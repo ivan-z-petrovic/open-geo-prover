@@ -1,0 +1,53 @@
+/* 
+ * DISCLAIMER PLACEHOLDER 
+ */
+
+package com.ogprover.test.formats.ogp_xml;
+
+import com.ogprover.main.OpenGeoProver;
+import com.ogprover.prover_protocol.cp.OGPCP;
+import com.ogprover.prover_protocol.cp.geoconstruction.Circle;
+import com.ogprover.prover_protocol.cp.thmstatement.TouchingCircles;
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
+/**
+* <dl>
+* <dt><b>Class description:</b></dt>
+* <dd>Class for XML converter of TouchingCircles objects</dd>
+* </dl>
+* 
+* @version 1.00
+* @author Ivan Petrovic
+*/
+public class TouchingCirclesConverter implements Converter {
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public boolean canConvert(Class clazz) {
+		return clazz.equals(TouchingCircles.class);
+	}
+
+	@Override
+	public void marshal(Object obj, HierarchicalStreamWriter writer,
+			MarshallingContext ctx) {
+		TouchingCircles statement = (TouchingCircles)obj;
+		writer.addAttribute("circle1", statement.getGeoObjects().get(0).getGeoObjectLabel());
+		writer.addAttribute("circle2", statement.getGeoObjects().get(1).getGeoObjectLabel());
+	}
+
+	@Override
+	public Object unmarshal(HierarchicalStreamReader reader,
+			UnmarshallingContext ctx) {
+		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();
+		String circle1 = reader.getAttribute("circle1");
+		String circle2 = reader.getAttribute("circle2");
+		
+		return new TouchingCircles((Circle)consProtocol.getConstructionMap().get(circle1), 
+				                   (Circle)consProtocol.getConstructionMap().get(circle2));
+	}
+	
+}

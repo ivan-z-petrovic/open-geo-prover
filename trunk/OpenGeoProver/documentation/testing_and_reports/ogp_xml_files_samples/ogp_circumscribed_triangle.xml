@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Center of circumscribed circle of triangle"> 
+	<!-- Let ABC be some triangle and ma, mb and mc are    -->
+	<!-- perpendicular bisector lines of edges a, b and c  --> 
+	<!-- respectively. Then they all meet in one point O - --> 
+	<!-- - center of circumscribed circle of triangle ABC. -->
+	<constructions>
+		<pfree label="A" />
+		<pfree label="B" />
+		<pfree label="C" />
+		<lperpbis label="ma" point1="B" point2="C" />
+		<lperpbis label="mb" point1="C" point2="A" />
+		<lperpbis label="mc" point1="A" point2="B" />
+		<pintersect label="O1" set1="ma" set2="mb" />
+		<pintersect label="O2" set1="mb" set2="mc" />
+	</constructions>
+	<statement>
+		<identicpts point1="O1" point2="O2" />
+	</statement>
+</geothm>
