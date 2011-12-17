@@ -27,12 +27,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class PerpendicularLineConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(PerpendicularLine.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		PerpendicularLine line = (PerpendicularLine)obj;
@@ -41,7 +39,6 @@ public class PerpendicularLineConverter implements Converter {
 		writer.addAttribute("baseline", line.getBaseLine().getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

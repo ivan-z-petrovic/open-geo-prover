@@ -26,12 +26,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class RotatedPointConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(RotatedPoint.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		RotatedPoint point = (RotatedPoint)obj;
@@ -41,7 +39,6 @@ public class RotatedPointConverter implements Converter {
 		writer.addAttribute("angmeasure", point.getDegAngleMeasure() + "");
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

@@ -26,12 +26,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class HarmonicConjugatesConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(FourHarmonicConjugatePoints.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		FourHarmonicConjugatePoints statement = (FourHarmonicConjugatePoints)obj;
@@ -46,7 +44,6 @@ public class HarmonicConjugatesConverter implements Converter {
 		writer.addAttribute("point4", D.getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

@@ -24,12 +24,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class EqualityOfRatioProductsConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(EqualityOfRatioProducts.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		EqualityOfRatioProducts statement = (EqualityOfRatioProducts)obj;
@@ -43,7 +41,6 @@ public class EqualityOfRatioProductsConverter implements Converter {
 		writer.endNode();
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		double coeff = Double.parseDouble(reader.getAttribute("coeff"));

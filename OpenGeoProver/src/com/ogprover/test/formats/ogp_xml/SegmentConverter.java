@@ -26,12 +26,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class SegmentConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(Segment.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		Segment seg = (Segment)obj;
@@ -39,7 +37,6 @@ public class SegmentConverter implements Converter {
 		writer.addAttribute("point2", seg.getSecondEndPoint().getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

@@ -27,12 +27,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class RandomPointFromLineConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(RandomPointFromLine.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		RandomPointFromLine line = (RandomPointFromLine)obj;
@@ -40,7 +38,6 @@ public class RandomPointFromLineConverter implements Converter {
 		writer.addAttribute("line", ((GeoConstruction)line.getBaseSetOfPoints()).getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

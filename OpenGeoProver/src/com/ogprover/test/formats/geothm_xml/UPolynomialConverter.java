@@ -28,12 +28,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class UPolynomialConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(UPolynomial.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		UPolynomial up = (UPolynomial)obj;
@@ -47,7 +45,6 @@ public class UPolynomialConverter implements Converter {
 	    }
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		UPolynomial up = new UPolynomial();

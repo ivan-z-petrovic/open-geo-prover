@@ -40,7 +40,6 @@ public class WuMethodProver extends AlgebraicMethodProver {
 	/**
 	 * @see com.ogprover.thmprover.TheoremProver#prove()
 	 */
-	@Override
 	public int prove() {
 		int retCode;
 		

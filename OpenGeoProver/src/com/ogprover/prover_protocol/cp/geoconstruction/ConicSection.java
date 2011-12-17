@@ -744,7 +744,6 @@ public abstract class ConicSection extends GeoConstruction implements SetOfPoint
 	/**
 	 * @see com.ogprover.prover_protocol.cp.geoconstruction.SetOfPoints#instantiateConditionFromBasicElements(com.ogprover.prover_protocol.cp.geoconstruction.Point)
 	 */
-	@Override
 	public XPolynomial instantiateConditionFromBasicElements(Point P) {
 		/*
 		 * NOTE:
@@ -769,7 +768,6 @@ public abstract class ConicSection extends GeoConstruction implements SetOfPoint
 	/**
 	 * @see com.ogprover.prover_protocol.cp.geoconstruction.SetOfPoints#getAllPossibleConditionsWithMappings()
 	 */
-	@Override
 	public Map<SymbolicPolynomial, ArrayList<Map<String, Point>>> getAllPossibleConditionsWithMappings() {
 		Map<SymbolicPolynomial, ArrayList<Map<String, Point>>> retMap = new HashMap<SymbolicPolynomial, ArrayList<Map<String, Point>>>();
 		

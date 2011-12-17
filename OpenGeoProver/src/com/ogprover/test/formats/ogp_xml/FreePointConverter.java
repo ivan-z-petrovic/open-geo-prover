@@ -23,19 +23,16 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class FreePointConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(FreePoint.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		FreePoint point = (FreePoint)obj;
 		writer.addAttribute("label", point.getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		String label = reader.getAttribute("label");

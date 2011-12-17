@@ -26,12 +26,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class CircleWithCenterAndRadiusConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(CircleWithCenterAndRadius.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		CircleWithCenterAndRadius circle = (CircleWithCenterAndRadius)obj;
@@ -41,7 +39,6 @@ public class CircleWithCenterAndRadiusConverter implements Converter {
 		writer.addAttribute("radipt2", circle.getRadius().getSecondEndPoint().getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

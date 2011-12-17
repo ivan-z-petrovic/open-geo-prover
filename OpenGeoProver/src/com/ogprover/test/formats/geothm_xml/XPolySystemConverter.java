@@ -24,12 +24,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class XPolySystemConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(XPolySystem.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		XPolySystem xs = (XPolySystem)obj;
@@ -41,7 +39,6 @@ public class XPolySystemConverter implements Converter {
 		}
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		XPolySystem xs = new XPolySystem();

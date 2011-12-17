@@ -347,7 +347,6 @@ public class Segment implements GeneralizedSegment{
 	/**
 	 * @see com.ogprover.prover_protocol.cp.auxiliary.GeneralizedSegment#getDescription()
 	 */
-	@Override
 	public String getDescription() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.firstEndPoint.getGeoObjectLabel());

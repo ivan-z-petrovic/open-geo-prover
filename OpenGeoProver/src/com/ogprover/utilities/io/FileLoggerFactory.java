@@ -18,7 +18,6 @@ import org.apache.log4j.spi.LoggerFactory;
 */
 public class FileLoggerFactory implements LoggerFactory {
 
-	@Override
 	public Logger makeNewLoggerInstance(String name) {
 		return new FileLogger(name);
 	}

@@ -24,12 +24,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class UTermConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(UTerm.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		UTerm ut = (UTerm)obj;
@@ -41,7 +39,6 @@ public class UTermConverter implements Converter {
 		}
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		double coeff = 0.0;

@@ -27,12 +27,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class RatioOfOrientedSegmentsConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(RatioOfOrientedSegments.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		RatioOfOrientedSegments statement = (RatioOfOrientedSegments)obj;
@@ -43,7 +41,6 @@ public class RatioOfOrientedSegmentsConverter implements Converter {
 		writer.addAttribute("ratiocoeff", statement.getRatioCoefficient() + "");
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

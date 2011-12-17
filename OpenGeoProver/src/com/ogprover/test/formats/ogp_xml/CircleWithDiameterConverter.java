@@ -26,12 +26,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class CircleWithDiameterConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(CircleWithDiameter.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		CircleWithDiameter circle = (CircleWithDiameter)obj;
@@ -40,7 +38,6 @@ public class CircleWithDiameterConverter implements Converter {
 		writer.addAttribute("diampt2", circle.getDiameter().getSecondEndPoint().getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

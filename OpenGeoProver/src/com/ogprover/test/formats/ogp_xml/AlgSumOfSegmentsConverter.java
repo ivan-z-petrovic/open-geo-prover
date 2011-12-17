@@ -26,12 +26,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class AlgSumOfSegmentsConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(AlgebraicSumOfThreeSegments.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		AlgebraicSumOfThreeSegments sum = (AlgebraicSumOfThreeSegments)obj;
@@ -63,7 +61,6 @@ public class AlgSumOfSegmentsConverter implements Converter {
 		}
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		GeneralizedSegment firstSeg = null, secondSeg = null, thirdSeg = null;

@@ -131,7 +131,6 @@ public abstract class Variable implements Comparable<Variable>, Cloneable {
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	@Override
 	public int compareTo(Variable v) {
 		if (v == null) {
 			OpenGeoProver.settings.getLogger().error("Null variable passed in.");

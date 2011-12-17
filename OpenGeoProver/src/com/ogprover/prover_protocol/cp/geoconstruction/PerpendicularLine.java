@@ -381,7 +381,6 @@ public class PerpendicularLine extends Line {
 	/**
 	 * @see com.ogprover.prover_protocol.cp.geoconstruction.SetOfPoints#instantiateConditionFromBasicElements(com.ogprover.prover_protocol.cp.geoconstruction.Point)
 	 */
-	@Override
 	public XPolynomial instantiateConditionFromBasicElements(Point P) {
 		Map<String, Point> pointsMap = new HashMap<String, Point>();
 		pointsMap.put(M0Label, P);

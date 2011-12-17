@@ -27,12 +27,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class ParallelLineConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(ParallelLine.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		ParallelLine line = (ParallelLine)obj;
@@ -41,7 +39,6 @@ public class ParallelLineConverter implements Converter {
 		writer.addAttribute("baseline", line.getBaseLine().getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

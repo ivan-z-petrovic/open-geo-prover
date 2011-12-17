@@ -59,7 +59,6 @@ public class OGPOutput implements SpecialFileFormatting {
 		return closed;
 	}
 
-	@Override
 	public void openDocument(String documentType, String title, String author)
 			throws IOException {
 		if (this.closed)
@@ -71,7 +70,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.openDocument(documentType, title, author);
 	}
 
-	@Override
 	public void closeDocument() throws IOException {
 		if (this.closed)
 			return;
@@ -82,7 +80,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.closeDocument();
 	}
 
-	@Override
 	public void openSection(String title) throws IOException {
 		if (this.closed)
 			return;
@@ -93,7 +90,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.openSection(title);
 	}
 
-	@Override
 	public void closeSection() throws IOException {
 		if (this.closed)
 			return;
@@ -104,7 +100,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.closeSection();
 	}
 
-	@Override
 	public void openSubSection(String title, boolean hasNumeration)
 			throws IOException {
 		if (this.closed)
@@ -116,7 +111,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.openSubSection(title, hasNumeration);
 	}
 
-	@Override
 	public void closeSubSection() throws IOException {
 		if (this.closed)
 			return;
@@ -127,7 +121,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.closeSubSection();
 	}
 
-	@Override
 	public void openParagraph() throws IOException {
 		if (this.closed)
 			return;
@@ -138,7 +131,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.openParagraph();
 	}
 
-	@Override
 	public void closeParagraph() throws IOException {
 		if (this.closed)
 			return;
@@ -149,7 +141,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.closeParagraph();
 	}
 
-	@Override
 	public void openEnum(String enumCommand) throws IOException {
 		if (this.closed)
 			return;
@@ -160,7 +151,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.openEnum(enumCommand);
 	}
 
-	@Override
 	public void closeEnum(String enumCommand) throws IOException {
 		if (this.closed)
 			return;
@@ -171,7 +161,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.closeEnum(enumCommand);
 	}
 
-	@Override
 	public void openItem() throws IOException {
 		if (this.closed)
 			return;
@@ -182,7 +171,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.openItem();
 	}
 
-	@Override
 	public void closeItem() throws IOException {
 		if (this.closed)
 			return;
@@ -193,7 +181,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.closeItem();
 	}
 
-	@Override
 	public void openItemWithDesc(String desc) throws IOException {
 		if (this.closed)
 			return;
@@ -204,7 +191,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.openItemWithDesc(desc);
 	}
 
-	@Override
 	public void closeItemWithDesc(String desc) throws IOException {
 		if (this.closed)
 			return;
@@ -215,7 +201,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.closeItemWithDesc(desc);
 	}
 
-	@Override
 	public void writePlainText(String text) throws IOException {
 		if (this.closed)
 			return;
@@ -226,7 +211,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writePlainText(text);
 	}
 
-	@Override
 	public void writeFormattedText(String text, int formatType)
 			throws IOException {
 		if (this.closed)
@@ -238,7 +222,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writeFormattedText(text, formatType);
 	}
 
-	@Override
 	public void writeProofText(String text) throws IOException {
 		if (this.closed)
 			return;
@@ -249,7 +232,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writeProofText(text);
 	}
 
-	@Override
 	public void writeSingleLine(String text) throws IOException {
 		if (this.closed)
 			return;
@@ -260,7 +242,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writeSingleLine(text);
 	}
 
-	@Override
 	public void writeBoldText(String text) throws IOException {
 		if (this.closed)
 			return;
@@ -271,7 +252,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writeBoldText(text);
 	}
 
-	@Override
 	public void writeEnumDescription(String desc) throws IOException {
 		if (this.closed)
 			return;
@@ -282,7 +262,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writeEnumDescription(desc);
 	}
 
-	@Override
 	public void writeEnumItem(String text) throws IOException {
 		if (this.closed)
 			return;
@@ -293,7 +272,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writeEnumItem(text);
 	}
 	
-	@Override
 	public void writePointCoordinatesAssignment(Point P)
 			throws IOException {
 		if (this.closed)
@@ -305,7 +283,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writePointCoordinatesAssignment(P);
 	}
 	
-	@Override
 	public void writePolynomial(int index, XPolynomial xpoly)
 			throws IOException {
 		if (this.closed)
@@ -317,7 +294,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writePolynomial(index, xpoly);
 	}
 	
-	@Override
 	public void writePolynomial(XPolynomial xpoly)
 			throws IOException {
 		if (this.closed)
@@ -329,7 +305,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writePolynomial(xpoly);
 	}
 	
-	@Override
 	public void writePolySystem(XPolySystem xpolySys) throws IOException {
 		if (this.closed)
 			return;
@@ -340,7 +315,6 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writePolySystem(xpolySys);
 	}
 	
-	@Override
 	public boolean isDocumentOpened() {
 		if (this.closed)
 			return false;
@@ -355,7 +329,6 @@ public class OGPOutput implements SpecialFileFormatting {
 		return false;
 	}
 
-	@Override
 	public boolean isSectionOpened() {
 		if (this.closed)
 			return false;
@@ -370,7 +343,6 @@ public class OGPOutput implements SpecialFileFormatting {
 		return false;
 	}
 
-	@Override
 	public boolean isSubSectionOpened() {
 		if (this.closed)
 			return false;
@@ -385,7 +357,6 @@ public class OGPOutput implements SpecialFileFormatting {
 		return false;
 	}
 
-	@Override
 	public boolean isParagraphOpened() {
 		if (this.closed)
 			return false;

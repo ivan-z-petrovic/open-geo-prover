@@ -24,12 +24,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class EqualAnglesConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(EqualAngles.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		EqualAngles statement = (EqualAngles)obj;
@@ -44,7 +42,6 @@ public class EqualAnglesConverter implements Converter {
 		writer.endNode();
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		if (!reader.hasMoreChildren())

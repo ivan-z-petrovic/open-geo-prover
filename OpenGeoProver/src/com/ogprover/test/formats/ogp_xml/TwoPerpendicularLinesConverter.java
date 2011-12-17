@@ -26,12 +26,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class TwoPerpendicularLinesConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(TwoPerpendicularLines.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		TwoPerpendicularLines statement = (TwoPerpendicularLines)obj;
@@ -39,7 +37,6 @@ public class TwoPerpendicularLinesConverter implements Converter {
 		writer.addAttribute("line2", statement.getGeoObjects().get(1).getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

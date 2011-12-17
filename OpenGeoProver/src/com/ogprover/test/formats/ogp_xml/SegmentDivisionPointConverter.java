@@ -26,12 +26,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class SegmentDivisionPointConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(SegmentDivisionPoint.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		SegmentDivisionPoint point = (SegmentDivisionPoint)obj;
@@ -42,7 +40,6 @@ public class SegmentDivisionPointConverter implements Converter {
 		writer.addAttribute("coeff", point.getDivisionCoefficient() + "");
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

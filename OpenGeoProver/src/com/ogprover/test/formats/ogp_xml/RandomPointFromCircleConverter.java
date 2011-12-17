@@ -27,20 +27,17 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class RandomPointFromCircleConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(RandomPointFromCircle.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		RandomPointFromCircle point = (RandomPointFromCircle)obj;
 		writer.addAttribute("label", point.getGeoObjectLabel());
 		writer.addAttribute("circle", ((GeoConstruction)point.getBaseSetOfPoints()).getGeoObjectLabel());
 	}
-
-	@Override
+	
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

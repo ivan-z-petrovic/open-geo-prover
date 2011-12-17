@@ -26,12 +26,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class OrientedSegmentsCombinationConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(LinearCombinationOfOrientedSegments.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		LinearCombinationOfOrientedSegments statement = (LinearCombinationOfOrientedSegments)obj;
@@ -49,7 +47,6 @@ public class OrientedSegmentsCombinationConverter implements Converter {
 		}
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		Vector<Segment> segments = new Vector<Segment>();
