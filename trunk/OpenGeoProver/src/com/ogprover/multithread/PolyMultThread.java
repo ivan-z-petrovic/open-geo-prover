@@ -118,7 +118,6 @@ public class PolyMultThread implements Runnable {
 	 * 
 	 * @see java.lang.Runnable#run()
 	 */
-	@Override
 	public void run() {
 		int firstSize = this.firstArray.size();
 		int secondSize = this.secondArray.size();

@@ -27,12 +27,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class TwoInversePointsConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(TwoInversePoints.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		TwoInversePoints statement = (TwoInversePoints)obj;
@@ -41,7 +39,6 @@ public class TwoInversePointsConverter implements Converter {
 		writer.addAttribute("circle", statement.getGeoObjects().get(2).getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

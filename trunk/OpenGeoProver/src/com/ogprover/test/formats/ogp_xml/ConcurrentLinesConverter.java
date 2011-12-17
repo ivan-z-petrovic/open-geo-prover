@@ -28,12 +28,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class ConcurrentLinesConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(ConcurrentLines.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		ConcurrentLines lines = (ConcurrentLines)obj;
@@ -46,7 +44,6 @@ public class ConcurrentLinesConverter implements Converter {
 		}
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		ArrayList<Line> lines = new ArrayList<Line>();

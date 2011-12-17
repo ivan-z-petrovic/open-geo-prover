@@ -28,12 +28,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class XPolynomialConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(XPolynomial.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		XPolynomial xp = (XPolynomial)obj;
@@ -47,7 +45,6 @@ public class XPolynomialConverter implements Converter {
 	    }
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		XPolynomial xp = new XPolynomial();

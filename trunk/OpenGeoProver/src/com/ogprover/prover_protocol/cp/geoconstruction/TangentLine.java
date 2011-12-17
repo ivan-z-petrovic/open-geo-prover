@@ -137,7 +137,6 @@ public class TangentLine extends Line {
 	 * 
 	 * @see com.ogprover.prover_protocol.cp.geoconstruction.Line#getCondition()
 	 */
-	@Override
 	public SymbolicPolynomial getCondition() {
 		/* 
 		 * M0=(x0, y0) is some arbitrary point from tangent line;
@@ -503,7 +502,6 @@ public class TangentLine extends Line {
 	/**
 	 * @see com.ogprover.prover_protocol.cp.geoconstruction.SetOfPoints#instantiateConditionFromBasicElements(com.ogprover.prover_protocol.cp.geoconstruction.Point)
 	 */
-	@Override
 	public XPolynomial instantiateConditionFromBasicElements(Point P) {
 		Map<SymbolicPolynomial, ArrayList<Map<String, Point>>> undMap = this.underlyingPointsSet.getAllPossibleConditionsWithMappings();
 		SymbolicPolynomial undCond = this.underlyingPointsSet.getCondition(); // get basic condition for underlying point set

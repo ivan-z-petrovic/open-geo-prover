@@ -206,7 +206,6 @@ public abstract class Line extends GeoConstruction implements SetOfPoints {
 	/**
 	 * @see com.ogprover.prover_protocol.cp.geoconstruction.SetOfPoints#getAllPossibleConditionsWithMappings()
 	 */
-	@Override
 	public Map<SymbolicPolynomial, ArrayList<Map<String, Point>>> getAllPossibleConditionsWithMappings() {
 		Map<SymbolicPolynomial, ArrayList<Map<String, Point>>> retMap = new HashMap<SymbolicPolynomial, ArrayList<Map<String, Point>>>();
 		

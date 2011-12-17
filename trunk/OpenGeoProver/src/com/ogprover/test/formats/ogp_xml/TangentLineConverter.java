@@ -28,12 +28,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class TangentLineConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(TangentLine.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		TangentLine line = (TangentLine)obj;
@@ -42,7 +40,6 @@ public class TangentLineConverter implements Converter {
 		writer.addAttribute("pointset", ((GeoConstruction)line.getUnderlyingPointsSet()).getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

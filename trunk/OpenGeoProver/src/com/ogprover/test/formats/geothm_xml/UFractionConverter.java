@@ -24,12 +24,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class UFractionConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(UFraction.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		UFraction uf = (UFraction)obj;
@@ -42,7 +40,6 @@ public class UFractionConverter implements Converter {
 		writer.endNode();
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		UFraction uf = new UFraction(null, null);

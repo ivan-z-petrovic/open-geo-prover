@@ -28,12 +28,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class CollinearPointsConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(CollinearPoints.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		CollinearPoints points = (CollinearPoints)obj;
@@ -46,7 +44,6 @@ public class CollinearPointsConverter implements Converter {
 		}
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		ArrayList<Point> points = new ArrayList<Point>();

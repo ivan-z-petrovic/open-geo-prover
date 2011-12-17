@@ -75,12 +75,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class OGPCPXMLConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(OGPCP.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		OGPCP consProtocol = (OGPCP)obj;
@@ -203,7 +201,6 @@ public class OGPCPXMLConverter implements Converter {
 		writer.endNode();
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = new OGPCP();

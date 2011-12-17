@@ -117,6 +117,7 @@
 		</javac>
 		
 		<!-- Generate Javadoc documentation -->
+		<!--
 		<javadoc destdir="${javadoc.path}"
 		         author="true"
 		         version="true"
@@ -130,6 +131,7 @@
 		    <doctitle><![CDATA[<h1>OGP API Documentation</h1>]]></doctitle>
 		    <bottom><![CDATA[<i>OpenGeoProver Project</i>]]></bottom>
 		</javadoc>
+		-->
 	</target>
 
 	<target name="dist" depends="compile"

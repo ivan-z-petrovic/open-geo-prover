@@ -25,12 +25,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class PowerConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(Power.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		Power power = (Power)obj;
@@ -39,7 +37,6 @@ public class PowerConverter implements Converter {
 		writer.addAttribute("exp", Integer.toString(power.getExponent()));
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		short vtype = 0;

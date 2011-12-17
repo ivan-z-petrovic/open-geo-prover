@@ -25,12 +25,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class GeoTheoremConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(GeoTheorem.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		GeoTheorem theorem = (GeoTheorem)obj;
@@ -47,7 +45,6 @@ public class GeoTheoremConverter implements Converter {
 		writer.endNode();
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		XPolySystem xs = null;

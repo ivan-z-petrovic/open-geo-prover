@@ -184,7 +184,6 @@ public class Power implements Comparable<Power>, Cloneable{
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	@Override
 	public int compareTo(Power p) {
 		int result = 0;
 		

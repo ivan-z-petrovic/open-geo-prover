@@ -40,7 +40,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.lastEnumCommandList = new Vector<String>();
 	}
 	
-	@Override
 	public void openDocument(String documentType, String title, String author) throws IOException {
 		if (this.documentOpened)
 			return;
@@ -70,7 +69,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.documentOpened = true;
 	}
 	
-	@Override
 	public void closeDocument() throws IOException {
 		if (!this.documentOpened)
 			return;
@@ -92,7 +90,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.documentOpened = false;
 	}
 
-	@Override
 	public void openSection(String title) throws IOException{
 		if (this.lastEnumCommandList != null) {
 			while (this.lastEnumCommandList.size() > 0)
@@ -119,7 +116,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.write(sb.toString());
 	}
 
-	@Override
 	public void closeSection() throws IOException {
 		if (this.isSectionOpened()) {
 			this.write("\n</proof_section>\n\n");
@@ -127,7 +123,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		}
 	}
 
-	@Override
 	public void openSubSection(String title, boolean hasNumeration) throws IOException {
 		// hasNumeration is not used for XML output - it is always numerated
 		
@@ -155,7 +150,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.write(sb.toString());
 	}
 
-	@Override
 	public void closeSubSection() throws IOException {
 		if (this.isSubSectionOpened()) {
 			this.write("\n</proof_subsection>\n\n");
@@ -163,7 +157,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		}
 	}
 
-	@Override
 	public void openParagraph() throws IOException {
 		if (this.lastEnumCommandList != null) {
 			while (this.lastEnumCommandList.size() > 0)
@@ -176,7 +169,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.write("\n<proof_line>\n");
 	}
 
-	@Override
 	public void closeParagraph() throws IOException {
 		if (this.paragraphOpened) {
 			this.write("\n</proof_line>\n\n");
@@ -184,7 +176,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		}
 	}
 
-	@Override
 	public void openEnum(String enumCommand) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -196,7 +187,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 			this.lastEnumCommandList.add(0, new String(enumCommand)); // add newest command at the beginning so it will be closed before existing commands
 	}
 
-	@Override
 	public void closeEnum(String enumCommand) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -208,17 +198,14 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 			this.lastEnumCommandList.remove(0);
 	}
 
-	@Override
 	public void openItem() throws IOException {
 		this.write("\n<proof_enum_item>");		
 	}
 
-	@Override
 	public void closeItem() throws IOException {
 		this.write("</proof_enum_item>");	
 	}
 
-	@Override
 	public void openItemWithDesc(String desc) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -228,7 +215,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.write(sb.toString());
 	}
 
-	@Override
 	public void closeItemWithDesc(String desc) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -249,12 +235,10 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		return newText;
 	}
 
-	@Override
 	public void writePlainText(String text) throws IOException {
 		this.write(XMLFileWriter.formatTextInXML(this.processTextWithIndices(text)));
 	}
 
-	@Override
 	public void writeFormattedText(String text, int formatType) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -282,23 +266,19 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.write(sb.toString());
 	}
 	
-	@Override
 	public void writeProofText(String text) throws IOException {
 		writeFormattedText(text, SpecialFileFormatting.FMT_TYPE_PROOF_TEXT);
 	}
 	
-	@Override
 	public void writeSingleLine(String text) throws IOException {
 		writeFormattedText(text, SpecialFileFormatting.FMT_TYPE_PROOF_LINE);
 	}
 
-	@Override
 	public void writeBoldText(String text) throws IOException {
 		writeFormattedText(text, SpecialFileFormatting.FMT_TYPE_PROOF_BOLD);
 		
 	}
 
-	@Override
 	public void writeEnumDescription(String desc) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -308,7 +288,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.write(sb.toString());
 	}
 
-	@Override
 	public void writeEnumItem(String text) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -318,7 +297,6 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.write(sb.toString());
 	}
 	
-	@Override
 	public void writePointCoordinatesAssignment(Point P)
 			throws IOException {
 		StringBuilder sb = new StringBuilder();
@@ -383,19 +361,16 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		return sb.toString();
 	}
 	
-	@Override
 	public void writePolynomial(int index, XPolynomial xpoly)
 			throws IOException {
 		this.write(getPolynomialText(index, xpoly));
 	}
 	
-	@Override
 	public void writePolynomial(XPolynomial xpoly)
 			throws IOException {
 		this.writePolynomial(-2, xpoly);
 	}
 	
-	@Override
 	public void writePolySystem(XPolySystem xpolySys) throws IOException {
 		if (xpolySys == null || xpolySys.getPolynomials().size() == 0)
 			return;
@@ -417,22 +392,18 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		
 	}
 	
-	@Override
 	public boolean isDocumentOpened() {
 		return this.documentOpened;
 	}
 
-	@Override
 	public boolean isSectionOpened() {
 		return this.sectionOpened;
 	}
 
-	@Override
 	public boolean isSubSectionOpened() {
 		return this.subSectionOpened;
 	}
 
-	@Override
 	public boolean isParagraphOpened() {
 		return this.paragraphOpened;
 	}

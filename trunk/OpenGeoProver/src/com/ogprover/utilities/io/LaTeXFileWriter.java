@@ -37,7 +37,6 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.lastEnumCommandList = new Vector<String>(); // empty list
 	}
 
-	@Override
 	public void openDocument(String documentType, String title, String author) throws IOException {
 		if (this.documentOpened)
 			return;
@@ -66,7 +65,6 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.documentOpened = true;
 	}
 	
-	@Override
 	public void closeDocument() throws IOException {
 		if (!this.documentOpened)
 			return;
@@ -88,7 +86,6 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.documentOpened = false;
 	}
 	
-	@Override
 	public void openSection(String title) throws IOException{
 		if (this.lastEnumCommandList != null) {
 			while (this.lastEnumCommandList.size() > 0)
@@ -111,12 +108,10 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write(sb.toString());
 	}
 
-	@Override
 	public void closeSection() throws IOException {
 		this.sectionOpened = false;		
 	}
 
-	@Override
 	public void openSubSection(String title, boolean hasNumeration) throws IOException {
 		if (this.lastEnumCommandList != null) {
 			while (this.lastEnumCommandList.size() > 0)
@@ -140,12 +135,10 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write(sb.toString());
 	}
 
-	@Override
 	public void closeSubSection() throws IOException {
 		this.subSectionOpened = false;
 	}
 
-	@Override
 	public void openParagraph() throws IOException {
 		if (this.lastEnumCommandList != null) {
 			while (this.lastEnumCommandList.size() > 0)
@@ -158,13 +151,11 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write("\n\n");
 	}
 
-	@Override
 	public void closeParagraph() throws IOException {
 		this.write("\n");
 		this.paragraphOpened = false;	
 	}
 
-	@Override
 	public void openEnum(String enumCommand) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -176,7 +167,6 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 			this.lastEnumCommandList.add(0, new String(enumCommand)); // add newest command at the beginning so it will be closed before existing commands
 	}
 
-	@Override
 	public void closeEnum(String enumCommand) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -188,17 +178,14 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 			this.lastEnumCommandList.remove(0);
 	}
 
-	@Override
 	public void openItem() throws IOException {
 		this.write("\\item ");		
 	}
 
-	@Override
 	public void closeItem() throws IOException {
 		// nothing for LaTeX		
 	}
 
-	@Override
 	public void openItemWithDesc(String desc) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -208,7 +195,6 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write(sb.toString());
 	}
 
-	@Override
 	public void closeItemWithDesc(String desc) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -265,12 +251,10 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		return sb.toString();
 	}
 
-	@Override
 	public void writePlainText(String text) throws IOException {
 		this.write(this.processTextWithIndices(text));
 	}
 
-	@Override
 	public void writeFormattedText(String text, int formatType) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -295,23 +279,19 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write(sb.toString());
 	}
 	
-	@Override
 	public void writeProofText(String text) throws IOException {
 		writeFormattedText(text, SpecialFileFormatting.FMT_TYPE_PROOF_TEXT);
 	}
 	
-	@Override
 	public void writeSingleLine(String text) throws IOException {
 		writeFormattedText(text, SpecialFileFormatting.FMT_TYPE_PROOF_LINE);
 	}
 
-	@Override
 	public void writeBoldText(String text) throws IOException {
 		writeFormattedText(text, SpecialFileFormatting.FMT_TYPE_PROOF_BOLD);
 		
 	}
 
-	@Override
 	public void writeEnumDescription(String desc) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -321,7 +301,6 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write(sb.toString());
 	}
 
-	@Override
 	public void writeEnumItem(String text) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -331,7 +310,6 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write(sb.toString());
 	}
 	
-	@Override
 	public void writePointCoordinatesAssignment(Point P)
 			throws IOException {
 		StringBuilder sb = new StringBuilder();
@@ -345,7 +323,6 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write(sb.toString());
 	}
 	
-	@Override
 	public void writePolynomial(int index, XPolynomial xpoly)
 			throws IOException {
 		StringBuilder sb = new StringBuilder();
@@ -421,13 +398,11 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write(sb.toString());
 	}
 	
-	@Override
 	public void writePolynomial(XPolynomial xpoly)
 			throws IOException {
 		this.writePolynomial(-2, xpoly);
 	}
 	
-	@Override
 	public void writePolySystem(XPolySystem xpolySys) throws IOException {
 		if (xpolySys == null || xpolySys.getPolynomials().size() == 0)
 			return;
@@ -496,22 +471,18 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write(sb.toString());
 	}
 	
-	@Override
 	public boolean isDocumentOpened() {
 		return this.documentOpened;
 	}
 
-	@Override
 	public boolean isSectionOpened() {
 		return this.sectionOpened;
 	}
 
-	@Override
 	public boolean isSubSectionOpened() {
 		return this.subSectionOpened;
 	}
 
-	@Override
 	public boolean isParagraphOpened() {
 		return this.paragraphOpened;
 	}

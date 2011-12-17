@@ -24,12 +24,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class RatioOfTwoCollinearSegmentsConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(RatioOfTwoCollinearSegments.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		RatioOfTwoCollinearSegments ratio = (RatioOfTwoCollinearSegments)obj;
@@ -42,7 +40,6 @@ public class RatioOfTwoCollinearSegmentsConverter implements Converter {
 		writer.endNode();
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		Segment numeratorSeg = null;

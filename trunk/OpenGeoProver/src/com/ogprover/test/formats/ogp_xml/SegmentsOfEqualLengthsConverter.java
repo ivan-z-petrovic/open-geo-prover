@@ -26,12 +26,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class SegmentsOfEqualLengthsConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(SegmentsOfEqualLengths.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		SegmentsOfEqualLengths statement = (SegmentsOfEqualLengths)obj;
@@ -41,7 +39,6 @@ public class SegmentsOfEqualLengthsConverter implements Converter {
 		writer.addAttribute("point22", statement.getGeoObjects().get(3).getGeoObjectLabel());
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();

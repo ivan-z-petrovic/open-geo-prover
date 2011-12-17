@@ -24,12 +24,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class AlgSumOfAnglesConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
-	@Override
 	public boolean canConvert(Class clazz) {
 		return clazz.equals(AlgebraicSumOfThreeAngles.class);
 	}
 
-	@Override
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		AlgebraicSumOfThreeAngles sum = (AlgebraicSumOfThreeAngles)obj;
@@ -48,7 +46,6 @@ public class AlgSumOfAnglesConverter implements Converter {
 		writer.endNode();
 	}
 
-	@Override
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		if (!reader.hasMoreChildren())
