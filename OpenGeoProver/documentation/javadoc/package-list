@@ -1,0 +1,17 @@
+com.ogprover.api
+com.ogprover.main
+com.ogprover.multithread
+com.ogprover.polynomials
+com.ogprover.prover_protocol
+com.ogprover.prover_protocol.cp
+com.ogprover.prover_protocol.cp.auxiliary
+com.ogprover.prover_protocol.cp.geoconstruction
+com.ogprover.prover_protocol.cp.ndgcondition
+com.ogprover.prover_protocol.cp.thmstatement
+com.ogprover.test.formats.geothm_xml
+com.ogprover.test.formats.ogp_xml
+com.ogprover.test.junit
+com.ogprover.test.manual
+com.ogprover.thmprover
+com.ogprover.utilities
+com.ogprover.utilities.io

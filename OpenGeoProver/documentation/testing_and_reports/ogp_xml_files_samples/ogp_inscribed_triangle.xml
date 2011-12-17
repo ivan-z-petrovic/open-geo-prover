@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Center of inscribed circle of triangle">
+	<!-- Put the description of theorem here -->
+	<constructions>
+		<pfree label="A" />
+		<pfree label="B" />
+		<pfree label="C" />
+		<langbis label="sa" firstraypt="B" vertex="A" secondraypt="C" />
+		<langbis label="sb" firstraypt="C" vertex="B" secondraypt="A" />
+		<langbis label="sc" firstraypt="B" vertex="C" secondraypt="A" />
+		<pintersect label="S" set1="sa" set2="sb" />
+	</constructions>
+	<statement>
+		<pointonset set="sc" point="S" />
+	</statement>
+</geothm>
