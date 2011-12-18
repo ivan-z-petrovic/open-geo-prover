@@ -1,0 +1,44 @@
+#summary This page contains all Wiki topics related to OpenGeoProver project.
+
+
+= Project development and maintenance =
+=== [development_plans Development Plans] ===
+What is currently done on the project? What baselines exist? What are plans for future work?
+
+=== [local_project_development Local Project Development] ===
+How to checkout, develop and maintain the project on your local machine? How to check in new code changes on repository trunks? Description of workflow for project changes.
+
+=== [coding_standards Coding Standards for this project] ===
+Coding standards that each developer should follow when making changes in this project.
+
+=== [important_issues Important issues] ===
+List of all relevant issues created for this project.
+
+=== [development_discussions Development discussions] ===
+Discussions among developers about various development related questions.
+
+
+= Mathematical Background =
+=== [geo_notes Geometry Notes] ===
+Various geometry related topics and questions.
+
+=== [agtp_main About Automated Geometry Theorem Provers] ===
+A brief description of filed of Automated Geometry Theorems Proving.
+
+=== [wu_method Wu's method] ===
+A brief description of Wu's method for automated geometry theorem proving.
+
+=== [groebner_basis_method Gröbner basis method] ===
+A brief description of Gröbner basis method for automated geometry theorem proving.
+
+
+
+= General Development Topics =
+=== [oop_design Object Oriented Development and Design] ===
+Various interesting topics related to OOP development and design especially in Java.
+
+=== [java5_notes Java 5 notes] ===
+Notes about Java 5 development relevant to this project.
+
+=== [ant_notes Ant notes] ===
+Various Ant topics.
