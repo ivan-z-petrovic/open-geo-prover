@@ -1,0 +1,7 @@
+#summary Page that lists coding standards that developers should follow when make changes in this project.
+
+(this page is still incomplete)
+
+= General rules =
+ * Follow common code standards used for Java development.
+ * ...
