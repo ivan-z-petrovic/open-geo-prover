@@ -1,0 +1,6 @@
+#summary Page for description of Wu's method.
+
+= Operation of pseudo division of two polynomials =
+
+Formulae for pseudo division:
+http://code.google.com/p/open-geo-prover/source/browse/trunk/OpenGeoProver/documentation/images/prem_formulae.jpg
