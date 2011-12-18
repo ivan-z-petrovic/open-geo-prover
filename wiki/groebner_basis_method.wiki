@@ -1,0 +1,5 @@
+#summary Description of Gröbner basis method.
+
+(page is still incomplete)
+
+Gröbner basis method is another algebraic method that will be implemented in OGP along with Wu's method.
