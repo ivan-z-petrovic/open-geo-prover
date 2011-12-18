@@ -1,0 +1,45 @@
+#summary This page describes plans for further development of OpenGeoProver project.
+
+= Introduction =
+
+== Branches and Releases ==
+
+=== Main development trunk ===
+Project maintains main development trunk. All bugs/issues reported on some specific branch are fixed on development trunk first, then merged to reported branch. Owners decide whether some fix has to be applied from development trunk to some other branches where bug/issue was not detected/reported.
+
+All general enhancements/improvements or new features of project are done on development trunk first, then are applied to desired branch. Owners decide whether to apply these improvements to some other branch.
+General approach for other branches (that didn't request the improvement) should be to not change them, but to upgrade them with latest development trunk at certain point.
+
+=== New branches ===
+All specific enhancement/improvements (required for specific client i.e. geometry system) are managed this way: a new branch of project is created first, then improvements are implemented only on new branch.
+
+
+= Current State of Project =
+
+== Current work ==
+The current active development trunk (initial work) is for integration of this prover into !GeoGebra geometry system:
+   * [http://www.geogebra.org/cms/ GeoGebra home page]
+   * [http://www.geogebra.org/en/wiki/index.php/English GeoGebra Wiki page]
+   * [http://www.geogebra.org/trac/wiki GeoGebra Developer Wiki page]
+
+As a part of this work, a new prover API suitable for !GeoGebra system will be implemented. It will accept input from !GeoGebra, convert it to internal prover representation and return the result in !GeoGebra desired format.
+
+On the other side !GeoGebra will provide representation of geometry theorems enhancing its _Construction Protocol_ object to contain statement together with constructions. Also it will provide representation of Non-Degeneracy Conditions (abbreviated !NDG Conditions) and necessary GUI implementation for prover sub-screen. (See more details on [http://www.geogebra.org/trac/wiki GeoGebra Developer Wiki page]).
+
+Current development trunk still doesn't have anything specific for !GeoGebra but later at certain point a new branch will be created to track this !GeoGebra baseline.
+
+== Other branches ==
+Currently there are no other branches in this project.
+
+
+= Plans for future work =
+
+Here are listed some ideas and plans for future work on this project.
+
+  # Generating Certificate for formal verification of Wu's method.
+  # Implementation of Gröbner basis method.
+  # Supporting new generic XML format for geometry theorems.
+  # Modifications in geometry constructions - deriving equations for geometry objects from given elements, and then producing polynomials by using these equations; Analysis and Work on conic sections (more details will be provided; this work will be done as new feature to existing development trunk).
+  # Analysis and Work on theorems from hyperbolic geometry (this will be tracked on separate branch).
+  # Implementation of parallel polynomial multiplying (new feature to head baseline).
+  # ...
