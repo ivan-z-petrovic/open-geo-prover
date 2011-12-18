@@ -3,7 +3,7 @@
 
 = Introduction =
 
-OpenGeoProver (abbreviated *OGP*) is *Open Source* project in *Java* programming language for implementation of *Automated Geometry Theorem Provers*.
+!OpenGeoProver (abbreviated *OGP*) is *Open Source* project in *Java* programming language for implementation of *Automated Geometry Theorem Provers*.
 
 This is the geometry tool used to examine whether certain statement about constructed geometry objects (points, lines and circles) is true or false.
 
@@ -13,6 +13,6 @@ It can be used as a standalone application as well as a geometry tool that can b
 (See [development_plans Plans for Development] page for more details about plans for further development of this project.)
 
 
-= Wiki Topics for OpenGeoProver project =
+= Wiki Topics for !OpenGeoProver project =
 
 The specific topics related to this project can be found on [ogp_wiki_topics Wiki Topics for OGP] page.
