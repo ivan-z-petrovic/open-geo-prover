@@ -1,0 +1,4 @@
+#summary Page for various development discussions related to OpenGeoProver project.
+
+= Discussions =
+Currently no entries here.
