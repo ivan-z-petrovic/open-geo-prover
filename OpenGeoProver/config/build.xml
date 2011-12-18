@@ -78,7 +78,9 @@
 		<!-- Execute JUnit tests -->
 		<junit printsummary="false"
 			   errorProperty="jutest.failed"
-		       failureProperty="jutest.failed">
+		       failureProperty="jutest.failed"
+			   fork="on"
+			   dir="${build.path}">
 			<classpath>
 				<path refid="jutest.classpath"/>
 				<pathelement path="${jutest.path}"/>
@@ -87,10 +89,10 @@
 			<formatter type="brief" usefile="false"/>
 			<formatter type="xml"/>
 			<!--
-			<test todir="${jutest.data.path}" name="com.ogp.unit_test.junit.JUTestPower"/>
+			<test todir="${jutest.data.path}" name="com.ogprover.test.junit.JUTestPower"/>
 			-->
 			<batchtest todir="${jutest.data.path}">
-				<fileset dir="${jutest.path}" includes="com/ogp/test/junit/JUTest*Suite*.class"/>
+				<fileset dir="${jutest.path}" includes="com/ogprover/test/junit/JUTest*Suite*.class"/>
 			</batchtest>
 		</junit>
 		
@@ -117,11 +119,11 @@
 		</javac>
 		
 		<!-- Generate Javadoc documentation -->
-		<!--
 		<javadoc destdir="${javadoc.path}"
 		         author="true"
 		         version="true"
 		         use="true"
+				 useexternalfile="true" 
 				 private="true"
 		         windowtitle="OpenGeoProver Javadoc">
 			<classpath refid="project.classpath" />
@@ -131,7 +133,6 @@
 		    <doctitle><![CDATA[<h1>OGP API Documentation</h1>]]></doctitle>
 		    <bottom><![CDATA[<i>OpenGeoProver Project</i>]]></bottom>
 		</javadoc>
-		-->
 	</target>
 
 	<target name="dist" depends="compile"
