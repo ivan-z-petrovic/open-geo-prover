@@ -1,6 +1,17 @@
 #summary Page for description of Wu's method.
 
+(page is still incomplete)
+
 = Operation of pseudo division of two polynomials =
 
 Formulae for pseudo division:
-http://code.google.com/p/open-geo-prover/source/browse/trunk/OpenGeoProver/documentation/images/prem_formulae.jpg
+
+Let *p* and *q* be multivariate polynomials and *p(x)* and *q(x)* are they as polynomials by single variable *x*.
+
+http://open-geo-prover.googlecode.com/svn/wiki/images/prem_formulae.png
+
+= Steps in (partial) Wu's method =
+ # Geometry constructions are represented as (transformed into) system of polynomials and they are hypotheses of the theorem. Theorem statement is represented as (transformed into) a single polynomial;
+ # Triangulation of input system of polynomials for hypotheses (by using pseudo division of polynomials);
+ # Calculation of final reminder of statement polynomial by using successive pseudo divisions of that polynomial with each polynomial from triangular system;
+ # If pseudo reminder is equal to zero (polynomial) theorem has been proved, if it is not zero then if input system of hypotheses is linear, the theorem has been disproved, otherwise it is not known whether theorem statement is true or false.
