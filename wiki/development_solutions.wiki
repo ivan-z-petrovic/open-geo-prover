@@ -1,0 +1,6 @@
+#summary Explanation of various design and development solutions applied in this project.
+
+(page is still incomplete)
+
+= Development Solutions topics =
+ * ...
