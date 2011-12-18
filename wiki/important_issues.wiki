@@ -1,0 +1,6 @@
+#summary List of important issues of this project.
+
+= Important issues =
+
+ * issue 1 : Fixed execution of JUnit tests from Ant build file. It is fixed by adding current working directory in junit tag. Consulted Apache's Ant official page for [http://ant.apache.org/manual/Tasks/junit.html junit tag] for help on this work. Revision that fixed it is r9.
+ * ...
