@@ -26,7 +26,7 @@ The current active development trunk (initial work) is for integration of this p
 
 As a part of this work, a new prover API suitable for !GeoGebra system will be implemented. It will accept input from !GeoGebra, convert it to internal prover representation and return the result in !GeoGebra desired format.
 
-On the other side !GeoGebra will provide representation of geometry theorems enhancing its _Construction Protocol_ object to contain statement together with constructions. Also it will provide representation of Non-Degeneracy Conditions (abbreviated !NDG Conditions) and necessary GUI implementation for prover sub-screen. (See more details on [http://www.geogebra.org/trac/wiki GeoGebra Developer Wiki page]).
+On the other side !GeoGebra will provide representation of geometry theorems enhancing its _Construction Protocol_ object to contain statement together with constructions. Also it will provide representation of Non-Degeneracy Conditions (abbreviated NDG Conditions) and necessary GUI implementation for prover sub-screen. (See more details on [http://www.geogebra.org/trac/wiki GeoGebra Developer Wiki page]).
 
 Current development trunk still doesn't have anything specific for !GeoGebra but later at certain point a new branch will be created to track this !GeoGebra baseline.
 
