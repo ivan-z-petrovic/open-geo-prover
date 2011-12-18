@@ -1,0 +1,3 @@
+#summary This page outlines most important notes for Java 5 development related to this project.
+
+(page is still incomplete)
