@@ -5,13 +5,15 @@
 == Branches and Releases ==
 
 === Main development trunk ===
-Project maintains main development trunk. All bugs/issues reported on some specific branch are fixed on development trunk first, then merged to reported branch. Owners decide whether some fix has to be applied from development trunk to some other branches where bug/issue was not detected/reported.
+Project maintains main development trunk. All bugs/issues of general type (not branch specific) reported on some specific branch are fixed on development trunk first, then merged to reported branch. Owners decide whether some fix has to be applied from development trunk to some other branches where bug/issue was not detected/reported.
+
+Branch specific bugs (related to code only from some specific branch) are fixed only on that branch.
 
 All general enhancements/improvements or new features of project are done on development trunk first, then are applied to desired branch. Owners decide whether to apply these improvements to some other branch.
 General approach for other branches (that didn't request the improvement) should be to not change them, but to upgrade them with latest development trunk at certain point.
 
 === New branches ===
-All specific enhancement/improvements (required for specific client i.e. geometry system) are managed this way: a new branch of project is created first, then improvements are implemented only on new branch.
+All specific enhancements/improvements (required for specific client i.e. geometry system) are managed this way: a new branch of project is created first, then improvements are implemented only on new branch.
 
 
 = Current State of Project =
