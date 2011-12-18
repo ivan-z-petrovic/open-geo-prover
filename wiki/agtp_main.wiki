@@ -1,0 +1,3 @@
+#summary This page contains general facts about Automated Geometry Theorem Proving.
+
+(page is still incomplete)
