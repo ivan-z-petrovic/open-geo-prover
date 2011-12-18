@@ -1,0 +1,5 @@
+#summary This page is for general topics about OOP development and design, especially in Java, related to this project.
+
+= OOP topics =
+ Currently no entries for this.
+
