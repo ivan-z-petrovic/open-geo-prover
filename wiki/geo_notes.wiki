@@ -1,0 +1,3 @@
+#summary Page for various geometry topics.
+
+(page still has to be developed)
