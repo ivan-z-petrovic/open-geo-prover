@@ -14,6 +14,9 @@ Coding standards that each developer should follow when making changes in this p
 === [important_issues Important issues] ===
 List of all relevant issues created for this project.
 
+=== [development_solutions Development Solutions] ===
+Explanation of various development solutions (algorithms, design) applied in this project
+
 === [development_discussions Development discussions] ===
 Discussions among developers about various development related questions.
 
