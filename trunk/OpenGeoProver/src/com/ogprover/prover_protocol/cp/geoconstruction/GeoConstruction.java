@@ -174,7 +174,13 @@ public abstract class GeoConstruction {
 	 * </b></i>
 	 */
 	public static final int GEOCONS_TYPE_RADICAL_AXIS = 46;
-	// put other line constructions here => [47 .. 59]
+	/**
+	 * <i><b>
+	 * Construction of angle ray
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_ANGLE_RAY = 47;
+	// put other line constructions here => [48 .. 59]
 	// ======= Conics' constructions =======
 	/**
 	 * <i><b>
