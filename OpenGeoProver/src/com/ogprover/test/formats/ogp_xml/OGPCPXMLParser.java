@@ -44,6 +44,7 @@ public class OGPCPXMLParser {
 		xstream.registerConverter(new OGPCPXMLConverter());
 		// constructions' converters - BEGIN
 		xstream.registerConverter(new AngleBisectorConverter());
+		xstream.registerConverter(new AngleRayConverter());
 		xstream.registerConverter(new CenterOfCircleConverter());
 		xstream.registerConverter(new CentralSymmetricPointConverter());
 		xstream.registerConverter(new CircleWithCenterAndPointConverter());

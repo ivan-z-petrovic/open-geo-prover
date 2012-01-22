@@ -7,6 +7,7 @@ package com.ogprover.test.formats.ogp_xml;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.prover_protocol.cp.geoconstruction.AngleBisector;
+import com.ogprover.prover_protocol.cp.geoconstruction.AngleRay;
 import com.ogprover.prover_protocol.cp.geoconstruction.CenterOfCircle;
 import com.ogprover.prover_protocol.cp.geoconstruction.CentralSymmetricPoint;
 import com.ogprover.prover_protocol.cp.geoconstruction.CircleWithCenterAndPoint;
@@ -94,6 +95,8 @@ public class OGPCPXMLConverter implements Converter {
 		for (GeoConstruction geoCons : consProtocol.getConstructionSteps()) {
 			if (geoCons instanceof AngleBisector)
 				writer.startNode("langbis");
+			else if (geoCons instanceof AngleRay)
+				writer.startNode("langray");
 			else if (geoCons instanceof CenterOfCircle)
 				writer.startNode("pcirclecent");
 			else if (geoCons instanceof CentralSymmetricPoint)
@@ -218,6 +221,8 @@ public class OGPCPXMLConverter implements Converter {
 				
 				if ("langbis".equals(nodeName))
 					geoCons = (AngleBisector)ctx.convertAnother(null, AngleBisector.class);
+				else if ("langray".equals(nodeName))
+					geoCons = (AngleRay)ctx.convertAnother(null, AngleRay.class);
 				else if ("pcirclecent".equals(nodeName))
 					geoCons = (CenterOfCircle)ctx.convertAnother(null, CenterOfCircle.class);
 				else if ("pcentralsymm".equals(nodeName))
