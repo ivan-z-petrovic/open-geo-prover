@@ -403,6 +403,8 @@ public abstract class Polynomial implements Cloneable{
 		Collection<Term> colP = p.getTerms().values(); // all values from tree in ascending order
 		Iterator<Term> termITP = colP.iterator();
 		
+		//long numIterations = 0; // used for better memory management
+		
 		// if passed in polynomial is zero constant - result is zero polynomial
 		this.terms = new TreeMap<Term, Term>(); // new empty tree of terms
 		if (p.isZero() == false) {
@@ -410,11 +412,21 @@ public abstract class Polynomial implements Cloneable{
 				Term curr = termIT.next();
 
 				while (termITP.hasNext()){
+					//numIterations++; // used for better memory management
+					
 					Term currP = termITP.next().clone();
 					currP.mul(curr);
 					this.addTerm(currP); // must use addTerm() method instead of put
 					 					 // because some other two factors can produce
 					 					 // same product so these terms must be merged
+					/*
+					currP = null;
+					
+					if (numIterations > 1000) {
+						Runtime.getRuntime().gc();
+						numIterations = 0;
+					}
+					*/ // used for better memory management
 				}
 				termITP = colP.iterator();
 			}

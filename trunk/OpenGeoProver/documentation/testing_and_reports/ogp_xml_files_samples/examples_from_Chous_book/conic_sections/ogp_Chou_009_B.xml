@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 009">
+	<!-- Example 9 from Chou's book (version with usage of Pascal's theorem) -->
+	<constructions>
+		<pfree label="A0" />
+		<pfree label="A1" />
+		<pfree label="A2" />
+		<pfree label="A3" />
+		<pfree label="A4" />
+		<ltwopts label="A0A1" point1="A0" point2="A1" />
+		<ltwopts label="A2A3" point1="A2" point2="A3" />
+		<pintersect label="A" set1="A0A1" set2="A2A3" />
+		<ltwopts label="A2A4" point1="A2" point2="A4" />
+		<pintersect label="B" set1="A0A1" set2="A2A4" />
+		<ltwopts label="A0A2" point1="A0" point2="A2" />
+		<ltwopts label="A1A3" point1="A1" point2="A3" />
+		<pintersect label="C" set1="A0A2" set2="A1A3" />
+		<ltwopts label="A1A4" point1="A1" point2="A4" />
+		<pintersect label="D" set1="A0A2" set2="A1A4" />
+		<ltwopts label="A0A3" point1="A0" point2="A3" />
+		<ltwopts label="A1A2" point1="A1" point2="A2" />
+		<pintersect label="E" set1="A0A3" set2="A1A2" />
+		<ltwopts label="A0A4" point1="A0" point2="A4" />
+		<pintersect label="F" set1="A0A4" set2="A1A2" />
+		<!-- Pascal's theorem application -->
+		<ltwopts label="AB" point1="A" point2="B" />
+		<ltwopts label="DE" point1="D" point2="E" />
+		<ltwopts label="BC" point1="B" point2="C" />
+		<ltwopts label="EF" point1="E" point2="F" />
+		<ltwopts label="CD" point1="C" point2="D" />
+		<ltwopts label="FA" point1="F" point2="A" />
+		<pintersect label="P" set1="AB" set2="DE" />
+		<pintersect label="Q" set1="BC" set2="EF" />
+		<pintersect label="R" set1="CD" set2="FA" />
+	</constructions>
+	<statement>
+		<collinearpts>
+			<point label="P" />
+			<point label="Q" />
+			<point label="R" />
+		</collinearpts>
+	</statement>
+</geothm>

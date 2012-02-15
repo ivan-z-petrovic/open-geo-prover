@@ -26,7 +26,10 @@ import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.prover_protocol.cp.auxiliary.PointListManager;
 import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
+import com.ogprover.prover_protocol.cp.geoconstruction.FreeParametricSet;
+import com.ogprover.prover_protocol.cp.geoconstruction.ParametricSet;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
+import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromParametricSet;
 import com.ogprover.prover_protocol.cp.geoconstruction.ShortcutConstruction;
 import com.ogprover.prover_protocol.cp.ndgcondition.NDGCondition;
 import com.ogprover.prover_protocol.cp.thmstatement.CompoundThmStatement;
@@ -93,16 +96,21 @@ public class OGPCP {
 	 * Members necessary for instantiation of points in algebraic form - BEGIN
 	 */
 	/**
-	 * Next index of u-variables - it starts with -2 because -2, -1 and 0
-	 * will have meaning of u[0] which is mark for zero value of u-variable;
-	 * first free point is instantiated with (0, 0) and another free point as
-	 * (u1, 0).
+	 * Next index of u-variable
 	 */
-	private int uIndex = -2;
+	private int uIndex = 1;
 	/**
 	 * Next index of x-variable
 	 */
 	private int xIndex = 1;
+	/**
+	 * Number of zero indices used instead of u indices when instantiating points.
+	 */
+	private int numZeroIndices = 0;
+	/**
+	 * Flag that determines whether CP contains some free parametric set or not
+	 */
+	private boolean hasFreeParametricSet = false;
 	/* 
 	 * Members necessary for instantiation of points in algebraic form - END
 	 */
@@ -257,7 +265,34 @@ public class OGPCP {
 	public int getXIndex() {
 		return xIndex;
 	}
+	
+	/**
+	 * @param numZeroIndices the numZeroIndices to set
+	 */
+	public void setNumZeroIndices(int numZeroIndices) {
+		this.numZeroIndices = numZeroIndices;
+	}
 
+	/**
+	 * @return the numZeroIndices
+	 */
+	public int getNumZeroIndices() {
+		return numZeroIndices;
+	}
+	
+	/**
+	 * @param hasFreeParametricSet the hasFreeParametricSet to set
+	 */
+	public void setHasFreeParametricSet(boolean hasFreeParametricSet) {
+		this.hasFreeParametricSet = hasFreeParametricSet;
+	}
+
+	/**
+	 * @return the hasFreeParametricSet
+	 */
+	public boolean isHasFreeParametricSet() {
+		return hasFreeParametricSet;
+	}
 	
 	
 
@@ -293,8 +328,10 @@ public class OGPCP {
 		this.ndgConditions = null;
 		this.algebraicGeoTheorem = new GeoTheorem();
 		this.zeroPoints = null;
-		this.uIndex = -2;
+		this.uIndex = 1;
 		this.xIndex = 1;
+		this.numZeroIndices = 0;
+		this.hasFreeParametricSet = false;
 	}
 	
 	/**
@@ -328,6 +365,15 @@ public class OGPCP {
 			this.constructionMap.put(gc.getGeoObjectLabel(), gc);
 			gc.setConsProtocol(this);
 			gc.setIndex(this.constructionSteps.size() - 1);
+			
+			if (gc instanceof FreeParametricSet) {
+				if (!this.hasFreeParametricSet) { // this is first free parametric set and therefore will contain the origin
+					((FreeParametricSet)gc).setContainsOrigin(true);
+					this.hasFreeParametricSet = true;
+				}
+				else
+					((FreeParametricSet)gc).setContainsOrigin(false);
+			}
 		}
 	}
 	
@@ -386,6 +432,15 @@ public class OGPCP {
 			this.constructionMap.put(gc.getGeoObjectLabel(), gc);
 			gc.setConsProtocol(this);
 			gc.setIndex(index);
+			
+			if (gc instanceof FreeParametricSet) {
+				if (!this.hasFreeParametricSet) { // this is first free parametric set and therefore will contain the origin
+					((FreeParametricSet)gc).setContainsOrigin(true);
+					this.hasFreeParametricSet = true;
+				}
+				else
+					((FreeParametricSet)gc).setContainsOrigin(false);
+			}
 		}
 	}
 	
@@ -537,8 +592,10 @@ public class OGPCP {
 	 * geometry points to their algebraic form (x and u variables).
 	 */
 	public void resetIndices() {
-		this.uIndex = -2;
+		this.uIndex = 1;
 		this.xIndex = 1;
+		this.numZeroIndices = 0;
+		this.hasFreeParametricSet = false;
 	}
 	
 	/**
@@ -579,6 +636,24 @@ public class OGPCP {
 		this.uIndex++;
 	}
 	
+	private void setNumberOfZeroCoordinates() {
+		// If there is a free parametric set of points, take the first
+		// and set necessary number of zero coordinates; otherwise it will be 3
+		// (first free point will be instantiated as (0,0) next free point will be
+		// instantiated as (0,u1)).
+		if (this.hasFreeParametricSet) {
+			for (GeoConstruction geoCons : this.constructionSteps) {
+				if (geoCons instanceof FreeParametricSet) {
+					this.numZeroIndices = ((FreeParametricSet)geoCons).getNumberOfZeroCoordinates();
+					return;
+				}
+			}
+		}
+		
+		this.numZeroIndices = 3;
+		return;
+	}
+	
 	/**
 	 * Method for conversion of this construction protocol
 	 * to algebraic form, used for algebraic prover methods
@@ -588,6 +663,9 @@ public class OGPCP {
 	public int convertToAlgebraicForm() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		FileLogger logger = OpenGeoProver.settings.getLogger();
+		
+		// First of all, set the number of zero coordinates used for instantiation of points
+		this.setNumberOfZeroCoordinates();
 		
 		try {
 			//output.openSection("Transformation of Construction Protocol to algebraic form");
@@ -601,6 +679,16 @@ public class OGPCP {
 						output.openEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
 						output.openItemWithDesc("Error: ");
 						output.closeItemWithDesc("Prover failed to transform construction of point " + geoCons.getGeoObjectLabel() + " to algebraic form.");
+						return OGPConstants.ERR_CODE_GENERAL;
+					}
+				}
+				else if (geoCons instanceof ParametricSet) {
+					int iRet = ((ParametricSet) geoCons).transformToAlgebraicForm();
+					
+					if (iRet != OGPConstants.RET_CODE_SUCCESS) {
+						output.openEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
+						output.openItemWithDesc("Error: ");
+						output.closeItemWithDesc("Prover failed to transform parametric set of points " + geoCons.getGeoObjectLabel() + " to algebraic form.");
 						return OGPConstants.ERR_CODE_GENERAL;
 					}
 				}
@@ -643,42 +731,91 @@ public class OGPCP {
 			return;
 		
 		UXVariable xVar = null, yVar = null;
+		boolean instantiatedAsOrigin = false;
 		
 		switch (pointType) {
 		case Point.POINT_TYPE_FREE:
-			if (this.uIndex <= 0)
+			if (!this.hasFreeParametricSet && this.numZeroIndices > 0) {
 				xVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
-			else
+				this.numZeroIndices--;
+			}
+			else {
 				xVar = new UXVariable(Variable.VAR_TYPE_UX_U, this.uIndex);
-			this.uIndex++;
+				this.uIndex++;
+			}
 			
-			if (this.uIndex <= 0)
+			if (!this.hasFreeParametricSet && this.numZeroIndices > 0) {
 				yVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
-			else
+				this.numZeroIndices--;
+			}
+			else {
 				yVar = new UXVariable(Variable.VAR_TYPE_UX_U, this.uIndex);
-			this.uIndex++;
+				this.uIndex++;
+			}
 			
 			break;
 		case Point.POINT_TYPE_X_INDEPENDENT:
-			if (this.uIndex <= 0)
-				xVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
-			else
-				xVar = new UXVariable(Variable.VAR_TYPE_UX_U, this.uIndex);
-			this.uIndex++;
+			instantiatedAsOrigin = false;
 			
-			yVar = new UXVariable(Variable.VAR_TYPE_UX_X, this.xIndex);
-			this.xIndex++;
+			if (this.hasFreeParametricSet && (P instanceof RandomPointFromParametricSet)) {
+				ParametricSet set = (ParametricSet) ((RandomPointFromParametricSet)P).getBaseSetOfPoints();
+				Point firstPointFromParamSet = set.getPoints().get(0);
+				
+				if ((set instanceof FreeParametricSet) && ((FreeParametricSet)set).isContainsOrigin() && P.equals(firstPointFromParamSet) && this.numZeroIndices > 1) {
+					// instantiate as origin
+					xVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
+					yVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
+					this.numZeroIndices = this.numZeroIndices - 2;
+					instantiatedAsOrigin = true;
+				}
+			}
+			
+			if (!instantiatedAsOrigin) {
+				if ((!this.hasFreeParametricSet || (P instanceof RandomPointFromParametricSet)) &&
+					this.numZeroIndices > 0) {
+					xVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
+					this.numZeroIndices--;
+				}
+				else {
+					xVar = new UXVariable(Variable.VAR_TYPE_UX_U, this.uIndex);
+					this.uIndex++;
+				}
+			
+				yVar = new UXVariable(Variable.VAR_TYPE_UX_X, this.xIndex);
+				this.xIndex++;
+			}
 			
 			break;
 		case Point.POINT_TYPE_Y_INDEPENDENT:
-			xVar = new UXVariable(Variable.VAR_TYPE_UX_X, this.xIndex);
-			this.xIndex++;
+			instantiatedAsOrigin = false;
 			
-			if (this.uIndex <= 0)
-				yVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
-			else
-				yVar = new UXVariable(Variable.VAR_TYPE_UX_U, this.uIndex);
-			this.uIndex++;
+			if (this.hasFreeParametricSet && (P instanceof RandomPointFromParametricSet)) {
+				ParametricSet set = (ParametricSet) ((RandomPointFromParametricSet)P).getBaseSetOfPoints();
+				Point firstPointFromParamSet = set.getPoints().get(0);
+				
+				if ((set instanceof FreeParametricSet) && ((FreeParametricSet)set).isContainsOrigin() && P.equals(firstPointFromParamSet) && this.numZeroIndices > 1) {
+					// instantiate as origin
+					xVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
+					yVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
+					this.numZeroIndices = this.numZeroIndices - 2;
+					instantiatedAsOrigin = true;
+				}
+			}
+			
+			if (!instantiatedAsOrigin) {
+				xVar = new UXVariable(Variable.VAR_TYPE_UX_X, this.xIndex);
+				this.xIndex++;
+			
+				if ((!this.hasFreeParametricSet || (P instanceof RandomPointFromParametricSet)) &&
+					this.numZeroIndices > 0) {
+					yVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
+					this.numZeroIndices--;
+				}
+				else {
+					yVar = new UXVariable(Variable.VAR_TYPE_UX_U, this.uIndex);
+					this.uIndex++;
+				}
+			}
 			
 			break;
 		case Point.POINT_TYPE_DEPENDENT:

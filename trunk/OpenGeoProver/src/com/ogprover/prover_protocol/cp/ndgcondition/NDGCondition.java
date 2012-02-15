@@ -19,6 +19,8 @@ import com.ogprover.prover_protocol.cp.auxiliary.PointsPositionChecker;
 import com.ogprover.prover_protocol.cp.auxiliary.ThreePointsPositionChecker;
 import com.ogprover.prover_protocol.cp.auxiliary.TwoPointsPositionChecker;
 import com.ogprover.prover_protocol.cp.geoconstruction.FreePoint;
+import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
+import com.ogprover.prover_protocol.cp.geoconstruction.ParametricSet;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromSetOfPoints;
 import com.ogprover.utilities.io.FileLogger;
@@ -387,6 +389,24 @@ public class NDGCondition {
 	}
 	
 	/**
+	 * Method that checks polynomial form of this NDG condition
+	 * in other parametric objects.
+	 *  
+	 * @return TRUE if there is some parametric object, FALSE otherwise.
+	 */
+	public boolean checkInParametricObjects() {
+		boolean result = false;
+		
+		for (GeoConstruction geoCons : this.consProtocol.getConstructionSteps()) {
+			if (geoCons instanceof ParametricSet) {
+				((ParametricSet)geoCons).processNDGCondition(this);
+				result = true;
+			}
+		}
+		
+		return result;
+	}
+	/**
 	 * Method that transforms polynomial form of this NDG condition
 	 * to user readable form which is stored in text property.
 	 * If transformation is unsuccessful or impossible, text remains
@@ -401,6 +421,10 @@ public class NDGCondition {
 		FileLogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.populatePointLists() != OGPConstants.RET_CODE_SUCCESS) {
+			// Check if there are other objects with parameters
+			if (checkInParametricObjects() == true)
+				return OGPConstants.RET_CODE_SUCCESS;
+			
 			logger.error("Failed to populate points for NDG condition.");
 			return OGPConstants.ERR_CODE_GENERAL;
 		}

@@ -35,6 +35,15 @@ public class Polar extends ShortcutConstruction {
 	 */
 	public static final String VERSION_NUM = "1.00"; // this should match the version number from class comment
 	
+	/**
+	 * Pole of this polar.
+	 */
+	private Point pole;
+	/**
+	 * Basic set of points (circle or conic section) of this polar.
+	 */
+	private SetOfPoints baseSet;
+	
 	
 	
     /*
@@ -77,7 +86,37 @@ public class Polar extends ShortcutConstruction {
 		return null;
 	}
 	
+	/**
+	 * @param pole the pole to set
+	 */
+	public void setPole(Point pole) {
+		this.pole = pole;
+	}
+
+	/**
+	 * @return the pole
+	 */
+	public Point getPole() {
+		return pole;
+	}
+
+	/**
+	 * @param baseSet the baseSet to set
+	 */
+	public void setBaseSet(SetOfPoints baseSet) {
+		this.baseSet = baseSet;
+	}
+
+	/**
+	 * @return the baseSet
+	 */
+	public SetOfPoints getBaseSet() {
+		return baseSet;
+	}
 	
+	
+	
+
 	/*
 	 * ======================================================================
 	 * ========================== CONSTRUCTORS ==============================
@@ -119,9 +158,9 @@ public class Polar extends ShortcutConstruction {
 			A1 = new RandomPointFromCircle("polarA1" + Math.round(Math.random()*1000), (Circle)baseSet);
 			B1 = new RandomPointFromCircle("polarB1" + Math.round(Math.random()*1000), (Circle)baseSet);
 		}
-		else if (baseSet instanceof ConicSection) {
-			A1 = new RandomPointFromConic("polarA1" + Math.round(Math.random()*1000), (ConicSection)baseSet);
-			B1 = new RandomPointFromConic("polarB1" + Math.round(Math.random()*1000), (ConicSection)baseSet);
+		else if (baseSet instanceof GeneralConicSection) {
+			A1 = new RandomPointFromGeneralConic("polarA1" + Math.round(Math.random()*1000), (GeneralConicSection)baseSet);
+			B1 = new RandomPointFromGeneralConic("polarB1" + Math.round(Math.random()*1000), (GeneralConicSection)baseSet);
 		}
 		else {
 			OpenGeoProver.settings.getLogger().error("Unknown set of points passed in for construction of polar");
@@ -155,6 +194,8 @@ public class Polar extends ShortcutConstruction {
 		this.shortcutListOfConstructions.add(B);
 		
 		this.shortcutListOfConstructions.add(new LineThroughTwoPoints(lineLabel, A, B));
+		this.pole = pole;
+		this.baseSet = baseSet;
 	}
 	
 	

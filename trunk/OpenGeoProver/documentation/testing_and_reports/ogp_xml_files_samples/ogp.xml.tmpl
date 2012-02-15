@@ -48,6 +48,10 @@
 <!-- example: k is circumscribed circle of triangle ABC -->
 <ccircumscribed label="k" point1="A" point2="B" point3="C" />
 
+<!-- ConicSectionWithFivePoints -->
+<!-- example: c is general conic section with points A, B, C, D and E -->
+<psconic5 label="c" pointA="A" pointB="B" pointC="C" pointD="D" pointE="E" />
+
 <!-- FootPoint -->
 <!-- example: F is foot point of perpendicular line through point M to line l -->
 <pfoot label="F" origpt="M" baseline="l" />
@@ -55,6 +59,10 @@
 <!-- FreePoint -->
 <!-- example: A is free point -->
 <pfree label="A" />
+
+<!-- GeneralConicSection -->
+<!-- example: c is general conic section -->
+<psgenconic label="c" />
 
 <!-- GeneralizedSegmentDivisionPoint -->
 <!-- example: point C divides segment AB with following ratio:   -->
@@ -111,6 +119,14 @@
 <!-- example: l is line through point M perpendicular to line p -->
 <lperp label="l" point="M" baseline="p" />
 
+<!-- Polar -->
+<!-- example: l is polar of point P w.r.t. set of points (circle or conic) c -->
+<lpolar label="l" pole="P" set="c" />
+
+<!-- Pole -->
+<!-- example: P is pole of line l w.r.t. set of points (circle or conic) c -->
+<ppole label="P" polar="l" set="c" />
+
 <!-- RadicalAxis -->
 <!-- example: r is radical axis of circles k1 and k2 -->
 <lradical label="r" circle1="k1" circle2="k2" />
@@ -118,6 +134,10 @@
 <!-- RandomPointFromCircle -->
 <!-- example: X is random point from circle k -->
 <prandcircle label="X" circle="k" />
+
+<!-- RandomPointFromGeneralConic -->
+<!-- example: X is random point from general conic section c -->
+<prandgenconic label="X" conic="c" />
 
 <!-- RandomPointFromLine -->
 <!-- example: X is random point from line l -->

@@ -29,10 +29,9 @@ import com.ogprover.prover_protocol.cp.geoconstruction.CircleWithCenterAndPoint;
 import com.ogprover.prover_protocol.cp.geoconstruction.CircleWithCenterAndRadius;
 import com.ogprover.prover_protocol.cp.geoconstruction.CircleWithDiameter;
 import com.ogprover.prover_protocol.cp.geoconstruction.CircumscribedCircle;
-import com.ogprover.prover_protocol.cp.geoconstruction.ConicSection;
-import com.ogprover.prover_protocol.cp.geoconstruction.ConicWithTwoFoci;
 import com.ogprover.prover_protocol.cp.geoconstruction.FootPoint;
 import com.ogprover.prover_protocol.cp.geoconstruction.FreePoint;
+import com.ogprover.prover_protocol.cp.geoconstruction.GeneralConicSection;
 import com.ogprover.prover_protocol.cp.geoconstruction.GeneralizedSegmentDivisionPoint;
 import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
 import com.ogprover.prover_protocol.cp.geoconstruction.HarmonicConjugatePoint;
@@ -41,15 +40,15 @@ import com.ogprover.prover_protocol.cp.geoconstruction.InverseOfPoint;
 import com.ogprover.prover_protocol.cp.geoconstruction.Line;
 import com.ogprover.prover_protocol.cp.geoconstruction.LineThroughTwoPoints;
 import com.ogprover.prover_protocol.cp.geoconstruction.MidPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.Parabola;
 import com.ogprover.prover_protocol.cp.geoconstruction.ParallelLine;
 import com.ogprover.prover_protocol.cp.geoconstruction.PerpendicularBisector;
 import com.ogprover.prover_protocol.cp.geoconstruction.PerpendicularLine;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 import com.ogprover.prover_protocol.cp.geoconstruction.Polar;
+import com.ogprover.prover_protocol.cp.geoconstruction.Pole;
 import com.ogprover.prover_protocol.cp.geoconstruction.RadicalAxis;
 import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromCircle;
-import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromConic;
+import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromGeneralConic;
 import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromLine;
 import com.ogprover.prover_protocol.cp.geoconstruction.ReflexivePoint;
 import com.ogprover.prover_protocol.cp.geoconstruction.RotatedPoint;
@@ -381,47 +380,6 @@ public class MTestCP {
 	 */
 	
 	
-	
-	/**
-	 * Testing conditions for conic sections.
-	 */
-	public static void testConicConditions() {
-		String strCond;
-		String[] strArr;
-		
-		System.out.println();
-		System.out.println("Condition for conic with two foci:");
-		OpenGeoProver.settings.getStopwacth().startMeasureTime();
-		strCond = ConicWithTwoFoci.conditionForConicWithTwoFoci.printToLaTeX();
-		OpenGeoProver.settings.getStopwacth().endMeasureTime();
-		System.out.println();
-		System.out.println("Time in seconds spent for calculation of conic condition is: " + OGPUtilities.roundUpToPrecision(OpenGeoProver.settings.getStopwacth().getTimeIntSec()) + " sec");
-		System.out.println();
-		strArr = strCond.split("\\$\\$");
-		for (String str : strArr)
-			System.out.println(str);
-		System.out.println("List of point labels is:");
-		for (String pointLabel : ConicWithTwoFoci.conditionForConicWithTwoFoci.getAllPointLabels())
-			System.out.print(pointLabel + " ");
-		System.out.println();
-		
-		System.out.println();
-		System.out.println("Condition for parabola:");
-		OpenGeoProver.settings.getStopwacth().startMeasureTime();
-		strCond = Parabola.conditionForParabola.printToLaTeX();
-		OpenGeoProver.settings.getStopwacth().endMeasureTime();
-		System.out.println();
-		System.out.println("Time in seconds spent for calculation of parabola condition is: " + OGPUtilities.roundUpToPrecision(OpenGeoProver.settings.getStopwacth().getTimeIntSec()) + " sec");
-		System.out.println();
-		strArr = strCond.split("\\$\\$");
-		for (String str : strArr)
-			System.out.println(str);
-		System.out.println("List of point labels is:");
-		for (String pointLabel : Parabola.conditionForParabola.getAllPointLabels())
-			System.out.print(pointLabel + " ");
-		System.out.println();
-	}
-	
 	/**
 	 * Testing calculation of first derivative of symbolic polynomials
 	 * for conditions for some point sets.
@@ -620,32 +578,6 @@ public class MTestCP {
 		cp.addGeoConstruction(AC);
 		ShortcutConstruction pointD = new ReflexivePoint("D", pointB, AC);
 		cp.addGeoConstruction(pointD);
-		
-		MTestCP.testConstructions(cp);
-	}
-	
-	// polar example
-	public static void testConstructionTransformationToAlgebraicForm5() {
-		OGPCP cp = new OGPCP();
-		cp.setTheoremName("Polar to ellipse/hyperbola");
-		
-		/*
-		 * Let we have some ellipse/hyperbola with foci points F1, F2
-		 * and one point from it - point A. Let B is some random point.
-		 * Let b be the polar of that point B with respect to given conic. 
-		 */
-		Point pointA = new FreePoint("A");
-		cp.addGeoConstruction(pointA);
-		Point pointF1 = new FreePoint("F1");
-		cp.addGeoConstruction(pointF1);
-		Point pointF2 = new FreePoint("F2");
-		cp.addGeoConstruction(pointF2);
-		Point pointB = new FreePoint("B");
-		cp.addGeoConstruction(pointB);
-		ConicSection conic = new ConicWithTwoFoci("conicW2F", pointA, pointF1, pointF2);
-		cp.addGeoConstruction(conic);
-		ShortcutConstruction polar = new Polar("b", pointB, conic);
-		cp.addGeoConstruction(polar);
 		
 		MTestCP.testConstructions(cp);
 	}
@@ -929,49 +861,7 @@ public class MTestCP {
 				 * Let M, N and P are respectively intersection points of following lines:
 				 * M = AB x DE, N = BC x EF, P = CD x FA. Then M, N and P are collinear points.
 				 */
-				// constructions
-				Point A = new FreePoint("A");
-				cp.addGeoConstruction(A);
-				Point F1 = new FreePoint("F1");
-				cp.addGeoConstruction(F1);
-				Point F2 = new FreePoint("F2");
-				cp.addGeoConstruction(F2);
-				ConicWithTwoFoci conic = new ConicWithTwoFoci("conic", A, F1, F2);
-				cp.addGeoConstruction(conic);
-				Point B = new RandomPointFromConic("B", conic);
-				cp.addGeoConstruction(B);
-				Point C = new RandomPointFromConic("C", conic);
-				cp.addGeoConstruction(C);
-				Point D = new RandomPointFromConic("D", conic);
-				cp.addGeoConstruction(D);
-				Point E = new RandomPointFromConic("E", conic);
-				cp.addGeoConstruction(E);
-				Point F = new RandomPointFromConic("F", conic);
-				cp.addGeoConstruction(F);
-				Line ab = new LineThroughTwoPoints("AB", A, B);
-				cp.addGeoConstruction(ab);
-				Line de = new LineThroughTwoPoints("DE", D, E);
-				cp.addGeoConstruction(de);
-				Line bc = new LineThroughTwoPoints("BC", B, C);
-				cp.addGeoConstruction(bc);
-				Line ef = new LineThroughTwoPoints("EF", E, F);
-				cp.addGeoConstruction(ef);
-				Line cd = new LineThroughTwoPoints("CD", C, D);
-				cp.addGeoConstruction(cd);
-				Line fa = new LineThroughTwoPoints("FA", F, A);
-				cp.addGeoConstruction(fa);
-				Point M = new IntersectionPoint("M", ab, de);
-				cp.addGeoConstruction(M);
-				Point N = new IntersectionPoint("N", bc, ef);
-				cp.addGeoConstruction(N);
-				Point P = new IntersectionPoint("P", cd, fa);
-				cp.addGeoConstruction(P);
-				// statement
-				ArrayList<Point> collPointsList = new ArrayList<Point>();
-				collPointsList.add(M);
-				collPointsList.add(N);
-				collPointsList.add(P);
-				cp.addThmStatement(new CollinearPoints(collPointsList));
+				// There is example of this theorem for general conic section - example 57.
 			}
 			break;
 		case 7:
@@ -2969,6 +2859,267 @@ public class MTestCP {
 				cp.addThmStatement(new CongruentTriangles(A, E, D, C, F, B));
 			}
 			break;
+		case 57:
+			{
+				cp.setTheoremName("Pascal's theorem for general conic");
+			
+				/*
+				 * Let A, B, C, D, E and F be six points from random general conic section.
+				 * Let P be an intersection of lines AB and DE, Q intersection of lines
+				 * BC and EF and R intersection of lines CD and FA. Then points P, Q and R
+				 * are collinear.
+				 */
+				GeneralConicSection c = new GeneralConicSection("c");
+				cp.addGeoConstruction(c);
+				Point A = new RandomPointFromGeneralConic("A", c);
+				cp.addGeoConstruction(A);
+				Point B = new RandomPointFromGeneralConic("B", c);
+				cp.addGeoConstruction(B);
+				Point C = new RandomPointFromGeneralConic("C", c);
+				cp.addGeoConstruction(C);
+				Point D = new RandomPointFromGeneralConic("D", c);
+				cp.addGeoConstruction(D);
+				Point E = new RandomPointFromGeneralConic("E", c);
+				cp.addGeoConstruction(E);
+				Point F = new RandomPointFromGeneralConic("F", c);
+				cp.addGeoConstruction(F);
+				Line AB = new LineThroughTwoPoints("AB", A, B);
+				cp.addGeoConstruction(AB);
+				Line DE = new LineThroughTwoPoints("DE", D, E);
+				cp.addGeoConstruction(DE);
+				Point P = new IntersectionPoint("P", AB, DE);
+				cp.addGeoConstruction(P);
+				Line BC = new LineThroughTwoPoints("BC", B, C);
+				cp.addGeoConstruction(BC);
+				Line EF = new LineThroughTwoPoints("EF", E, F);
+				cp.addGeoConstruction(EF);
+				Point Q = new IntersectionPoint("Q", BC, EF);
+				cp.addGeoConstruction(Q);
+				Line CD = new LineThroughTwoPoints("CD", C, D);
+				cp.addGeoConstruction(CD);
+				Line FA = new LineThroughTwoPoints("FA", F, A);
+				cp.addGeoConstruction(FA);
+				Point R = new IntersectionPoint("R", CD, FA);
+				cp.addGeoConstruction(R);
+				// statement
+				ArrayList<Point> collPointsList = new ArrayList<Point>();
+				collPointsList.add(P);
+				collPointsList.add(Q);
+				collPointsList.add(R);
+				cp.addThmStatement(new CollinearPoints(collPointsList));
+			}
+			break;
+		case 58:
+			{
+				cp.setTheoremName("Converse of Pascal's theorem for general conic");
+		
+				/*
+				 * Let A, B, C, D and E are five points from random general conic section.
+				 * Let P be the intersection of lines AB and DE, Q is random point from line BC
+				 * and R is the intersection of lines PQ and CD. Let F be the intersection of
+				 * lines EQ and RA. Then F is on same conic section like first five points A-E.
+				 */
+				GeneralConicSection c = new GeneralConicSection("c");
+				cp.addGeoConstruction(c);
+				Point A = new RandomPointFromGeneralConic("A", c);
+				cp.addGeoConstruction(A);
+				Point B = new RandomPointFromGeneralConic("B", c);
+				cp.addGeoConstruction(B);
+				Point C = new RandomPointFromGeneralConic("C", c);
+				cp.addGeoConstruction(C);
+				Point D = new RandomPointFromGeneralConic("D", c);
+				cp.addGeoConstruction(D);
+				Point E = new RandomPointFromGeneralConic("E", c);
+				cp.addGeoConstruction(E);
+				Line AB = new LineThroughTwoPoints("AB", A, B);
+				cp.addGeoConstruction(AB);
+				Line DE = new LineThroughTwoPoints("DE", D, E);
+				cp.addGeoConstruction(DE);
+				Point P = new IntersectionPoint("P", AB, DE);
+				cp.addGeoConstruction(P);
+				Line BC = new LineThroughTwoPoints("BC", B, C);
+				cp.addGeoConstruction(BC);
+				Point Q = new RandomPointFromLine("Q", BC);
+				cp.addGeoConstruction(Q);
+				Line PQ = new LineThroughTwoPoints("PQ", P, Q);
+				cp.addGeoConstruction(PQ);
+				Line CD = new LineThroughTwoPoints("CD", C, D);
+				cp.addGeoConstruction(CD);
+				Point R = new IntersectionPoint("R", PQ, CD);
+				cp.addGeoConstruction(R);
+				Line EQ = new LineThroughTwoPoints("EQ", E, Q);
+				cp.addGeoConstruction(EQ);
+				Line RA = new LineThroughTwoPoints("RA", R, A);
+				cp.addGeoConstruction(RA);
+				Point F = new IntersectionPoint("F", EQ, RA);
+				cp.addGeoConstruction(F);
+				// statement
+				cp.addThmStatement(new PointOnSetOfPoints(c, F));
+			}
+			break;
+		case 59: // same thm as in #58
+			{
+				cp.setTheoremName("Converse of Pascal's theorem for general conic");
+	
+				/*
+				 * Let A, B, C, D and E are five points from random general conic section.
+				 * Let P be the intersection of lines AB and DE, Q is random point from line BC
+				 * and R is the intersection of lines PQ and CD. Let F be the intersection of
+				 * lines EQ and RA. Then F is on same conic section like first five points A-E.
+				 */
+				Point O = new FreePoint("O");
+				cp.addGeoConstruction(O);
+				Point M = new FreePoint("M");
+				cp.addGeoConstruction(M);
+				Line OM = new LineThroughTwoPoints("OM", O, M); // y-axis
+				cp.addGeoConstruction(OM);
+				Line n = new PerpendicularLine("n", OM, O); // x-axis
+				cp.addGeoConstruction(n);
+				GeneralConicSection c = new GeneralConicSection("c");
+				cp.addGeoConstruction(c);
+				Point A = new RandomPointFromGeneralConic("A", c);
+				cp.addGeoConstruction(A);
+				Point B = new IntersectionPoint("B", c, OM);
+				cp.addGeoConstruction(B);
+				Point C = new IntersectionPoint("C", c, OM);
+				cp.addGeoConstruction(C);
+				Point D = new IntersectionPoint("D", c, n);
+				cp.addGeoConstruction(D);
+				Point E = new IntersectionPoint("E", c, n);
+				cp.addGeoConstruction(E);
+				Line AB = new LineThroughTwoPoints("AB", A, B);
+				cp.addGeoConstruction(AB);
+				Line DE = new LineThroughTwoPoints("DE", D, E);
+				cp.addGeoConstruction(DE);
+				Point P = new IntersectionPoint("P", AB, DE);
+				cp.addGeoConstruction(P);
+				Line BC = new LineThroughTwoPoints("BC", B, C);
+				cp.addGeoConstruction(BC);
+				Point Q = new RandomPointFromLine("Q", BC);
+				cp.addGeoConstruction(Q);
+				Line PQ = new LineThroughTwoPoints("PQ", P, Q);
+				cp.addGeoConstruction(PQ);
+				Line CD = new LineThroughTwoPoints("CD", C, D);
+				cp.addGeoConstruction(CD);
+				Point R = new IntersectionPoint("R", PQ, CD);
+				cp.addGeoConstruction(R);
+				Line EQ = new LineThroughTwoPoints("EQ", E, Q);
+				cp.addGeoConstruction(EQ);
+				Line RA = new LineThroughTwoPoints("RA", R, A);
+				cp.addGeoConstruction(RA);
+				Point F = new IntersectionPoint("F", EQ, RA);
+				cp.addGeoConstruction(F);
+				// statement
+				cp.addThmStatement(new PointOnSetOfPoints(c, F));
+			}
+			break;
+		case 60: 
+			{
+				cp.setTheoremName("Brianchon");
+
+				/*
+				 * Let A, B, C, D, E and F are six points from random general conic section.
+				 * Let ta, tb, tc, td, te and tf be tangent lines on given conic section in these
+				 * points. Let they intersect each other in following points:
+				 * A1=taXtb, B1=tbXtc, C1=tcXtd, D1=tdXte, E1=teXtf and F1=tfXta.
+				 * Then following lines are concurrent: A1D1, B1E1 and C1F1.
+				 */
+				GeneralConicSection c = new GeneralConicSection("c");
+				cp.addGeoConstruction(c);
+				Point A = new RandomPointFromGeneralConic("A", c);
+				cp.addGeoConstruction(A);
+				Point B = new RandomPointFromGeneralConic("B", c);
+				cp.addGeoConstruction(B);
+				Point C = new RandomPointFromGeneralConic("C", c);
+				cp.addGeoConstruction(C);
+				Point D = new RandomPointFromGeneralConic("D", c);
+				cp.addGeoConstruction(D);
+				Point E = new RandomPointFromGeneralConic("E", c);
+				cp.addGeoConstruction(E);
+				Point F = new RandomPointFromGeneralConic("F", c);
+				cp.addGeoConstruction(F);
+				Line ta = new TangentLine("ta", A, c);
+				cp.addGeoConstruction(ta);
+				Line tb = new TangentLine("tb", B, c);
+				cp.addGeoConstruction(tb);
+				Line tc = new TangentLine("tc", C, c);
+				cp.addGeoConstruction(tc);
+				Line td = new TangentLine("td", D, c);
+				cp.addGeoConstruction(td);
+				Line te = new TangentLine("te", E, c);
+				cp.addGeoConstruction(te);
+				Line tf = new TangentLine("tf", F, c);
+				cp.addGeoConstruction(tf);
+				Point A1 = new IntersectionPoint("A1", ta, tb);
+				cp.addGeoConstruction(A1);
+				Point B1 = new IntersectionPoint("B1", tb, tc);
+				cp.addGeoConstruction(B1);
+				Point C1 = new IntersectionPoint("C1", tc, td);
+				cp.addGeoConstruction(C1);
+				Point D1 = new IntersectionPoint("D1", td, te);
+				cp.addGeoConstruction(D1);
+				Point E1 = new IntersectionPoint("E1", te, tf);
+				cp.addGeoConstruction(E1);
+				Point F1 = new IntersectionPoint("F1", tf, ta);
+				cp.addGeoConstruction(F1);
+				Line p = new LineThroughTwoPoints("p", A1, D1);
+				cp.addGeoConstruction(p);
+				Line q = new LineThroughTwoPoints("q", B1, E1);
+				cp.addGeoConstruction(q);
+				Line r = new LineThroughTwoPoints("r", C1, F1);
+				cp.addGeoConstruction(r);
+				Point S = new IntersectionPoint("S", p, q);
+				cp.addGeoConstruction(S);
+				// statement
+				cp.addThmStatement(new PointOnSetOfPoints(r, S));
+			}
+			break;
+		case 61: 
+			{
+				cp.setTheoremName("Pole and Polar");
+
+				/*
+				 * Let A be some random point and c is general conic.
+				 * If a is polar of A w.r.t. conic c, then pole P of line a
+				 * w.r.t. conic c is equal to point A.
+				 */
+				GeneralConicSection c = new GeneralConicSection("c");
+				cp.addGeoConstruction(c);
+				Point A = new FreePoint("A");
+				cp.addGeoConstruction(A);
+				ShortcutConstruction a = new Polar("a", A, c);
+				cp.addGeoConstruction(a);
+				ShortcutConstruction P = new Pole("P", a.getLine(), c);
+				cp.addGeoConstruction(P);
+				// statement
+				cp.addThmStatement(new IdenticalPoints(A, P.getPoint()));
+			}
+			break;
+		case 62: 
+			{
+				cp.setTheoremName("Pole and Polar for circle");
+	
+				/*
+				 * Let A be some random point and c is circle with center O and point B.
+				 * If a is polar of A w.r.t. circle c, then pole P of line a
+				 * w.r.t. circle c is equal to point A.
+				 */
+				Point O = new FreePoint("O");
+				cp.addGeoConstruction(O);
+				Point B = new FreePoint("B");
+				cp.addGeoConstruction(B);
+				Point A = new FreePoint("A");
+				cp.addGeoConstruction(A);
+				Circle c = new CircleWithCenterAndPoint("c", O, B);
+				cp.addGeoConstruction(c);
+				ShortcutConstruction a = new Polar("a", A, c);
+				cp.addGeoConstruction(a);
+				ShortcutConstruction P = new Pole("P", a.getLine(), c);
+				cp.addGeoConstruction(P);
+				// statement
+				cp.addThmStatement(new IdenticalPoints(A, P.getPoint()));
+			}
+			break;
 		default:
 			break;
 		}
@@ -2991,6 +3142,9 @@ public class MTestCP {
 		 * Prepare settings
 		 */
 		OpenGeoProver.settings = new OGPConfigurationSettings();
+		//OpenGeoProver.settings.getParameters().putTimeLimit(900000); // 15 min
+		//OpenGeoProver.settings.getParameters().putTimeLimit(50400000); // 14 h
+		//OpenGeoProver.settings.getParameters().putSpaceLimit(10000000);
 		//OpenGeoProver.settings.setOutput(new OGPOutput(null, null)); // no output files
 		try {
 			OpenGeoProver.settings.setOutput(new OGPOutput(new LaTeXFileWriter("my_latex_test"), null));
@@ -3077,6 +3231,9 @@ public class MTestCP {
 		MTestCP.testTheoremProving(54);
 		MTestCP.testTheoremProving(55);
 		MTestCP.testTheoremProving(56);
+		MTestCP.testTheoremProving(57);
+		MTestCP.testTheoremProving(58);
+		MTestCP.testTheoremProving(59);
 		*/
 	   /*
 		* Disproved (intentionally or not) or can't be proved/disproved or problems
@@ -3090,13 +3247,13 @@ public class MTestCP {
 		MTestCP.testTheoremProving(47); // can't be proved !!! (power of point w.r.t. circle)
 		MTestCP.testTheoremProving(48); // can't be proved !!! (power of point w.r.t. circle - 2)
 		MTestCP.testTheoremProving(49); // can't be proved !!! (power of point w.r.t. circle - 3) - huge complexity
+		MTestCP.testTheoremProving(60); // can't be proved !!! (memory and time exceed all limits per process)
+		MTestCP.testTheoremProving(61); // can't be proved !!! (memory and time exceed all limits per process)
+		MTestCP.testTheoremProving(62); // can't be proved !!! (memory and time exceed all limits per process)
 		*/
 		
 		// put current theorem(s) here
-		//MTestCP.testTheoremProving(39);
-		//MTestCP.testTheoremProving(32); // butterfly thm
-		//MTestCP.testTheoremProving(54);
-		MTestCP.testTheoremProving(11);
+		MTestCP.testTheoremProving(57);
 		
 		OpenGeoProver.settings.getTimer().cancel(); // cancel timer thread
 		

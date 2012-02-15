@@ -431,7 +431,7 @@ public class XPolySystem {
 			
 			// if no polynomial found with variable x[ii] that is error
 			if (notFreeSystem.size() == 0) {
-				logger.error("Variable with index " + ii + " not found in polynomail system.");
+				logger.error("Variable with index " + ii + " not found in polynomial system.");
 				return OGPConstants.ERR_CODE_GENERAL;
 			}
 			

@@ -43,6 +43,7 @@ public class JUTestPoint extends TestCase {
 	@Before
 	public void setUp() throws Exception{
 		consProtocol = new OGPCP();
+		consProtocol.setNumZeroIndices(3);
 		point = new FreePoint("A");
 		consProtocol.addGeoConstruction(point);
 		

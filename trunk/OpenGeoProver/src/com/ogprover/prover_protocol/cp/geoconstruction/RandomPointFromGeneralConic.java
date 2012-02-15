@@ -16,13 +16,13 @@ import com.ogprover.utilities.io.OGPOutput;
 /**
 * <dl>
 * <dt><b>Class description:</b></dt>
-* <dd>Class for random point from conic</dd>
+* <dd>Class for random point from general conic section</dd>
 * </dl>
 * 
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class RandomPointFromConic extends RandomPointFromSetOfPoints {
+public class RandomPointFromGeneralConic extends RandomPointFromParametricSet {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -67,9 +67,9 @@ public class RandomPointFromConic extends RandomPointFromSetOfPoints {
 	 * @param pointLabel	Label of this point
 	 * @param conic			Base conic which this point belongs to
 	 */
-	public RandomPointFromConic(String pointLabel, ConicSection conic) {
+	public RandomPointFromGeneralConic(String pointLabel, ConicSection conic) {
 		this.geoObjectLabel = pointLabel;
-		this.baseSetOfPoints = conic;
+		this.baseSetOfPoints = (SetOfPoints) conic;
 		// add point to point set
 		if (this.baseSetOfPoints != null)
 			this.baseSetOfPoints.addPointToSet(this);
@@ -92,7 +92,7 @@ public class RandomPointFromConic extends RandomPointFromSetOfPoints {
 	public Point clone() {
 		// call constructor with null set of points to avoid adding cloned point to
 		// that set of points; later just set the base set of points reference
-		RandomPointFromConic p = new RandomPointFromConic(this.geoObjectLabel, null);
+		RandomPointFromGeneralConic p = new RandomPointFromGeneralConic(this.geoObjectLabel, null);
 		p.setBaseSetOfPoints(this.baseSetOfPoints);
 		
 		if (this.getX() != null)
@@ -135,7 +135,7 @@ public class RandomPointFromConic extends RandomPointFromSetOfPoints {
 				return false;
 			}
 			
-			if (baseConic.getIndex() < 0 || baseConic.getIndex() >= this.index) {
+			if (((GeoConstruction)baseConic).getIndex() < 0 || ((GeoConstruction)baseConic).getIndex() >= this.index) {
 				output.openItemWithDesc("Error: ");
 				output.closeItemWithDesc("Random point " + this.getGeoObjectLabel() + " can't be constructed since its base conic is not yet constructed or not added to construction protocol");
 				return false;
@@ -145,11 +145,6 @@ public class RandomPointFromConic extends RandomPointFromSetOfPoints {
 			output.close();
 			return false;
 		}
-		
-		// further specific logic depends on conic type - add bellow specific logic if necessary
-		if (baseConic instanceof Parabola)
-			return ((Parabola)baseConic).isParabolaPointConstructionValid(this);
-		// TODO add other conditions for some other conic types here (if required) ...
 		
 		return true;
 	}
@@ -162,7 +157,7 @@ public class RandomPointFromConic extends RandomPointFromSetOfPoints {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Random point ");
 		sb.append(this.geoObjectLabel);
-		sb.append(" from conic ");
+		sb.append(" from general conic ");
 		sb.append(((GeoConstruction)this.baseSetOfPoints).getGeoObjectLabel());
 		return sb.toString();
 	}

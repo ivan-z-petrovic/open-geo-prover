@@ -563,6 +563,13 @@ public class XPolynomial extends Polynomial {
 				canProceed = true; // after division, one more loop step will be done
 				// calculate new reminder
 				reminder = (XPolynomial)reminder.multiplyByPolynomial(pc).subtractPolynomial(p.clone().multiplyByPolynomial(rc));
+				/*
+				XPolynomial tempP = (XPolynomial) p.clone();
+				tempP.multiplyByPolynomial(rc);
+				reminder.multiplyByPolynomial(pc).subtractPolynomial(tempP);
+				tempP = null;
+				Runtime.getRuntime().gc();
+				*/ // used for better memory management
 			}
 			
 			/*
@@ -767,6 +774,22 @@ public class XPolynomial extends Polynomial {
 			
 			if (xp.equals(conditionPoly))
 				return true; // found a match
+		}
+		
+		// special case - if NDGC polynomial is single term polynomial, check whether position polynomial is divisible by it
+		if (conditionPoly.getTerms().size() == 1) {
+			boolean bDivisible = true;
+			Term singleTerm = conditionPoly.getTermsAsDescList().get(0);
+			
+			for (Term xt : posPolyResidum.getTermsAsDescList()) {
+				if (!xt.isDivisibleByTerm(singleTerm)) {
+					bDivisible = false;
+					break;
+				}
+			}
+		
+			if (bDivisible)
+				return true;
 		}
 		
 		return posPolyResidum.equals(conditionPoly);

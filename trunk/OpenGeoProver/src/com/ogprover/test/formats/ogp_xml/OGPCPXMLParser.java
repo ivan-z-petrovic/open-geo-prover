@@ -51,8 +51,10 @@ public class OGPCPXMLParser {
 		xstream.registerConverter(new CircleWithCenterAndRadiusConverter());
 		xstream.registerConverter(new CircleWithDiameterConverter());
 		xstream.registerConverter(new CircumscribedCircleConverter());
+		xstream.registerConverter(new ConicSectionWithFivePointsConverter());
 		xstream.registerConverter(new FootPointConverter());
 		xstream.registerConverter(new FreePointConverter());
+		xstream.registerConverter(new GeneralConicSectionConverter());
 		xstream.registerConverter(new GeneralizedSegmentDivisionPointConverter());
 		xstream.registerConverter(new HarmonicConjugatePointConverter());
 		xstream.registerConverter(new IntersectionPointConverter());
@@ -62,8 +64,11 @@ public class OGPCPXMLParser {
 		xstream.registerConverter(new ParallelLineConverter());
 		xstream.registerConverter(new PerpendicularBisectorConverter());
 		xstream.registerConverter(new PerpendicularLineConverter());
+		xstream.registerConverter(new PolarConverter());
+		xstream.registerConverter(new PoleConverter());
 		xstream.registerConverter(new RadicalAxisConverter());
 		xstream.registerConverter(new RandomPointFromCircleConverter());
+		xstream.registerConverter(new RandomPointFromGeneralConicConverter());
 		xstream.registerConverter(new RandomPointFromLineConverter());
 		xstream.registerConverter(new ReflexivePointConverter());
 		xstream.registerConverter(new RotatedPointConverter());

@@ -35,6 +35,15 @@ public class Pole extends ShortcutConstruction {
 	 */
 	public static final String VERSION_NUM = "1.00"; // this should match the version number from class comment
 	
+	/**
+	 * Polar of this pole.
+	 */
+	private Line polar;
+	/**
+	 * Basic set of points (circle or conic section) of this pole.
+	 */
+	private SetOfPoints baseSet;
+	
 	
 	
     /*
@@ -76,6 +85,35 @@ public class Pole extends ShortcutConstruction {
 		// This construction is not for conic
 		return null;
 	}
+	
+	/**
+	 * @param polar the polar to set
+	 */
+	public void setPolar(Line polar) {
+		this.polar = polar;
+	}
+
+	/**
+	 * @return the polar
+	 */
+	public Line getPolar() {
+		return polar;
+	}
+
+	/**
+	 * @param baseSet the baseSet to set
+	 */
+	public void setBaseSet(SetOfPoints baseSet) {
+		this.baseSet = baseSet;
+	}
+
+	/**
+	 * @return the baseSet
+	 */
+	public SetOfPoints getBaseSet() {
+		return baseSet;
+	}
+	
 	
 	
 	/*
@@ -133,11 +171,11 @@ public class Pole extends ShortcutConstruction {
 			D11 = new RandomPointFromCircle("poleD11" + Math.round(Math.random()*1000), (Circle)baseSet);
 			D21 = new RandomPointFromCircle("poleD21" + Math.round(Math.random()*1000), (Circle)baseSet);
 		}
-		else if (baseSet instanceof ConicSection) {
-			C11 = new RandomPointFromConic("poleC11" + Math.round(Math.random()*1000), (ConicSection)baseSet);
-			C21 = new RandomPointFromConic("poleC21" + Math.round(Math.random()*1000), (ConicSection)baseSet);
-			D11 = new RandomPointFromConic("poleD11" + Math.round(Math.random()*1000), (ConicSection)baseSet);
-			D21 = new RandomPointFromConic("poleD21" + Math.round(Math.random()*1000), (ConicSection)baseSet);
+		else if (baseSet instanceof GeneralConicSection) {
+			C11 = new RandomPointFromGeneralConic("poleC11" + Math.round(Math.random()*1000), (GeneralConicSection)baseSet);
+			C21 = new RandomPointFromGeneralConic("poleC21" + Math.round(Math.random()*1000), (GeneralConicSection)baseSet);
+			D11 = new RandomPointFromGeneralConic("poleD11" + Math.round(Math.random()*1000), (GeneralConicSection)baseSet);
+			D21 = new RandomPointFromGeneralConic("poleD21" + Math.round(Math.random()*1000), (GeneralConicSection)baseSet);
 		}
 		else {
 			OpenGeoProver.settings.getLogger().error("Unknown set of points passed in for construction of pole");
@@ -198,6 +236,8 @@ public class Pole extends ShortcutConstruction {
 		this.shortcutListOfConstructions.add(u);
 		
 		this.shortcutListOfConstructions.add(new IntersectionPoint(pointLabel, t, u));
+		this.polar = polar;
+		this.baseSet = baseSet;
 	}
 	
 	
