@@ -62,6 +62,7 @@ public interface SpecialFileFormatting {
 	public void writeEnumDescription(String desc) throws IOException;
 	public void writeEnumItem(String text) throws IOException;
 	public void writePointCoordinatesAssignment(Point P) throws IOException;
+	public void writePointWithCoordinates(Point P) throws IOException;
 	public void writePolynomial(int index, XPolynomial xpoly) throws IOException;
 	public void writePolynomial(XPolynomial xpoly) throws IOException;
 	public void writePolySystem(XPolySystem xpolySys) throws IOException;

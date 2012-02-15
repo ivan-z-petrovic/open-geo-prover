@@ -126,7 +126,7 @@ public abstract class GeoConstruction {
 	public static final int GEOCONS_TYPE_RAND_POINT_ON_CIRCLE = 31;
 	/**
 	 * <i><b>
-	 * Construction of random point on conic
+	 * Construction of random point on general conic
 	 * </b></i>
 	 */
 	public static final int GEOCONS_TYPE_RAND_POINT_ON_CONIC = 32;
@@ -208,16 +208,16 @@ public abstract class GeoConstruction {
 	public static final int GEOCONS_TYPE_CIRCUMSCRIBED_CIRCLE = 63;
 	/**
 	 * <i><b>
-	 * Construction of conic with two foci
+	 * Construction of general conic section
 	 * </b></i>
 	 */
-	public static final int GEOCONS_TYPE_CONIC_WITH_TWO_FOCI = 64;
+	public static final int GEOCONS_TYPE_CONIC_SECTION = 64;
 	/**
 	 * <i><b>
-	 * Construction of parabola
+	 * Construction of general conic section with five points
 	 * </b></i>
 	 */
-	public static final int GEOCONS_TYPE_PARABOLA = 65;
+	public static final int GEOCONS_TYPE_CONIC_SECTION_WITH_FIVE_PTS = 65;
 	// put other conic constructions here => [66 .. 69]
 	/*
 	 * The rest of construction types are listed here, but some of them 

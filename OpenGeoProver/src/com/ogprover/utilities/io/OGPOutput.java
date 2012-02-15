@@ -283,6 +283,17 @@ public class OGPOutput implements SpecialFileFormatting {
 			this.xmlFile.writePointCoordinatesAssignment(P);
 	}
 	
+	public void writePointWithCoordinates(Point P)
+			throws IOException {
+		if (this.closed)
+			return;
+
+		if (this.latexFile != null)
+			this.latexFile.writePointWithCoordinates(P);
+		if (this.xmlFile != null)
+			this.xmlFile.writePointWithCoordinates(P);
+	}
+	
 	public void writePolynomial(int index, XPolynomial xpoly)
 			throws IOException {
 		if (this.closed)

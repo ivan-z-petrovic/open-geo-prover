@@ -212,8 +212,6 @@ public class IntersectionPoint extends Point {
 			return ((PerpendicularLine)this.firstPointSet).isPerpendicularLinePointConstructionValid(this);
 		if (this.firstPointSet instanceof ParallelLine)
 			return ((ParallelLine)this.firstPointSet).isParallelLinePointConstructionValid(this);
-		if (this.firstPointSet instanceof Parabola)
-			return ((Parabola)this.firstPointSet).isParabolaPointConstructionValid(this);
 		// TODO add other conditions for some other point set types here (if required) ...
 		
 		// further specific logic depends on set type - add bellow specific logic if necessary
@@ -221,8 +219,6 @@ public class IntersectionPoint extends Point {
 			return ((PerpendicularLine)this.secondPointSet).isPerpendicularLinePointConstructionValid(this);
 		if (this.secondPointSet instanceof ParallelLine)
 			return ((ParallelLine)this.secondPointSet).isParallelLinePointConstructionValid(this);
-		if (this.secondPointSet instanceof Parabola)
-			return ((Parabola)this.secondPointSet).isParabolaPointConstructionValid(this);
 		// TODO add other conditions for some other point set types here (if required) ...
 		
 		return true;

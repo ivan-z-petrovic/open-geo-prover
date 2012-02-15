@@ -48,7 +48,7 @@ public abstract class PointsPositionChecker {
 	/**
 	 * Initial value of u-index in auxiliary CP.
 	 */
-	protected int acpUIndex = -2;
+	protected int acpUIndex = 1;
 	/**
 	 * Initial value of x-index in auxiliary CP.
 	 */

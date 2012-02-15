@@ -6,58 +6,8 @@ package com.ogprover.test.formats.ogp_xml;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoconstruction.AngleBisector;
-import com.ogprover.prover_protocol.cp.geoconstruction.AngleRay;
-import com.ogprover.prover_protocol.cp.geoconstruction.CenterOfCircle;
-import com.ogprover.prover_protocol.cp.geoconstruction.CentralSymmetricPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.CircleWithCenterAndPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.CircleWithCenterAndRadius;
-import com.ogprover.prover_protocol.cp.geoconstruction.CircleWithDiameter;
-import com.ogprover.prover_protocol.cp.geoconstruction.CircumscribedCircle;
-import com.ogprover.prover_protocol.cp.geoconstruction.FootPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.FreePoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeneralizedSegmentDivisionPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
-import com.ogprover.prover_protocol.cp.geoconstruction.HarmonicConjugatePoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.IntersectionPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.InverseOfPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.LineThroughTwoPoints;
-import com.ogprover.prover_protocol.cp.geoconstruction.MidPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.ParallelLine;
-import com.ogprover.prover_protocol.cp.geoconstruction.PerpendicularBisector;
-import com.ogprover.prover_protocol.cp.geoconstruction.PerpendicularLine;
-import com.ogprover.prover_protocol.cp.geoconstruction.RadicalAxis;
-import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromCircle;
-import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromLine;
-import com.ogprover.prover_protocol.cp.geoconstruction.ReflexivePoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.RotatedPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.SegmentDivisionPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.TangentLine;
-import com.ogprover.prover_protocol.cp.geoconstruction.TranslatedPoint;
-import com.ogprover.prover_protocol.cp.thmstatement.AlgebraicSumOfThreeAngles;
-import com.ogprover.prover_protocol.cp.thmstatement.AlgebraicSumOfThreeSegments;
-import com.ogprover.prover_protocol.cp.thmstatement.CollinearPoints;
-import com.ogprover.prover_protocol.cp.thmstatement.ConcurrentCircles;
-import com.ogprover.prover_protocol.cp.thmstatement.ConcurrentLines;
-import com.ogprover.prover_protocol.cp.thmstatement.ConcyclicPoints;
-import com.ogprover.prover_protocol.cp.thmstatement.CongruentTriangles;
-import com.ogprover.prover_protocol.cp.thmstatement.EqualAngles;
-import com.ogprover.prover_protocol.cp.thmstatement.EqualityOfRatioProducts;
-import com.ogprover.prover_protocol.cp.thmstatement.EqualityOfTwoRatios;
-import com.ogprover.prover_protocol.cp.thmstatement.FourHarmonicConjugatePoints;
-import com.ogprover.prover_protocol.cp.thmstatement.IdenticalPoints;
-import com.ogprover.prover_protocol.cp.thmstatement.LinearCombinationOfDoubleSignedPolygonAreas;
-import com.ogprover.prover_protocol.cp.thmstatement.LinearCombinationOfOrientedSegments;
-import com.ogprover.prover_protocol.cp.thmstatement.PointOnSetOfPoints;
-import com.ogprover.prover_protocol.cp.thmstatement.RatioOfOrientedSegments;
-import com.ogprover.prover_protocol.cp.thmstatement.RatioOfTwoSegments;
-import com.ogprover.prover_protocol.cp.thmstatement.SegmentsOfEqualLengths;
-import com.ogprover.prover_protocol.cp.thmstatement.SimilarTriangles;
-import com.ogprover.prover_protocol.cp.thmstatement.ThmStatement;
-import com.ogprover.prover_protocol.cp.thmstatement.TouchingCircles;
-import com.ogprover.prover_protocol.cp.thmstatement.TwoInversePoints;
-import com.ogprover.prover_protocol.cp.thmstatement.TwoParallelLines;
-import com.ogprover.prover_protocol.cp.thmstatement.TwoPerpendicularLines;
+import com.ogprover.prover_protocol.cp.geoconstruction.*;
+import com.ogprover.prover_protocol.cp.thmstatement.*;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -109,10 +59,14 @@ public class OGPCPXMLConverter implements Converter {
 				writer.startNode("cdiam");
 			else if (geoCons instanceof CircumscribedCircle)
 				writer.startNode("ccircumscribed");
+			else if (geoCons instanceof ConicSectionWithFivePoints)
+				writer.startNode("psconic5");
 			else if (geoCons instanceof FootPoint)
 				writer.startNode("pfoot");
 			else if (geoCons instanceof FreePoint)
 				writer.startNode("pfree");
+			else if (geoCons instanceof GeneralConicSection)
+				writer.startNode("psgenconic");
 			else if (geoCons instanceof GeneralizedSegmentDivisionPoint)
 				writer.startNode("pgensegdiv");
 			else if (geoCons instanceof HarmonicConjugatePoint)
@@ -131,10 +85,16 @@ public class OGPCPXMLConverter implements Converter {
 				writer.startNode("lperpbis");
 			else if (geoCons instanceof PerpendicularLine)
 				writer.startNode("lperp");
+			else if (geoCons instanceof Polar)
+				writer.startNode("lpolar");
+			else if (geoCons instanceof Pole)
+				writer.startNode("ppole");
 			else if (geoCons instanceof RadicalAxis)
 				writer.startNode("lradical");
 			else if (geoCons instanceof RandomPointFromCircle)
 				writer.startNode("prandcircle");
+			else if (geoCons instanceof RandomPointFromGeneralConic)
+				writer.startNode("prandgenconic");
 			else if (geoCons instanceof RandomPointFromLine)
 				writer.startNode("prandline");
 			else if (geoCons instanceof ReflexivePoint)
@@ -235,10 +195,14 @@ public class OGPCPXMLConverter implements Converter {
 					geoCons = (CircleWithDiameter)ctx.convertAnother(null, CircleWithDiameter.class);
 				else if ("ccircumscribed".equals(nodeName))
 					geoCons = (CircumscribedCircle)ctx.convertAnother(null, CircumscribedCircle.class);
+				else if ("psconic5".equals(nodeName)) 
+					geoCons = (ConicSectionWithFivePoints)ctx.convertAnother(null, ConicSectionWithFivePoints.class);
 				else if ("pfoot".equals(nodeName))
 					geoCons = (FootPoint)ctx.convertAnother(null, FootPoint.class);
 				else if ("pfree".equals(nodeName))
 					geoCons = (FreePoint)ctx.convertAnother(null, FreePoint.class);
+				else if ("psgenconic".equals(nodeName)) 
+					geoCons = (GeneralConicSection)ctx.convertAnother(null, GeneralConicSection.class);
 				else if ("pgensegdiv".equals(nodeName)) 
 					geoCons = (GeneralizedSegmentDivisionPoint)ctx.convertAnother(null, GeneralizedSegmentDivisionPoint.class);
 				else if ("pharmonicconj".equals(nodeName)) 
@@ -257,10 +221,16 @@ public class OGPCPXMLConverter implements Converter {
 					geoCons = (PerpendicularBisector)ctx.convertAnother(null, PerpendicularBisector.class);
 				else if ("lperp".equals(nodeName)) 
 					geoCons = (PerpendicularLine)ctx.convertAnother(null, PerpendicularLine.class);
+				else if ("lpolar".equals(nodeName)) 
+					geoCons = (Polar)ctx.convertAnother(null, Polar.class);
+				else if ("ppole".equals(nodeName)) 
+					geoCons = (Pole)ctx.convertAnother(null, Pole.class);
 				else if ("lradical".equals(nodeName)) 
 					geoCons = (RadicalAxis)ctx.convertAnother(null, RadicalAxis.class);
 				else if ("prandcircle".equals(nodeName))
 					geoCons = (RandomPointFromCircle)ctx.convertAnother(null, RandomPointFromCircle.class);
+				else if ("prandgenconic".equals(nodeName))
+					geoCons = (RandomPointFromGeneralConic)ctx.convertAnother(null, RandomPointFromGeneralConic.class);
 				else if ("prandline".equals(nodeName))
 					geoCons = (RandomPointFromLine)ctx.convertAnother(null, RandomPointFromLine.class);
 				else if ("preflexive".equals(nodeName))

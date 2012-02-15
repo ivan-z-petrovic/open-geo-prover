@@ -323,6 +323,18 @@ public class LaTeXFileWriter extends CustomFileWriter implements SpecialFileForm
 		this.write(sb.toString());
 	}
 	
+	public void writePointWithCoordinates(Point P)
+			throws IOException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(P.getGeoObjectLabel());
+		sb.append("($");
+		sb.append(P.getX().printToLaTeX());
+		sb.append("$, $");
+		sb.append(P.getY().printToLaTeX());
+		sb.append("$)");
+		this.write(sb.toString());
+	}
+	
 	public void writePolynomial(int index, XPolynomial xpoly)
 			throws IOException {
 		StringBuilder sb = new StringBuilder();

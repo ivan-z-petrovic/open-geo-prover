@@ -310,6 +310,18 @@ public class XMLFileWriter extends CustomFileWriter implements SpecialFileFormat
 		this.write(sb.toString());
 	}
 	
+	public void writePointWithCoordinates(Point P)
+			throws IOException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(P.getGeoObjectLabel());
+		sb.append("(");
+		sb.append(P.getX().printToXML());
+		sb.append(", ");
+		sb.append(P.getY().printToXML());
+		sb.append(")");
+		this.write(sb.toString());
+	}
+	
 	private String getPolynomialText(int index, XPolynomial xpoly) {
 		StringBuilder sb = new StringBuilder();
 		int outIndex = index + 1;
