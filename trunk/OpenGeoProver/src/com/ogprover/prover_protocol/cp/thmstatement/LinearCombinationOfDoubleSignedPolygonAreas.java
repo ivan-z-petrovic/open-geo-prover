@@ -163,7 +163,7 @@ public class LinearCombinationOfDoubleSignedPolygonAreas extends DimensionThmSta
 		StringBuilder sb = new StringBuilder();
 		sb.append("Linear combination of double signed polygon areas: ");
 		for (int ii = 0; ii < this.coefficients.size(); ii++) {
-			if (ii > 0)
+			if (ii > 0 && this.coefficients.get(ii) > 0)
 				sb.append("+");
 			sb.append(this.coefficients.get(ii));
 			sb.append("*");

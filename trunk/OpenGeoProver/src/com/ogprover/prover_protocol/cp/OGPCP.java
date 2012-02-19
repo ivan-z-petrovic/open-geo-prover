@@ -31,6 +31,7 @@ import com.ogprover.prover_protocol.cp.geoconstruction.ParametricSet;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromParametricSet;
 import com.ogprover.prover_protocol.cp.geoconstruction.ShortcutConstruction;
+import com.ogprover.prover_protocol.cp.geoconstruction.SpecialConstantAngle;
 import com.ogprover.prover_protocol.cp.ndgcondition.NDGCondition;
 import com.ogprover.prover_protocol.cp.thmstatement.CompoundThmStatement;
 import com.ogprover.prover_protocol.cp.thmstatement.ThmStatement;
@@ -689,6 +690,16 @@ public class OGPCP {
 						output.openEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
 						output.openItemWithDesc("Error: ");
 						output.closeItemWithDesc("Prover failed to transform parametric set of points " + geoCons.getGeoObjectLabel() + " to algebraic form.");
+						return OGPConstants.ERR_CODE_GENERAL;
+					}
+				}
+				else if (geoCons instanceof SpecialConstantAngle) {
+					int iRet = ((SpecialConstantAngle) geoCons).transformToAlgebraicForm();
+					
+					if (iRet != OGPConstants.RET_CODE_SUCCESS) {
+						output.openEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
+						output.openItemWithDesc("Error: ");
+						output.closeItemWithDesc("Prover failed to transform special constant angle " + geoCons.getGeoObjectLabel() + " to algebraic form.");
 						return OGPConstants.ERR_CODE_GENERAL;
 					}
 				}

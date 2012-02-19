@@ -87,7 +87,7 @@ public class SymbolicPolynomial extends Polynomial {
 	 * @param cf	real constant that represents constant polynomial
 	 */
 	public SymbolicPolynomial(double cf) {
-		Term singleTerm = new UTerm(cf);
+		Term singleTerm = new SymbolicTerm(cf);
 		this.terms = new TreeMap<Term, Term>();
 		this.terms.put(singleTerm, singleTerm);
 	}

@@ -180,7 +180,25 @@ public abstract class GeoConstruction {
 	 * </b></i>
 	 */
 	public static final int GEOCONS_TYPE_ANGLE_RAY = 47;
-	// put other line constructions here => [48 .. 59]
+	/**
+	 * <i><b>
+	 * Construction of angle trisector
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_ANGLE_TRISECTOR = 48;
+	/**
+	 * <i><b>
+	 * Construction of triple angle ray
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_TRIPLE_ANGLE_RAY = 49;
+	/**
+	 * <i><b>
+	 * Construction of angle ray of third angle to 60 degrees
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_ANGLE_RAY_TO_60_DEG = 50;
+	// put other line constructions here => [51 .. 59]
 	// ======= Conics' constructions =======
 	/**
 	 * <i><b>
@@ -219,6 +237,14 @@ public abstract class GeoConstruction {
 	 */
 	public static final int GEOCONS_TYPE_CONIC_SECTION_WITH_FIVE_PTS = 65;
 	// put other conic constructions here => [66 .. 69]
+	// ======= Various constructions =======
+	/**
+	 * <i><b>
+	 * Construction of angle of 60 degrees
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_ANGLE_OF_60_DEG = 70;
+	// put other constructions here => [71 .. 79]
 	/*
 	 * The rest of construction types are listed here, but some of them 
 	 * could not be implemented with equalities like those that depend 

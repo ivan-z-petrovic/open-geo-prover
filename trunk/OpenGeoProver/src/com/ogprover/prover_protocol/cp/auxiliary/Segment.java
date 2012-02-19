@@ -288,7 +288,7 @@ public class Segment implements GeneralizedSegment{
 	
 	/**
 	 * <i>
-	 * Method that returns symbolic polynomial that represents the condition 
+	 * Method that returns generic symbolic polynomial that represents the condition 
 	 * for square of distance between two end points of this segment
 	 * </i>
 	 *  
@@ -297,6 +297,24 @@ public class Segment implements GeneralizedSegment{
 	 */
 	public static SymbolicPolynomial getConditionForSquareOfDistance() {
 		return squareOfDistance;
+	}
+	
+	/**
+	 * <i>
+	 * Method that returns symbolic polynomial that represents the condition 
+	 * for square of distance between two end points of this segment
+	 * </i>
+	 *  
+	 * @return	Symbolic polynomial representing the condition
+	 * 			for square of distance between two end points 
+	 */
+	public static SymbolicPolynomial getSubstitutedConditionForSquareOfDistance(String labelA, String labelB) {
+		Map<String, String> labelsMap = new HashMap<String, String>();
+		
+		labelsMap.put(ALabel, labelA);
+		labelsMap.put(BLabel, labelB);
+		
+		return ((SymbolicPolynomial) squareOfDistance.clone()).substitute(labelsMap);
 	}
 	
 	/**
