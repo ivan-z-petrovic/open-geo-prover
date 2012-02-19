@@ -44,7 +44,10 @@ public class OGPCPXMLParser {
 		xstream.registerConverter(new OGPCPXMLConverter());
 		// constructions' converters - BEGIN
 		xstream.registerConverter(new AngleBisectorConverter());
+		xstream.registerConverter(new AngleOf60DegConverter());
 		xstream.registerConverter(new AngleRayConverter());
+		xstream.registerConverter(new AngleRayOfThirdAngleTo60DegConverter());
+		xstream.registerConverter(new AngleTrisectorConverter());
 		xstream.registerConverter(new CenterOfCircleConverter());
 		xstream.registerConverter(new CentralSymmetricPointConverter());
 		xstream.registerConverter(new CircleWithCenterAndPointConverter());
@@ -75,10 +78,12 @@ public class OGPCPXMLParser {
 		xstream.registerConverter(new SegmentDivisionPointConverter());
 		xstream.registerConverter(new TangentLineConverter());
 		xstream.registerConverter(new TranslatedPointConverter());
+		xstream.registerConverter(new TripleAngleRayConverter());
 		// constructions' converters - END
 		// statements' converters - BEGIN
 		xstream.registerConverter(new AlgSumOfAnglesConverter());
 		xstream.registerConverter(new AlgSumOfSegmentsConverter());
+		xstream.registerConverter(new AngleEqualToSpecialConstantAngleConverter());
 		xstream.registerConverter(new CollinearPointsConverter());
 		xstream.registerConverter(new ConcurrentCirclesConverter());
 		xstream.registerConverter(new ConcurrentLinesConverter());
@@ -87,8 +92,11 @@ public class OGPCPXMLParser {
 		xstream.registerConverter(new EqualAnglesConverter());
 		xstream.registerConverter(new EqualityOfRatioProductsConverter());
 		xstream.registerConverter(new EqualityOfTwoRatiosConverter());
+		xstream.registerConverter(new EquilateralTriangleConverter());
 		xstream.registerConverter(new HarmonicConjugatesConverter());
 		xstream.registerConverter(new IdenticalPointsConverter());
+		xstream.registerConverter(new LinearCombinationOfDoubleSignedPolygonAreasConverter());
+		xstream.registerConverter(new LinearCombinationOfSquaresOfSegmentsConverter());
 		xstream.registerConverter(new PolygonAreasCombinationConverter());
 		xstream.registerConverter(new OrientedSegmentsCombinationConverter());
 		xstream.registerConverter(new PointOnSetOfPointsConverter());

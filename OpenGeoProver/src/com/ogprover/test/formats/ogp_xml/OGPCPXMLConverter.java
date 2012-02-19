@@ -45,8 +45,14 @@ public class OGPCPXMLConverter implements Converter {
 		for (GeoConstruction geoCons : consProtocol.getConstructionSteps()) {
 			if (geoCons instanceof AngleBisector)
 				writer.startNode("langbis");
+			else if (geoCons instanceof AngleOf60Deg)
+				writer.startNode("ang60deg");
 			else if (geoCons instanceof AngleRay)
 				writer.startNode("langray");
+			else if (geoCons instanceof AngleRayOfThirdAngleTo60Deg)
+				writer.startNode("langrayto60deg");
+			else if (geoCons instanceof AngleTrisector)
+				writer.startNode("langtris");
 			else if (geoCons instanceof CenterOfCircle)
 				writer.startNode("pcirclecent");
 			else if (geoCons instanceof CentralSymmetricPoint)
@@ -107,6 +113,8 @@ public class OGPCPXMLConverter implements Converter {
 				writer.startNode("ltangent");
 			else if (geoCons instanceof TranslatedPoint)
 				writer.startNode("ptranslated");
+			else if (geoCons instanceof TripleAngleRay)
+				writer.startNode("ltangray");
 			ctx.convertAnother(geoCons);
 			writer.endNode();
 		}
@@ -117,6 +125,8 @@ public class OGPCPXMLConverter implements Converter {
 			writer.startNode("algsumangles");
 		else if (statement instanceof AlgebraicSumOfThreeSegments)
 			writer.startNode("algsumsegs");
+		else if (statement instanceof AngleEqualToSpecialConstantAngle)
+			writer.startNode("angeqspecconsang");
 		else if (statement instanceof CollinearPoints)
 			writer.startNode("collinearpts");
 		else if (statement instanceof ConcurrentCircles)
@@ -133,6 +143,8 @@ public class OGPCPXMLConverter implements Converter {
 			writer.startNode("eqratioprods");
 		else if (statement instanceof EqualityOfTwoRatios)
 			writer.startNode("eqratios");
+		else if (statement instanceof EquilateralTriangle)
+			writer.startNode("eqtriangle");
 		else if (statement instanceof FourHarmonicConjugatePoints)
 			writer.startNode("harmonicconj");
 		else if (statement instanceof IdenticalPoints)
@@ -141,6 +153,8 @@ public class OGPCPXMLConverter implements Converter {
 			writer.startNode("polyareas");
 		else if (statement instanceof LinearCombinationOfOrientedSegments)
 			writer.startNode("segmentscomb");
+		else if (statement instanceof LinearCombinationOfSquaresOfSegments)
+			writer.startNode("sqsegmentscomb");
 		else if (statement instanceof PointOnSetOfPoints)
 			writer.startNode("pointonset");
 		else if (statement instanceof RatioOfOrientedSegments)
@@ -181,8 +195,14 @@ public class OGPCPXMLConverter implements Converter {
 				
 				if ("langbis".equals(nodeName))
 					geoCons = (AngleBisector)ctx.convertAnother(null, AngleBisector.class);
+				else if ("ang60deg".equals(nodeName))
+					geoCons = (AngleOf60Deg)ctx.convertAnother(null, AngleOf60Deg.class);
 				else if ("langray".equals(nodeName))
 					geoCons = (AngleRay)ctx.convertAnother(null, AngleRay.class);
+				else if ("langrayto60deg".equals(nodeName))
+					geoCons = (AngleRayOfThirdAngleTo60Deg)ctx.convertAnother(null, AngleRayOfThirdAngleTo60Deg.class);
+				else if ("langtris".equals(nodeName))
+					geoCons = (AngleTrisector)ctx.convertAnother(null, AngleTrisector.class);
 				else if ("pcirclecent".equals(nodeName))
 					geoCons = (CenterOfCircle)ctx.convertAnother(null, CenterOfCircle.class);
 				else if ("pcentralsymm".equals(nodeName))
@@ -243,6 +263,8 @@ public class OGPCPXMLConverter implements Converter {
 					geoCons = (TangentLine)ctx.convertAnother(null, TangentLine.class);
 				else if ("ptranslated".equals(nodeName)) 
 					geoCons = (TranslatedPoint)ctx.convertAnother(null, TranslatedPoint.class);
+				else if ("ltangray".equals(nodeName))
+					geoCons = (TripleAngleRay)ctx.convertAnother(null, TripleAngleRay.class);
 				if (geoCons != null)
 					consProtocol.addGeoConstruction(geoCons);
 				
@@ -259,6 +281,8 @@ public class OGPCPXMLConverter implements Converter {
 				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, AlgebraicSumOfThreeAngles.class));
 			else if ("algsumsegs".equals(nodeName))
 				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, AlgebraicSumOfThreeSegments.class));
+			else if ("angeqspecconsang".equals(nodeName))
+				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, AngleEqualToSpecialConstantAngle.class));
 			else if ("collinearpts".equals(nodeName))
 				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, CollinearPoints.class));
 			else if ("concurrentcircles".equals(nodeName))
@@ -275,6 +299,8 @@ public class OGPCPXMLConverter implements Converter {
 				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EqualityOfRatioProducts.class));
 			else if ("eqratios".equals(nodeName))
 				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EqualityOfTwoRatios.class));
+			else if ("eqtriangle".equals(nodeName))
+				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EquilateralTriangle.class));
 			else if ("harmonicconj".equals(nodeName))
 				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, FourHarmonicConjugatePoints.class));
 			else if ("identicpts".equals(nodeName))
@@ -283,6 +309,8 @@ public class OGPCPXMLConverter implements Converter {
 				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, LinearCombinationOfDoubleSignedPolygonAreas.class));
 			else if ("segmentscomb".equals(nodeName))
 				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, LinearCombinationOfOrientedSegments.class));
+			else if ("sqsegmentscomb".equals(nodeName))
+				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, LinearCombinationOfSquaresOfSegments.class));
 			else if ("pointonset".equals(nodeName))
 				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, PointOnSetOfPoints.class));
 			else if ("ratioorisegs".equals(nodeName))

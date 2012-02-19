@@ -3224,13 +3224,12 @@ public class MTestCP {
 		MTestCP.testTheoremProving(44);
 		MTestCP.testTheoremProving(45);
 		MTestCP.testTheoremProving(46);
-		MTestCP.testTheoremProving(50); // ? - bug with max number of terms showing 0 - should be fixed
-		MTestCP.testTheoremProving(51); // ? - same as above
+		MTestCP.testTheoremProving(50);
+		MTestCP.testTheoremProving(51);
 		MTestCP.testTheoremProving(52);
 		MTestCP.testTheoremProving(53);
 		MTestCP.testTheoremProving(54);
 		MTestCP.testTheoremProving(55);
-		MTestCP.testTheoremProving(56);
 		MTestCP.testTheoremProving(57);
 		MTestCP.testTheoremProving(58);
 		MTestCP.testTheoremProving(59);
@@ -3239,21 +3238,22 @@ public class MTestCP {
 		* Disproved (intentionally or not) or can't be proved/disproved or problems
 		*/
 	   /*
-		MTestCP.testTheoremProving(6); // can't be proved at this moment !!! (Pascal's thm for conics)
+		MTestCP.testTheoremProving(6);  // can't be proved at this moment !!! (Pascal's thm for conics)
 		MTestCP.testTheoremProving(16); // 'false' theorem
 		MTestCP.testTheoremProving(18); // testing two disjunctive lines
-		MTestCP.testTheoremProving(22); // can't be proved !!! (angle bisectors of paralllelogram's angles) - but proved 55
+		MTestCP.testTheoremProving(22); // can't be proved !!! (angle bisectors of paralllelogram's angles)
 		MTestCP.testTheoremProving(27); // can't be proved !!! (part of Great problem for triangle: PbPc = AC + AB)
 		MTestCP.testTheoremProving(47); // can't be proved !!! (power of point w.r.t. circle)
 		MTestCP.testTheoremProving(48); // can't be proved !!! (power of point w.r.t. circle - 2)
 		MTestCP.testTheoremProving(49); // can't be proved !!! (power of point w.r.t. circle - 3) - huge complexity
+		MTestCP.testTheoremProving(56); // can't be proved !!! (angle bisectors of paralllelogram's angles)
 		MTestCP.testTheoremProving(60); // can't be proved !!! (memory and time exceed all limits per process)
 		MTestCP.testTheoremProving(61); // can't be proved !!! (memory and time exceed all limits per process)
 		MTestCP.testTheoremProving(62); // can't be proved !!! (memory and time exceed all limits per process)
 		*/
 		
 		// put current theorem(s) here
-		MTestCP.testTheoremProving(57);
+		MTestCP.testTheoremProving(55);
 		
 		OpenGeoProver.settings.getTimer().cancel(); // cancel timer thread
 		

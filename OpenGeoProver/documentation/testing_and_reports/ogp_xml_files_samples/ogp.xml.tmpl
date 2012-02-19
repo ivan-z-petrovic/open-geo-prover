@@ -20,9 +20,22 @@
 <!-- example: angle bisector "l" of angle <ABC -->
 <langbis label="l" firstraypt="A" vertex="B" secondraypt="C" />
 
+<!-- AngleOf60Deg -->
+<!-- example: angle "alpha" of 60 degrees -->
+<ang60deg label="alpha" />
+
 <!-- AngleRay -->
 <!-- example: angle ray "l" (where l = BC) of angle <ABC congruent to angle <DEF -->
 <langray label="l" firstraypt="A" vertex="B" congangfrp="D" congangv="E" congangsrp="F" />
+
+<!-- AngleRayOfThirdAngleTo60Deg -->
+<!-- example: angle ray "l" (where l = BC) of angle <ABC which in sum        -->
+<!-- with angles <DEF and <GHI gives angle alpha whose measure is 60 degrees -->
+<langrayto60deg label="l" firstraypt="A" vertex="B" firstangfrp="D" firstangv="E" firstangsrp="F" secondangfrp="G" secondangv="H" secondangsrp="I" ang60deg="alpha" />
+
+<!-- AngleTrisector -->
+<!-- example: angle trisector "l" of angle <ABC -->
+<langtris label="l" firstraypt="A" vertex="B" secondraypt="C" />
 
 <!-- CenterOfCircle -->
 <!-- example: C is center of circle k -->
@@ -163,6 +176,10 @@
 <!-- example: Point D is obtained by translating point C for vector AB -->
 <ptranslated label="D" point1="A" point2="B" origpt="C" />
 
+<!-- TripleAngleRay -->
+<!-- example: angle ray "l" (where l = BC) of angle <ABC which is three times greater than angle <DEF -->
+<ltangray label="l" firstraypt="A" vertex="B" smallangfrp="D" smallangv="E" smallangsrp="F" />
+
 <!-- ----------------------------------- -->
 <!-- Tags for construction steps - END   -->
 <!-- ----------------------------------- -->
@@ -203,6 +220,12 @@
 		<segment point1="K" point2="L" />
 	</segprod>
 </algsumsegs>
+
+<!-- AngleEqualToSpecialConstantAngle -->
+<!-- example: angle <ABC is equal to angle alpha of known size (e.g. 30, 60 or 45 degrees) -->
+<angeqspecconsang consAngle="alpha">
+	<angle firstraypt="A" vertex="B" secondraypt="C"/>
+</angeqspecconsang>
 
 <!-- CollinearPoints -->
 <!-- example: Points A1, A2, ... An are collinear (belong to same line) -->
@@ -305,6 +328,10 @@
 	<ratioden point1="G" point2="H" />
 </eqratios>
 
+<!-- EquilateralTriangle -->
+<!-- example: triangle ABC is equilateral -->
+<eqtriangle pointA="A" pointB="B" pointC="C" />
+
 <!-- FourHarmonicConjugatePoints -->
 <!-- example: pairs of points (A, B) and (C, D) make four harmonic conjugate points -->
 <harmonicconj point1="A" point2="B" point3="C" point4="D" />
@@ -349,6 +376,21 @@
 	<segment point1="G" point2="H" />
 	<coeff value="0.5" />
 </segmentscomb>
+
+<!-- LinearCombinationOfSquaresOfSegments -->
+<!-- example: let for generalized segments AB, CD*EF and GH following equality holds: -->
+<!-- 2*AB - 3*CD*EF + 0.5*GH = 0 -->
+<sqsegmentscomb>
+	<segment point1="A" point2="B" />
+	<coeff value="2" />
+	<segprod>
+		<segment point1="C" point2="D" />
+		<segment point1="E" point2="F" />
+	</segprod>
+	<coeff value="-3" />
+	<segment point1="G" point2="H" />
+	<coeff value="0.5" />
+</sqsegmentscomb>
 
 <!-- PointOnSetOfPoints -->
 <!-- example: point M is on set of points s (can be line, circle or conic section) -->

@@ -35,22 +35,22 @@ public class CongruentTrianglesConverter implements Converter {
 		CongruentTriangles statement = (CongruentTriangles)obj;
 		
 		writer.startNode("point");
-		writer.addAttribute("label", statement.getFirstTrianglePointA().getGeoObjectLabel());
+		writer.addAttribute("label", statement.getGeoObjects().get(0).getGeoObjectLabel());
 		writer.endNode();
 		writer.startNode("point");
-		writer.addAttribute("label", statement.getFirstTrianglePointB().getGeoObjectLabel());
+		writer.addAttribute("label", statement.getGeoObjects().get(1).getGeoObjectLabel());
 		writer.endNode();
 		writer.startNode("point");
-		writer.addAttribute("label", statement.getFirstTrianglePointC().getGeoObjectLabel());
+		writer.addAttribute("label", statement.getGeoObjects().get(2).getGeoObjectLabel());
 		writer.endNode();
 		writer.startNode("point");
-		writer.addAttribute("label", statement.getSecondTrianglePointA().getGeoObjectLabel());
+		writer.addAttribute("label", statement.getGeoObjects().get(3).getGeoObjectLabel());
 		writer.endNode();
 		writer.startNode("point");
-		writer.addAttribute("label", statement.getSecondTrianglePointB().getGeoObjectLabel());
+		writer.addAttribute("label", statement.getGeoObjects().get(4).getGeoObjectLabel());
 		writer.endNode();
 		writer.startNode("point");
-		writer.addAttribute("label", statement.getSecondTrianglePointC().getGeoObjectLabel());
+		writer.addAttribute("label", statement.getGeoObjects().get(5).getGeoObjectLabel());
 		writer.endNode();
 	}
 
