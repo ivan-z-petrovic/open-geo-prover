@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import com.ogprover.polynomials.GeoTheorem;
 import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.test.formats.geothm_xml.GeoTheoremXMLParser;
 import com.ogprover.test.formats.ogp_xml.OGPCPXMLParser;
 import com.ogprover.thmprover.AlgebraicMethodProver;
 import com.ogprover.thmprover.TheoremProver;
@@ -168,24 +167,6 @@ public class OpenGeoProver {
 					return;
 				}
 				
-				report = new OGPReport(consProtocol);
-				
-				// opening output report
-				report.openReport();
-			}
-			else if (parameters.getInputFormat().equals("A")) { // xml file which contains polynomial representation of problem
-				GeoTheoremXMLParser parser = new GeoTheoremXMLParser();
-				theorem = parser.readGeoTheoremFromXML(parameters.getInputFile());
-				
-				if (theorem == null) {
-					logger.error("Failed to read theorem.");
-					output.close();
-					return;
-				}
-				
-				consProtocol = new OGPCP();
-				consProtocol.setAlgebraicGeoTheorem(theorem);
-				consProtocol.setTheoremName(theorem.getName());
 				report = new OGPReport(consProtocol);
 				
 				// opening output report
