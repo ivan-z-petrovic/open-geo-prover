@@ -122,6 +122,7 @@ public class EqualAngles extends DimensionThmStatement {
 		this.firstAngle = firstAngle;
 		this.secondAngle = secondAngle;
 		
+		this.geoObjects = new Vector<GeoConstruction>();
 		this.geoObjects.add(firstAngle.getFirstRayPoint());
 		this.geoObjects.add(firstAngle.getVertex());
 		this.geoObjects.add(firstAngle.getSecondRayPoint());
