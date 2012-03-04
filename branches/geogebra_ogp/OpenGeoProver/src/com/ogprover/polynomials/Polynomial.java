@@ -8,14 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.multithread.PolyMultThread;
-import com.ogprover.multithread.SyncProduct;
 import com.ogprover.utilities.io.FileLogger;
 
 /**
@@ -375,15 +370,6 @@ public abstract class Polynomial implements Cloneable{
 	public final Polynomial multiplyByPolynomial(Polynomial p){
 		FileLogger logger = OpenGeoProver.settings.getLogger();
 		
-		int n = OpenGeoProver.settings.getParameters().getConLevel();
-		
-		// if polynomials have huge number of terms multiply them concurrently
-		//if (n > 1 && (this.getTerms().size() > 400 || p.getTerms().size() > 400)) {
-		if (n > 1 && (this.getTerms().size() > 500 && p.getTerms().size() > 500)) {
-			logger.debug("Concurrent multiplication");
-			return multiplyByPolynomialConcurrently(p, n);
-		}
-		
 		if (p == null) {
 			logger.error("Attempt to multiply by null polynomial.");
 			return null;
@@ -430,83 +416,6 @@ public abstract class Polynomial implements Cloneable{
 				}
 				termITP = colP.iterator();
 			}
-		}
-		
-		return this;
-	}
-	
-	/**
-	 * <b>[final method]</b><br>
-	 * Method for multiplication of this polynomial by another polynomial in concurrent manner.
-	 * 
-	 * @param p		Polynomial - factor
-	 * @param n		Number of parallel threads
-	 * @return		Product of this polynomial and passed in polynomial
-	 */
-	public final Polynomial multiplyByPolynomialConcurrently(Polynomial p, int n){
-		FileLogger logger = OpenGeoProver.settings.getLogger();
-		
-		if (n == 1)
-			return this.multiplyByPolynomial(p);
-		
-		if (p == null) {
-			logger.error("Attempt to multiply by null polynomial.");
-			return null;
-		}
-		
-		if (this.getType() != p.getType()) {
-			logger.error("Attempt to multiply by polynomial of another type.");
-			return null;
-		}
-		
-		// if this polynomial is zero - nothing is changed
-		if (this.isZero())
-			return this;
-		
-		if (n <= 0) {
-			logger.error("Passed in non-positive number of threads.");
-			return null;
-		}
-		
-		if (n > OGPConstants.maxNumOfThreads) {
-			logger.warn("Passed in number of threads is greater than maximal number " +
-						OGPConstants.maxNumOfThreads + 
-						". Setting to maximal number.");
-			n = OGPConstants.maxNumOfThreads;
-		}
-		ExecutorService service = Executors.newFixedThreadPool(n); // object for generating threads
-		// create sources for reading terms
-		Object[] firstPolyTermsArray = this.terms.values().toArray();
-		ArrayList<Term> firstArray = new ArrayList<Term>();
-		for (int ii = 0, jj = this.terms.size(); ii < jj; ii++)
-			firstArray.add(ii, (Term)firstPolyTermsArray[ii]);
-		Object[] secondPolyTermsArray = p.getTerms().values().toArray();
-		ArrayList<Term> secondArray = new ArrayList<Term>();
-		for (int ii = 0, jj = p.getTerms().size(); ii < jj; ii++)
-			secondArray.add(ii, (Term)secondPolyTermsArray[ii]);
-		
-		// if passed in polynomial is zero constant - result is zero polynomial
-		this.terms = new TreeMap<Term, Term>(); // new empty tree of terms
-		Polynomial localStorage = this.clone();
-		
-		if (p.isZero() == false) {
-			// create destination for terms of result - synchronized object
-			SyncProduct sp = new SyncProduct(this);
-			
-			for (int ii = 0; ii < n; ii++)
-				service.execute(new PolyMultThread(ii, n, firstArray, secondArray, localStorage.clone(), sp, ii + "")); // create and run thread - each thread is using same 
-																								                         // arrays of terms for reading and same synchronization 
-																								                         // object sp for storing results
-			service.shutdown(); // prevent creating new threads and keep already executed until they complete
-			
-			// wait for all threads to complete their work
-			try {
-				if (!service.awaitTermination(n*5000, TimeUnit.MILLISECONDS)) {
-					logger.error("Failed to complete all threads");
-					service.shutdownNow(); // immediately kill all created running threads
-					return null;
-				}
-			} catch (InterruptedException e) {}
 		}
 		
 		return this;
