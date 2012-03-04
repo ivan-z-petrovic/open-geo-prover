@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 082">
+	<!-- Example 82 from Chou's book                                            -->
+	<!-- In triangle ABC let F be the midpoint of side BC, and                  -->
+	<!-- D and E are the feet of the altitudes on sides AB and AC respectively. -->
+	<!-- Let G be the foot of perpendicular line from F to line DE.             -->
+	<!-- Then G is midpoint of segment DE.                                      -->
+	<constructions>
+		<pfree label="A"/>
+		<pfree label="B"/>
+		<pfree label="C"/>
+		<ltwopts label="c" point1="A" point2="B"/>
+		<ltwopts label="a" point1="B" point2="C"/>
+		<ltwopts label="b" point1="C" point2="A"/>
+		<pmid label="F" point1="B" point2="C"/>
+		<pfoot label="D" origpt="C" baseline="c"/>
+		<pfoot label="E" origpt="B" baseline="b"/>
+		<ltwopts label="de" point1="D" point2="E"/>
+		<pfoot label="G" origpt="F" baseline="de"/>
+	</constructions>
+	<statement>
+		<ratioorisegs point11="D" point12="G" point21="G" point22="E" ratiocoeff="1"/>
+	</statement>
+</geothm>

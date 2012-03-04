@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Polar 001">
+	<!-- Version with general conic section                          -->
+	<!-- Let c be a conic section and P a point. Let p be a polar    -->
+	<!-- of point P (pole) with respect to conic c. Then if AB is    -->
+	<!-- random secant of conic c through P and if Q is intersection -->
+	<!-- of that secant and polar p, then points P and Q are in      -->
+	<!-- harmonic conjunction with points A and B.                   -->
+	<constructions>
+		<psgenconic label="c" />
+		<pfree label="P" />
+		<lpolar label="p" pole="P" set="c" />
+		<prandgenconic label="A" conic="c" />
+		<ltwopts label="s" point1="P" point2="A" />
+		<pintersect label="B" set1="s" set2="c" />
+		<pintersect label="Q" set1="s" set2="p" />
+	</constructions>
+	<statement>
+		<harmonicconj point1="A" point2="B" point3="P" point4="Q" />
+	</statement>
+</geothm>

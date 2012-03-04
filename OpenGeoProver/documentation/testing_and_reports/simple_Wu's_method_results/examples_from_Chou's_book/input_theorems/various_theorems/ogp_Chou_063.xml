@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 063">
+	<!-- Example 63 from Chou's book                                               -->
+	<!-- Show that the lines joining the vertices of a triangle ABC with the poles -->
+	<!-- A1, B1 and C1 of the opposite sides of the triangle relative to some      -->
+	<!-- circle, are concurrent.                                                    -->
+	<constructions>
+		<pfree label="B"/>
+		<pfree label="C"/>
+		<pfree label="A"/>
+		<ltwopts label="c" point1="A" point2="B"/>
+		<ltwopts label="a" point1="B" point2="C"/>
+		<ltwopts label="b" point1="C" point2="A"/>
+		<pfree label="O"/>
+		<pfoot label="A'" origpt="O" baseline="a"/>
+		<pfoot label="B'" origpt="O" baseline="b"/>
+		<pfoot label="C'" origpt="O" baseline="c"/>
+		<ltwopts label="n" point1="O" point2="A'"/>
+		<prandline label="P" line="n"/>
+		<ccenterpt label="k" center="O" point="P"/>
+		<pinverse label="A1" point="A'" circle="k"/>
+		<pinverse label="B1" point="B'" circle="k"/>
+		<pinverse label="C1" point="C'" circle="k"/>
+		<ltwopts label="a1" point1="A" point2="A1"/>
+		<ltwopts label="b1" point1="B" point2="B1"/>
+		<pintersect label="I" set1="a1" set2="b1"/>
+	</constructions>
+	<statement>
+		<collinearpts>
+			<point label="C"/>
+			<point label="C1"/>
+			<point label="I"/>
+		</collinearpts>
+	</statement>
+</geothm>
