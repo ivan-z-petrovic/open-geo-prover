@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 019 (Brianchon's theorem for circle)">
+	<!-- Example 19 from Chou's book                                        -->
+	<!-- Let A, B, C, D, E and F are six points from circle.                -->
+	<!-- Let ta, tb, tc, td, te and tf be tangent lines on given circle in  -->
+	<!-- these points. Let they intersect each other in following points:   -->
+	<!-- A1=taXtb, B1=tbXtc, C1=tcXtd, D1=tdXte, E1=teXtf and F1=tfXta.     -->
+	<!-- Then following lines are concurrent: A1D1, B1E1 and C1F1.          -->
+	<constructions>
+		<pfree label="O" />
+		<pfree label="A" />
+		<ccenterpt label="c" center="O" point="A" />
+		<prandcircle label="B" circle="c" />
+		<prandcircle label="C" circle="c" />
+		<prandcircle label="D" circle="c" />
+		<prandcircle label="E" circle="c" />
+		<prandcircle label="F" circle="c" />
+		<ltwopts label="ra" point1="O" point2="A" />
+		<ltwopts label="rb" point1="O" point2="B" />
+		<ltwopts label="rc" point1="O" point2="C" />
+		<ltwopts label="rd" point1="O" point2="D" />
+		<ltwopts label="re" point1="O" point2="E" />
+		<ltwopts label="rf" point1="O" point2="F" />
+		<lperp label="ta" point="A" baseline="ra" />
+		<lperp label="tb" point="B" baseline="rb" />
+		<lperp label="tc" point="C" baseline="rc" />
+		<lperp label="td" point="D" baseline="rd" />
+		<lperp label="te" point="E" baseline="re" />
+		<lperp label="tf" point="F" baseline="rf" />
+		<pintersect label="A1" set1="ta" set2="tb" />
+		<pintersect label="B1" set1="tb" set2="tc" />
+		<pintersect label="C1" set1="tc" set2="td" />
+		<pintersect label="D1" set1="td" set2="te" />
+		<pintersect label="E1" set1="te" set2="tf" />
+		<pintersect label="F1" set1="tf" set2="ta" />
+		<ltwopts label="A1D1" point1="A1" point2="D1" />
+		<ltwopts label="B1E1" point1="B1" point2="E1" />
+		<ltwopts label="C1F1" point1="C1" point2="F1" />
+	</constructions>
+	<statement>
+		<concurrentlines>
+			<line label="A1D1" />
+			<line label="B1E1" />
+			<line label="C1F1" />
+		</concurrentlines>
+	</statement>
+</geothm>

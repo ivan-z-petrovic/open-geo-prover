@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 011">
+	<!-- Example 11 from Chou's book (version with usage of Pascal's theorem) -->
+	<constructions>
+		<psgenconic label="c" />
+		<prandgenconic label="A0" conic="c" />
+		<prandgenconic label="A1" conic="c" />
+		<prandgenconic label="A2" conic="c" />
+		<prandgenconic label="A3" conic="c" />
+		<prandgenconic label="A4" conic="c" />
+		<prandgenconic label="A5" conic="c" />
+		<ltwopts label="A0A1" point1="A0" point2="A1" />
+		<ltwopts label="A2A3" point1="A2" point2="A3" />
+		<pintersect label="A" set1="A0A1" set2="A2A3" />
+		<ltwopts label="A4A5" point1="A4" point2="A5" />
+		<pintersect label="B" set1="A0A1" set2="A4A5" />
+		<ltwopts label="A0A2" point1="A0" point2="A2" />
+		<ltwopts label="A1A4" point1="A1" point2="A4" />
+		<pintersect label="C" set1="A0A2" set2="A1A4" />
+		<ltwopts label="A0A3" point1="A0" point2="A3" />
+		<ltwopts label="A1A5" point1="A1" point2="A5" />
+		<pintersect label="D" set1="A0A3" set2="A1A5" />
+		<ltwopts label="A0A4" point1="A0" point2="A4" />
+		<ltwopts label="A1A2" point1="A1" point2="A2" />
+		<pintersect label="E" set1="A0A4" set2="A1A2" />
+		<ltwopts label="A0A5" point1="A0" point2="A5" />
+		<ltwopts label="A1A3" point1="A1" point2="A3" />
+		<pintersect label="F" set1="A0A5" set2="A1A3" />
+		<!-- Pascal's theorem application -->
+		<ltwopts label="AB" point1="A" point2="B" />
+		<ltwopts label="DE" point1="D" point2="E" />
+		<ltwopts label="BC" point1="B" point2="C" />
+		<ltwopts label="EF" point1="E" point2="F" />
+		<ltwopts label="CD" point1="C" point2="D" />
+		<ltwopts label="FA" point1="F" point2="A" />
+		<pintersect label="P" set1="AB" set2="DE" />
+		<pintersect label="Q" set1="BC" set2="EF" />
+		<pintersect label="R" set1="CD" set2="FA" />
+	</constructions>
+	<statement>
+		<collinearpts>
+			<point label="P" />
+			<point label="Q" />
+			<point label="R" />
+		</collinearpts>
+	</statement>
+</geothm>

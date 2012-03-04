@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Theorem name"> <!-- Set the theorem name -->
+	<!-- Put the description of theorem here -->
+	<constructions>
+		<!-- Put construction steps here -->
+	</constructions>
+	<statement>
+		<!-- Put theorem statement here -->
+	</statement>
+</geothm>
+
+
+
+<!-- ----------------------------------- -->
+<!-- Tags for construction steps - BEGIN -->
+<!-- ----------------------------------- -->
+
+<!-- AngleBisector -->
+<!-- example: angle bisector "l" of angle <ABC -->
+<langbis label="l" firstraypt="A" vertex="B" secondraypt="C" />
+
+<!-- AngleOf60Deg -->
+<!-- example: angle "alpha" of 60 degrees -->
+<ang60deg label="alpha" />
+
+<!-- AngleRay -->
+<!-- example: angle ray "l" (where l = BC) of angle <ABC congruent to angle <DEF -->
+<langray label="l" firstraypt="A" vertex="B" congangfrp="D" congangv="E" congangsrp="F" />
+
+<!-- AngleRayOfThirdAngleTo60Deg -->
+<!-- example: angle ray "l" (where l = BC) of angle <ABC which in sum        -->
+<!-- with angles <DEF and <GHI gives angle alpha whose measure is 60 degrees -->
+<langrayto60deg label="l" firstraypt="A" vertex="B" firstangfrp="D" firstangv="E" firstangsrp="F" secondangfrp="G" secondangv="H" secondangsrp="I" ang60deg="alpha" />
+
+<!-- AngleTrisector -->
+<!-- example: angle trisector "l" of angle <ABC -->
+<langtris label="l" firstraypt="A" vertex="B" secondraypt="C" />
+
+<!-- CenterOfCircle -->
+<!-- example: C is center of circle k -->
+<pcirclecent label="C" circle="k" />
+
+<!-- CentralSymmetricPoint -->
+<!-- example: B is point central symmetric to A with respect to center of symmetry O -->
+<pcentralsymm label="B" origpt="A" center="O" />
+
+<!-- CircleWithCenterAndPoint -->
+<!-- example: k is circle with center O and one point A -->
+<ccenterpt label="k" center="O" point="A" />
+
+<!-- CircleWithCenterAndRadius -->
+<!-- example: circle k has center O and radius congruent to segment AB -->
+<ccenterradi label="k" center="O" radipt1="A" radipt2="B" />
+
+<!-- CircleWithDiameter -->
+<!-- example: k is circle whose diameter is congruent to segment AB -->
+<cdiam label="k" diampt1="A" diampt2="B" />
+
+<!-- CircumscribedCircle -->
+<!-- example: k is circumscribed circle of triangle ABC -->
+<ccircumscribed label="k" point1="A" point2="B" point3="C" />
+
+<!-- ConicSectionWithFivePoints -->
+<!-- example: c is general conic section with points A, B, C, D and E -->
+<psconic5 label="c" pointA="A" pointB="B" pointC="C" pointD="D" pointE="E" />
+
+<!-- FootPoint -->
+<!-- example: F is foot point of perpendicular line through point M to line l -->
+<pfoot label="F" origpt="M" baseline="l" />
+
+<!-- FreePoint -->
+<!-- example: A is free point -->
+<pfree label="A" />
+
+<!-- GeneralConicSection -->
+<!-- example: c is general conic section -->
+<psgenconic label="c" />
+
+<!-- GeneralizedSegmentDivisionPoint -->
+<!-- example: point C divides segment AB with following ratio:   -->
+<!-- AC/CB = 2.3 * (A1B1/C1D1) * (A2B2/C2D2) * ... * (AnBn/CnDn) -->
+<!-- here AiBi and CiDi are collinear segments (belong to same line or to parallel lines) -->
+<pgensegdiv label="C" coeff="2.3" >
+	<segment point1="A" point2="B" />
+	<ratioprod>
+		<ratiocollinearsegs>
+			<segment point1="A1" point2="B1" />
+			<segment point1="C1" point2="D1" />
+		</ratiocollinearsegs>
+		<ratiocollinearsegs>
+			<segment point1="A2" point2="B2" />
+			<segment point1="C2" point2="D2" />
+		</ratiocollinearsegs>
+		<!-- ... -->
+		<ratiocollinearsegs>
+			<segment point1="An" point2="Bn" />
+			<segment point1="Cn" point2="Dn" />
+		</ratiocollinearsegs>
+	</ratioprod>
+</pgensegdiv>
+
+<!-- HarmonicConjugatePoint -->
+<!-- example: D is fourth harmonic conjugate point added to triple of points (A, B, C) -->
+<pharmonicconj label="D" point1="A" point2="B" point3="C" />
+
+<!-- IntersectionPoint -->
+<!-- example: S is intersection point of point sets a and b (each can be line, circle or conic section) -->
+<pintersect label="S" set1="a" set2="b" />
+
+<!-- InverseOfPoint -->
+<!-- example: P is inverse point of point A with respect to circle k -->
+<pinverse label="P" point="A" circle="k" />
+
+<!-- LineThroughTwoPoints -->
+<!-- example: l is line AB -->
+<ltwopts label="l" point1="A" point2="B" />
+
+<!-- MidPoint -->
+<!-- example: M is midpoint of segment AB -->
+<pmid label="M" point1="A" point2="B" />
+
+<!-- ParallelLine -->
+<!-- example: l is line through point M parallel to line p -->
+<lparallel label="l" point="M" baseline="p" />
+
+<!-- PerpendicularBisector -->
+<!-- example: m is perpendicular bisector of segment AB -->
+<lperpbis label="m" point1="A" point2="B" />
+
+<!-- PerpendicularLine -->
+<!-- example: l is line through point M perpendicular to line p -->
+<lperp label="l" point="M" baseline="p" />
+
+<!-- Polar -->
+<!-- example: l is polar of point P w.r.t. set of points (circle or conic) c -->
+<lpolar label="l" pole="P" set="c" />
+
+<!-- Pole -->
+<!-- example: P is pole of line l w.r.t. set of points (circle or conic) c -->
+<ppole label="P" polar="l" set="c" />
+
+<!-- RadicalAxis -->
+<!-- example: r is radical axis of circles k1 and k2 -->
+<lradical label="r" circle1="k1" circle2="k2" />
+
+<!-- RandomPointFromCircle -->
+<!-- example: X is random point from circle k -->
+<prandcircle label="X" circle="k" />
+
+<!-- RandomPointFromGeneralConic -->
+<!-- example: X is random point from general conic section c -->
+<prandgenconic label="X" conic="c" />
+
+<!-- RandomPointFromLine -->
+<!-- example: X is random point from line l -->
+<prandline label="X" line="l" />
+
+<!-- ReflexivePoint -->
+<!-- example: A' is point reflexive to point A with respect to given line p -->
+<preflexive label="A'" origpt="A" baseline="p" />
+
+<!-- RotatedPoint -->
+<!-- example: B is point obtained by rotating point A around center O for angle of 45 degrees (measure can be negative as well) -->
+<protated label="B" origpt="A" center="O" angmeasure="45" />
+
+<!-- SegmentDivisionPoint -->
+<!-- example: Point C from line AB divides segment AB in following ratio: AC/CB = -5 -->
+<psegdiv label="C" point1="A" point1="B" coeff="-5" />
+
+<!-- TangentLine -->
+<!-- example: t is tangent line of given point set k (can be circle or conic section) and passes through point P -->
+<ltangent label="t" basept="P" pointset="k" />
+
+<!-- TranslatedPoint -->
+<!-- example: Point D is obtained by translating point C for vector AB -->
+<ptranslated label="D" point1="A" point2="B" origpt="C" />
+
+<!-- TripleAngleRay -->
+<!-- example: angle ray "l" (where l = BC) of angle <ABC which is three times greater than angle <DEF -->
+<ltangray label="l" firstraypt="A" vertex="B" smallangfrp="D" smallangv="E" smallangsrp="F" />
+
+<!-- ----------------------------------- -->
+<!-- Tags for construction steps - END   -->
+<!-- ----------------------------------- -->
+
+
+
+<!-- ----------------------------------- -->
+<!-- Tags for theorem statements - BEGIN -->
+<!-- ----------------------------------- -->
+
+<!-- AlgebraicSumOfThreeAngles -->
+<!-- example: angle <ABC is sum of angles <DEF and <GHI i.e. algebraic sum of these tree angles is zero -->
+<algsumangles>
+	<angle firstraypt="A" vertex="B" secondraypt="C"/>
+	<angle firstraypt="D" vertex="E" secondraypt="F"/>
+	<angle firstraypt="G" vertex="H" secondraypt="I"/>
+</algsumangles>
+
+<!-- AlgebraicSumOfThreeSegments -->
+<!-- example1: segment AB is sum of segments CD and EF i.e. algebraic sum of these three segments is zero -->
+<algsumsegs>
+	<segment point1="A" point2="B" />
+	<segment point1="C" point2="D" />
+	<segment point1="E" point2="F" />
+</algsumsegs>
+<!-- example2: product of segments AB and CD is sum of segment products EF*GH and IJ*KL i.e. algebraic sum of these three segment products is zero -->
+<algsumsegs>
+	<segprod>
+		<segment point1="A" point2="B" />
+		<segment point1="C" point2="D" />
+	</segprod>
+	<segprod>
+		<segment point1="E" point2="F" />
+		<segment point1="G" point2="H" />
+	</segprod>
+	<segprod>
+		<segment point1="I" point2="J" />
+		<segment point1="K" point2="L" />
+	</segprod>
+</algsumsegs>
+
+<!-- AngleEqualToSpecialConstantAngle -->
+<!-- example: angle <ABC is equal to angle alpha of known size (e.g. 30, 60 or 45 degrees) -->
+<angeqspecconsang consAngle="alpha">
+	<angle firstraypt="A" vertex="B" secondraypt="C"/>
+</angeqspecconsang>
+
+<!-- CollinearPoints -->
+<!-- example: Points A1, A2, ... An are collinear (belong to same line) -->
+<collinearpts>
+	<point label="A1" />
+	<point label="A2" />
+	<!--     ...     -->
+	<point label="An" />
+</collinearpts>
+
+<!-- ConcurrentCircles -->
+<!-- example: circles k1, k2, ... kn are concurrent (have a common point) -->
+<concurrentcircles>
+	<circle label="k1" />
+	<circle label="k2" />
+	<!--      ...     -->
+	<circle label="kn" />
+</concurrentcircles>
+
+<!-- ConcurrentLines -->
+<!-- example: lines l1, l2, ... ln are concurrent (have a common point) -->
+<concurrentlines>
+	<line label="l1" />
+	<line label="l2" />
+	<!--     ...    -->
+	<line label="ln" />
+</concurrentlines>
+
+<!-- ConcyclicPoints -->
+<!-- example: points P1, P2, ... Pn are concyclic (belong to same circle) -->
+<concyclicpts>
+	<point label="P1" />
+	<point label="P2" />
+	<!--     ...     -->
+	<point label="Pn" />
+</concyclicpts>
+
+<!-- CongruentTriangles -->
+<!-- example: triangles ABC and DEF are congruent -->
+<congrtriangles>
+	<point label="A" />
+	<point label="B" />
+	<point label="C" />
+	<point label="D" />
+	<point label="E" />
+	<point label="F" />
+</congrtriangles>
+
+<!-- EqualAngles -->
+<!-- example: angle <ABC is equal to angle <DEF -->
+<eqangles>
+	<angle firstraypt="A" vertex="B" secondraypt="C"/>
+	<angle firstraypt="D" vertex="E" secondraypt="F"/>
+</eqangles>
+
+<!-- EqualityOfRatioProducts -->
+<!-- example: following equality holds: -->
+<!-- (A1B1/C1D1) * (A2B2/C2D2) * ... * (AnBn/CnDn) = 3.4 * (E1F1/G1H1) * (E2F2/G2H2) * ... * (EmFm/GmHm) -->
+<!-- here segments AiBi and CiDi are collinear (belong to same line or parallel lines); also segments EjFj and GjHj are collinear -->
+<eqratioprods coeff="3.4" >
+	<ratioprod>
+		<ratiocollinearsegs>
+			<segment point1="A1" point2="B1" />
+			<segment point1="C1" point2="D1" />
+		</ratiocollinearsegs>
+		<ratiocollinearsegs>
+			<segment point1="A2" point2="B2" />
+			<segment point1="C2" point2="D2" />
+		</ratiocollinearsegs>
+		<!-- ... -->
+		<ratiocollinearsegs>
+			<segment point1="An" point2="Bn" />
+			<segment point1="Cn" point2="Dn" />
+		</ratiocollinearsegs>
+	</ratioprod>
+	<ratioprod>
+		<ratiocollinearsegs>
+			<segment point1="E1" point2="F1" />
+			<segment point1="G1" point2="H1" />
+		</ratiocollinearsegs>
+		<ratiocollinearsegs>
+			<segment point1="E2" point2="F2" />
+			<segment point1="G2" point2="H2" />
+		</ratiocollinearsegs>
+		<!-- ... -->
+		<ratiocollinearsegs>
+			<segment point1="Em" point2="Fm" />
+			<segment point1="Gm" point2="Hm" />
+		</ratiocollinearsegs>
+	</ratioprod>
+</eqratioprods>
+
+<!-- EqualityOfTwoRatios -->
+<!-- example: following equation holds AB/CD = 2.3 * EF/GH -->
+<!-- here segments AB and CD and segments EF and GH need not be collinear -->
+<eqratios coeff="2.3" >
+	<rationum point1="A" point2="B" />
+	<ratioden point1="C" point2="D" />
+	<rationum point1="E" point2="F" />
+	<ratioden point1="G" point2="H" />
+</eqratios>
+
+<!-- EquilateralTriangle -->
+<!-- example: triangle ABC is equilateral -->
+<eqtriangle pointA="A" pointB="B" pointC="C" />
+
+<!-- FourHarmonicConjugatePoints -->
+<!-- example: pairs of points (A, B) and (C, D) make four harmonic conjugate points -->
+<harmonicconj point1="A" point2="B" point3="C" point4="D" />
+
+<!-- IdenticalPoints -->
+<!-- example: points A and B are identical -->
+<identicpts point1="A" point2="B" />
+
+<!-- LinearCombinationOfDoubleSignedPolygonAreas -->
+<!-- example: let S be an area of a polygon and let following equation holds: -->
+<!-- S(ABCD) = S(KLM) + (1/3)*S(TUV) ==> this can be transformed to following linear combination of polygon areas: -->
+<!-- 3*S(ABCD) - 3*S(KLM) - S(TUV) = 0 -->
+<polyareas>
+	<polygon coeff="3" >
+		<vertex label="A" />
+		<vertex label="B" />
+		<vertex label="C" />
+		<vertex label="D" />
+	</polygon>
+	<polygon coeff="-3" >
+		<vertex label="K" />
+		<vertex label="L" />
+		<vertex label="M" />
+	</polygon>
+	<polygon coeff="-1" >
+		<vertex label="T" />
+		<vertex label="U" />
+		<vertex label="V" />
+	</polygon>
+</polyareas>
+
+<!-- LinearCombinationOfOrientedSegments -->
+<!-- example: let for collinear segments AB, CD, EF and GH following equality holds: -->
+<!-- 2*AB - 3*CD + EF + 0.5*GH = 0 -->
+<segmentscomb>
+	<segment point1="A" point2="B" />
+	<coeff value="2" />
+	<segment point1="C" point2="D" />
+	<coeff value="-3" />
+	<segment point1="E" point2="F" />
+	<coeff value="1" />
+	<segment point1="G" point2="H" />
+	<coeff value="0.5" />
+</segmentscomb>
+
+<!-- LinearCombinationOfSquaresOfSegments -->
+<!-- example: let for generalized segments AB, CD*EF and GH following equality holds: -->
+<!-- 2*AB - 3*CD*EF + 0.5*GH = 0 -->
+<sqsegmentscomb>
+	<segment point1="A" point2="B" />
+	<coeff value="2" />
+	<segprod>
+		<segment point1="C" point2="D" />
+		<segment point1="E" point2="F" />
+	</segprod>
+	<coeff value="-3" />
+	<segment point1="G" point2="H" />
+	<coeff value="0.5" />
+</sqsegmentscomb>
+
+<!-- PointOnSetOfPoints -->
+<!-- example: point M is on set of points s (can be line, circle or conic section) -->
+<pointonset set="s" point="M" />
+
+<!-- RatioOfOrientedSegments -->
+<!-- example: ratio of collinear segments AB and CD is 4.5 i.e. AB/CD = 4.5 -->
+<ratioorisegs point11="A" point12="B" point21="C" point22="D" ratiocoeff="4.5" />
+
+<!-- RatioOfTwoSegments -->
+<!-- example: ratio of two segments AB and CD is 3 (they need not be collinear) -->
+<segratio coeff="3" >
+	<segment point1="A" point2="B" />
+	<segment point1="C" point2="D" />
+</segratio>
+
+<!-- SegmentsOfEqualLengths -->
+<!-- example: segment AB is equal to segment CD -->
+<eqsegs point11="A" point12="B" point21="C" point22="D" />
+
+<!-- SimilarTriangles -->
+<!-- example: triangles ABC and DEF are similar and equally oriented (also can be similar and with different orientation) -->
+<simrtriangles equalyoriented="true">
+	<point label="A" />
+	<point label="B" />
+	<point label="C" />
+	<point label="D" />
+	<point label="E" />
+	<point label="F" />
+</simrtriangles>
+
+<!-- TouchingCircles -->
+<!-- example: circles k1 and k2 touch each other (at some common point P) -->
+<touchcircles circle1="k1" circle2="k2" />
+
+<!-- TwoInversePoints -->
+<!-- example: Point B is inverse point of point A with respect to circle k -->
+<inversepts point1="B" point2="A" circle="k" />
+
+<!-- TwoParallelLines -->
+<!-- example: lines p and q are parallel -->
+<parallellines line1="p" line2="q" />
+
+<!-- TwoPerpendicularLines -->
+<!-- example: lines p and q are perpendicular -->
+<perplines line1="p" line2="q" />
+
+<!-- ----------------------------------- -->
+<!-- Tags for theorem statements - END   -->
+<!-- ----------------------------------- -->
+
+
