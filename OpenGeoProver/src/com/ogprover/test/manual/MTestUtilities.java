@@ -4,15 +4,9 @@
 
 package com.ogprover.test.manual;
 
-import java.io.File;
 import java.io.IOException;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.polynomials.GeoTheorem;
-import com.ogprover.polynomials.XPolySystem;
-import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.test.formats.geothm_xml.GeoTheoremXMLParser;
-import com.ogprover.utilities.io.CustomFileReader;
 import com.ogprover.utilities.io.CustomFileWriter;
 import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.LaTeXFileWriter;
@@ -135,141 +129,8 @@ public class MTestUtilities {
 		}
 	}
 	
-	/**
-	 * Testing XML parser for theorems in algebraic form.
-	 */
-	public static void testGeoTheoremXMLParser() {
-		System.out.println();
-		System.out.println("========= TEST OF READING X-POLYNOMIALS FROM XML FILE =========");
-		System.out.println();
-		
-		GeoTheoremXMLParser parser = new GeoTheoremXMLParser();
-		GeoTheorem theorem = parser.readGeoTheoremFromXML("geothm01_src");
-		XPolySystem system = null;
-		XPolynomial statement = null;
-		
-		if (theorem != null) {
-			system = theorem.getHypotheses();
-			statement = theorem.getStatement();
-		}
-		
-		if (system != null) {
-			System.out.println();
-			System.out.println("System of XPolynomials read from xml file \"geothm01_src.xml\" is:");
-			System.out.println();
-			for(int ii = 0, jj = system.getPolynomials().size(); ii < jj; ii++)
-				System.out.println(system.getXPoly(ii).printToLaTeX());
-		}
-		else
-			System.out.println("System is empty.");
-		
-		if (statement != null) {
-			System.out.println();
-			System.out.println("Single XPolynomial read from xml file \"geothm01_src.xml\" is:");
-			System.out.println();
-			System.out.println(statement.printToLaTeX());
-		}
-		else
-			System.out.println("Single polynomial is empty.");
-		
-		if (theorem != null) {
-			GeoTheorem newtheorem = null;
-			XPolySystem newsystem = null;
-			XPolynomial newstatement = null;
-			CustomFileWriter destFile = null;
-			CustomFileReader srcFile = null;
-			
-			parser.writeGeoTheoremToXML(theorem, "geothm01_dest");
-			System.out.println();
-			System.out.println("Geometry theorem is written to \"geothm01_dest.xml\" file.");
-			System.out.println();
-			
-			// Copy "geothm01_dest.xml" to input directory
-			try {
-				destFile = new CustomFileWriter(CustomFileReader.INPUT_DIR_NAME, "geothm01_dest", "xml");
-				srcFile = new CustomFileReader(GeoTheoremXMLParser.XML_DIR_NAME, "geothm01_dest", "xml");
-				String line = null;
-				
-				while ((line = srcFile.readLine()) != null) {
-					destFile.write(line);
-					destFile.write("\n");
-				}
-			}
-			catch (Exception e) {
-				// do nothing
-			}
-			finally {
-				if (destFile != null)
-					destFile.close();
-				if (srcFile != null)
-					srcFile.close();
-			}
-			System.out.println();
-			System.out.println("File \"geothm01_dest.xml\" has been copied to input directory.");
-			System.out.println();
-			
-			newtheorem = parser.readGeoTheoremFromXML("geothm01_dest");
-			
-			if (newtheorem != null) {
-				newsystem = newtheorem.getHypotheses();
-				newstatement = newtheorem.getStatement();
-			}
-			
-			if (newsystem != null) {
-				System.out.println();
-				System.out.println("System of XPolynomials read from xml file \"geothm01_dest.xml\" is:");
-				System.out.println();
-			
-				for(int ii = 0, jj = newsystem.getPolynomials().size(); ii < jj; ii++)
-					System.out.println(newsystem.getXPoly(ii).printToLaTeX());
-			}
-			else
-				System.out.println("New system is empty");
-			
-			if (newstatement != null) {
-				System.out.println();
-				System.out.println("Single XPolynomial read from xml file \"geothm01_dest.xml\" is:");
-				System.out.println();
-				System.out.println(newstatement.printToLaTeX());
-			}
-			else
-				System.out.println("New single polynomial is empty");
-			
-			// Delete "geothm01_dest.xml" from input directory
-			try {
-				srcFile = new CustomFileReader(CustomFileReader.INPUT_DIR_NAME, "geothm01_dest", "xml");
-				File inputFile = (srcFile != null) ? srcFile.getInputFile() : null;
-				boolean result = true;
-
-				System.out.println();
-				if (inputFile != null && inputFile.exists()) {
-					if (srcFile != null) { // must close this first in order to successfully delete the file
-						srcFile.close();
-						srcFile = null;
-					}
-					result = inputFile.delete();
-					if (!result)
-						System.out.println("Failed to delete \"geothm01_dest.xml\" file from input directory.");
-					else
-						System.out.println("File \"geothm01_dest.xml\" has been deleted from input directory.");
-				}
-				else
-					System.out.println("File \"geothm01_dest.xml\" doesn't exist.");
-				System.out.println();
-			}
-			catch (Exception e) {
-				// do nothing
-			}
-			finally {
-				if (srcFile != null)
-					srcFile.close();
-			}
-		}
-	}
-	
 	public static void main (String args[]) {
 		// MTestUtilities.testCustomFileWriter();
 		// MTestUtilities.testFormattedWriters();
-		MTestUtilities.testGeoTheoremXMLParser();
 	}
 }

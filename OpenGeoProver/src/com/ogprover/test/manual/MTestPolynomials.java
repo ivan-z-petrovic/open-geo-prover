@@ -18,10 +18,8 @@ import com.ogprover.polynomials.UFraction;
 import com.ogprover.polynomials.UPolynomial;
 import com.ogprover.polynomials.UTerm;
 import com.ogprover.polynomials.Variable;
-import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
-import com.ogprover.test.formats.geothm_xml.GeoTheoremXMLParser;
 import com.ogprover.utilities.OGPUtilities;
 import com.ogprover.utilities.Stopwatch;
 import com.ogprover.utilities.io.FileLogger;
@@ -891,38 +889,6 @@ public class MTestPolynomials {
 		
 	}
 	
-	/**
-	 * Testing operations over system of x-polynomials.
-	 */
-	public static void testXPolySystem(String fileName) {
-		System.out.println();
-		System.out.println("	TEST FOR X-POLY SYSTEM");
-		System.out.println();
-		
-		// read system from xml file
-		GeoTheoremXMLParser parser = new GeoTheoremXMLParser();
-		XPolySystem system = parser.readGeoTheoremFromXML(fileName).getHypotheses();
-		
-		if (system != null) {
-			System.out.println();
-			System.out.println("System of XPolynomials read from xml file '" + fileName +".xml' is:");
-			System.out.println();
-			for(int ii = 0, jj = system.getPolynomials().size(); ii < jj; ii++)
-				System.out.println(system.getXPoly(ii).printToLaTeX());
-		}
-		else
-			System.out.println("System is empty");
-		
-		if (system != null && system.triangulate() == 0) {
-			System.out.println();
-			System.out.println("System of XPolynomials after triangulation is:");
-			System.out.println();
-			
-			for(int ii = 0, jj = system.getPolynomials().size(); ii < jj; ii++)
-				System.out.println(system.getXPoly(ii).printToLaTeX());
-		}
-	}
-	
 	public static void main (String[] args) {
 		OpenGeoProver.settings = new OGPConfigurationSettings();
 		// MTestPolynomials.testPrintingDecimals();
@@ -936,7 +902,6 @@ public class MTestPolynomials {
 		// MTestPolynomials.testUFractions();
 		// MTestPolynomials.testXTerms();
 		 MTestPolynomials.testXPolynomials();
-		//MTestPolynomials.testXPolySystem("geothm01_test");
 		 
 		OpenGeoProver.settings.getTimer().cancel(); // cancel timer thread
 	}
