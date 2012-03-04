@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 079 (Ptolemy's Theorem)">
+	<!-- Example 79 from Chou's book                                       -->
+	<!-- If ABCD is convex quadrilateral inscribed in given circle k, then -->
+	<!-- following equality holds: AC*BD = AB*CD + BC*DA, i.e. product of  -->
+	<!-- diagonals is equal to sum of products of opposite edges.          -->
+	<constructions>
+		<pfree label="A" />
+		<pfree label="B" />
+		<pfree label="C" />
+		<ccircumscribed label="k" point1="A" point2="B" point3="C" />
+		<prandcircle label="D" circle="k" />
+	</constructions>
+	<statement>
+		<algsumsegs>
+			<segprod>
+				<segment point1="A" point2="C" />
+				<segment point1="B" point2="D" />
+			</segprod>
+			<segprod>
+				<segment point1="A" point2="B" />
+				<segment point1="C" point2="D" />
+			</segprod>
+			<segprod>
+				<segment point1="B" point2="C" />
+				<segment point1="D" point2="A" />
+			</segprod>
+		</algsumsegs>
+	</statement>
+</geothm>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Converse of Thales' theorem">
+	<!-- Let SAB be a triangle and l line parallel with AB that intersects   -->
+	<!-- lines SA and SB in points C and D in that order.                    -->
+	<!-- Then for oriented segments following equality holds: SA/SB = SC/SD. -->
+	<constructions>
+		<pfree label="S" />
+		<pfree label="A" />
+		<pfree label="B" />
+		<ltwopts label="SA" point1="S" point2="A" />
+		<prandline label="C" line="SA" />
+		<ltwopts label="AB" point1="A" point2="B" />
+		<lparallel label="CD" point="C" baseline="AB" />
+		<ltwopts label="SB" point1="S" point2="B" />
+		<pintersect label="D" set1="CD" set2="SB" />
+	</constructions>
+	<statement>
+		<eqratioprods coeff="1" >
+			<ratioprod>
+				<ratiocollinearsegs>
+					<segment point1="S" point2="A" />
+					<segment point1="S" point2="B" />
+				</ratiocollinearsegs>
+			</ratioprod>
+			<ratioprod>
+				<ratiocollinearsegs>
+					<segment point1="S" point2="C" />
+					<segment point1="S" point2="D" />
+				</ratiocollinearsegs>
+			</ratioprod>
+		</eqratioprods>
+	</statement>
+</geothm>

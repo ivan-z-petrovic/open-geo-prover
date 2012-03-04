@@ -1,0 +1,35 @@
+Example # from book		Theorem name/description
+_____________________________________________________________________
+001						Pappus' theorem
+006						Pascal's theorem for conic section					
+007						Converse of Pascal's theorem for conic section
+009						[no name - theorem about conic sections]
+010						[no name - theorem about conic sections]
+011						[no name - theorem about conic sections]
+012						[no name - theorem about conic sections]
+013						Steiner's theorem for conic sections
+014						Kirkman's theorem for conic sections
+017						Gauss conic theorem
+019						Brianchon's theorem for circle
+031						[no name]
+036						Butterfly theorem
+039						Morley's theorem
+040						[no name]
+042						[no name]
+063						[no name]
+079						Ptolemy's theorem
+082						[no name]
+142						Theorem of Centroid
+154						Theorem of Incenter
+162						Euler's formula
+173						Theorem of orthocenter
+191						Euler's line
+196						Nine points circle (Euler's circle)
+288						Simson's theorem
+320						Menelaus' theorem
+321						Converse of Menelaus' theorem
+334						Ceva's theorem
+335						Converse of Ceva's theorem
+336						Gergonne's point
+346						Desargues' theorem
+
