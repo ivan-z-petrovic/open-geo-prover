@@ -14,7 +14,6 @@ import com.ogprover.main.OGPParameters;
 import com.ogprover.main.OGPReport;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.test.formats.ogp_xml.OGPCPXMLParser;
 import com.ogprover.thmprover.AlgebraicMethodProver;
 import com.ogprover.thmprover.TheoremProver;
 import com.ogprover.thmprover.WuMethodProver;
@@ -142,9 +141,7 @@ public class MTestOpenGeoProver {
 	 * @param inputFileName		Name of file with theorem representation
 	 */
 	public static void testTheoremProving(String inputFileName) {
-		OGPCPXMLParser parser = new OGPCPXMLParser();
-		OGPCP consProtocol = parser.readGeoTheoremFromXML(inputFileName);
-		MTestOpenGeoProver.simulateTheoremProving(consProtocol);
+		// TODO
 	}
 	
 	
