@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import com.ogprover.polynomials.GeoTheorem;
 import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.test.formats.ogp_xml.OGPCPXMLParser;
 import com.ogprover.thmprover.AlgebraicMethodProver;
 import com.ogprover.thmprover.TheoremProver;
 import com.ogprover.thmprover.WuMethodProver;
@@ -157,22 +156,12 @@ public class OpenGeoProver {
 		OGPCP consProtocol = null;
 		
 		if (parameters.getInputFile() != null) { // reading problem from file
-			if (parameters.getInputFormat().equals("O")) { // xml file which contains geometric construction and theorem statement
-				OGPCPXMLParser parser = new OGPCPXMLParser();
-				consProtocol = parser.readGeoTheoremFromXML(parameters.getInputFile());
-
-				if (consProtocol == null) {
-					logger.error("Failed to read theorem.");
-					output.close();
-					return;
-				}
-				
-				report = new OGPReport(consProtocol);
-				
-				// opening output report
-				report.openReport();
-			}
-			else if (parameters.getInputFormat().equals("G")) { // gcl file with representation of problem in GCLC language
+			// temp code - BEGIN
+			consProtocol = new OGPCP();
+			report = new OGPReport(consProtocol);
+			// temp code - END
+			
+			if (parameters.getInputFormat().equals("G")) { // gcl file with representation of problem in GCLC language
 				// TODO
 			}
 			else { // unknown format
@@ -184,6 +173,9 @@ public class OpenGeoProver {
 		else { // reading problem from internal memory
 			// TODO
 		}
+		
+		if (consProtocol == null)
+			return;
 		
 		
 		/*
