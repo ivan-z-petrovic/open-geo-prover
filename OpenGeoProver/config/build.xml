@@ -153,10 +153,6 @@
 			<copy todir="${temp.config.path}">
 				<fileset dir="${config.path}" />
 			</copy>
-		<mkdir dir="${temp.3rd_party_libs.path}"/>
-			<copy todir="${temp.3rd_party_libs.path}">
-				<fileset dir="${3rd_party_libs.path}" />
-			</copy>
 		<mkdir dir="${temp.documentation.path}"/>
 			<copy todir="${temp.documentation.path}">
 				<fileset dir="${documentation.path}" />
