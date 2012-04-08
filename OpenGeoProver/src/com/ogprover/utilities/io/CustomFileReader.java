@@ -88,7 +88,8 @@ public class CustomFileReader {
 	 * @throws IOException
 	 */
 	public CustomFileReader(String dirName, String fileName, String fileExtension) throws IOException {
-		File inDir = new File(dirName);
+		//File inDir = new File(dirName);
+		File inDir = new File(System.getProperty("user.dir") + "/" + dirName); // full path to input directory
 		
 		if (inDir.exists() == false || inDir.isDirectory() == false)
 			throw new IllegalArgumentException("File with name " + CustomFileReader.INPUT_DIR_NAME + " is not a directory.");
