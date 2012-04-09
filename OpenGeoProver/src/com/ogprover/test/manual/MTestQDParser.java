@@ -29,15 +29,18 @@ import com.ogprover.utilities.io.QDParser;
 */
 public class MTestQDParser {
 	public static void main (String[] args) {
-		OpenGeoProver.settings = new OGPConfigurationSettings();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
-		OGPCP consProtocol = new OGPCP();
-		
+		/*
+		 * First of all adjust working directory.
+		 */
 		//System.out.println(System.getProperty("user.dir")); // this is path to current project
 		System.setProperty("user.dir", System.getProperty("user.dir") + "/OpenGeoProver");	// adjust working directory (enter directory where input sub-directory resides);
 																							// note: this is not a physical change of directory, only change of property that holds 
 																							// information about current directory.
 		//System.out.println(System.getProperty("user.dir")); // this is adjusted path
+		
+		OpenGeoProver.settings = new OGPConfigurationSettings();
+		FileLogger logger = OpenGeoProver.settings.getLogger();
+		OGPCP consProtocol = new OGPCP();
 		
 		// Read the name of XML file from command line (extension is optional); file is in "input" directory
 		if (args.length != 1) {
