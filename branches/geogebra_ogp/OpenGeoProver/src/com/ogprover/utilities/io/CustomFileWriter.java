@@ -88,7 +88,8 @@ public class CustomFileWriter {
 	 * @throws IOException
 	 */
 	public CustomFileWriter(String dirName, String fileName, String fileExtension) throws IOException {
-		File outDir = new File(dirName);
+		// File outDir = new File(dirName);
+		File outDir = new File(System.getProperty("user.dir") + "/" + dirName); // full path to output directory
 		
 		if (outDir.exists() == false)
 			outDir.mkdir(); // creates output directory

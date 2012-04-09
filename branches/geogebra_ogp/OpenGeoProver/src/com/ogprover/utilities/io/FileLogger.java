@@ -35,7 +35,7 @@ public class FileLogger extends Logger{
 		super(name);
 		this.setLevel(Level.INFO); // this will include info, warn, error and fatal messages 
 		this.setVerbose(false);
-		this.setRootDirectory(FileLogger.DEFAULT_ROOT_DIR);
+		this.setRootDirectory(System.getProperty("user.dir") + "/" + FileLogger.DEFAULT_ROOT_DIR);
 	}
 
 	/**
