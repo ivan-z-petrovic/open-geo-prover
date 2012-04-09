@@ -87,6 +87,7 @@ public class OpenGeoProver {
 		 */
 		if (args.length == 1 && (args[0].equals("-h") || args[0].equals("--help"))) {
 			OGPParameters.printHelp();
+			OpenGeoProver.settings.getTimer().cancel(); // cancel default timer task
 			return;
 		}
 		
