@@ -117,5 +117,7 @@ public class MTestQDParser {
 			logger.error(message);
 			System.out.println(message);
 		}
+		
+		OpenGeoProver.settings.getTimer().cancel(); // cancel default timer task
 	}
 }
