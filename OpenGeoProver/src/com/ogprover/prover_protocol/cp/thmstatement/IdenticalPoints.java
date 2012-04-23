@@ -11,9 +11,9 @@ import java.util.Vector;
 import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.auxiliary.Segment;
 import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
+import com.ogprover.prover_protocol.cp.geoobject.Segment;
 
 
 /**

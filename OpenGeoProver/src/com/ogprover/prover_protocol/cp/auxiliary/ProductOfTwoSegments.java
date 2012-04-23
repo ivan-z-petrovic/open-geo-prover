@@ -5,6 +5,7 @@
 package com.ogprover.prover_protocol.cp.auxiliary;
 
 import com.ogprover.polynomials.XPolynomial;
+import com.ogprover.prover_protocol.cp.geoobject.Segment;
 
 /**
 * <dl>

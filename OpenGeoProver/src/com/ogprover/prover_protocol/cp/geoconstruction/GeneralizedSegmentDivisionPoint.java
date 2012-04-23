@@ -15,7 +15,7 @@ import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.auxiliary.RatioOfTwoCollinearSegments;
 import com.ogprover.prover_protocol.cp.auxiliary.RatioProduct;
-import com.ogprover.prover_protocol.cp.auxiliary.Segment;
+import com.ogprover.prover_protocol.cp.geoobject.Segment;
 import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 

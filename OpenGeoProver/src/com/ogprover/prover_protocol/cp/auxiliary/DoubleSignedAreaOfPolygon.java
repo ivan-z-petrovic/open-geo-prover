@@ -9,6 +9,7 @@ import java.util.Vector;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
+import com.ogprover.prover_protocol.cp.geoobject.Segment;
 
 /**
 * <dl>

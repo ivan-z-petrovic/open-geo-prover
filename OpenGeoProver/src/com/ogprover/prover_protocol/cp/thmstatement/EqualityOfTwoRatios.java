@@ -7,8 +7,8 @@ package com.ogprover.prover_protocol.cp.thmstatement;
 import java.util.Vector;
 
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.prover_protocol.cp.auxiliary.Segment;
 import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
+import com.ogprover.prover_protocol.cp.geoobject.Segment;
 
 
 /**

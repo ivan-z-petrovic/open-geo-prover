@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.prover_protocol.cp.OGPCP;
+import com.ogprover.prover_protocol.cp.geoobject.GeoObject;
 import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 
@@ -21,7 +22,7 @@ import com.ogprover.utilities.io.OGPOutput;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public abstract class GeoConstruction {
+public abstract class GeoConstruction implements GeoObject {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -328,6 +329,8 @@ public abstract class GeoConstruction {
 	 * Method that retrieves the label of constructed geometric object
 	 * 
 	 * @return The label of geometric object
+	 * 
+	 * @see com.ogprover.prover_protocol.cp.geoobject.GeoObject#getGeoObjectLabel()
 	 */
 	public String getGeoObjectLabel() {
 		return geoObjectLabel;
