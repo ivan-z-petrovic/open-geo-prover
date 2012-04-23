@@ -15,7 +15,7 @@ import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager;
-import com.ogprover.prover_protocol.cp.auxiliary.Segment;
+import com.ogprover.prover_protocol.cp.geoobject.Segment;
 import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 

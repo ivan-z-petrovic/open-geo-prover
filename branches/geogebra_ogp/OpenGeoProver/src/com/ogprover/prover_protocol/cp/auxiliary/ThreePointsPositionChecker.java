@@ -14,6 +14,7 @@ import com.ogprover.prover_protocol.cp.geoconstruction.Line;
 import com.ogprover.prover_protocol.cp.geoconstruction.LineThroughTwoPoints;
 import com.ogprover.prover_protocol.cp.geoconstruction.PerpendicularBisector;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
+import com.ogprover.prover_protocol.cp.geoobject.Segment;
 import com.ogprover.prover_protocol.cp.ndgcondition.NDGCondition;
 import com.ogprover.prover_protocol.cp.thmstatement.AlgebraicSumOfThreeSegments;
 import com.ogprover.prover_protocol.cp.thmstatement.CollinearPoints;

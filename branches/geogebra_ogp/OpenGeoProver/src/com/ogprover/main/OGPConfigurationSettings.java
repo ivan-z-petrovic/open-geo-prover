@@ -7,7 +7,6 @@ package com.ogprover.main;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.utilities.OGPTimer;
 import com.ogprover.utilities.Stopwatch;
 import com.ogprover.utilities.io.FileLogger;
@@ -101,10 +100,6 @@ public class OGPConfigurationSettings {
 	 * of prover execution in log file
 	 */
 	private FileLogger logger = null;
-	/**
-	 * Construction protocol obtained from OGP xml file
-	 */
-	private OGPCP parsedCP = null;
 	/*
 	 * Return codes of some operations 
 	 */
@@ -228,20 +223,6 @@ public class OGPConfigurationSettings {
 	 */
 	public FileLogger getLogger() {
 		return logger;
-	}
-	
-	/**
-	 * @param parsedCP the parsedCP to set
-	 */
-	public void setParsedCP(OGPCP parsedCP) {
-		this.parsedCP = parsedCP;
-	}
-
-	/**
-	 * @return the parsedCP
-	 */
-	public OGPCP getParsedCP() {
-		return parsedCP;
 	}
 
 	/**

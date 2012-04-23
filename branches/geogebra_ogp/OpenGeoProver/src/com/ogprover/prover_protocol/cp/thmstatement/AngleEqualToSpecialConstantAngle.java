@@ -16,11 +16,11 @@ import com.ogprover.polynomials.SymbolicVariable;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.auxiliary.Angle;
 import com.ogprover.prover_protocol.cp.auxiliary.GeneralizedAngleTangent;
 import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 import com.ogprover.prover_protocol.cp.geoconstruction.SpecialConstantAngle;
+import com.ogprover.prover_protocol.cp.geoobject.Angle;
 
 
 /**

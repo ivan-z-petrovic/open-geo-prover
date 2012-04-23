@@ -2,7 +2,7 @@
  * DISCLAIMER PLACEHOLDER 
  */
 
-package com.ogprover.prover_protocol.cp.auxiliary;
+package com.ogprover.prover_protocol.cp.geoobject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,18 +15,20 @@ import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.OGPCP;
+import com.ogprover.prover_protocol.cp.auxiliary.GeneralizedSegment;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 
 /**
 * <dl>
 * <dt><b>Class description:</b></dt>
-* <dd>Class for segment between two points</dd>
+* <dd>Class for segment between two points and for vector from the first 
+* 		towards the second point</dd>
 * </dl>
 * 
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class Segment implements GeneralizedSegment{
+public class Segment implements GeneralizedSegment, GeoObject {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -77,6 +79,10 @@ public class Segment implements GeneralizedSegment{
 	 * Second end point of this segment
 	 */
 	private Point secondEndPoint = null;
+	/**
+	 * Label of segment
+	 */
+	private String segLabel = null;
 	
 	// Static initializer of condition member 
 	static {
@@ -207,6 +213,13 @@ public class Segment implements GeneralizedSegment{
 		return secondEndPoint;
 	}
 	
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoobject.GeoObject#getGeoObjectLabel()
+	 */
+	public String getGeoObjectLabel() {
+		return this.segLabel;
+	}
+	
 	
 	
 	/*
@@ -223,6 +236,24 @@ public class Segment implements GeneralizedSegment{
 	public Segment(Point firstP, Point secondP) {
 		this.firstEndPoint = firstP;
 		this.secondEndPoint = secondP;
+		StringBuilder sb = new StringBuilder();
+		sb.append("|");
+		sb.append(firstP.getGeoObjectLabel());
+		sb.append(secondP.getGeoObjectLabel());
+		sb.append("|");
+		this.segLabel = sb.toString(); 
+	}
+	
+	/**
+	 * Constructor method
+	 * 
+	 * @param firstP	First end point
+	 * @param secondP	Second end point
+	 * @param label		Label of segment
+	 */
+	public Segment(Point firstP, Point secondP, String label) {
+		this(firstP, secondP);
+		this.segLabel = label;
 	}
 	
 	
