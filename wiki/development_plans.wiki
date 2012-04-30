@@ -1,24 +1,30 @@
 #summary This page describes plans for further development of OpenGeoProver project.
 
-= Introduction =
+=OGP Development Plans=
 
-== Branches and Releases ==
+==Introduction==
 
-=== Main development trunk ===
-Project maintains main development trunk. All bugs/issues of general type (not branch specific) reported on some specific branch are fixed on development trunk first, then merged to reported branch. Owners decide whether some fix has to be applied from development trunk to some other branches where bug/issue was not detected/reported.
+===Branches and Releases===
+
+*Main development trunk*
+
+Project maintains main development trunk. All bugs/issues of general type (not branch specific) reported on some specific branch are fixed on development trunk first, then merged to the reported branch. Owners decide whether some fix has to be applied from development trunk to some other branches where bug/issue was not detected/reported.
 
 Branch specific bugs (related to code only from some specific branch) are fixed only on that branch.
 
 All general enhancements/improvements or new features of project are done on development trunk first, then are applied to desired branch. Owners decide whether to apply these improvements to some other branch.
 General approach for other branches (that didn't request the improvement) should be to not change them, but to upgrade them with latest development trunk at certain point.
 
-=== New branches ===
+*New branches*
+
 All specific enhancements/improvements (required for specific client i.e. geometry system) are managed this way: a new branch of project is created first, then improvements are implemented only on new branch.
 
+Since development on main trunk will be done in stages according to predefined plan, all new non-planned features can be implemented only on a newly created branch first and then later merged up to the main development branch at some point, when it is safe. New page will be created from main development trunk. Also, before merging a new feature from that new page up to the main trunk, that branch has to be upgraded first with new revisions made on main trunk.
 
-= Current State of Project =
 
-== Current work ==
+==Current State of Project==
+
+===Current work===
 The current active development trunk (initial work) is for integration of this prover into !GeoGebra geometry system:
    * [http://www.geogebra.org/cms/ GeoGebra home page]
    * [http://www.geogebra.org/en/wiki/index.php/English GeoGebra Wiki page]
@@ -26,15 +32,15 @@ The current active development trunk (initial work) is for integration of this p
 
 As a part of this work, a new prover API suitable for !GeoGebra system will be implemented. It will accept input from !GeoGebra, convert it to internal prover representation and return the result in !GeoGebra desired format.
 
-On the other side !GeoGebra will provide representation of geometry theorems enhancing its _Construction Protocol_ object to contain statement together with constructions. Also it will provide representation of Non-Degeneracy Conditions (abbreviated NDG Conditions) and necessary GUI implementation for prover sub-screen. (See more details on [http://www.geogebra.org/trac/wiki GeoGebra Developer Wiki page]).
+On the other side !GeoGebra will provide representation of geometry theorems enhancing its _Construction Protocol_ object to contain statement together with constructions. Also it will provide representation of Non-Degenerative Conditions (abbreviated NDG Conditions) and necessary GUI implementation for prover sub-screen. (See more details on [http://www.geogebra.org/trac/wiki GeoGebra Developer Wiki page]).
 
-Current development trunk still doesn't have anything specific for !GeoGebra but later at certain point a new branch will be created to track this !GeoGebra baseline.
+For more details see [development_plans#Details_about_development_plans].
 
-== Other branches ==
+===Other branches===
 Currently there are no other branches in this project.
 
 
-= Plans for future work =
+==Plans for future work==
 
 Here are listed some ideas and plans for future work on this project.
 
@@ -45,3 +51,5 @@ Here are listed some ideas and plans for future work on this project.
   # Analysis and Work on theorems from hyperbolic geometry (this will be tracked on separate branch).
   # Implementation of parallel polynomial multiplying (new feature to head baseline).
   # ...
+
+==Details about development plans==
