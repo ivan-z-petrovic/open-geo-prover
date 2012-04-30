@@ -42,6 +42,7 @@ Following table outlines all stages of development work on main development trun
 || || _Implementation of Generic XML format for geometry theorems_ || Not Yet Started || ||
 || || _Implementation of certificate for formal verification of Wu's method_ || Not Yet Started || High priority work ||
 || || _Implementation of parallel algorithms for polynomial multiplication_ || Work Started || Low priority work ||
+|| || _Refactoring code for transformation of geometry theorems_ || Not Yet Started || Low priority work ||
 || ... || ... || ... || ||
 || || || || ||
 
