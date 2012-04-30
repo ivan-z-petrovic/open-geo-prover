@@ -1,0 +1,16 @@
+#summary This page covers all details about all development plans
+
+= OGP Details about past, current and future development plans =
+
+==Stages in development on the main development trunk==
+
+ # Fist stage is *A-stage* or initial development, that started by reimplementation of simple Wu's method from GCLC geometry system in Java programming language
+    * *A.1* Implementation of main algebraic primitives (variables, powers, terms, polynomials and polynomial systems) and main algorithms for manipulation with these primitives. <== *Finished*
+    * *A.2* Implementation of simple Wu's method (algorithm for triangulation and calculation of final reminder). <== *Finished*
+
+ # *B-stage*
+    xxx
+ # *C-stage*
+ # *D-stage*
+
+==Details about Integration of OGP with !GeoGebra==
