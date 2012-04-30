@@ -6,7 +6,7 @@
 
 Following table outlines all stages of development work on main development trunk. Stages are not chronological but stage A must be the first stage and also some stages cannot be started until some other work has been previously completed.
 
-|| *Stage or sub-stage of work* || *Work Description* || *State of work* || *Comment* ||
+|| *Stage or sub-stage of work* || *Work Description* || *Work Status* || *Comment* ||
 || *A* || _Initial development work_ || Testing + Documenting || Must be the first ||
 || *A.1* || _Algebraic primitives_ || *Finished* || ||
 || *A.2* || _Simple Wu's method_ || *Finished* || ||
