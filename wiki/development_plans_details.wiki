@@ -72,7 +72,7 @@ Following table outlines all development baselines of OGP project.
 || *Destination of development branch* || *Description* ||
 || trunk || MAIN Development baseline ||
 || branches/geogebra_ogp || Integration of OGP with !GeoGebra ||
-|| [[TBD]] || Implementation of Area Method ||
+|| {{{[TBD]}}} || Implementation of Area Method ||
 || ... || ... ||
 
 
