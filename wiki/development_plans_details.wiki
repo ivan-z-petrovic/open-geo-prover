@@ -54,7 +54,7 @@ The details about stages are given bellow:
     * *A.3* - Transformation of geometry constructions and theorem statements to algebraic form.
     * *A.4* - Processing of NDG conditions.  
  # *B-stage* is about adding support for conic sections to OGP
-    * *B.1* - Adding basing support which means parametric sets, general conic sections and conics through five points.
+    * *B.1* - Adding basic support which means parametric sets, general conic sections and conics through five points.
     * *B.2* - Adding support for specific conic sections like ellipses, hyperbolas and parabolas (all will be implemented by usage of parametric sets and special coordinates choice to fit desired equation of conic section).
  # *C-stage* is for implementation of Groebner basis method
     * *C.1* - First step which is about refactoring code for algebraic primitives. That way prover will become more flexible and will be able to work with different implementations of polynomials - some of them will be more efficient with memory, some will have faster algorithms for multiplication, some will be best for specific algebraic proving method.
