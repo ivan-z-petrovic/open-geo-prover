@@ -4,9 +4,53 @@
 
 ==Stages in development on the main development trunk==
 
+Following table outlines all stages of development work on main development trunk. Stages are not chronological but stage A must be the first stage and also some stages cannot be started until some other work has been previously completed.
+
+|| *Stage or sub-stage of work* || *Work Description* || *State of work* || *Comment* ||
+|| *A* || _Initial development work_ || Testing + Documenting || Must be the first ||
+|| *A.1* || _Algebraic primitives_ || *Finished* || ||
+|| *A.2* || _Simple Wu's method_ || *Finished* || ||
+|| *A.3* || _Transformation to algebraic form_ || *Finished* || ||
+|| *A.4* || _NDG Conditions_ || *Finished* || ||
+|| *A.5* || _Preparing documentation and examples_ || Ongoing || ||
+|| *A.6* || _Testing and bug fixing_ || Ongoing || ||
+|| || || || ||
+|| *B* || _Adding Support for conic sections_ || Ongoing || ||
+|| *B.1* || _Basic support for conic sections_ || *Finished* || ||
+|| *B.2* || _Specific conic sections_ || Not Yet Started || ||
+|| *B.3* || _Preparing documentation and examples_ || Ongoing || ||
+|| *B.4* || _Testing and bug fixing_ || Ongoing || ||
+|| || || || ||
+|| *C* || _Groebner basis method implementation_ || Not Yet Started || ||
+|| *C.1* || _Refactoring code for algebraic primitives_ || Not Yet Started || ||
+|| *C.2* || _Implementation of Groebner basis method_ || Not Yet Started || Must start after *C.1* ||
+|| *C.3* || _Preparing documentation and examples_ || Not Yet Started || ||
+|| *C.4* || _Testing and bug fixing_ || Not Yet Started || ||
+|| || || || ||
+|| *D* || _Complete Wu's method_ || Not Yet Started || Must start after *C.1* ||
+|| *D.1* || _Implementation of complete Wu's method_ || Not Yet Started || ||
+|| *D.2* || _Preparing documentation and examples_ || Not Yet Started || ||
+|| *D.3* || _Testing and bug fixing_ || Not Yet Started || ||
+|| || || || ||
+|| *E* || _GUI_ || Not Yet Started || ||
+|| *E.1* || _GUI design_ || Not Yet Started || ||
+|| *E.2* || _GUI implementation_ || Not Yet Started || ||
+|| *E.3* || _Preparing documentation and examples_ || Not Yet Started || ||
+|| *E.4* || _Testing and bug fixing_ || Not Yet Started || ||
+|| || || || ||
+|| *No name* ||  || To Be Decided || ||
+|| || _Implementation of Generic XML format for geometry theorems_ || Not Yet Started || ||
+|| ... || ... || ... || ||
+|| || || || ||
+
+The details about stages are given bellow:
+
  # Fist stage is *A-stage* or initial development, that started by reimplementation of simple Wu's method from GCLC geometry system in Java programming language
     * *A.1* Implementation of main algebraic primitives (variables, powers, terms, polynomials and polynomial systems) and main algorithms for manipulation with these primitives. <== *Finished*
     * *A.2* Implementation of simple Wu's method (algorithm for triangulation and calculation of final reminder). <== *Finished*
+    * *A.3* Transformation of geometry constructions and theorem statements in algebraic form. <== *Finished*
+    * *A.4* Processing of NDG conditions. <== *Finished*
+    * *A.5* Fixing bugs. <== *Ongoing*
 
  # *B-stage*
     xxx
