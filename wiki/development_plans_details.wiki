@@ -48,16 +48,35 @@ Following table outlines all stages of development work on main development trun
 
 The details about stages are given bellow:
 
- # Fist stage is *A-stage* or initial development, that started by reimplementation of simple Wu's method from GCLC geometry system in Java programming language
-    * *A.1* Implementation of main algebraic primitives (variables, powers, terms, polynomials and polynomial systems) and main algorithms for manipulation with these primitives. <== *Finished*
-    * *A.2* Implementation of simple Wu's method (algorithm for triangulation and calculation of final reminder). <== *Finished*
-    * *A.3* Transformation of geometry constructions and theorem statements in algebraic form. <== *Finished*
-    * *A.4* Processing of NDG conditions. <== *Finished*
-    * *A.5* Fixing bugs. <== *Ongoing*
+ # *A-stage* or initial development, that started by reimplementation of simple Wu's method from GCLC geometry system in Java programming language
+    * *A.1* - Implementation of main algebraic primitives (variables, powers, terms, polynomials and polynomial systems) and main algorithms for manipulation with these primitives.
+    * *A.2* - Implementation of simple Wu's method (algorithm for triangulation and calculation of final reminder).
+    * *A.3* - Transformation of geometry constructions and theorem statements to algebraic form.
+    * *A.4* - Processing of NDG conditions.  
+ # *B-stage* is about adding support for conic sections to OGP
+    * *B.1* - Adding basing support which means parametric sets, general conic sections and conics through five points.
+    * *B.2* - Adding support for specific conic sections like ellipses, hyperbolas and parabolas (all will be implemented by usage of parametric sets and special coordinates choice to fit desired equation of conic section).
+ # *C-stage* is for implementation of Groebner basis method
+    * *C.1* - First step which is about refactoring code for algebraic primitives. That way prover will become more flexible and will be able to work with different implementations of polynomials - some of them will be more efficient with memory, some will have faster algorithms for multiplication, some will be best for specific algebraic proving method.
+    * *C.2* - Implementation of algorithms used by Groebner basis method.
+ # *D-stage* is about implementation of Complete Wu's method for Automated Geometry Theorem Proving
+    * *D.1* - Implementation of suitable algebraic primitives and algorithms for complete Wu's method - [http://www.cs.wichita.edu/~ye/ JGEX] can be used as a reference
+ # *E-stage* is for implementation of GUI for OGP as a standalone application. It is not yet decided but probably [http://qt-jambi.org/ Qt Jambi] will be used for this purpose.
+ # *Other stages and work to be done*
+    * *Refactoring code for transformation of geometry theorems* - it is necessary to precisely define a construction in terms of Automated Geometry Theorem Proving and compare it with traditional mathematical concept of geometry construction. It is necessary to distinguish general geometry constructions from those that can be used in algebraic proving methods.
 
- # *B-stage*
-    xxx
- # *C-stage*
- # *D-stage*
+==All Branches==
 
-==Details about Integration of OGP with !GeoGebra==
+Following table outlines all development baselines of OGP project.
+
+|| *Destination of development branch* || *Description* ||
+|| trunk || MAIN Development baseline ||
+|| branches/geogebra_ogp || Integration of OGP with !GeoGebra ||
+|| [[TBD]] || Implementation of Area Method ||
+|| ... || ... ||
+
+
+==Details about other branches==
+
+ * [ogp_for_geogebra_plan_details Integration of OGP with GeoGebra]
+ * ...
