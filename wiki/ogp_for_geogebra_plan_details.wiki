@@ -6,7 +6,7 @@
 
 Following table outlines main stages of development work.
 
-|| *Stage or sub-stage of work* || *Work Description* || *State of work* || *Comment* ||
+|| *Stage or sub-stage of work* || *Work Description* || *Work Status* || *Comment* ||
 || *A* || _Initial development work_ || Ongoing || ||
 || *A.1* || _Preparations for main work_ || Ongoing || ||
 || *A.2* || _XML parsing of geometry constructions_ || Ongoing || ||
