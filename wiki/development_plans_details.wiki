@@ -48,7 +48,7 @@ Following table outlines all stages of development work on main development trun
 
 The details about stages are given bellow:
 
- # *A-stage* or initial development, that started by reimplementation of simple Wu's method from GCLC geometry system in Java programming language
+ # *A-stage* or initial development, that started by reimplementation of simple Wu's method from [http://poincare.matf.bg.ac.rs/~janicic//gclc/ GCLC geometry system] in Java programming language
     * *A.1* - Implementation of main algebraic primitives (variables, powers, terms, polynomials and polynomial systems) and main algorithms for manipulation with these primitives.
     * *A.2* - Implementation of simple Wu's method (algorithm for triangulation and calculation of final reminder).
     * *A.3* - Transformation of geometry constructions and theorem statements to algebraic form.
