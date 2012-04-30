@@ -73,7 +73,7 @@ Following table outlines all development baselines of OGP project.
 || trunk || MAIN Development baseline ||
 || branches/geogebra_ogp || Integration of OGP with !GeoGebra ||
 || {{{[TBD]}}} || Implementation of Area Method ||
-|| {{{[TBD]}}} || Implementation of algebraic provers in hyperbolic geometry ||
+|| {{{[TBD]}}} || Implementation of algebraic provers for hyperbolic geometry ||
 || ... || ... ||
 
 
