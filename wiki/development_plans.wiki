@@ -55,4 +55,4 @@ Here are listed some ideas and plans for future work on this project.
   # ...
 
 ==Details about development plans==
-Visit page [development_plans_details Details about current and future development plans].
+Visit page [development_plans_details Details about all development plans].
