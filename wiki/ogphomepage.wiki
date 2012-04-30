@@ -1,7 +1,9 @@
 #summary This is Home page of OpenGeoProver project.
 #labels Featured
 
-= Introduction =
+=OGP Home Page=
+
+== Introduction ==
 
 !OpenGeoProver (abbreviated *OGP*) is *Open Source* project in *Java* programming language for implementation of various *Automated Geometry Theorem Provers*.
 
@@ -13,6 +15,6 @@ It can be used as a standalone application as well as a geometry tool that can b
 (See [development_plans Plans for Development] page for more details about plans for further development of this project.)
 
 
-= Wiki Topics for !OpenGeoProver project =
+== Wiki Topics for !OpenGeoProver project ==
 
 The specific topics related to this project can be found on [ogp_wiki_topics Wiki Topics for OGP] page.
