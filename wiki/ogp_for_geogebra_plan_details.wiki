@@ -13,6 +13,8 @@ Following table outlines main stages of development work.
 || *A.3* || _Parsing of theorem statements_ || Not Yet Started || ||
 || *A.4* || _Replacement of logger_ || Not Yet Started || ||
 || *A.5* || _Implementation of output format_ || Not Yet Started || ||
+|| *A.6* || _Preparing documentation and examples_ || Ongoing || ||
+|| *A.7* || _Testing and bug fixing_ || Ongoing || ||
 || ... || ... || ... || ||
 || || || || ||
 || *B* || _Further development work_ || Not Yet Started|| TBD - will be split in new stages ||
