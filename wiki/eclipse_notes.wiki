@@ -39,7 +39,11 @@ If java application uses working directory as a starting reference point for wor
 ==Eclipse Subversive topics==
 
 ===Changing directory structure===
+Before making and committing any change in directory structure (like deleting file or directory, adding new file/directory or renaming) it is necessary to update the project to the latest revision in order for SVN commit to succeed. Also it is good practice to maintain the project up to the latest revision.
 
 ===Ignoring some resources in synchronization===
 
 ===Making new branch===
+Before making new branch first of all commit all changes and clean and remove all unnecessary resources (log, lib, ...). Then update the entire project to the latest revision. Then go to "Team > Branch...", set the name of new branch and appropriate comment/description and hit OK button. 
+
+After the branch has been created, check it out to new local directory in new Java project as stated in [local_project_development#Checkout_of_project_in_local_working_environment Local development Wiki page], just choose the trunk of the new branch for the path of project's repository.
