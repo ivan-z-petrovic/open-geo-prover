@@ -2,6 +2,8 @@
 
 =Integration of OGP with !GeoGebra=
 
+This development is done in Java 1.5.0_22 version of Java SDK.
+
 ==Stages in development work on branch dedicated for integration of OGP to !GeoGebra==
 
 Following table outlines main stages of development work.
