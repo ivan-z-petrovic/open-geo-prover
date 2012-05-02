@@ -16,6 +16,7 @@ As known [http://en.wikipedia.org/wiki/Angle_trisection trisector of angle canno
  # Select points A, B and P as free points. Let u,,A,, = AP and v,,B,, = BP.
  # Construct line v,,A,, such that angle <(u,,A,,, v,,A,,) = <BAP and line b such that <(v,,A,,, b) = <BAP.
  # Construct line u,,B,, such that angle <(u,,B,,, v,,B,,) = <ABP and line a such that <(u,,B,,, a) = <ABP.
+ # Triangle's vertex C is intersection of lines a and b.
  # Since sum of inner triangle's angles is equal to 180 degrees, then sum of their thirds is 60 degrees. Angle of 60 degrees can be constructed by compass and ruler. Therefore it is possible to construct the third of inner angle <BCA as difference of angle of 60 degrees and sum of angles <BAP and <ABP.
  # Construct line u,,C,, such that angle <(u,,C,,, b) = <BCA/3 and line v,,C,, which is angle bisector of angle <(u,,C,,, a).
  # P is intersection of u,,A,, and v,,B,,; Q is intersection of u,,b,, and v,,C,, and R is intersection of u,,C,, and v,,A,,.
