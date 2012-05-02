@@ -28,7 +28,7 @@ Following table outlines all stages of development work on main development trun
 || *GB.4* || _Testing and bug fixing_ || Not Yet Started || ||
 || || || || ||
 || *CWU* || _Complete Wu's method_ || Not Yet Started || Must start after *GB.1* ||
-|| *CWU.1* || _Implementation of complete Wu's method_ || Not Yet Started || ||
+|| *CWU.1* || _Implementation of complete Wu's method_ || Not Yet Started || Will be later split in few sub-stages ||
 || *CWU.2* || _Preparing documentation and examples_ || Not Yet Started || ||
 || *CWU.3* || _Testing and bug fixing_ || Not Yet Started || ||
 || || || || ||
