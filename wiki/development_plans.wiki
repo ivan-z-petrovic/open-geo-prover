@@ -25,7 +25,9 @@ Since development on main trunk will be done in stages according to predefined p
 ==Current State of Project==
 
 ===Current work===
-The current active development trunk (initial work) is for integration of this prover into !GeoGebra geometry system:
+_The current active *development trunk* is in state of completing examples and tests for the initial work done, and is also for implementation of solution for support for conic sections._
+
+*The current active development work is for integration of this prover into !GeoGebra geometry system:*
    * [http://www.geogebra.org/cms/ GeoGebra home page]
    * [http://www.geogebra.org/en/wiki/index.php/English GeoGebra Wiki page]
    * [http://www.geogebra.org/trac/wiki GeoGebra Developer Wiki page]
