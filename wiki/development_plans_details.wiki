@@ -38,6 +38,13 @@ Following table outlines all stages of development work on main development trun
 || *GUI.3* || _Preparing documentation and examples_ || Not Yet Started || ||
 || *GUI.4* || _Testing and bug fixing_ || Not Yet Started || ||
 || || || || ||
+|| *REP* || _Refactoring current solution for report generation and logging_ || Not Yet Started || Medium priority work ||
+|| *REP.1* || _Ideas for refactoring_ || Not Yet Started || ||
+|| *REP.2* || _Implementation of new solution for reporting_ || Not Yet Started || ||
+|| *REP.3* || _Refactoring solution for logging_ || Not Yet Started || ||
+|| *REP.4* || _Preparing documentation and examples_ || Not Yet Started || ||
+|| *REP.5* || _Testing and bug fixing_ || Not Yet Started || ||
+|| || || || ||
 || *No name* ||  || To Be Decided || Will be split in new stages later ||
 || || _Implementation of Generic XML format for geometry theorems_ || Not Yet Started || ||
 || || _Implementation of certificate for formal verification of Wu's method_ || Not Yet Started || High priority work ||
@@ -62,6 +69,8 @@ The details about stages are given bellow:
  # *CWU-stage* is about implementation of Complete Wu's method for Automated Geometry Theorem Proving
     * *CWU.1* - Implementation of suitable algebraic primitives and algorithms for complete Wu's method - [http://www.cs.wichita.edu/~ye/ JGEX] can be used as a reference
  # *GUI-stage* is for implementation of GUI for OGP as a standalone application. It is not yet decided but probably [http://qt-jambi.org/ Qt Jambi] will be used for this purpose.
+ # *REP-stage* is for refactoring current solution for reporting and logging in OGP
+  * *REP.1* - Current code is very saturated/polluted by pieces for low level logic related to report generation. Therefore it is necessary to consider idea for implementation of internal journal to track all actions taken by the prover at the moment of their realization and later to generate a report from that journal. Also current project uses only one type of logger. Project should provide usage of various loggers hence some kind of generalization is required.
  # *Other stages and work to be done*
     * *Refactoring code for transformation of geometry theorems* - it is necessary to precisely define a construction in terms of Automated Geometry Theorem Proving and compare it with traditional mathematical concept of geometry construction. It is necessary to distinguish general geometry constructions from those that can be used in algebraic proving methods.
 
