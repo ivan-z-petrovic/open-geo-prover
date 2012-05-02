@@ -93,4 +93,5 @@ Following table outlines all development baselines of OGP project.
 ==Details about other branches==
 
  * [ogp_for_geogebra_plan_details Integration of OGP with GeoGebra]
+ * [ogp_with_area_plan_details Implementation of Area Method]
  * ...
