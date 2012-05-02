@@ -19,7 +19,7 @@ General approach for other branches (that didn't request the improvement) should
 
 All specific enhancements/improvements (required for specific client i.e. geometry system) are managed this way: a new branch of project is created first, then improvements are implemented only on new branch.
 
-Since development on main trunk will be done in stages according to predefined plan, all new non-planned features can be implemented only on a newly created branch first and then later merged up to the main development branch at some point, when it is safe. New branch will be created from main development trunk. Also, before merging a new feature from that new branch up to the main trunk, that branch has to be upgraded first with new revisions made on the main trunk.
+Since development on main trunk will be done in stages according to predefined plan, all new non-planned features can be implemented only on a newly created branch first and then later merged up to the main development branch at some point, when it is safe. New branch will be created from main development trunk. Also, before merging a new feature from that new branch up to the main trunk, that branch has to be upgraded first with new revisions made on the main trunk. Same rules apply to all other already created branches - their development is done according to predefined plan so all new non-planned features are implemented to new branch created from the old one client specific branch.
 
 
 ==Current State of Project==
