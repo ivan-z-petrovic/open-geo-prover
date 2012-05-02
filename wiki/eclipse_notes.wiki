@@ -11,11 +11,11 @@ To increase the size of Java heap available for certain Java application it is n
 
 _-Xms64m -Xmx512m_
 
-where the first parameter specifies initial and the second specifies maximal Java heap size in megabytes.
+where the first parameter specifies initial and the second specifies maximal Java heap size in megabytes (and these numbers can be changed appropriately).
 
 In application that runs from Eclipse, these arguments are added in "Run configuration" window in Arguments tab (section for "VM arguments").
 
-Also, in Eclipse this could be initialized for each application started from Eclipse by setting these arguments in *eclipse.ini* file (in directory for Eclipse program) under "-vmargs" line. Better do not change this file if not sure or if you don't want same consumption of heap for all applications.
+Also, in Eclipse this could be initialized for each application started from Eclipse by setting these arguments in *eclipse.ini* file (in directory for Eclipse program) below "-vmargs" line. Better do not change this file if not sure or if you don't want same consumption of heap for all applications.
 
 For more information about changing size of Java heap read on-line resource [http://baskarfelix.wordpress.com/2008/08/06/out-of-memory-errorjava-heap-space/ on following external link].
 
