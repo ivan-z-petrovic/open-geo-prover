@@ -6,10 +6,17 @@
 ==Main development trunk==
 
 ===A-stage (Initial development work)===
- * issue 1 : Fixed execution of JUnit tests from Ant build file. It is fixed by adding current working directory in junit tag. Consulted Apache's Ant official page for [http://ant.apache.org/manual/Tasks/junit.html junit tag] for help on this work. Revision that fixed it is r9.
+ * issue 1: Execution of JUnit tests from Ant build file. It is fixed by adding current working directory in junit tag. Consulted Apache's Ant official page for [http://ant.apache.org/manual/Tasks/junit.html junit tag] for help on this work.
+ * issue 2: Implemented new type of construction - construction of second angle ray for given first ray and congruent angle.
+ * issue 4: New types of constructions added to the project.
+ * issue 5: Adding several examples for simple Wu's method.
+ * issue 6: Project cleanup - removing unnecessary files and folders.
+ * issue 7: Execution of OGP help from command line.
  * ...
 
 ===CON-stage (Support for conic sections)===
+ * issue 3: Implementation of basic support for parametric sets.
+
  * ...
 
 ===Stage free issues===
@@ -19,6 +26,9 @@
 ==Integration of OGP with !GeoGebra==
 
 ===A-stage (Initial development work)===
+ * issue 8: Review of project's licenses.
+ * issue 9: New branch creation for integration with !GeoGebra.
+ * issue 10: Implementation of XML parser for geometry constructions.
  * ...
 
 ===Stage free issues===
