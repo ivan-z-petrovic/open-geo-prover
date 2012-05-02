@@ -5,10 +5,33 @@
 Here are listed some important development notes that developers less experienced in [http://www.eclipse.org/ Eclipse IDE] could not know but which are sometimes very useful or necessary to know.
 
 ==Starting Java to use more of heap memory==
+Sometimes Java application could have great demands for fresh memory to allocate new objects. If this happens in very short time frame, Java run time exception "Out of memory" could come up.
+
+To increase the size of Java heap available for certain Java application it is necessary to add following arguments to JVM (java interpreter) when running the application:
+
+_-Xms64m -Xmx512m_
+
+where the first parameter specifies initial and the second specifies maximal Java heap size in megabytes.
+
+In application that runs from Eclipse, these arguments are added in "Run configuration" window in Arguments tab (section for "VM arguments").
+
+Also, in Eclipse this could be initialized for each application started from Eclipse by setting these arguments in *eclipse.ini* file (in directory for Eclipse program) under "-vmargs" line. Better do not change this file if not sure or if you don't want same consumption of heap for all applications.
+
+For more information about changing size of Java heap read on-line resource [http://baskarfelix.wordpress.com/2008/08/06/out-of-memory-errorjava-heap-space/ on following external link].
 
 ==Remote debugging in Eclipse==
+In order to debug Java application (built with debug notes) remotely from Eclipse, it is necessary to add following parameters of JVM (parameters of java interpreter) in command line for starting that application:
+
+_-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address="8095"_
+
+(Here *8095* is port number on which debugger connects to running application and can be any appropriate number.)
+
+On the other side, in Eclipse, there must be created a debugging session on localhost that connects to the application on the port stated in debugging JVM parameters (8095 in the above example).
+
+More details can be found [http://www.ibm.com/developerworks/opensource/library/os-eclipse-javadebug/index.html here].
 
 ==Setting working directory in Eclipse==
+If java application uses working directory as a starting reference point for work with files (i.e. if works with relative paths), it is important to set the correct working directory for that application. If application is executed out of Eclipse it is easily achieved by calling *java* command from the desired directory. In Eclipse, the working directory can be set in "Run configuration" dialog, in "Arguments" tab, for "Working directory" option "Other" is chosen and then directory is selected from "File System".
 
 ==Eclipse Subversive topics==
 
