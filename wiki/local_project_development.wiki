@@ -48,8 +48,8 @@ This is description for Eclipse IDE with Subversive SVN plug-in installed.
     * ant.jar from Apache Ant lib from eclipse plug-ins, and 
     * two plugin.jar files from installed Java environment: one from *jre1.5.0_22\lib* and another from *jdk1.5.0_22\jre\lib*.
   * After configuration of Build path check whether configuration of Java Compiler matches necessary Java SDK.
-   * Configure Ant for the new Java project:
-    * from Eclipse go to Run > External Tools > External Tools Configuration, on the left side select build.xml file for !OpenGeoProver project and in JRE tab from the right side select "Run in the same JRE as the workspace".
+  * Configure Ant for the new Java project:
+   * from Eclipse go to Run > External Tools > External Tools Configuration, on the left side select build.xml file for !OpenGeoProver project and in JRE tab from the right side select "Run in the same JRE as the workspace".
  # Also checkout wiki project as well to follow changes in wiki pages and add resources (like images) to wiki project on Google Code repository.
 
 = Committing new source code changes to Google Code repository =
