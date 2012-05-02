@@ -15,28 +15,28 @@ Following table outlines all stages of development work on main development trun
 || *A.5* || _Preparing documentation and examples_ || Ongoing || ||
 || *A.6* || _Testing and bug fixing_ || Ongoing || ||
 || || || || ||
-|| *B* || _Adding Support for conic sections_ || Ongoing || Low priority work ||
-|| *B.1* || _Basic support for conic sections_ || *Finished* || ||
-|| *B.2* || _Specific conic sections_ || Not Yet Started || ||
-|| *B.3* || _Preparing documentation and examples_ || Ongoing || ||
-|| *B.4* || _Testing and bug fixing_ || Ongoing || ||
+|| *CON* || _Adding Support for conic sections_ || Ongoing || Low priority work ||
+|| *CON.1* || _Basic support for conic sections_ || *Finished* || ||
+|| *CON.2* || _Specific conic sections_ || Not Yet Started || ||
+|| *CON.3* || _Preparing documentation and examples_ || Ongoing || ||
+|| *CON.4* || _Testing and bug fixing_ || Ongoing || ||
 || || || || ||
-|| *C* || _Groebner basis method implementation_ || Not Yet Started || High priority work ||
-|| *C.1* || _Refactoring code for algebraic primitives_ || Not Yet Started || ||
-|| *C.2* || _Implementation of Groebner basis method_ || Not Yet Started || Must start after *C.1* ||
-|| *C.3* || _Preparing documentation and examples_ || Not Yet Started || ||
-|| *C.4* || _Testing and bug fixing_ || Not Yet Started || ||
+|| *GB* || _Groebner basis method implementation_ || Not Yet Started || High priority work ||
+|| *GB.1* || _Refactoring code for algebraic primitives_ || Not Yet Started || ||
+|| *GB.2* || _Implementation of Groebner basis method_ || Not Yet Started || Must start after *GB.1* ||
+|| *GB.3* || _Preparing documentation and examples_ || Not Yet Started || ||
+|| *GB.4* || _Testing and bug fixing_ || Not Yet Started || ||
 || || || || ||
-|| *D* || _Complete Wu's method_ || Not Yet Started || Must start after *C.1* ||
-|| *D.1* || _Implementation of complete Wu's method_ || Not Yet Started || ||
-|| *D.2* || _Preparing documentation and examples_ || Not Yet Started || ||
-|| *D.3* || _Testing and bug fixing_ || Not Yet Started || ||
+|| *CWU* || _Complete Wu's method_ || Not Yet Started || Must start after *GB.1* ||
+|| *CWU.1* || _Implementation of complete Wu's method_ || Not Yet Started || ||
+|| *CWU.2* || _Preparing documentation and examples_ || Not Yet Started || ||
+|| *CWU.3* || _Testing and bug fixing_ || Not Yet Started || ||
 || || || || ||
-|| *E* || _GUI_ || Not Yet Started || Low priority work ||
-|| *E.1* || _GUI design_ || Not Yet Started || ||
-|| *E.2* || _GUI implementation_ || Not Yet Started || ||
-|| *E.3* || _Preparing documentation and examples_ || Not Yet Started || ||
-|| *E.4* || _Testing and bug fixing_ || Not Yet Started || ||
+|| *GUI* || _GUI development for OGP_ || Not Yet Started || Low priority work ||
+|| *GUI.1* || _GUI design_ || Not Yet Started || ||
+|| *GUI.2* || _GUI implementation_ || Not Yet Started || ||
+|| *GUI.3* || _Preparing documentation and examples_ || Not Yet Started || ||
+|| *GUI.4* || _Testing and bug fixing_ || Not Yet Started || ||
 || || || || ||
 || *No name* ||  || To Be Decided || Will be split in new stages later ||
 || || _Implementation of Generic XML format for geometry theorems_ || Not Yet Started || ||
@@ -53,15 +53,15 @@ The details about stages are given bellow:
     * *A.2* - Implementation of simple Wu's method (algorithm for triangulation and calculation of final reminder).
     * *A.3* - Transformation of geometry constructions and theorem statements to algebraic form.
     * *A.4* - Processing of NDG conditions.  
- # *B-stage* is about adding support for conic sections to OGP
-    * *B.1* - Adding basic support which means parametric sets, general conic sections and conics through five points.
-    * *B.2* - Adding support for specific conic sections like ellipses, hyperbolas and parabolas (all will be implemented by usage of parametric sets and special coordinates choice to fit desired equation of conic section).
- # *C-stage* is for implementation of Groebner basis method
-    * *C.1* - First step which is about refactoring code for algebraic primitives. That way prover will become more flexible and will be able to work with different implementations of polynomials - some of them will be more efficient with memory, some will have faster algorithms for multiplication, some will be best for specific algebraic proving method.
-    * *C.2* - Implementation of algorithms used by Groebner basis method.
- # *D-stage* is about implementation of Complete Wu's method for Automated Geometry Theorem Proving
-    * *D.1* - Implementation of suitable algebraic primitives and algorithms for complete Wu's method - [http://www.cs.wichita.edu/~ye/ JGEX] can be used as a reference
- # *E-stage* is for implementation of GUI for OGP as a standalone application. It is not yet decided but probably [http://qt-jambi.org/ Qt Jambi] will be used for this purpose.
+ # *CON-stage* is about adding support for conic sections to OGP
+    * *CON.1* - Adding basic support which means parametric sets, general conic sections and conics through five points.
+    * *CON.2* - Adding support for specific conic sections like ellipses, hyperbolas and parabolas (all will be implemented by usage of parametric sets and special coordinates choice to fit desired equation of conic section).
+ # *GB-stage* is for implementation of Groebner basis method
+    * *GB.1* - First step which is about refactoring code for algebraic primitives. That way prover will become more flexible and will be able to work with different implementations of polynomials - some of them will be more efficient with memory, some will have faster algorithms for multiplication, some will be best for specific algebraic proving method.
+    * *GB.2* - Implementation of algorithms used by Groebner basis method.
+ # *CWU-stage* is about implementation of Complete Wu's method for Automated Geometry Theorem Proving
+    * *CWU.1* - Implementation of suitable algebraic primitives and algorithms for complete Wu's method - [http://www.cs.wichita.edu/~ye/ JGEX] can be used as a reference
+ # *GUI-stage* is for implementation of GUI for OGP as a standalone application. It is not yet decided but probably [http://qt-jambi.org/ Qt Jambi] will be used for this purpose.
  # *Other stages and work to be done*
     * *Refactoring code for transformation of geometry theorems* - it is necessary to precisely define a construction in terms of Automated Geometry Theorem Proving and compare it with traditional mathematical concept of geometry construction. It is necessary to distinguish general geometry constructions from those that can be used in algebraic proving methods.
 
