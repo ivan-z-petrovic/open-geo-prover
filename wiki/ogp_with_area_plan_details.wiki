@@ -1,0 +1,5 @@
+#summary This page is start for all the details about Implementation of Area Method.
+
+=Implementation of Area Method in OGP=
+
+(_this page is still under development_)
