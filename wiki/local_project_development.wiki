@@ -1,5 +1,7 @@
 #summary This page outlines most important tasks for development and maintenance of OpenGeoProver project in local environment.
 
+=Local Project Development and Maintenance=
+
 = Prerequisites =
 == Java SDK ==
 In order to develop !OpenGeoProver project there must be installed at least Java 1.5 environment on local machine.
@@ -13,15 +15,15 @@ For example:
  * JAVA_HOME = C:\Program Files (x86)\Java\jdk1.5.0_22
  * CLASSPATH = C:\Program Files (x86)\Java\jdk1.5.0_22\jre\bin
 
-(_In Windows OS environment variables are found in Control Panel > System > Advanced System Settings_)
+(_In Windows OS environment variables are found under Control Panel > System > Advanced System Settings_)
 
 ==== Java SDK to use ====
-The plan is to use one of recent Java versions, but in fact it depends on branch of this project. E.g. branch for !GeoGebra will be developed with Java 1.5.0_22. It will be clearly stated in corresponding Wiki page for branches what version of Java to use for developing of certain branch.
+The plan is to use one of recent Java versions, but in fact it depends on branch of this project. E.g. branch for !GeoGebra will be developed with Java 1.5.0_22. It will be clearly stated in corresponding Wiki page for branches which version of Java to use for developing of certain branch.
 
 _Note_: Java releases can be found on official [http://www.oracle.com/technetwork/java/javase/downloads/index.html Java site].
 
 == Eclipse IDE ==
-It is up to developer which IDE to use for developing this project. We suggest [http://www.eclipse.org/downloads/ Eclipse IDE]. There are various plug-ins for Eclipse that could make development process comfortable. One of them is [http://metrics.sourceforge.net/ metrics plug-in] that provides project statistics (number of lines of code, methods, classes, interfaces etc.).
+It is up to a developer which IDE to use for developing this project. We suggest [http://www.eclipse.org/downloads/ Eclipse IDE]. There are various plug-ins for Eclipse that could make development process comfortable. One of them is [http://metrics.sourceforge.net/ metrics plug-in] that provides project statistics (number of lines of code, methods, classes, interfaces etc.).
 
 == Subversion ==
 As a Version Control System (VCS) for this project on Google Code repository we use Subversion (SVN). There are various SVN toolkits to install in local machine in order to use SVN to access this project on Google Code repository.
@@ -32,9 +34,9 @@ One of them is [http://www.eclipse.org/subversive/ Subversive - SVN Team Provide
 This is description for Eclipse IDE with Subversive SVN plug-in installed.
 
  # Create new SVN repository:
-   * Use https://open-geo-prover.googlecode.com/svn/trunk for URL
+   * For example use https://open-geo-prover.googlecode.com/svn/trunk for URL of trunk of main development baseline.
    * Use your own Google Code credentials for the Authentication
-   * Note: According to [http://code.google.com/p/support/wiki/FAQ#Accounts Google Code FAQ] user must have Google account in order to make code changes to project from repository.
+   * Note: According to [http://code.google.com/p/support/wiki/FAQ#Accounts Google Code FAQ] user must have Google account in order to make code changes to project on this repository.
  # Checkout !OpenGeoProver project from Google Code repository into new Eclipse Java project:
    * Go to SVN repository and from right click menu select "Find/Checkout As..." item. From "Check Out As" pop-up screen select "Check out as a project configured using the New Project Wizard" and from that wizard select new Java project.
    * Configure Java Build path in Eclipse for new Java project:
