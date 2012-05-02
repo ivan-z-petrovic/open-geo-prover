@@ -30,6 +30,9 @@ On the other side, in Eclipse, there must be created a debugging session on loca
 
 More details can be found [http://www.ibm.com/developerworks/opensource/library/os-eclipse-javadebug/index.html here].
 
+==Enabling debugger for external project added to existing Eclipse workspace==
+To do this it is necessary to open "Debug configuration" dialog, select the desired application and in "Classpath" tab select the "User Entries" and open "Advanced..." sub-dialog, then select "Add Folders" and browse for directory with classes. Also in "Main" tab search for main class.
+
 ==Setting working directory in Eclipse==
 If java application uses working directory as a starting reference point for work with files (i.e. if works with relative paths), it is important to set the correct working directory for that application. If application is executed out of Eclipse it is easily achieved by calling *java* command from the desired directory. In Eclipse, the working directory can be set in "Run configuration" dialog, in "Arguments" tab, for "Working directory" option "Other" is chosen and then directory is selected from "File System".
 
