@@ -40,9 +40,14 @@ This is description for Eclipse IDE with Subversive SVN plug-in installed.
  # Checkout !OpenGeoProver project from Google Code repository into new Eclipse Java project:
    * Go to SVN repository and from right click menu select "Find/Checkout As..." item. From "Check Out As" pop-up screen select "Check out as a project configured using the New Project Wizard" and from that wizard select new Java project.
    * Configure Java Build path in Eclipse for new Java project:
-     * From Source tab browse for default output (build) folder - select/create bin under !OpenGeoProver directory.
+     * In Source tab select source directories of the project (it is *src* sub-directory in project's baseline directory).
+     * From Source tab browse for "Default output folder" (build folder) - select/create bin under !OpenGeoProver directory.
      * Go to Libraries tab and select jre1.5.0_22 as a system JRE for eclipse project (select it from installed JREs on local machine).
-     * Create new User library and add all 3rd party libs in it, ant.jar from Apache Ant lib from eclipse plug-ins, and two plugin.jar files from installed Java environment: one from *jre1.5.0_22\lib* and another from *jdk1.5.0_22\jre\lib*.
+     * Create new User library and add: 
+      * all project's 3rd party libs in it, 
+      * ant.jar from Apache Ant lib from eclipse plug-ins, and 
+      * two plugin.jar files from installed Java environment: one from *jre1.5.0_22\lib* and another from *jdk1.5.0_22\jre\lib*.
+   * After configuration of Build path check whether configuration of Java Compiler matches necessary Java SDK.
    * Configure Ant for the new Java project:
      * from Eclipse go to Run > External Tools > External Tools Configuration, on the left side select build.xml file for !OpenGeoProver project and in JRE tab from the right side select "Run in the same JRE as the workspace".
  # Also checkout wiki project as well to follow changes in wiki pages and add resources (like images) to wiki project on Google Code repository.
