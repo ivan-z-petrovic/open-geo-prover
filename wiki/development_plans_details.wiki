@@ -74,6 +74,9 @@ The details about stages are given bellow:
  # *Other stages and work to be done*
     * *Refactoring code for transformation of geometry theorems* - it is necessary to precisely define a construction in terms of Automated Geometry Theorem Proving and compare it with traditional mathematical concept of geometry construction. It is necessary to distinguish general geometry constructions from those that can be used in algebraic proving methods. Also, this stage covers questions about instantiation of points and usage of special coordinates - heuristics related to them.
 
+*Note:*
+ Every project issue created to track a single specific piece of work has to have a mark of at least stage of work it is related to, but better if more detailed sub-stage label is provided. For more information about issues of this project visit [important_issues Issues] page.
+
 ==All Branches==
 
 Following table outlines all development baselines of OGP project.
