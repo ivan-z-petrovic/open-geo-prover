@@ -82,12 +82,12 @@ The details about stages are given bellow:
 
 Following table outlines all development baselines of OGP project.
 
-|| *Destination of development branch* || *Description* ||
-|| trunk || MAIN Development baseline ||
-|| branches/geogebra_ogp || Integration of OGP with !GeoGebra ||
-|| {{{[TBD]}}} || Implementation of Area Method ||
-|| {{{[TBD]}}} || Implementation of algebraic provers for hyperbolic geometry ||
-|| ... || ... ||
+|| *Destination of development branch* || *Description* || *Comment* ||
+|| trunk || MAIN Development baseline || ||
+|| branches/geogebra_ogp || Integration of OGP with !GeoGebra || cut from trunk ||
+|| {{{[TBD]}}} || Implementation of Area Method || ||
+|| {{{[TBD]}}} || Implementation of algebraic provers for hyperbolic geometry || ||
+|| ... || ... || ||
 
 
 ==Details about other branches==
