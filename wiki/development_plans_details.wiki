@@ -72,7 +72,7 @@ The details about stages are given bellow:
  # *REP-stage* is for refactoring current solution for reporting and logging in OGP
   * *REP.1* - Current code is very saturated/polluted by pieces for low level logic related to report generation. Therefore it is necessary to consider idea for implementation of internal journal to track all actions taken by the prover at the moment of their realization and later to generate a report from that journal. Also current project uses only one type of logger. Project should provide usage of various loggers hence some kind of generalization is required.
  # *Other stages and work to be done*
-    * *Refactoring code for transformation of geometry theorems* - it is necessary to precisely define a construction in terms of Automated Geometry Theorem Proving and compare it with traditional mathematical concept of geometry construction. It is necessary to distinguish general geometry constructions from those that can be used in algebraic proving methods.
+    * *Refactoring code for transformation of geometry theorems* - it is necessary to precisely define a construction in terms of Automated Geometry Theorem Proving and compare it with traditional mathematical concept of geometry construction. It is necessary to distinguish general geometry constructions from those that can be used in algebraic proving methods. Also, this stage covers questions about instantiation of points and usage of special coordinates - heuristics related to them.
 
 ==All Branches==
 
