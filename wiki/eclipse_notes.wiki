@@ -1,0 +1,19 @@
+#summary This page contains important developer notes for work within Eclipse IDE.
+
+=Notes for work within Eclipse IDE=
+
+Here are listed some important development notes that developers less experienced in [http://www.eclipse.org/ Eclipse IDE] could not know but which are sometimes very useful or necessary to know.
+
+==Starting Java to use more of heap memory==
+
+==Remote debugging in Eclipse==
+
+==Setting working directory in Eclipse==
+
+==Eclipse Subversive topics==
+
+===Changing directory structure===
+
+===Ignoring some resources in synchronization===
+
+===Making new branch===
