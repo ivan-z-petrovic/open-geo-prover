@@ -10,7 +10,7 @@ Let *p* and *q* be multivariate polynomials and *p(x)* and *q(x)* are they as po
 
 http://open-geo-prover.googlecode.com/svn/wiki/images/prem_formulae.png
 
-= Steps in (partial) Wu's method =
+= Steps in simple(partial) Wu's method =
  # Geometry constructions are represented as (transformed into) system of polynomials and they are hypotheses of the theorem. Theorem statement is represented as (transformed into) a single polynomial;
  # Triangulation of input system of polynomials for hypotheses (by using pseudo division of polynomials);
  # Calculation of final reminder of statement polynomial by using successive pseudo divisions of that polynomial with each polynomial from triangular system;
