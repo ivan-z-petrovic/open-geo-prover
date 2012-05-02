@@ -1,6 +1,25 @@
 #summary List of important issues of this project.
 
-= Important issues =
+=Important issues of OGP project by development branch/baseline and stage of work on a specific branch=
 
+
+==Main development trunk==
+
+===A-stage (Initial development work)===
  * issue 1 : Fixed execution of JUnit tests from Ant build file. It is fixed by adding current working directory in junit tag. Consulted Apache's Ant official page for [http://ant.apache.org/manual/Tasks/junit.html junit tag] for help on this work. Revision that fixed it is r9.
+ * ...
+
+===CON-stage (Support for conic sections)===
+ * ...
+
+===Stage free issues===
+ * ...
+
+
+==Integration of OGP with !GeoGebra==
+
+===A-stage (Initial development work)===
+ * ...
+
+===Stage free issues===
  * ...
