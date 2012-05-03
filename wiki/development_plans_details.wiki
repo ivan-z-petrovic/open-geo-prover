@@ -38,19 +38,19 @@ Following table outlines all stages of development work on main development trun
 || *GUI.3* || _Preparing documentation and examples_ || Not Yet Started || ||
 || *GUI.4* || _Testing and bug fixing_ || Not Yet Started || ||
 || || || || ||
-|| *REP* || _Refactoring current solution for report generation and logging_ || Not Yet Started || Medium priority work ||
+|| *REP* || _Refactoring current solution for report generation <br>and logging_ || Not Yet Started || Medium priority work ||
 || *REP.1* || _Ideas for refactoring_ || Not Yet Started || ||
 || *REP.2* || _Implementation of new solution for reporting_ || Not Yet Started || ||
 || *REP.3* || _Refactoring solution for logging_ || Not Yet Started || ||
 || *REP.4* || _Preparing documentation and examples_ || Not Yet Started || ||
 || *REP.5* || _Testing and bug fixing_ || Not Yet Started || ||
 || || || || ||
-|| *No name* ||  || To Be Decided || Will be split in new stages later ||
-|| || _Implementation of Generic XML format for geometry theorems_ || Not Yet Started || ||
-|| || _Implementation of certificate for formal verification of Wu's method_ || Not Yet Started || High priority work ||
-|| || _Implementation of parallel algorithms for polynomial multiplication_ || Work Started || Low priority work ||
-|| || _Refactoring code for transformation of geometry theorems_ || Not Yet Started || Low priority work ||
-|| || _Implementation of algebraic primitives that spend less memory for Wu's method_ || Not Yet Started || Medium priority work; Must start after *GB.1* ||
+|| *No name* || _To Be Decided_ || Ideas consideration || Will be split in new stages later ||
+|| || _Implementation of Generic XML format for <br>geometry theorems_ || Not Yet Started || ||
+|| || _Implementation of certificate for formal verification <br>of Wu's method_ || Not Yet Started || High priority work ||
+|| || _Implementation of parallel algorithms for <br>polynomial multiplication_ || Work Started || Low priority work ||
+|| || _Refactoring code for transformation of <br>geometry theorems_ || Not Yet Started || Low priority work ||
+|| || _Implementation of algebraic primitives that spend <br> less memory for Wu's method_ || Not Yet Started || Medium priority work;<br> Must start after *GB.1* ||
 || ... || ... || ... || ||
 || || || || ||
 
