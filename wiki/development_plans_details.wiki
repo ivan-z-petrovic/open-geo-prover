@@ -80,7 +80,9 @@ The details about stages are given below:
      * multivariate polynomial factorizations
      * [http://en.wikipedia.org/wiki/Resultant polynomial resultant] and its usage in algebraic proving
      * Rc-constructability - whether it is possible to construct the geometry object with specified properties from input elements - examination by usage of algebraic proving methods
-     * application of algebraic proving methods in general problems of polynomial functional dependency (algebraic topics).
+     * application of algebraic proving methods in general problems of polynomial functional dependency (algebraic topics)
+     * application of algebraic provers in other branches of geometry (stereometry, projective geometry, hyperbolic geometry, affine geometry ...)
+     * overcoming limitations in classic algebraic proving methods related to axioms of order - variations of algebraic proving methods.
 
 
 *Note:*
