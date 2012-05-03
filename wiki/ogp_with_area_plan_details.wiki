@@ -2,4 +2,64 @@
 
 =Implementation of Area Method in OGP=
 
-(_this page is still under development_)
+The area method is another geometric theorem proving method, which will be
+implemented in OpenGeoProver this summer (2012) during the Google Summer of Code
+program.
+
+Compared to Wu's method or the Gröbner basis method, it is a little less
+powerful : it can not deal with conics, for example. On the other hand, it has
+one big advantage : being not an algebraic method, it produces human-readable
+proofs. This proofs are generally not the easiest, and they contain sometimes
+long lines of calculus, but they always remain close to the geometric
+construction.
+
+The method is based on several observations : 
+
+1) All classical geometrical assertions (AB is parallel/perpendicular to CD, AB
+has the same length as CD, angle ABC has the same mesure as DEF, etc.) can be
+described as equalities between geometric quantities of two types :
+
+- oriented ratios AB/CD, where AB and CD are parallel,
+- S_ABC, the (oriented) area of the triangle ABC,
+- and Pythagoras difference P_ABC, defined as AB²+CB²-AC².
+
+For example, "A and B belong to the same circle arc CD" can be re-written "S_ACD
+=/= 0, S_BCD =/= 0, and S_CAD.P_CBD = S_CBD.P_CAD".
+
+2) A large subset of figures made by ruler and compass can also be made with a
+few (5) construction rules, on a formal system which deals only with points. An
+figure, to be used with the area method, has to be constructed using only this
+primitives :
+
+- Construction of an arbitrary free point,
+- Intersection of two lines
+- Foot from a given point to a line
+- Point Y on the line passing through a given point W, parallel to a given line
+  AB, and verifying WY = rUV, where r is a rational expression in geometric
+  quantities, or a variable.
+- Construction of a point Y on the line passing throug a point U and
+  perpendicular to a line UV, such that 4S_UVY/P_UVY=r, where r is a rational
+  expression in geometric quantities, or a variable.
+
+When we say "a line", it is actually given in the form of two different points.
+So, each one of the primitive constructions above constructs a new point from a
+set of points.
+
+The only "ruler and compass" construction which is impossible to describe with
+this system is the intersection between a circle and a line, or the intersection
+between two circles. To be more specific (and this last remark explains why this
+limitation is not really problematic), the only thing which is actually
+impossible to do is to distinguish the two points created this way. So, if one
+is already known (if we want to have the intersection between the line UV and
+the circle centered in O, passing through U, for example), it becomes possible.
+
+3) This primitives can easily be translated into equalities between the
+geometric quantities exposed above.
+
+
+So, the principle is simple : the algorithms processes all the construction
+steps in reverse order, and in the formula it tries to show, every occurence of
+intermediate points is replaced with previous points, thanks to "elimination
+lemmas" (allowing to do that for all types of quantities, and for all
+primitives). Finally, all we have to prove is the equality between two
+rational expressions, which can be made very easily.
