@@ -3,7 +3,7 @@
 =Implementation of Area Method in OGP=
 
 The area method is another geometric theorem proving method, which will be
-implemented in OpenGeoProver this summer (2012) during the Google Summer of Code
+implemented in !OpenGeoProver this summer (2012) during the Google Summer of Code
 program.
 
 Compared to Wu's method or the Gröbner basis method, it is a little less
