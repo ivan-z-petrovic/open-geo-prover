@@ -45,7 +45,7 @@ Following table outlines all stages of development work on main development trun
 || *REP.4* || _Preparing documentation and examples_ || Not Yet Started || ||
 || *REP.5* || _Testing and bug fixing_ || Not Yet Started || ||
 || || || || ||
-|| *No name* || _To Be Decided_ || Ideas consideration || Will be split in new stages later ||
+|| *No name{{{[}}}To Be Decided{{{]}}}* || _N/A_ || Ideas consideration || Will be split in new stages later ||
 || || _Implementation of Generic XML format for <br>geometry theorems_ || Not Yet Started || ||
 || || _Implementation of certificate for formal verification <br>of Wu's method_ || Not Yet Started || High priority work ||
 || || _Implementation of parallel algorithms for <br>polynomial multiplication_ || Work Started || Low priority work ||
