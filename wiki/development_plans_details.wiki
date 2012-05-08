@@ -107,6 +107,16 @@ Following table outlines all development baselines of OGP project.
  * [ogp_with_area_plan_details Implementation of Area Method]
  * ...
 
-==Plan for making branches==
+<br>
+<br>
+==Plans for making branches==
+====Integration with !GeoGebra====
 Following diagram shows the development plan for integration of OGP into !GeoGebra with implementation of Area method.
 http://open-geo-prover.googlecode.com/svn/wiki/images/baselines_diagram01.png
+
+ # New baseline will be cut from branch dedicated to integration of OGP with !GeoGebra, and implementation of Area method will start on that baseline. The idea is to separate two parallel independent development processes while it is not certain how they will affect each other and while ideas are in initial form.
+ # Every change made on basic branch for !GeoGebra will be merged up to branch for Area method to keep them as much consistent as possible.
+ # Every bug found on Area method branch or every desired improvement that are not specific to Area method must be merged down to basic branch for integration with !GeoGebra and even up to main development trunk (if it is some general thing).
+ # Every Area method specific changes will be done only on the Area method baseline.
+ # This situation should last not longer than 2-3 months. In summer we expect to have basic prover functionality implemented in !GeoGebra and also main development ideas and concepts developed for Area method implementation. At that moment we will merge all Area method specific code from its baseline down to basic development baseline of OGP for !GeoGebra and we will then delete Area specific branch. All further development work for integration of OGP with !GeoGebra will continue on the single branch (the basic one) for all types of provers.
+ # Since Area method is needed in OGP not only for !GeoGebra, at some point in the future that code will be merged from !GeoGebra's branch up to main development trunk. But it is still not planned and that is very low priority work at this moment (as per plans for development on main trunk).
