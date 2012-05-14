@@ -11,14 +11,13 @@ import java.util.Vector;
 /**
 * <dl>
 * <dt><b>Class description:</b></dt>
-* <dd>Class for construction of reflexive point 
-*     of given point with respect to given line</dd>
+* <dd>Class for list of other simple constructions</dd>
 * </dl>
 * 
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class ReflexivePoint extends ShortcutConstruction {
+public class ListOfConstructions extends ShortcutConstruction {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -45,7 +44,8 @@ public class ReflexivePoint extends ShortcutConstruction {
 	 */
 	@Override
 	public Point getPoint() {
-		return (Point) this.shortcutListOfConstructions.get(this.shortcutListOfConstructions.size() - 1);
+		// This construction is not for point
+		return null;
 	}
 
 	/**
@@ -84,18 +84,10 @@ public class ReflexivePoint extends ShortcutConstruction {
 	/**
 	 * Constructor method
 	 * 
-	 * @param pointLabel	Label of this point
-	 * @param originalPoint	Original point
-	 * @param baseLine		Line of reflexivity 
+	 * @param consList	List of constructions
 	 */
-	public ReflexivePoint(String pointLabel, Point originalPoint, Line baseLine) {
-		this.shortcutListOfConstructions = new Vector<GeoConstruction>();
-		
-		Line perpLine = new PerpendicularLine("reflexivePointPerpLine" + Math.round(Math.random()*1000), baseLine, originalPoint);
-		this.shortcutListOfConstructions.add(perpLine);
-		Point footPoint = new IntersectionPoint("reflexivePointFootPoint" + Math.round(Math.random()*1000), perpLine, baseLine);
-		this.shortcutListOfConstructions.add(footPoint);
-		this.shortcutListOfConstructions.add(new CentralSymmetricPoint(pointLabel, originalPoint, footPoint));
+	public ListOfConstructions(Vector<GeoConstruction> consList) {
+		this.shortcutListOfConstructions = consList;
 	}
 	
 	
@@ -111,6 +103,6 @@ public class ReflexivePoint extends ShortcutConstruction {
 	@Override
 	public String getConstructionDesc() {
 		// Shortcut construction is expanded in CP - therefore no detailed description is required.
-		return "Reflexive point";
+		return "List of simple constructions";
 	}
 }
