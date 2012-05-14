@@ -48,7 +48,7 @@ import com.ogprover.prover_protocol.cp.geoconstruction.RadicalAxis;
 import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromCircle;
 import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromGeneralConic;
 import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromLine;
-import com.ogprover.prover_protocol.cp.geoconstruction.ReflexivePoint;
+import com.ogprover.prover_protocol.cp.geoconstruction.ReflectedPoint;
 import com.ogprover.prover_protocol.cp.geoconstruction.RotatedPoint;
 import com.ogprover.prover_protocol.cp.geoconstruction.ShortcutConstruction;
 import com.ogprover.prover_protocol.cp.geoconstruction.TangentLine;
@@ -576,7 +576,7 @@ public class MTestCP {
 		cp.addGeoConstruction(pointC);
 		Line AC = new LineThroughTwoPoints("AC", pointA, pointC);
 		cp.addGeoConstruction(AC);
-		ShortcutConstruction pointD = new ReflexivePoint("D", pointB, AC);
+		ShortcutConstruction pointD = new ReflectedPoint("D", pointB, AC);
 		cp.addGeoConstruction(pointD);
 		
 		MTestCP.testConstructions(cp);
@@ -2818,7 +2818,7 @@ public class MTestCP {
 				cp.addGeoConstruction(C);
 				Line AC = new LineThroughTwoPoints("AC", A, C);
 				cp.addGeoConstruction(AC);
-				ShortcutConstruction D = new ReflexivePoint("D", B, AC);
+				ShortcutConstruction D = new ReflectedPoint("D", B, AC);
 				cp.addGeoConstruction(D);
 				// statement
 				cp.addThmStatement(new CongruentTriangles(A, B, C, A, D.getPoint(), C));
