@@ -73,7 +73,7 @@ public class OGPCPXMLParser {
 		xstream.registerConverter(new RandomPointFromCircleConverter());
 		xstream.registerConverter(new RandomPointFromGeneralConicConverter());
 		xstream.registerConverter(new RandomPointFromLineConverter());
-		xstream.registerConverter(new ReflexivePointConverter());
+		xstream.registerConverter(new ReflectedPointConverter());
 		xstream.registerConverter(new RotatedPointConverter());
 		xstream.registerConverter(new SegmentDivisionPointConverter());
 		xstream.registerConverter(new TangentLineConverter());

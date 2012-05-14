@@ -103,7 +103,7 @@ public class OGPCPXMLConverter implements Converter {
 				writer.startNode("prandgenconic");
 			else if (geoCons instanceof RandomPointFromLine)
 				writer.startNode("prandline");
-			else if (geoCons instanceof ReflexivePoint)
+			else if (geoCons instanceof ReflectedPoint)
 				writer.startNode("preflexive");
 			else if (geoCons instanceof RotatedPoint)
 				writer.startNode("protated");
@@ -254,7 +254,7 @@ public class OGPCPXMLConverter implements Converter {
 				else if ("prandline".equals(nodeName))
 					geoCons = (RandomPointFromLine)ctx.convertAnother(null, RandomPointFromLine.class);
 				else if ("preflexive".equals(nodeName))
-					geoCons = (ReflexivePoint)ctx.convertAnother(null, ReflexivePoint.class);
+					geoCons = (ReflectedPoint)ctx.convertAnother(null, ReflectedPoint.class);
 				else if ("protated".equals(nodeName)) 
 					geoCons = (RotatedPoint)ctx.convertAnother(null, RotatedPoint.class);
 				else if ("psegdiv".equals(nodeName)) 
