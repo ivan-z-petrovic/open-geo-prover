@@ -87,7 +87,7 @@ public class MTestQDParser {
 		StringReader sr = new StringReader(xmlString);
 		
 		// Create document handler and call the parser
-		DocHandler dh = new OGPDocHandler(consProtocol);
+		DocHandler dh = new OGPDocHandler();
 		QDParser qdParser = new QDParser();
 		
 		try {
