@@ -39,7 +39,7 @@ public abstract class GeoGebraCommand implements GeoGebraObject {
 	public static final String COMMAND_INTERSECT = "Intersect";
 	public static final String COMMAND_MIDPOINT = "Midpoint";
 	public static final String COMMAND_CENTER = "Center"; // center of circle/conic
-	public static final String COMMAND_POINT = "Point"; // Random point on some set of points (line, circle, segment, polygon)
+	public static final String COMMAND_POINT = "Point"; // Random point on some set of points (line, circle, segment, polygon) or point on specified distance
 	public static final String COMMAND_POINT_IN = "PointIn"; // Random point inside polygon or some other geometry object with interior
 	// Lines
 	public static final String COMMAND_LINE = "Line"; // Line through two points or parallel line
