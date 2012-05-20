@@ -34,6 +34,11 @@ public class CenterOfCircle extends ShortcutConstruction {
 	 */
 	public static final String VERSION_NUM = "1.00"; // this should match the version number from class comment
 	
+	/**
+	 * Circle whose center is constructed.
+	 */
+	private Circle circle;
+	
 	
 	
     /*
@@ -46,6 +51,10 @@ public class CenterOfCircle extends ShortcutConstruction {
 	 */
 	@Override
 	public Point getPoint() {
+		Point circleCenter = this.circle.getCenter();
+		
+		if (circleCenter != null)
+			return circleCenter;
 		return (Point) this.shortcutListOfConstructions.get(this.shortcutListOfConstructions.size() - 1);
 	}
 
@@ -86,9 +95,10 @@ public class CenterOfCircle extends ShortcutConstruction {
 	 * Constructor method
 	 * 
 	 * @param pointLabel	Label of center
-	 * @param circle		Circle whos center is this point
+	 * @param circle		Circle whose center is this point
 	 */
 	public CenterOfCircle(String pointLabel, Circle circle) {
+		this.circle = circle;
 		this.shortcutListOfConstructions = new Vector<GeoConstruction>();
 		
 		// If circle already has constructed center, nothing should be done
