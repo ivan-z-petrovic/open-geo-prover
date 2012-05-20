@@ -446,6 +446,22 @@ public class OGPCP {
 	}
 	
 	/**
+	 * Method which removes the construction from construction protocol.
+	 * 
+	 * @param gc	The construction to be removed. Note: the construction from
+	 * 				CP has to be provided here, not a copy of it, since with 
+	 * 				non-overridden equals() it won't be found in CP.
+	 */
+	public void removeGeoConstruction(GeoConstruction gc) {
+		if (gc == null)
+			return;
+		
+		int consInd = this.constructionSteps.indexOf(gc); // uses equals()
+		this.constructionSteps.remove(consInd);
+		this.constructionMap.remove(gc.getGeoObjectLabel());
+	}
+	
+	/**
 	 * Method to add theorem statement to construction protocol.
 	 * 
 	 * @param statement	Theorem statement to add to this construction protocol.

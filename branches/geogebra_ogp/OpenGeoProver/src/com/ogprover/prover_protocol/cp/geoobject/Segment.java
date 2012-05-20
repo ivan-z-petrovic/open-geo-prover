@@ -6,6 +6,7 @@ package com.ogprover.prover_protocol.cp.geoobject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import com.ogprover.polynomials.Power;
 import com.ogprover.polynomials.SymbolicPolynomial;
@@ -28,7 +29,7 @@ import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class Segment implements GeneralizedSegment, GeoObject {
+public class Segment implements GeneralizedSegment, PointList {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -401,6 +402,16 @@ public class Segment implements GeneralizedSegment, GeoObject {
 		sb.append(this.firstEndPoint.getGeoObjectLabel());
 		sb.append(this.secondEndPoint.getGeoObjectLabel());
 		return sb.toString();
+	}
+
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoobject.PointList#getPoints()
+	 */
+	public Vector<Point> getPoints() {
+		Vector<Point> points = new Vector<Point>();
+		points.add(this.firstEndPoint);
+		points.add(this.secondEndPoint);
+		return points;
 	}
 	
 }
