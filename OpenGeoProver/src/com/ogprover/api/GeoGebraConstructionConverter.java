@@ -5,11 +5,15 @@
 package com.ogprover.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
+import com.ogprover.prover_protocol.cp.geoconstruction.*;
 import com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommand;
+import com.ogprover.prover_protocol.cp.geoobject.*;
 import com.ogprover.utilities.io.FileLogger;
 
 /**
@@ -40,11 +44,21 @@ public abstract class GeoGebraConstructionConverter {
 	/**
 	 * Input list of constructions in format of GeoGebra's commands.
 	 */
-	protected ArrayList<GeoGebraCommand> ggCmdList;
+	protected Vector<GeoGebraCommand> ggCmdList;
 	/**
 	 * OGP's Construction Protocol for storage of converted construction.
 	 */
 	protected OGPCP consProtocol;
+	/**
+	 * List of constructions to be removed from Construction Protocol after each
+	 * step of conversion. 
+	 */
+	protected Vector<GeoConstruction> constructionsToRemove;
+	/**
+	 * Map with auxiliary geometry objects (angles, vectors, polygons etc.), used in constructions 
+	 * of other geometry objects.
+	 */
+	protected Map<String, GeoObject> auxiliaryObjectsMap;
 	
 	
 	
@@ -277,6 +291,30 @@ public abstract class GeoGebraConstructionConverter {
 	protected abstract GeoConstruction convertRayCmd(GeoGebraCommand ggCmd);
 	
 	/**
+	 * Conversion of construction 'AngleCmd'.
+	 * 
+	 * @param ggCmd		Construction command in GeoGebra format.
+	 * @return			Converted construction in OGP format or null in case of error.
+	 */
+	protected abstract GeoConstruction convertAngleCmd(GeoGebraCommand ggCmd);
+	
+	/**
+	 * Conversion of construction 'PolygonCmd'.
+	 * 
+	 * @param ggCmd		Construction command in GeoGebra format.
+	 * @return			Converted construction in OGP format or null in case of error.
+	 */
+	protected abstract GeoConstruction convertPolygonCmd(GeoGebraCommand ggCmd);
+	
+	/**
+	 * Conversion of construction 'PolyLineCmd'.
+	 * 
+	 * @param ggCmd		Construction command in GeoGebra format.
+	 * @return			Converted construction in OGP format or null in case of error.
+	 */
+	protected abstract GeoConstruction convertPolyLineCmd(GeoGebraCommand ggCmd);
+	
+	/**
 	 * Conversion of construction 'CircleArcCmd'.
 	 * 
 	 * @param ggCmd		Construction command in GeoGebra format.
@@ -329,6 +367,8 @@ public abstract class GeoGebraConstructionConverter {
 	public GeoGebraConstructionConverter() {
 		this.ggCmdList = null;
 		this.consProtocol = null;
+		this.constructionsToRemove = new Vector<GeoConstruction>();
+		this.auxiliaryObjectsMap = new HashMap<String, GeoObject>();
 	}
 	
 	/**
@@ -337,9 +377,11 @@ public abstract class GeoGebraConstructionConverter {
 	 * @param inputCmdList	Input list with constructions in format of GeoGebra's commands
 	 * @param ogpCP			OGP's construction protocol for storage of converted constructions
 	 */
-	public GeoGebraConstructionConverter(ArrayList<GeoGebraCommand> inputCmdList, OGPCP ogpCP) {
+	public GeoGebraConstructionConverter(Vector<GeoGebraCommand> inputCmdList, OGPCP ogpCP) {
 		this.ggCmdList = inputCmdList;
 		this.consProtocol = ogpCP;
+		this.constructionsToRemove = new Vector<GeoConstruction>();
+		this.auxiliaryObjectsMap = new HashMap<String, GeoObject>();
 	}
 	
 	
@@ -369,13 +411,18 @@ public abstract class GeoGebraConstructionConverter {
 		}
 		
 		for (GeoGebraCommand ggCmd : this.ggCmdList) {
-			GeoConstruction geoCons = this.convertConstruction(ggCmd);
+			this.constructionsToRemove.clear();
 			
+			GeoConstruction geoCons = this.convertConstruction(ggCmd);
 			if (geoCons == null) {
-				logger.error("Failed to convert GeoGebra command " + ggCmd.getDescription());
+				logger.error("Failed to convert GeoGebra command " + ((ggCmd != null) ? ggCmd.getDescription() : ""));
 				return false;
 			}
 			
+			if (this.constructionsToRemove.size() > 0) {
+				for (GeoConstruction gc : this.constructionsToRemove)
+					this.consProtocol.removeGeoConstruction(gc);
+			}
 			this.consProtocol.addGeoConstruction(geoCons);
 		}
 		
@@ -457,6 +504,12 @@ public abstract class GeoGebraConstructionConverter {
 			return convertVectorCmd(ggCmd);
 		if (ggCmd.getCommandName().equals(GeoGebraCommand.COMMAND_RAY)) 
 			return convertRayCmd(ggCmd);
+		if (ggCmd.getCommandName().equals(GeoGebraCommand.COMMAND_ANGLE)) 
+			return convertAngleCmd(ggCmd);
+		if (ggCmd.getCommandName().equals(GeoGebraCommand.COMMAND_POLYGON)) 
+			return convertPolygonCmd(ggCmd);
+		if (ggCmd.getCommandName().equals(GeoGebraCommand.COMMAND_POLYLINE)) 
+			return convertPolyLineCmd(ggCmd);
 		if (ggCmd.getCommandName().equals(GeoGebraCommand.COMMAND_CIRCLE_ARC)) 
 			return convertCircleArcCmd(ggCmd);
 		if (ggCmd.getCommandName().equals(GeoGebraCommand.COMMAND_CCIRCLE_ARC)) 
@@ -480,9 +533,9 @@ public abstract class GeoGebraConstructionConverter {
 	 * 
 	 * @param ggCmd				The command to be validated
 	 * @param minInputSize		Minimal number of input arguments
-	 * @param maxInputSize		Maximal number of input arguments
+	 * @param maxInputSize		Maximal number of input arguments, if equals -1 that means no upper limit for number of arguments (infinity)
 	 * @param minOutputSize		Minimal number of output arguments
-	 * @param maxOutputSize		Maximal number of output arguments
+	 * @param maxOutputSize		Maximal number of output arguments, if equals -1 that means no upper limit for number of arguments (infinity)
 	 * @return					TRUE if validation passed, FALSE otherwise.
 	 */
 	protected boolean validateCmdArguments(GeoGebraCommand ggCmd, int minInputSize, int maxInputSize, int minOutputSize, int maxOutputSize) {
@@ -497,40 +550,42 @@ public abstract class GeoGebraConstructionConverter {
 		 * Validation of input argument list
 		 */
 		ArrayList<String> iArgs = ggCmd.getInputArgs();
-		if (iArgs == null) {
+		if (iArgs == null && minInputSize > 0) {
 			logger.error("List of input arguments is null for command " + ggCmd.getDescription());
 			return false;
 		}
-		int iSize = iArgs.size();
-		if (iSize < minInputSize || iSize > maxInputSize) {
-			logger.error("List of input arguments is with incorrect number of elements for command " + ggCmd.getDescription());
-			return false;
-		}
-		for (int ii = 0; ii < iSize; ii++) {
-			String iLabel = iArgs.get(ii);
-			
-			if (iLabel == null) {
-				logger.error("Some of input arguments is null for command " + ggCmd.getDescription());
+		if (iArgs != null) {
+			int iSize = iArgs.size();
+			if (iSize < minInputSize || (maxInputSize != -1 && iSize > maxInputSize)) {
+				logger.error("List of input arguments is with incorrect number of elements for command " + ggCmd.getDescription());
 				return false;
 			}
+			for (int ii = 0; ii < iSize; ii++) {
+				String iLabel = iArgs.get(ii);
 			
-			/*
-			 * Format of input label - it can be one of following:
-			 * 	1. label of existing geometry object
-			 * 	2. number
-			 * 	3. GeoGebra command in form: "cmdName[arg1, arg2, ..., argn]"
-			 */
-			if (iLabel.length() == 0) {
-				logger.error("Empty label is not allowed for input argument in command " + ggCmd.getDescription());
-				return false;
-			}
-			if (this.consProtocol.getConstructionMap().get(iLabel) == null &&
-				(!iLabel.contains("[") || !iLabel.contains("]"))) {
-				try {
-					Double.parseDouble(iLabel);
-				} catch (NumberFormatException ex) {
-					logger.error("The format of input label is incorrect for command " + ggCmd.getDescription());
+				if (iLabel == null) {
+					logger.error("Some of input arguments is null for command " + ggCmd.getDescription());
 					return false;
+				}
+			
+				/*
+				 * Format of input label - it can be one of following:
+				 * 	1. label of existing geometry object
+				 * 	2. number
+				 * 	3. GeoGebra command in form: "cmdName[arg1, arg2, ..., argn]"
+				 */
+				if (iLabel.length() == 0) {
+					logger.error("Empty label is not allowed for input argument in command " + ggCmd.getDescription());
+					return false;
+				}
+				if (this.getGeoObject(iLabel) == null &&
+						(!iLabel.contains("[") || !iLabel.contains("]"))) {
+					try {
+						Double.parseDouble(iLabel);
+					} catch (NumberFormatException ex) {
+						logger.error("The format of input label is incorrect for command " + ggCmd.getDescription());
+						return false;
+					}
 				}
 			}
 		}
@@ -544,7 +599,7 @@ public abstract class GeoGebraConstructionConverter {
 			return false;
 		}
 		int oSize = oArgs.size();
-		if (oSize < minOutputSize || oSize > maxOutputSize) {
+		if (oSize < minOutputSize || (maxOutputSize != -1 && oSize > maxOutputSize)) {
 			logger.error("List of output arguments is with incorrect number of elements for command " + ggCmd.getDescription());
 			return false;
 		}
@@ -561,12 +616,100 @@ public abstract class GeoGebraConstructionConverter {
 			 * and can be regular label of geometry object which must not exist
 			 * in construction protocol among object constructed previously.
 			 */
-			if (this.consProtocol.getConstructionMap().get(oLabel) != null) { // this condition covers the case of empty label as well
+			if (this.getGeoObject(oLabel) != null) { // note: this condition covers the case of empty label as well
 				logger.error("Bad output label (already used in previous construction) for command " + ggCmd.getDescription());
 				return false;
 			}
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Method which retrieves geometry object by its label.
+	 * It searches first among constructions, then among auxiliary objects.
+	 * 
+	 * @param objLabel	The label of object which is searched for.
+	 * @return			The object found by label or null if not found.
+	 */
+	protected GeoObject getGeoObject(String objLabel) {
+		GeoConstruction gc = this.consProtocol.getConstructionMap().get(objLabel);
+		
+		if (gc != null)
+			return gc;
+		return this.auxiliaryObjectsMap.get(objLabel);
+	}
+	
+	/**
+	 * Method which returns the list of <b>numOfPts</b> points from point set.
+	 * If point set doesn't have necessary number of points, new points are created.
+	 * 
+	 * @param ptSet			Set of points whose points are retrieved
+	 * @param numOfPts		Number of points
+	 * @param consList		List of all constructions where only new points are added
+	 * @return				List of points from point set, or null in case of error
+	 */
+	protected Vector<Point> getOrCreatePointsFromPointSet(SetOfPoints ptSet, int numOfPts, Vector<GeoConstruction> consList) {
+		if (ptSet == null)
+			return null;
+		
+		Vector<Point> vpts = new Vector<Point>();
+		Vector<Point> setPts = ptSet.getPoints();
+		int numSetPts = (setPts == null) ? 0 : setPts.size();
+		
+		for (int ii = 0; ii < numOfPts; ii++) {
+			Point pt = (numSetPts > ii) ? setPts.get(ii) : null;
+			
+			if (pt == null) {
+				StringBuilder sb = new StringBuilder();
+				sb.append(ptSet.getGeoObjectLabel());
+				sb.append("_pt");
+				sb.append(ii+1);
+				sb.append("_");
+				sb.append(Math.round(Math.random()*1000));
+				String ptLabel = GeoGebraConstructionConverter.generateRandomLabel(sb.toString());
+				pt = RandomPointFromSetOfPoints.createRandomPoint(ptLabel, ptSet);
+				if (pt == null)
+					return null; // failed to create a point (i.e. unknown set of points passed)
+				consList.add(pt);
+			}
+			
+			vpts.add(pt);
+		}
+		
+		return vpts;
+	}
+	
+	/**
+	 * <i>
+	 * Method which retrieves the random label to be used in some geometry object.
+	 * </i>
+	 * 
+	 * @param prefix	The prefix of new random label
+	 * @return			Random label
+	 */
+	protected static String generateRandomLabel(String prefix) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(prefix);
+		sb.append(Math.round(Math.random()*1000));
+		return sb.toString();
+	}
+	
+	/**
+	 * <i>
+	 * Method which retrieves the message for class cast exception to be used for logging.
+	 * </i>
+	 * 
+	 * @param ggCmd		The command on which an exception has occurred.
+	 * @param ex		The exception caught.
+	 * @return			Exception message.
+	 */
+	protected static String getClassCastExceptionMessage(GeoGebraCommand ggCmd, Exception ex) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Can't cast input argument(s) for command ");
+		sb.append(ggCmd.getCommandName());
+		sb.append(" exception caught: ");
+		sb.append(ex.toString());
+		return sb.toString();
 	}
 }

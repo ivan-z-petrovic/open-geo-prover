@@ -6,11 +6,10 @@ package com.ogprover.prover_protocol.cp.geoconstruction;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Vector;
-
 import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.prover_protocol.cp.geoobject.PointList;
 
 /**
  * <dl>
@@ -22,7 +21,7 @@ import com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager;
  * @author Ivan Petrovic
  */
 
-public interface SetOfPoints {
+public interface SetOfPoints extends PointList {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -87,13 +86,6 @@ public interface SetOfPoints {
 	 * @return The condition (it is null in case of error)
 	 */
 	public abstract SymbolicPolynomial getCondition();
-	/**
-	 * Method that retrieves the collection of points from
-	 * this set of points
-	 * 
-	 * @return The list of all points from this set
-	 */
-	public abstract Vector<Point> getPoints();
 	/**
 	 * Method that retrieves map with all symbolic conditions that could be applied for
 	 * this set of points, together with list of all mappings of points to symbolic

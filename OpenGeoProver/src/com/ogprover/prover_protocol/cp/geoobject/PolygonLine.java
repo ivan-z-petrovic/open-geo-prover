@@ -19,7 +19,7 @@ import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class PolygonLine implements GeoObject {
+public class PolygonLine implements PointList {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -42,6 +42,12 @@ public class PolygonLine implements GeoObject {
 	 * The label of polygon line.
 	 */
 	private String label;
+	/**
+	 * Vector of labels of polygon edges.
+	 * First edge is segment from first to second point etc., the last edge is
+	 * segment from last to first point.
+	 */
+	private Vector<String> edgesLabels;
 	
 	
 	
@@ -72,6 +78,20 @@ public class PolygonLine implements GeoObject {
 		return this.label;
 	}
 	
+	/**
+	 * @param edgesLabels the edgesLabels to set
+	 */
+	public void setEdgesLabels(Vector<String> edgesLabels) {
+		this.edgesLabels = edgesLabels;
+	}
+
+	/**
+	 * @return the edgesLabels
+	 */
+	public Vector<String> getEdgesLabels() {
+		return edgesLabels;
+	}
+	
 	
 	
 	/*
@@ -79,9 +99,9 @@ public class PolygonLine implements GeoObject {
 	 * ========================== CONSTRUCTORS ==============================
 	 * ======================================================================
 	 */
-	
-	public PolygonLine(Vector<Point> vertices) {
+	public PolygonLine(Vector<Point> vertices, Vector<String> edges) {
 		this.vertices = vertices;
+		this.edgesLabels = edges;
 		StringBuilder sb = new StringBuilder();
 		sb.append("|");
 		for (Point pt: vertices)
@@ -90,8 +110,9 @@ public class PolygonLine implements GeoObject {
 		this.label = sb.toString();
 	}
 	
-	public PolygonLine(Vector<Point> vertices, String label) {
+	public PolygonLine(Vector<Point> vertices, Vector<String> edges, String label) {
 		this.vertices = vertices;
+		this.edgesLabels = edges;
 		this.label = label;
 	}
 	
@@ -121,6 +142,13 @@ public class PolygonLine implements GeoObject {
 	public boolean containsPointAsVertex(String ptLabel) {
 		Point tempPt = new FreePoint(ptLabel);
 		return this.containsPointAsVertex(tempPt);
+	}
+
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoobject.PointList#getPoints()
+	 */
+	public Vector<Point> getPoints() {
+		return this.vertices;
 	}
 }
 
