@@ -52,3 +52,6 @@ If the ignored resource exists in repository, when performing "Team synchronize"
 Before making new branch first of all commit all changes and clean and remove all unnecessary resources (log, lib, ...). Then update the entire project to the latest revision. Then go to "Team > Branch...", set the name of new branch and appropriate comment/description and hit OK button. 
 
 After the branch has been created, check it out to new local directory in new Java project as explained in [local_project_development#Checkout_of_project_in_local_working_environment Local development Wiki page], just choose the trunk of the new branch for the path of project's repository.
+
+===Merging===
+There is a brief description on [http://www.eclipse.org/subversive/documentation/teamSupport/merge_dialog.php Eclipse Subversive documentation] about merging, but one important note for merge operation is that the resource which is merged has to match the same that resource from the repository location. For example, if you right click on *src* directory on local workspace, then in Merge dialog in URL edit filed you must choose same that directory from the repository location (e.g. {{{https://open-geo-prover.googlecode.com/svn/branches/geogebra_ogp/OpenGeoProver/src}}}).
