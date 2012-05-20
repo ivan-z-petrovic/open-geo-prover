@@ -58,8 +58,9 @@ public class GeoGebraCommandFactory {
 	 * @param ggCmdName		Name of GeoGebra command
 	 * @param inputArgs		List of input arguments - labels of previously constructed objects
 	 * @param outputArgs	List of output arguments - labels of new objects
-	 * @param objType		The GeoGebra's type of geometry object.
-	 * @return
+	 * @param objType		The GeoGebra's type of geometry object. 
+	 * 						It can be GeoGebraObject.OBJ_TYPE_NONE if command object implicitly sets the type.  
+	 * @return				GeoGebra command object or null in case of error.
 	 */
 	public static GeoGebraCommand createGeoGebraCommand(String ggCmdName, ArrayList<String> inputArgs, ArrayList<String> outputArgs, String objType) {
 		/*

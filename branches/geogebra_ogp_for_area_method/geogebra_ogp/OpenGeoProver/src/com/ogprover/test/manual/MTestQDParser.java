@@ -6,13 +6,16 @@ package com.ogprover.test.manual;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Vector;
 
+import com.ogprover.api.GGConsConverterForAlgebraicProvers;
+import com.ogprover.api.GeoGebraConstructionConverter;
 import com.ogprover.main.OGPConfigurationSettings;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
+import com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommand;
 import com.ogprover.utilities.io.CustomFileReader;
-import com.ogprover.utilities.io.DocHandler;
 import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPDocHandler;
 import com.ogprover.utilities.io.QDParser;
@@ -40,7 +43,6 @@ public class MTestQDParser {
 		
 		OpenGeoProver.settings = new OGPConfigurationSettings();
 		FileLogger logger = OpenGeoProver.settings.getLogger();
-		OGPCP consProtocol = new OGPCP();
 		
 		// Read the name of XML file from command line (extension is optional); file is in "input" directory
 		if (args.length != 1) {
@@ -87,7 +89,8 @@ public class MTestQDParser {
 		StringReader sr = new StringReader(xmlString);
 		
 		// Create document handler and call the parser
-		DocHandler dh = new OGPDocHandler();
+		Vector<GeoGebraCommand> ggCmdList = new Vector<GeoGebraCommand>();
+		OGPDocHandler dh = new OGPDocHandler(ggCmdList);
 		QDParser qdParser = new QDParser();
 		
 		try {
@@ -99,23 +102,37 @@ public class MTestQDParser {
 		}
 		
 		// Check results of parsing
-		if (((OGPDocHandler)dh).isSuccess()) { // note: this is safe cast
+		if (dh.isSuccess()) {
+			// Convert parsed GeoGebra commands
+			OGPCP consProtocol = new OGPCP();
+			consProtocol.setTheoremName(dh.getTheoremName());
+			GeoGebraConstructionConverter consCnv = new GGConsConverterForAlgebraicProvers(dh.getGeoGebraCmdList(), consProtocol);
+			
 			System.out.println();
-			if (consProtocol.getTheoremName() != null) {
-				System.out.println("Constructions for theorem \"" + consProtocol.getTheoremName() + "\"");
+			if (consCnv.convert() == false) {
+				String message = "Failed to convert GeoGebra constructions to OGP format";
+				logger.error(message);
+				System.out.println(message);
 				System.out.println();
 			}
+			else {
+				if (consProtocol.getTheoremName() != null) {
+					System.out.println("Constructions for theorem \"" + consProtocol.getTheoremName() + "\"");
+					System.out.println();
+				}
 			
-			for (int ii = 0, jj = consProtocol.getConstructionSteps().size(); ii < jj; ii++) {
-				GeoConstruction gc = consProtocol.getConstructionSteps().get(ii);
-				System.out.println(gc.getConstructionDesc());
+				for (int ii = 0, jj = consProtocol.getConstructionSteps().size(); ii < jj; ii++) {
+					GeoConstruction gc = consProtocol.getConstructionSteps().get(ii);
+					System.out.println(gc.getConstructionDesc());
+				}
+				System.out.println();
 			}
-			System.out.println();
 		}
 		else {
 			String message = "Failed to parse xml input with geometry constructions.";
 			logger.error(message);
 			System.out.println(message);
+			System.out.println();
 		}
 		
 		OpenGeoProver.settings.getTimer().cancel(); // cancel default timer task

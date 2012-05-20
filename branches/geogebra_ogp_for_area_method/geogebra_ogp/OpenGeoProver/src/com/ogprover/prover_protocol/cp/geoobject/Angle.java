@@ -4,6 +4,8 @@
 
 package com.ogprover.prover_protocol.cp.geoobject;
 
+import java.util.Vector;
+
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 
 
@@ -16,7 +18,7 @@ import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class Angle implements GeoObject {
+public class Angle implements PointList {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -171,7 +173,17 @@ public class Angle implements GeoObject {
 		sb.append(this.secondRayPoint.getGeoObjectLabel());
 		return sb.toString();
 	}
-
+	
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoobject.PointList#getPoints()
+	 */
+	public Vector<Point> getPoints() {
+		Vector<Point> points = new Vector<Point>();
+		points.add(this.firstRayPoint);
+		points.add(this.vertex);
+		points.add(this.secondRayPoint);
+		return points;
+	}
 }
 
 

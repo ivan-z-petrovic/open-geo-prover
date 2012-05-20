@@ -4,7 +4,6 @@
 
 package com.ogprover.utilities.io;
 
-/*
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -14,20 +13,7 @@ import java.util.Vector;
 import org.xml.sax.SAXException;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoconstruction.*;
-import com.ogprover.prover_protocol.cp.geogebra.*;
-import com.ogprover.prover_protocol.cp.geoobject.*;
-*/
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.xml.sax.SAXException;
-
-import com.ogprover.main.OpenGeoProver;
+import com.ogprover.prover_protocol.cp.geogebra.FreePointCmd;
 import com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommand;
 import com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommandFactory;
 import com.ogprover.prover_protocol.cp.geogebra.GeoGebraObject;
@@ -106,7 +92,12 @@ public class OGPDocHandler implements DocHandler {
 	
 	// ===== Storage objects for parsed data =====
 	/**
-	 * Map of geometry objects read from XML file.
+	 * The list of parsed GeoGebra commands.
+	 */
+	private Vector<GeoGebraCommand> geoGebraCmdList = null;
+	/**
+	 * Map of geometry objects read from XML file. Each object is associated
+	 * by the GeoGebra command that introduces it in output argument list.
 	 */
 	private Map<String, GeoGebraCommand> geoObjMap = null;
 	/**
@@ -126,11 +117,6 @@ public class OGPDocHandler implements DocHandler {
 	private String currentTagName;
 	
 	// ===== Data members for processing of command tag =====
-	/**
-	 * The last processed geometry object defined by command tag.
-	 */
-	@SuppressWarnings("unused")
-	private GeoGebraCommand lastGeoObject;
 	/**
 	 * Name of construction defined by command tag being processed.
 	 */
@@ -161,12 +147,12 @@ public class OGPDocHandler implements DocHandler {
 	 * ======================================================================
 	 */
 	/**
-	 * @return the geoObjMap
+	 * @return the geoGebraCmdList
 	 */
-	public Map<String, GeoGebraCommand> getGeoObjMap() {
-		return this.geoObjMap;
+	public Vector<GeoGebraCommand> getGeoGebraCmdList() {
+		return geoGebraCmdList;
 	}
-
+	
 	/**
 	 * @return the theoremName
 	 */
@@ -190,9 +176,13 @@ public class OGPDocHandler implements DocHandler {
 	 */
 	/**
 	 * Constructor method.
+	 * 
+	 * @param ggCmdList		Collection for storage of parsed GeoGebra commands
 	 */
-	public OGPDocHandler() {
+	public OGPDocHandler(Vector<GeoGebraCommand> ggCmdList) {
+		this.geoGebraCmdList = ggCmdList;
 		this.geoObjMap = new HashMap<String, GeoGebraCommand>();
+		this.theoremName = "";
 	}
 	
 	
@@ -257,100 +247,44 @@ public class OGPDocHandler implements DocHandler {
 				return;
 			}
 			
-			/*
-			 * Check previously constructed geometry object - <element> tags
-			 * usually follow the <command> tag: <element> describes the object
-			 * introduced with <command>. 
-			 * 
-			 * For polygons there is one <command> and then set of <element> tags 
-			 * for definition of polygon and its edges. For free points there is 
-			 * just <element> tag (without previous <command> tag). Also a point
-			 * can be defined after <expression> tag but these points are vertices
-			 * of special polygons so they will be considered as free points for 
-			 * proving purposes if not required differently.
-			 */
+			// Find command for this element
+			GeoGebraCommand ggCmd = this.geoObjMap.get(elementLabel);
 			
-			/* TODO
-			 * 
-			
-			boolean bDoDefaultCheck = false;
-			
-			if (elementType.equals(GeoGebraObject.OBJ_TYPE_POINT)) {
-				boolean bIsFreePt = false;
-				boolean bIsFromPoly = false;
-				
-				if (this.lastGeoObject == null)
-					bIsFreePt = true;
+			if (ggCmd == null) {
+				// Object could not be found and this is allowed only for points
+				if (elementType.equalsIgnoreCase(GeoGebraObject.OBJ_TYPE_POINT)) {
+					// create new free point
+					GeoGebraCommand newGGCmd = new FreePointCmd(elementLabel);
+					this.geoGebraCmdList.add(newGGCmd);
+					this.geoObjMap.put(elementLabel, newGGCmd);
+				}
 				else {
-					if ((this.lastGeoObject instanceof PolygonCmd) || (this.lastGeoObject instanceof PolyLineCmd)) { // polygon or open polygon line
-						PolygonLine polyLine = (PolygonLine)(this.lastGeoObject); // safe cast
-						if (!polyLine.containsPointAsVertex(elementLabel))
-							bIsFreePt = true;
-						else
-							bIsFromPoly = true;
+					logger.error("Definition of object which is not constructed");
+					this.bSuccess = false;
+					return;
+				}
+			}
+			else {
+				// If command is transformation, set the object type if not already set, otherwise check type
+				String cmdName = ggCmd.getCommandName();
+				boolean bCheck = true;
+				if (cmdName.equals(GeoGebraCommand.COMMAND_MIRROR) || cmdName.equals(GeoGebraCommand.COMMAND_ROTATE) ||
+					cmdName.equals(GeoGebraCommand.COMMAND_TRANSLATE) || cmdName.equals(GeoGebraCommand.COMMAND_DILATE)) {
+					if (ggCmd.getObjectType().equals(GeoGebraObject.OBJ_TYPE_NONE)) {
+						ggCmd.setObjectType(elementType);
+						bCheck = false;
+					} 
+				}
+				
+				if (bCheck) {
+					// Check the type of object in command
+					if (!elementType.equalsIgnoreCase(ggCmd.getObjectType())) {
+						logger.error("Definition of object doesn't match the construction of that object");
+						this.bSuccess = false;
+						return;
 					}
-					else if (!(this.lastGeoObject instanceof Point))
-						bIsFreePt = true;
-					else if (!this.lastGeoObject.getGeoObjectLabel().equals(elementLabel))
-						bIsFreePt = true;
-				}
-				
-				if (bIsFreePt) {
-					Point freePt = new FreePoint(elementLabel);
-					this.lastGeoObject = freePt;
-					this.lastGeoObjectType = OGPDocHandler.ELEMENT_TYPE_POINT;
-					this.consProtocol.addGeoConstruction(freePt);
-					this.geoObjMap.put(freePt.getGeoObjectLabel(), freePt);
-				}
-				else if (!bIsFromPoly)
-					bDoDefaultCheck = true;
-			}
-			else if (elementType.equals(OGPDocHandler.ELEMENT_TYPE_SEGMENT)) {
-				// Skip checking segments introduced as edges of previously constructed polygon
-				if (!(this.lastGeoObject instanceof PolygonLine))
-					bDoDefaultCheck = true;
-			}
-			else if (elementType.equals(OGPDocHandler.ELEMENT_TYPE_CCURVE) || elementType.equals(OGPDocHandler.ELEMENT_TYPE_ICURVE)) {
-				// Skip curves other than conic sections
-			}
-			else if (elementType.equals(OGPDocHandler.ELEMENT_TYPE_NUMERIC)) {
-				// numeric is not for geometry objects so skip it
-			}
-			
-			if (bDoDefaultCheck) {
-				if (this.lastGeoObject == null) {
-					StringBuilder sb = new StringBuilder();
-					sb.append("Element tag for definition of geometry object of type ");
-					sb.append(elementType);
-					sb.append(" encountered before corresponding command tag for that geometry object.");
-					logger.error(sb.toString());
-					this.bSuccess = false;
-					return;
-				}
-				
-				if (!this.lastGeoObject.getGeoObjectLabel().equals(elementLabel)) {
-					StringBuilder sb = new StringBuilder();
-					sb.append("Element tag for definition of geometry object of type ");
-					sb.append(elementType);
-					sb.append(" doesn't match the label of last geometry construction command.");
-					logger.error(sb.toString());
-					this.bSuccess = false;
-					return;
-				}
-				
-				if (!this.lastGeoObjectType.equals(elementType)) {
-					StringBuilder sb = new StringBuilder();
-					sb.append("Element tag for definition of geometry object of type ");
-					sb.append(elementType);
-					sb.append(" doesn't match the type of last geometry construction command.");
-					logger.error(sb.toString());
-					this.bSuccess = false;
-					return;
 				}
 			}
-			
-			*
-			*/
 			
 			this.currentTagType = OGPDocHandler.TAG_TYPE_ELEMENT;
 		}
@@ -419,6 +353,8 @@ public class OGPDocHandler implements DocHandler {
 				return;
 			}
 			
+			// this tag is just skipped ...
+			
 			this.currentTagType = OGPDocHandler.TAG_TYPE_EXPRESSION;
 		}
 		// === other tags ===
@@ -477,26 +413,26 @@ public class OGPDocHandler implements DocHandler {
 			GeoGebraCommand ggCmd = GeoGebraCommandFactory.createGeoGebraCommand(this.currConstructionName, this.currGeoObjInputArgs, this.currGeoObjOutputArgs, GeoGebraObject.OBJ_TYPE_NONE);
 			
 			if (ggCmd == null) {
-				logger.error("Failed to create geometry object for current command tag.");
+				logger.error("Failed to create geometry object for current command tag");
 				this.bSuccess = false;
 				return;
-			}
-			
-			this.currentTagType = OGPDocHandler.TAG_TYPE_CONSTRUCTION;
+			}	
 			
 			/*
 			 * Store this geometry object in collections of geometry objects obtained by parsing.
 			 */
-			this.lastGeoObject = ggCmd;
-			// Put objects that are not already added
-			String objLabel = ggCmd.getGeoObjectLabel();
-			if (this.geoObjMap.get(objLabel) == null)
-				this.geoObjMap.put(objLabel, ggCmd);
+			this.geoGebraCmdList.add(ggCmd);
+			for (String outLabel : this.currGeoObjOutputArgs) {
+				if (outLabel.length() > 0) // "not empty label"
+					this.geoObjMap.put(outLabel, ggCmd);
+			}
 			
-			// reset elements used for processing of command tag
+			// reset elements used for processing of command tag - prepare for next <command> tag
 			this.currConstructionName = null;
 			this.currGeoObjInputArgs = null;
 			this.currGeoObjOutputArgs = null;
+			
+			this.currentTagType = OGPDocHandler.TAG_TYPE_CONSTRUCTION;
 		}
 		// === </input> ===
 		else if (tag.equalsIgnoreCase(OGPDocHandler.TAG_NAME_INPUT)) {
@@ -549,14 +485,15 @@ public class OGPDocHandler implements DocHandler {
 		// Put initializations for parsing process here ...
 		
 		// ===== Storage objects for parsed data =====
+		this.geoGebraCmdList.clear();
 		this.geoObjMap.clear();
+		this.theoremName = "";
 		
 		// ===== Data members for processing of current tag =====
 		this.currentTagType = OGPDocHandler.TAG_TYPE_NONE;
 		this.currentTagName = null;
 		
 		// ===== Data members for processing of command tag =====
-		this.lastGeoObject = null; // the geometry construction defined by last current command found
 		this.currConstructionName = null;
 		this.currGeoObjInputArgs = null;
 		this.currGeoObjOutputArgs = null;

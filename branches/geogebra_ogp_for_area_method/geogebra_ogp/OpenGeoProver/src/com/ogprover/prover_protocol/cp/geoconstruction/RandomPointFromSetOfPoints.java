@@ -167,6 +167,30 @@ public abstract class RandomPointFromSetOfPoints extends Point {
 		
 		return OGPConstants.RET_CODE_SUCCESS;
 	}
+	
+	/**
+	 * <i>
+	 * Method for creation of new random point from point set.
+	 * </i>
+	 * 
+	 * @param ptLabel	Label of new random point.
+	 * @param ptSet		Set of points where new point belongs to.
+	 * @return			New point or null if unable to create (unknown set of point type).
+	 */
+	public static Point createRandomPoint(String ptLabel, SetOfPoints ptSet) {
+		if (ptSet instanceof Line)
+			return new RandomPointFromLine(ptLabel, (Line)ptSet);
+		
+		if (ptSet instanceof Circle)
+			return new RandomPointFromCircle(ptLabel, (Circle)ptSet);
+		
+		if (ptSet instanceof GeneralConicSection)
+			return new RandomPointFromGeneralConic(ptLabel, (GeneralConicSection)ptSet);
+		
+		// TODO - if new type of point set is defined, add corresponding piece of code for it here.
+		
+		return null; // unknown type of point set
+	}
 
 }
 
