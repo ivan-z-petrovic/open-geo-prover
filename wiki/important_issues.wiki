@@ -30,7 +30,7 @@
  * issue 9: New branch creation for integration with !GeoGebra.
  * issue 10: Implementation of XML parser for geometry constructions.
  * issue 11: Changes in OGP constructions in development trunk and new branch.
- * issue 12: Replacement of log4j logger by GeoGebra's logger.
+ * issue 12: Replacement of log4j logger by !GeoGebra's logger.
  * ...
 
 ===Stage free issues===
