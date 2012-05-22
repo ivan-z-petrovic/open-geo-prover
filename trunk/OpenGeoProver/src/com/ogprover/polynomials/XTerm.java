@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
  * <dl>
@@ -250,7 +250,7 @@ public class XTerm extends Term {
 	 */
 	@Override
 	public Term divide(Term t) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (t == null) {
 			logger.error("Null term passed in.");

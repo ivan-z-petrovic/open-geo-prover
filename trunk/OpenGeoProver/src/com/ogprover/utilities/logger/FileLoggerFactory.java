@@ -2,7 +2,7 @@
  * DISCLAIMER PLACEHOLDER 
  */
 
-package com.ogprover.utilities.io;
+package com.ogprover.utilities.logger;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;

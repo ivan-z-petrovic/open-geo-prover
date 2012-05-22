@@ -14,8 +14,7 @@ import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.GeoTheorem;
 import com.ogprover.utilities.io.CustomFileReader;
 import com.ogprover.utilities.io.CustomFileWriter;
-import com.ogprover.utilities.io.FileLogger;
-
+import com.ogprover.utilities.logger.ILogger;
 import com.thoughtworks.xstream.XStream;
 
 
@@ -85,7 +84,7 @@ public class GeoTheoremXMLParser {
 	 * 						null otherwise
 	 */
 	public GeoTheorem readGeoTheoremFromXML(String fileName) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (fileName == null) {
 			logger.error("Null file name passed to readGeoTheoremFromXML() method.");

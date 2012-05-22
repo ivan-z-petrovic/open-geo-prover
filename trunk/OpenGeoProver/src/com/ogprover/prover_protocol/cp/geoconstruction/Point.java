@@ -19,9 +19,9 @@ import com.ogprover.polynomials.UXVariable;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -323,7 +323,7 @@ public abstract class Point extends GeoConstruction implements Cloneable {
 	 * 							or ERR_CODE_GENERAL in case of error
 	 */
 	private int renameCoordinate(short coordinateType, short newVarType, long newIndex, boolean writeToOutput) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		String messageForOutput = "";
 		
@@ -571,7 +571,7 @@ public abstract class Point extends GeoConstruction implements Cloneable {
 	 * 						successfully, or ERR_CODE_GENERAL in case of error
 	 */
 	private int addPolynomialToSystem(XPolynomial xPoly, boolean writeToOutput) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		
 		// When polynomial is added to the system, it is polynomial
@@ -638,7 +638,7 @@ public abstract class Point extends GeoConstruction implements Cloneable {
 	 * 						value is returned. 
 	 */
 	public final int processConstructionPolynomial(XPolynomial xPoly, boolean writeToOutput) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		
 		logger.debug("Starting processing of polynomial...");
@@ -676,7 +676,7 @@ public abstract class Point extends GeoConstruction implements Cloneable {
 	 * @see com.ogprover.prover_protocol.cp.geoconstruction.Point#processConstructionPolynomial(XPolynomial xPoly, boolean writeToOutput)
 	 */
 	private int processConstructionPolynomialLogic(XPolynomial xPoly, boolean writeToOutput) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		
 		// If this point is free, there should no be any condition for it
