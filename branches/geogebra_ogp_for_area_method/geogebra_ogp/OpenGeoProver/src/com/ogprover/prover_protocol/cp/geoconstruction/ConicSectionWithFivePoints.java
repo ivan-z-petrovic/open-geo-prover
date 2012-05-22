@@ -23,9 +23,9 @@ import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager;
 import com.ogprover.prover_protocol.cp.ndgcondition.NDGCondition;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 
 
@@ -219,7 +219,7 @@ public class ConicSectionWithFivePoints extends ParametricSet implements ConicSe
 		 * necessary is to use parametric points.
 		 */
 
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// NOTE: This method is used to find best elements for process of transformation
 		// in algebraic form. It is implemented by calling same methods like in
@@ -401,7 +401,7 @@ public class ConicSectionWithFivePoints extends ParametricSet implements ConicSe
      */
     public int transformToAlgebraicForm() {
     	OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+    	ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		try {
 			output.openSubSection("Transformation of general conic section " + this.geoObjectLabel + ": ", true);

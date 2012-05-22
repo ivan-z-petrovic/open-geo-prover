@@ -25,8 +25,8 @@ import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.prover_protocol.cp.auxiliary.PointListManager;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
 import com.ogprover.prover_protocol.cp.geoconstruction.FreeParametricSet;
+import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
 import com.ogprover.prover_protocol.cp.geoconstruction.ParametricSet;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromParametricSet;
@@ -35,9 +35,9 @@ import com.ogprover.prover_protocol.cp.geoconstruction.SpecialConstantAngle;
 import com.ogprover.prover_protocol.cp.ndgcondition.NDGCondition;
 import com.ogprover.prover_protocol.cp.thmstatement.CompoundThmStatement;
 import com.ogprover.prover_protocol.cp.thmstatement.ThmStatement;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
  * <dl>
@@ -386,7 +386,7 @@ public class OGPCP {
 	 * @param gc	Geometry construction to add into this protocol
 	 */
 	public void addGeoConstruction(int index, GeoConstruction gc) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (gc == null) {
 			logger.warn("Attempt to add null object to construction protocol");
@@ -511,7 +511,7 @@ public class OGPCP {
 	 */
 	public boolean isValid() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		boolean valid = true;
 		
 		try {
@@ -679,7 +679,7 @@ public class OGPCP {
 	 */
 	public int convertToAlgebraicForm() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// First of all, set the number of zero coordinates used for instantiation of points
 		this.setNumberOfZeroCoordinates();

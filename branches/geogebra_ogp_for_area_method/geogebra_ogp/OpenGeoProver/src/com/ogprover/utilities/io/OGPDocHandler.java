@@ -17,6 +17,7 @@ import com.ogprover.prover_protocol.cp.geogebra.FreePointCmd;
 import com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommand;
 import com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommandFactory;
 import com.ogprover.prover_protocol.cp.geogebra.GeoGebraObject;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -207,7 +208,7 @@ public class OGPDocHandler implements DocHandler {
 		if (!this.bSuccess)
 			return; // skip the tag if an error has already been encountered
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// Save the name of current open tag
 		this.currentTagName = tag;
@@ -380,7 +381,7 @@ public class OGPDocHandler implements DocHandler {
 		if (!this.bSuccess)
 			return; // skip the tag if an error has already been encountered
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// === </construction> ===
 		if (tag.equalsIgnoreCase(OGPDocHandler.TAG_NAME_CONSTRUCTION)) {
@@ -507,7 +508,7 @@ public class OGPDocHandler implements DocHandler {
 	 */
 	public void endDocument() throws Exception {
 		String message;
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.currentTagType != TAG_TYPE_NONE) {
 			message = "XML input not valid.";

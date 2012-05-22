@@ -10,9 +10,9 @@ import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 
 
@@ -84,7 +84,7 @@ public abstract class RandomPointFromSetOfPoints extends Point {
 	 */
 	@Override
 	public int transformToAlgebraicForm() {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		
 		try {

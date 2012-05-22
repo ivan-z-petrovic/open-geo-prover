@@ -9,8 +9,9 @@ import java.util.Calendar;
 
 import com.ogprover.utilities.OGPTimer;
 import com.ogprover.utilities.Stopwatch;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.logger.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
  * <dl>
@@ -99,7 +100,7 @@ public class OGPConfigurationSettings {
 	 * Logger object that manages logging of technical details 
 	 * of prover execution in log file
 	 */
-	private FileLogger logger = null;
+	private ILogger logger = null;
 	/*
 	 * Return codes of some operations 
 	 */
@@ -212,7 +213,7 @@ public class OGPConfigurationSettings {
 	 * 
 	 * @param logger The logger to set
 	 */
-	public void setLogger(FileLogger logger) {
+	public void setLogger(ILogger logger) {
 		this.logger = logger;
 	}
 
@@ -221,7 +222,7 @@ public class OGPConfigurationSettings {
 	 * 
 	 * @return The logger
 	 */
-	public FileLogger getLogger() {
+	public ILogger getLogger() {
 		return logger;
 	}
 

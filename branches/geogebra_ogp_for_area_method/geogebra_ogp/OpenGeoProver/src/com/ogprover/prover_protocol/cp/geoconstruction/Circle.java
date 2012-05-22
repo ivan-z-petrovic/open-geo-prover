@@ -21,7 +21,7 @@ import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.prover_protocol.cp.auxiliary.GeneralizedAngleTangent;
 import com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 
 
@@ -427,7 +427,7 @@ public abstract class Circle extends GeoConstruction implements SetOfPoints {
 	 * @see com.ogprover.prover_protocol.cp.geoconstruction.SetOfPoints#findBestPointsForInstantation(com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager)
 	 */
 	public int findBestPointsForInstantation(PointSetRelationshipManager manager) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// NOTE: This method is used to find best elements for process of transformation
 		// in algebraic form. It is implemented by calling same methods like in

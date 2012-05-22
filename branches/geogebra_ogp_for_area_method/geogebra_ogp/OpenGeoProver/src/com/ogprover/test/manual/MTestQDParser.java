@@ -16,9 +16,9 @@ import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
 import com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommand;
 import com.ogprover.utilities.io.CustomFileReader;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPDocHandler;
 import com.ogprover.utilities.io.QDParser;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -42,7 +42,7 @@ public class MTestQDParser {
 		//System.out.println(System.getProperty("user.dir")); // this is adjusted path
 		
 		OpenGeoProver.settings = new OGPConfigurationSettings();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// Read the name of XML file from command line (extension is optional); file is in "input" directory
 		if (args.length != 1) {

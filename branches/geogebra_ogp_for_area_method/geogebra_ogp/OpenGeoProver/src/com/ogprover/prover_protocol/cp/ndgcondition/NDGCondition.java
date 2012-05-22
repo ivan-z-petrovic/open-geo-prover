@@ -23,7 +23,7 @@ import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
 import com.ogprover.prover_protocol.cp.geoconstruction.ParametricSet;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromSetOfPoints;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -326,7 +326,7 @@ public class NDGCondition {
 	 * @return	SUCCESS if successful, general error code otherwise
 	 */
 	private int populatePointLists() {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		Vector<UXVariable> varList = this.polynomial.extractAllVariables();
 		
 		if (varList == null) {
@@ -418,7 +418,7 @@ public class NDGCondition {
 	 *          error is returned otherwise.
 	 */
 	public int transformToUserReadableForm() {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.populatePointLists() != OGPConstants.RET_CODE_SUCCESS) {
 			// Check if there are other objects with parameters

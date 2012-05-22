@@ -7,7 +7,7 @@ package com.ogprover.polynomials;
 import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -159,7 +159,7 @@ public abstract class Term implements Comparable<Term>, Cloneable{
 		int size = this.powers.size(), 
 		tsize = ((t != null) ? t.getPowers().size() : 0);
 		int ii = 0;
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 
 		if (t == null) {
 			logger.error("Null term passed in.");
@@ -199,7 +199,7 @@ public abstract class Term implements Comparable<Term>, Cloneable{
 	 * @param p		Power to be added into collection
 	 */
 	public void addPower(Power p) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// If power is of another variable type, don't add it into collection
 		if ((this.getType() == Term.TERM_TYPE_UTERM && p.getVarType() == Variable.VAR_TYPE_UX_U) ||
@@ -258,7 +258,7 @@ public abstract class Term implements Comparable<Term>, Cloneable{
 		int size = this.powers.size();
 		int tsize = ((t != null) ? t.getPowers().size() : 0);
 		int ii = 0, jj = 0, op = ((add == true) ? 1 : -1);
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// Terms must be of same type
 		if (t == null)
@@ -343,7 +343,7 @@ public abstract class Term implements Comparable<Term>, Cloneable{
 		int size = this.powers.size(), 
 			tsize = ((t != null) ? t.getPowers().size() : 0);
 		Power pi = null, pj = null;
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (t == null) {
 			logger.error("Null term passed in.");
@@ -561,7 +561,7 @@ public abstract class Term implements Comparable<Term>, Cloneable{
 	// t2 = [x_9, x_8, (x_6)^2, x_5, x_3, (x_2)^2]
 	// then gcd(t1, t2) = [(x_6)^2, x_5, x_3] etc.
 	public final Term gcd(Term t){
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		Term thisBeforeChange = this.clone();
 		this.powers = new Vector<Power>(); // prepare vector of powers to receive powers of gcd
 		

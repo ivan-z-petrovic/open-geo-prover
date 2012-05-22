@@ -11,9 +11,9 @@ import java.util.Vector;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -321,7 +321,7 @@ public class XPolySystem {
 	public int triangulate() {
 		StringBuilder sb;
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// if system is already triangular, only reorder it and exit
 		if (this.checkAndReOrderTriangularSystem() == true) {
