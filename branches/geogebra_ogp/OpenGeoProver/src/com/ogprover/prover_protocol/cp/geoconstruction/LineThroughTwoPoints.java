@@ -19,8 +19,8 @@ import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -188,7 +188,7 @@ public class LineThroughTwoPoints extends Line {
 	@Override
 	public boolean isValidConstructionStep() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (!super.isValidConstructionStep())
 			return false;

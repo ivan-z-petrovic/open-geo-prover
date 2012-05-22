@@ -14,7 +14,7 @@ import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.prover_protocol.cp.geoconstruction.*;
 import com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommand;
 import com.ogprover.prover_protocol.cp.geoobject.*;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
 * <dl>
@@ -398,7 +398,7 @@ public abstract class GeoGebraConstructionConverter {
 	 * @return	TRUE if conversion was successful, FALSE otherwise.
 	 */
 	public boolean convert() {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.ggCmdList == null) {
 			logger.error("Can't convert constructions - Missing input list with GeoGebra's commands");
@@ -443,7 +443,7 @@ public abstract class GeoGebraConstructionConverter {
 		 *  generated before that particular single construction.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// Points
 		if (ggCmd.getCommandName().equals(GeoGebraCommand.COMMAND_FREE_POINT))
@@ -539,7 +539,7 @@ public abstract class GeoGebraConstructionConverter {
 	 * @return					TRUE if validation passed, FALSE otherwise.
 	 */
 	protected boolean validateCmdArguments(GeoGebraCommand ggCmd, int minInputSize, int maxInputSize, int minOutputSize, int maxOutputSize) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (ggCmd == null) {
 			logger.error("Cannot convert null command");

@@ -21,9 +21,9 @@ import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.prover_protocol.cp.ndgcondition.NDGCondition;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -197,7 +197,7 @@ public class AngleOf60Deg extends GeoConstruction implements SpecialConstantAngl
      */
 	public int transformToAlgebraicForm() {
     	OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+    	ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		try {
 			output.openSubSection("Transformation of angle " + this.geoObjectLabel + " of 60 degrees: ", true);

@@ -14,11 +14,11 @@ import com.ogprover.thmprover.WuMethodProver;
 import com.ogprover.utilities.OGPTimer;
 import com.ogprover.utilities.OGPUtilities;
 import com.ogprover.utilities.Stopwatch;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.LaTeXFileWriter;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.io.XMLFileWriter;
+import com.ogprover.utilities.logger.FileLogger;
 
 
 /**
@@ -67,7 +67,7 @@ public class OpenGeoProver {
 		OpenGeoProver.settings = new OGPConfigurationSettings();
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		FileLogger logger = (FileLogger) OpenGeoProver.settings.getLogger();
 		Stopwatch stopwatch = OpenGeoProver.settings.getStopwacth();
 		
 		// prover's introduction message

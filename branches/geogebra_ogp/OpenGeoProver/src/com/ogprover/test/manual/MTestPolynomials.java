@@ -22,7 +22,7 @@ import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.utilities.OGPUtilities;
 import com.ogprover.utilities.Stopwatch;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
 * <dl>
@@ -193,7 +193,7 @@ public class MTestPolynomials {
 		u4.addPower(new Power(Variable.VAR_TYPE_UX_U, 8, 8)); // adding (u_8)^8
 		
 		// test now printing with various log levels
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		System.out.println(u1.toString());
 		logger.info("u1 term printed");
 		System.out.println(u2.toString());

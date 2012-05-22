@@ -9,9 +9,9 @@ import java.io.IOException;
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.UXVariable;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -128,7 +128,7 @@ public class FreePoint extends Point {
 	@Override
 	public int transformToAlgebraicForm() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		try {
 			output.openSubSection("Transformation of point " + this.geoObjectLabel + ": ", true);

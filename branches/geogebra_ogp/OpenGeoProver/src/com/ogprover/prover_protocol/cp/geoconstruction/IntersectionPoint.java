@@ -12,9 +12,9 @@ import com.ogprover.polynomials.UXVariable;
 import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 
 
@@ -178,7 +178,7 @@ public class IntersectionPoint extends Point {
 	@Override
 	public boolean isValidConstructionStep() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (!super.isValidConstructionStep())
 			return false;
@@ -248,7 +248,7 @@ public class IntersectionPoint extends Point {
 	 * @see com.ogprover.prover_protocol.cp.geoconstruction.Point#transformToAlgebraicForm()
 	 */
 	public int transformToAlgebraicFormWithOutputPrintFlag(boolean outputPrintFlag) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		
 		try {

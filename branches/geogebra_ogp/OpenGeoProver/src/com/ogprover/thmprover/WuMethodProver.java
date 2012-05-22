@@ -12,9 +12,9 @@ import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.GeoTheorem;
 import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
 * <dl>
@@ -45,7 +45,7 @@ public class WuMethodProver extends AlgebraicMethodProver {
 		
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		XPolySystem hypotheses = this.theorem.getHypotheses();
 		XPolynomial statement = this.theorem.getStatement();

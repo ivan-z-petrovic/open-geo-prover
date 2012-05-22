@@ -20,8 +20,8 @@ import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
 * <dl>
@@ -263,7 +263,7 @@ public class TangentLine extends Line {
 	@Override
 	public boolean isValidConstructionStep() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (!super.isValidConstructionStep())
 			return false;
@@ -355,7 +355,7 @@ public class TangentLine extends Line {
 	 */
 	@Override
 	public int findBestPointsForInstantation(PointSetRelationshipManager manager) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// First call method from superclass - it implements default behavior considering
 		// this line as plain line through two points
