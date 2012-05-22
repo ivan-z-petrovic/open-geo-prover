@@ -14,10 +14,10 @@ import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.test.formats.geothm_xml.GeoTheoremXMLParser;
 import com.ogprover.utilities.io.CustomFileReader;
 import com.ogprover.utilities.io.CustomFileWriter;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.LaTeXFileWriter;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.io.XMLFileWriter;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
 * <dl>
@@ -36,7 +36,7 @@ public class MTestUtilities {
 	public static void testCustomFileWriter() {
 		CustomFileWriter cfw = null;
 		boolean error = false;
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		try {
 			cfw = new CustomFileWriter("firstExample", "txt");

@@ -14,7 +14,7 @@ import java.util.Vector;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
  * <dl>
@@ -415,7 +415,7 @@ public class XPolynomial extends Polynomial {
 	// is 2) and leading coefficient, multiplied by (x_3) since maximal exponent is decreased by 1, is:
 	// (x_6)(x_3) + 2(u_1)(x_3).
 	private int getLeadingExpAndCoeff(int varIndex, int expDecr, XPolynomial leadingCoeff) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (leadingCoeff == null) {
 			logger.error("Passed null polynomial - no place where to store terms");

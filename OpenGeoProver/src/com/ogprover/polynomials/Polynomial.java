@@ -16,7 +16,7 @@ import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.multithread.PolyMultThread;
 import com.ogprover.multithread.SyncProduct;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
  * <dl>
@@ -196,7 +196,7 @@ public abstract class Polynomial implements Cloneable{
 	 * @return		This polynomial, which is result of operation
 	 */
 	public final Polynomial addTerm(Term t) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (t == null) {
 			logger.error("Attempt to add null term.");
@@ -239,7 +239,7 @@ public abstract class Polynomial implements Cloneable{
 	 * @return		This polynomial, which is result of operation
 	 */
 	public final Polynomial addPolynomial(Polynomial p) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (p == null) {
 			logger.error("Attempt to add null polynomial.");
@@ -272,7 +272,7 @@ public abstract class Polynomial implements Cloneable{
 	 * @return		This polynomial, which is result of operation
 	 */
 	public final Polynomial subtractPolynomial(Polynomial p) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (p == null) {
 			logger.error("Attempt to subtract null polynomial.");
@@ -331,7 +331,7 @@ public abstract class Polynomial implements Cloneable{
 	 * @return		Product of this polynomial and term
 	 */
 	public final Polynomial multiplyByTerm(Term t){
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (t == null) {
 			logger.error("Attempt to multiply by null term.");
@@ -373,7 +373,7 @@ public abstract class Polynomial implements Cloneable{
 	 * @return		Product of this polynomial and passed in polynomial
 	 */
 	public final Polynomial multiplyByPolynomial(Polynomial p){
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		int n = OpenGeoProver.settings.getParameters().getConLevel();
 		
@@ -444,7 +444,7 @@ public abstract class Polynomial implements Cloneable{
 	 * @return		Product of this polynomial and passed in polynomial
 	 */
 	public final Polynomial multiplyByPolynomialConcurrently(Polynomial p, int n){
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (n == 1)
 			return this.multiplyByPolynomial(p);

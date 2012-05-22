@@ -15,8 +15,8 @@ import com.ogprover.polynomials.SymbolicTerm;
 import com.ogprover.polynomials.SymbolicVariable;
 import com.ogprover.polynomials.UXVariable;
 import com.ogprover.polynomials.Variable;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -364,7 +364,7 @@ public class RotatedPoint extends SelfConditionalPoint {
 	@Override
 	public boolean isValidConstructionStep() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (!super.isValidConstructionStep())
 			return false;

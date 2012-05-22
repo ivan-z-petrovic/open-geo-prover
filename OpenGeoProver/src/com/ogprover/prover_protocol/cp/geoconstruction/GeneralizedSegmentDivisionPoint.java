@@ -16,8 +16,8 @@ import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.auxiliary.RatioOfTwoCollinearSegments;
 import com.ogprover.prover_protocol.cp.auxiliary.RatioProduct;
 import com.ogprover.prover_protocol.cp.auxiliary.Segment;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -318,7 +318,7 @@ public class GeneralizedSegmentDivisionPoint extends SelfConditionalPoint {
 	@Override
 	public boolean isValidConstructionStep() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (!super.isValidConstructionStep())
 			return false;

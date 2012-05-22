@@ -8,8 +8,8 @@ import java.io.IOException;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -391,7 +391,7 @@ public abstract class GeoConstruction {
 		// when validating whole construction protocol.
 		
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		try {
 			if (this.consProtocol == null) {
