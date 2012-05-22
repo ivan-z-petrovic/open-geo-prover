@@ -11,9 +11,9 @@ import com.ogprover.prover_protocol.cp.ndgcondition.NDGCondition;
 import com.ogprover.thmprover.TheoremProver;
 import com.ogprover.utilities.OGPUtilities;
 import com.ogprover.utilities.Stopwatch;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -100,7 +100,7 @@ public class OGPReport {
 	public int openReport() {
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (parameters.createReport()) {	
 			String title = "OpenGeoProver Output for conjecture ``" + this.consProtocol.getTheoremName() + "'' ";
@@ -133,7 +133,7 @@ public class OGPReport {
 	public int printProverResults(int proverRetCode) {
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		Stopwatch stopwatch = OpenGeoProver.settings.getStopwacth();
 		int retCode = OGPConstants.RET_CODE_SUCCESS;
 		

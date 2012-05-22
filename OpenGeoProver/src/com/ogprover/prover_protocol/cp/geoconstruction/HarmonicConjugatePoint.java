@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-//import com.ogp.polynomials.XPolynomial;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.Power;
 import com.ogprover.polynomials.SymbolicPolynomial;
@@ -17,8 +16,8 @@ import com.ogprover.polynomials.SymbolicVariable;
 import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.UXVariable;
 import com.ogprover.polynomials.Variable;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -429,7 +428,7 @@ public class HarmonicConjugatePoint extends SelfConditionalPoint {
 	@Override
 	public boolean isValidConstructionStep() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (!super.isValidConstructionStep())
 			return false;

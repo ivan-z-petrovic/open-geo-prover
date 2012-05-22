@@ -17,7 +17,7 @@ import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.prover_protocol.cp.geoconstruction.Point;
 import com.ogprover.prover_protocol.cp.geoconstruction.SetOfPoints;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
 * <dl>
@@ -356,7 +356,7 @@ public class PointSetRelationshipManager {
 	 * Preparation method for finding best points for instantiation of condition
 	 */
 	public void prepareForFirstInstantiation() {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// check if point has already been instantiated
 		if (this.point.getPointState() == Point.POINT_STATE_INITIALIZED) {
@@ -406,7 +406,7 @@ public class PointSetRelationshipManager {
 	 * @param pointsMap		Passed in map of points for instantiation
 	 */
 	public void processPointsAndConditionForConstruction(Map<String, Point> pointsMap) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		Map<String, Point> bestElements = this.getBestPointsForInstantiation();
 		XPolynomial bestPolynomial = this.getBestInstantiatedPolynomial();
 		

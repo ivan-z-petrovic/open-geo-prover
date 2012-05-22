@@ -13,9 +13,9 @@ import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
 * <dl>
@@ -108,7 +108,7 @@ public abstract class SelfConditionalPoint extends Point {
 	 */
 	public int transformToAlgebraicForm(Map<String, Point> pointsMap) {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		try {
 			output.openSubSection("Transformation of point " + this.geoObjectLabel + ": ", true);

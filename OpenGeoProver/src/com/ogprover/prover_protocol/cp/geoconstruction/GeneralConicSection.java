@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+
+import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.Power;
+import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.SymbolicTerm;
 import com.ogprover.polynomials.SymbolicVariable;
 import com.ogprover.polynomials.Term;
@@ -19,16 +22,14 @@ import com.ogprover.polynomials.UPolynomial;
 import com.ogprover.polynomials.UTerm;
 import com.ogprover.polynomials.UXVariable;
 import com.ogprover.polynomials.Variable;
-import com.ogprover.polynomials.XTerm;
-import com.ogprover.utilities.io.FileLogger;
-import com.ogprover.utilities.io.OGPOutput;
-import com.ogprover.utilities.io.SpecialFileFormatting;
-import com.ogprover.main.OGPConstants;
-import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
+import com.ogprover.polynomials.XTerm;
 import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.prover_protocol.cp.auxiliary.PointSetRelationshipManager;
 import com.ogprover.prover_protocol.cp.ndgcondition.NDGCondition;
+import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.io.SpecialFileFormatting;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -226,7 +227,7 @@ public class GeneralConicSection extends FreeParametricSet implements ConicSecti
 		 * necessary is to use parametric points.
 		 */
 
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// NOTE: This method is used to find best elements for process of transformation
 		// in algebraic form. It is implemented by calling same methods like in
@@ -379,7 +380,7 @@ public class GeneralConicSection extends FreeParametricSet implements ConicSecti
      */
     public int transformToAlgebraicForm() {
     	OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+    	ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		try {
 			output.openSubSection("Transformation of general conic section " + this.geoObjectLabel + ": ", true);

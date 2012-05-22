@@ -7,7 +7,7 @@ package com.ogprover.prover_protocol.cp.geogebra;
 import java.util.ArrayList;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -67,7 +67,7 @@ public class GeoGebraCommandFactory {
 		 * Note: This method must match the implementation of GeoGebraConstructionConverter#convertConstruction() method.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		// Points
 		if (ggCmdName.equals(GeoGebraCommand.COMMAND_FREE_POINT))

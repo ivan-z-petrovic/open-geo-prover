@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
  * <dl>
@@ -204,7 +204,7 @@ public class GeoTheorem {
 	 * @return	SUCCESS if successful, general error code otherwise.
 	 */
 	public int fillNDGConditionsForWuProver() {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		XPolynomial one = new XPolynomial(1);
 		int numOfHypotheses = (this.hypotheses != null) ? this.hypotheses.getPolynomials().size() : 0;
 		

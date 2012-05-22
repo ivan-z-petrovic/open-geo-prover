@@ -10,8 +10,8 @@ import java.util.Vector;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.prover_protocol.cp.geoobject.Segment;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -129,7 +129,7 @@ public class CircleWithCenterAndRadius extends Circle {
 	@Override
 	public boolean isValidConstructionStep() {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (!super.isValidConstructionStep())
 			return false;
