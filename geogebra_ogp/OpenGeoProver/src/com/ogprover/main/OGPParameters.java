@@ -9,7 +9,7 @@ import java.util.HashMap;
 import org.apache.log4j.Level;
 
 import com.ogprover.thmprover.TheoremProver;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -549,7 +549,7 @@ public class OGPParameters {
 	public static int readParametersFromCommandLine(String[] args) {
 		int ii = 0, argc = args.length;
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		boolean setInputFmt = false, setInputName = false;
 		int retCode = OGPConstants.RET_CODE_SUCCESS;
 		

@@ -20,11 +20,12 @@ import com.ogprover.thmprover.WuMethodProver;
 import com.ogprover.utilities.OGPTimer;
 import com.ogprover.utilities.OGPUtilities;
 import com.ogprover.utilities.Stopwatch;
-import com.ogprover.utilities.io.FileLogger;
 import com.ogprover.utilities.io.LaTeXFileWriter;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.io.XMLFileWriter;
+import com.ogprover.utilities.logger.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
 * <dl>
@@ -44,7 +45,7 @@ public class MTestOpenGeoProver {
 	 */
 	public static void simulateTheoremProving(OGPCP cp) {
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		Stopwatch stopwatch = OpenGeoProver.settings.getStopwacth();
 		OGPReport report = new OGPReport(cp);
@@ -149,7 +150,7 @@ public class MTestOpenGeoProver {
 		OpenGeoProver.settings = new OGPConfigurationSettings();
 		
 		// turn on debug log level
-		OpenGeoProver.settings.getLogger().setLevel(Level.DEBUG);
+		((FileLogger) OpenGeoProver.settings.getLogger()).setLevel(Level.DEBUG);
 		
 		try {
 			OpenGeoProver.settings.setOutput(new OGPOutput(new LaTeXFileWriter(OGPConstants.DEF_VAL_PARAM_OUTPUT_FILE), new XMLFileWriter(OGPConstants.DEF_VAL_PARAM_OUTPUT_FILE)));

@@ -12,7 +12,7 @@ import com.ogprover.prover_protocol.cp.OGPCP;
 import com.ogprover.prover_protocol.cp.geoconstruction.*;
 import com.ogprover.prover_protocol.cp.geogebra.*;
 import com.ogprover.prover_protocol.cp.geoobject.*;
-import com.ogprover.utilities.io.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
 * <dl>
@@ -76,7 +76,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 	 * @see com.ogprover.api.GeoGebraConstructionConverter#convertFreePointCmd(com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommand)
 	 */
 	protected GeoConstruction convertFreePointCmd(GeoGebraCommand ggCmd) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 0, 0, 1, 1) == false) {
 			logger.error("Failed to validate command: " + FreePointCmd.cmdName);
@@ -97,7 +97,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * work with constant numbers, the point on specified distance will be constructed as free point.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 1, 1, 1, 1) == false) {
 			logger.error("Failed to validate command: " + PointCmd.cmdName);
@@ -139,7 +139,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * objects, this point will be constructed as a plain free point.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 1, 1, 1, 1) == false) {
 			logger.error("Failed to validate command: " + PointInCmd.cmdName);
@@ -162,7 +162,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * Output can give all intersection points of two input objects. 
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 3, 1, -1) == false) {
 			logger.error("Failed to validate command: " + IntersectCmd.cmdName);
@@ -203,7 +203,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * which are labels of two points or one input argument which is label of segment.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 1, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + MidpointCmd.cmdName);
@@ -249,7 +249,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * which is the label of a circle/conic. 
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 1, 1, 1, 1) == false) {
 			logger.error("Failed to validate command: " + CenterCmd.cmdName);
@@ -291,7 +291,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * which are labels of either two points or a point and line.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + LineCmd.cmdName);
@@ -326,7 +326,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * which are labels of a point and a line.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + OrthogonalLineCmd.cmdName);
@@ -359,7 +359,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * which are labels of points or one input argument which is label of segment.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 1, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + LineBisectorCmd.cmdName);
@@ -398,7 +398,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * which are labels of three points. 
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
 			logger.error("Failed to validate command: " + AngularBisectorCmd.cmdName);
@@ -438,7 +438,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * tangent, the label of second is empty string.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 2, 2) == false) {
 			logger.error("Failed to validate command: " + TangentCmd.cmdName);
@@ -486,7 +486,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * line of that selected point w.r.t. that circle/conic.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + PolarCmd.cmdName);
@@ -531,7 +531,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * This construction can be currently done only for circles.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + DiameterCmd.cmdName);
@@ -586,7 +586,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * for construction of circumscribed circle.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 3, 1, 1) == false) {
 			logger.error("Failed to validate command: " + CircleCmd.cmdName);
@@ -672,7 +672,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * "Construction" of conic section through 5 given points.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 5, 5, 1, 1) == false) {
 			logger.error("Failed to validate command: " + ConicCmd.cmdName);
@@ -708,7 +708,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * conic section will be retrieved.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
 			logger.error("Failed to validate command: " + EllipseCmd.cmdName);
@@ -746,7 +746,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * conic section will be retrieved.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
 			logger.error("Failed to validate command: " + HyperbolaCmd.cmdName);
@@ -784,7 +784,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * conic section will be retrieved.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + ParabolaCmd.cmdName);
@@ -853,7 +853,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 	 * @return						Corresponding geometry construction for reflected point or null in case of error. 
 	 */
 	private GeoConstruction getMirrorPointCons(String mirroredPtLabel, Point originalPt, GeoObject mirrorCenter) {
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (originalPt == null || mirrorCenter == null) {
 			logger.error("Can't mirror - missing some input element");
@@ -939,7 +939,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * that image is the center of circle of inversion).
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + MirrorCmd.cmdName);
@@ -1253,7 +1253,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * Segment is always defined by two points.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + SegmentCmd.cmdName);
@@ -1284,7 +1284,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * Vector is always defined by two points.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + VectorCmd.cmdName);
@@ -1317,7 +1317,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * Ray is always defined by two points.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + RayCmd.cmdName);
@@ -1348,7 +1348,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * Angle is defined by three points or by two lines.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 3, 1, 1) == false) {
 			logger.error("Failed to validate command: " + AngleCmd.cmdName);
@@ -1443,7 +1443,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * defined by two subsequent vertices and number of vertices.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 3, -1, 1, -1) == false) {
 			logger.error("Failed to validate command: " + PolygonCmd.cmdName);
@@ -1547,7 +1547,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * Polygon line is defined by the array of its vertices.
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 3, -1, 1, 1) == false) {
 			logger.error("Failed to validate command: " + PolyLineCmd.cmdName);
@@ -1606,7 +1606,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * It will be stored as a circle since algebraic provers can't distinguish circle arcs. 
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
 			logger.error("Failed to validate command: " + CircleArcCmd.cmdName);
@@ -1637,7 +1637,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * It will be stored as a circle since algebraic provers can't distinguish circle arcs. 
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
 			logger.error("Failed to validate command: " + CircumcircleArcCmd.cmdName);
@@ -1670,7 +1670,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * It will be stored as a circle since algebraic provers can't distinguish circle arcs. 
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
 			logger.error("Failed to validate command: " + CircleSectorCmd.cmdName);
@@ -1701,7 +1701,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * It will be stored as a circle since algebraic provers can't distinguish circle arcs. 
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
 			logger.error("Failed to validate command: " + CircumcircleSectorCmd.cmdName);
@@ -1733,7 +1733,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 * It will be stored as a circle since algebraic provers can't distinguish circle arcs. 
 		 */
 		
-		FileLogger logger = OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + SemicircleCmd.cmdName);

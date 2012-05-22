@@ -89,6 +89,7 @@ import com.ogprover.utilities.OGPUtilities;
 import com.ogprover.utilities.Stopwatch;
 import com.ogprover.utilities.io.LaTeXFileWriter;
 import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.logger.FileLogger;
 
 /**
 * <dl>
@@ -3153,7 +3154,7 @@ public class MTestCP {
 			e.printStackTrace();
 		} 
 		// turn on debug log level
-		OpenGeoProver.settings.getLogger().setLevel(Level.DEBUG);
+		((FileLogger) OpenGeoProver.settings.getLogger()).setLevel(Level.DEBUG);
 		
 		/*
 		 * Testing specific methods - not transformations 

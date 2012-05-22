@@ -2,7 +2,7 @@
  * DISCLAIMER PLACEHOLDER 
  */
 
-package com.ogprover.utilities.io;
+package com.ogprover.utilities.logger;
 
 import java.io.IOException;
 
@@ -11,6 +11,8 @@ import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
+
+
 
 /**
 * <dl>
@@ -21,7 +23,7 @@ import org.apache.log4j.PatternLayout;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class FileLogger extends Logger{
+public class FileLogger extends Logger implements ILogger {
 	// Hierarchy of log levels from lowest to highest:
 	// ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
 	// If log level is set to L then all messages with levels X >= L will be enabled
@@ -119,6 +121,12 @@ public class FileLogger extends Logger{
      * until the first one finishes and releases the lock."
      */
     
+    public synchronized void fatal(String msg) {
+    	if (this.verbose)
+    		System.out.println(msg);
+    	this.log(FileLogger.class.getName(), Level.FATAL, msg, null);
+	}
+    
     public synchronized void error(String msg) {
     	if (this.verbose)
     		System.out.println(msg);
@@ -142,4 +150,10 @@ public class FileLogger extends Logger{
     		System.out.println(msg);
     	this.log(FileLogger.class.getName(), Level.DEBUG, msg, null);	
     }
+    
+	public synchronized void trace(String msg) {
+		if (this.verbose)
+    		System.out.println(msg);
+    	this.log(FileLogger.class.getName(), Level.TRACE, msg, null);
+	}
 }
