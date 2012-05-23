@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import org.apache.log4j.Level;
-
 import com.ogprover.main.OGPConfigurationSettings;
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OGPParameters;
@@ -89,7 +87,6 @@ import com.ogprover.utilities.OGPUtilities;
 import com.ogprover.utilities.Stopwatch;
 import com.ogprover.utilities.io.LaTeXFileWriter;
 import com.ogprover.utilities.io.OGPOutput;
-import com.ogprover.utilities.logger.FileLogger;
 
 /**
 * <dl>
@@ -3154,7 +3151,7 @@ public class MTestCP {
 			e.printStackTrace();
 		} 
 		// turn on debug log level
-		((FileLogger) OpenGeoProver.settings.getLogger()).setLevel(Level.DEBUG);
+		//((FileLogger) OpenGeoProver.settings.getLogger()).setLevel(Level.DEBUG);
 		
 		/*
 		 * Testing specific methods - not transformations 

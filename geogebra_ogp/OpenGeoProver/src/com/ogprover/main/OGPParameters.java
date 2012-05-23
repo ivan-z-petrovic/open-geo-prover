@@ -6,9 +6,8 @@ package com.ogprover.main;
 
 import java.util.HashMap;
 
-import org.apache.log4j.Level;
-
 import com.ogprover.thmprover.TheoremProver;
+import com.ogprover.utilities.logger.GeoGebraLogger;
 import com.ogprover.utilities.logger.ILogger;
 
 
@@ -239,18 +238,18 @@ public class OGPParameters {
 	 * @param logLevel	Log Level to put
 	 * @return	Value of <b>OGPParameters.put(String key, String value)</b> method
 	 */
-	public String putLogLevel(Level logLevel) {
+	public String putLogLevel(GeoGebraLogger.Level logLevel) {
 		String retCode = null;
 		
-		if (logLevel.equals(Level.OFF))
+		if (logLevel == null)
 			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "N");
-		else if (logLevel.equals(Level.INFO))
+		else if (logLevel.equals(GeoGebraLogger.INFO))
 			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "I"); // same as "B" - basic
-		else if (logLevel.equals(Level.ERROR))
+		else if (logLevel.equals(GeoGebraLogger.ERROR))
 			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "E");
-		else if (logLevel.equals(Level.WARN))
+		else if (logLevel.equals(GeoGebraLogger.WARN))
 			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "W");
-		else if (logLevel.equals(Level.DEBUG))
+		else if (logLevel.equals(GeoGebraLogger.DEBUG))
 			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "D");
 		else // default is basic level
 			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "B");
@@ -387,30 +386,30 @@ public class OGPParameters {
 	}
 	
 	/**
-	 * @return	One of org.appache.log4j.Level.xxx enumerated constants representing log level
+	 * @return	One of GeoGebraLogger.Level.xxx enumerated constants representing log level
 	 */
-	public Level getLogLevel() {
+	public GeoGebraLogger.Level getLogLevel() {
 		String value = this.get(OGPParameters.PARAM_LOG_LEVEL);
-		Level retCode = Level.INFO;
+		GeoGebraLogger.Level retCode = GeoGebraLogger.INFO;
 		
 		switch(value.charAt(0)){
 		case 'N':
-			retCode = Level.OFF;
+			retCode = null;
 			break;
 		case 'B':
-			retCode = Level.INFO;
+			retCode = GeoGebraLogger.INFO;
 			break;
 		case 'E':
-			retCode = Level.ERROR;
+			retCode = GeoGebraLogger.ERROR;
 			break;
 		case 'I':
-			retCode = Level.INFO;
+			retCode = GeoGebraLogger.INFO;
 			break;
 		case 'W':
-			retCode = Level.WARN;
+			retCode = GeoGebraLogger.WARN;
 			break;
 		case 'D':
-			retCode = Level.DEBUG;
+			retCode = GeoGebraLogger.DEBUG;
 			break;
 		default: // default is basic level
 			OpenGeoProver.settings.getLogger().error("Bad value assigned to log level parameter.");

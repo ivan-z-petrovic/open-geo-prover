@@ -6,8 +6,6 @@ package com.ogprover.test.manual;
 
 import java.io.IOException;
 
-import org.apache.log4j.Level;
-
 import com.ogprover.main.OGPConfigurationSettings;
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OGPParameters;
@@ -24,7 +22,6 @@ import com.ogprover.utilities.io.LaTeXFileWriter;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.io.XMLFileWriter;
-import com.ogprover.utilities.logger.FileLogger;
 import com.ogprover.utilities.logger.ILogger;
 
 /**
@@ -150,7 +147,7 @@ public class MTestOpenGeoProver {
 		OpenGeoProver.settings = new OGPConfigurationSettings();
 		
 		// turn on debug log level
-		((FileLogger) OpenGeoProver.settings.getLogger()).setLevel(Level.DEBUG);
+		//((FileLogger) OpenGeoProver.settings.getLogger()).setLevel(Level.DEBUG);
 		
 		try {
 			OpenGeoProver.settings.setOutput(new OGPOutput(new LaTeXFileWriter(OGPConstants.DEF_VAL_PARAM_OUTPUT_FILE), new XMLFileWriter(OGPConstants.DEF_VAL_PARAM_OUTPUT_FILE)));
