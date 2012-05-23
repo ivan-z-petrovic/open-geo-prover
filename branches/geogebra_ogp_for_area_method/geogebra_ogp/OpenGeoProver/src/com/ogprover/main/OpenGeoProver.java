@@ -18,7 +18,7 @@ import com.ogprover.utilities.io.LaTeXFileWriter;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.io.XMLFileWriter;
-import com.ogprover.utilities.logger.FileLogger;
+import com.ogprover.utilities.logger.ILogger;
 
 
 /**
@@ -67,7 +67,7 @@ public class OpenGeoProver {
 		OpenGeoProver.settings = new OGPConfigurationSettings();
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
-		FileLogger logger = (FileLogger) OpenGeoProver.settings.getLogger();
+		ILogger logger = OpenGeoProver.settings.getLogger();
 		Stopwatch stopwatch = OpenGeoProver.settings.getStopwacth();
 		
 		// prover's introduction message
@@ -101,8 +101,8 @@ public class OpenGeoProver {
 		}
 		
 		// setting log level and verbose flag in logger
-		logger.setLevel(parameters.getLogLevel());
-		logger.setVerbose(parameters.getVerbose());
+		//logger.setLevel(parameters.getLogLevel());
+		//logger.setVerbose(parameters.getVerbose());
 		
 		// creating output files
 		if (parameters.createReport()) {
