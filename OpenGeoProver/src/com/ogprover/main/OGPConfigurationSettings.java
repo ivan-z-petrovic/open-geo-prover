@@ -10,7 +10,7 @@ import java.util.Calendar;
 import com.ogprover.utilities.OGPTimer;
 import com.ogprover.utilities.Stopwatch;
 import com.ogprover.utilities.io.OGPOutput;
-import com.ogprover.utilities.logger.FileLogger;
+import com.ogprover.utilities.logger.GeoGebraLogger;
 import com.ogprover.utilities.logger.ILogger;
 
 /**
@@ -287,7 +287,8 @@ public class OGPConfigurationSettings {
 			this.logFileName = OGPConfigurationSettings.defaultLogFileName + sdf.format(cal.getTime());
 		}
 		
-		this.setLogger(FileLogger.getLogger(this.logFileName, logFileRootDirectory));
+		// Set the file logger
+		this.setLogger(GeoGebraLogger.factory(this.logFileName, logFileRootDirectory));
 	}
 	
 	
