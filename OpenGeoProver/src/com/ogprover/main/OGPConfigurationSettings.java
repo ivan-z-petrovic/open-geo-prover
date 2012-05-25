@@ -81,7 +81,7 @@ public class OGPConfigurationSettings {
 	 * Default name of log file
 	 * </b></i>
 	 */
-	public static final String defaultLogFileName = OpenGeoProver.class.getName();
+	public static final String defaultLogFileName = OpenGeoProver.class.getSimpleName();
 	/**
 	 * <i><b>
 	 * Date and time format - first pattern
