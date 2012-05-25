@@ -113,6 +113,15 @@ public class SegmentsOfEqualLengths extends DimensionThmStatement {
 		this.geoObjects.add(D);
 	}
 	
+	/**
+	 * Constructor method.
+	 * 
+	 * @param seg1	First segment
+	 * @param seg2	Second segment
+	 */
+	public SegmentsOfEqualLengths(Segment seg1, Segment seg2) {
+		this(seg1.getFirstEndPoint(), seg1.getSecondEndPoint(), seg2.getFirstEndPoint(), seg2.getSecondEndPoint());
+	}
 	
 	
 	/*

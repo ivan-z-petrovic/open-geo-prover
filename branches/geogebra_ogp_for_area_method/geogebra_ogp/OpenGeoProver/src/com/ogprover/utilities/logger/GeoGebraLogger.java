@@ -462,7 +462,11 @@ public class GeoGebraLogger implements ILogger {
 		logger.setLogLevel(GeoGebraLogger.INFO);
 		logger.setLogDestination(GeoGebraLogger.LogDestination.FILE);
 		StringBuilder sb = new StringBuilder();
-		sb.append(logFileRootDirectory);
+		
+		String rootDirPath = logFileRootDirectory;
+		if (rootDirPath == null)
+			rootDirPath = System.getProperty("user.dir") + "/log/"; // assumption: current user directory is "OpenGeoProver"
+		sb.append(rootDirPath);
 		if (logFileName.contains("."))
 			sb.append(logFileName.substring(0, logFileName.lastIndexOf(".")));
 		else
