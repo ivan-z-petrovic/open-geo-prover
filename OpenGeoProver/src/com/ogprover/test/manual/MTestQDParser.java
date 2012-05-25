@@ -9,7 +9,9 @@ import java.io.StringReader;
 import java.util.Vector;
 
 import com.ogprover.api.GGConsConverterForAlgebraicProvers;
+import com.ogprover.api.GGStatConverterForAlgebraicProvers;
 import com.ogprover.api.GeoGebraConstructionConverter;
+import com.ogprover.api.GeoGebraStatementConverter;
 import com.ogprover.main.OGPConfigurationSettings;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.prover_protocol.cp.OGPCP;
@@ -44,8 +46,8 @@ public class MTestQDParser {
 		OpenGeoProver.settings = new OGPConfigurationSettings();
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
-		// Read the name of XML file from command line (extension is optional); file is in "input" directory
-		if (args.length != 1) {
+		// Read the name of XML file and theorem statement text from command line (extension is optional); file is in "input" directory
+		if (args.length != 2) {
 			logger.error("Incorrect number of command line arguments");
 			return;
 		}
@@ -126,6 +128,19 @@ public class MTestQDParser {
 					System.out.println(gc.getConstructionDesc());
 				}
 				System.out.println();
+				
+				// Convert theorem statement
+				GeoGebraStatementConverter statCnv = new GGStatConverterForAlgebraicProvers(args[1], consCnv);
+				if (statCnv.convert() == false) {
+					String message = "Failed to convert GeoGebra statement to OGP format";
+					logger.error(message);
+					System.out.println(message);
+					System.out.println();
+				}
+				else {
+					System.out.println(statCnv.getOgpStatement().getStatementDesc());
+					System.out.println();
+				}
 			}
 		}
 		else {

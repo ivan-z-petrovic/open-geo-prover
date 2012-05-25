@@ -1266,6 +1266,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			
 			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
 			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Segment seg = new Segment(pt1, pt2, oArgs.get(0));
+			this.auxiliaryObjectsMap.put(seg.getGeoObjectLabel(), seg);
 			return new LineThroughTwoPoints(oArgs.get(0), pt1, pt2);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
