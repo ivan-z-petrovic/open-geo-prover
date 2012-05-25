@@ -55,7 +55,7 @@ public abstract class GeoGebraConstructionConverter {
 	 */
 	protected Vector<GeoConstruction> constructionsToRemove;
 	/**
-	 * Map with auxiliary geometry objects (angles, vectors, polygons etc.), used in constructions 
+	 * Map with auxiliary geometry objects (angles, segments, vectors, polygons etc.), used in constructions 
 	 * of other geometry objects.
 	 */
 	protected Map<String, GeoObject> auxiliaryObjectsMap;
@@ -353,6 +353,29 @@ public abstract class GeoGebraConstructionConverter {
 	 * @return			Converted construction in OGP format or null in case of error.
 	 */
 	protected abstract GeoConstruction convertSemicircleCmd(GeoGebraCommand ggCmd);
+	
+	
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== GETTERS/SETTERS ===========================
+	 * ======================================================================
+	 */
+	/**
+	 * @return the consProtocol
+	 */
+	public OGPCP getConsProtocol() {
+		return consProtocol;
+	}
+	
+	/**
+	 * @return the auxiliaryObjectsMap
+	 */
+	public Map<String, GeoObject> getAuxiliaryObjectsMap() {
+		return auxiliaryObjectsMap;
+	}
+	
 	
 	
 	
