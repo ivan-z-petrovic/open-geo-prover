@@ -12,11 +12,15 @@ import java.util.Vector;
 
 import org.xml.sax.SAXException;
 
+import com.ogprover.geogebra.GeoGebraObject;
+import com.ogprover.geogebra.GeoGebraTheorem;
+import com.ogprover.geogebra.command.GeoGebraCommand;
+import com.ogprover.geogebra.command.GeoGebraCommandFactory;
+import com.ogprover.geogebra.command.ProveCmd;
+import com.ogprover.geogebra.command.construction.FreePointCmd;
+import com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand;
+import com.ogprover.geogebra.command.statement.GeoGebraStatementCommand;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.geogebra.FreePointCmd;
-import com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommand;
-import com.ogprover.prover_protocol.cp.geogebra.GeoGebraCommandFactory;
-import com.ogprover.prover_protocol.cp.geogebra.GeoGebraObject;
 import com.ogprover.utilities.logger.ILogger;
 
 
@@ -33,15 +37,15 @@ public class OGPDocHandler implements DocHandler {
 	/*
 	 * Note:
 	 * 
-	 * 		This XML document handler is used for parsing input geometry constructions
+	 * 		This XML document handler is used for parsing input geometry theorem
 	 * from GeoGebra to OGP. Currently OGP implements only algebraic provers so GeoGebra's
-	 * constructions are converted in OGP to the format suitable for algebraic provers
-	 * (i.e. to constructions that algebraic provers can deal with).
+	 * theorems are converted in OGP to the format suitable for algebraic provers
+	 * (i.e. to constructions and statements that algebraic provers can deal with).
 	 * Later, when other prover methods are added, if they need different conversion of
-	 * GeoGebra's constructions, suitable converter class has to be created.
+	 * GeoGebra's theorems, suitable converter class has to be created.
 	 * 		Conversion logic is not in this class - this is just for low level XML parsing.
-	 * The result of parsing is list of GeoGebra's construction commands which enters the
-	 * conversion method of converter class which transforms it to the OGP constructions.
+	 * The result of parsing is GeoGebra's theorem object which enters the conversion method 
+	 * of converter class which transforms it to the OGP theorem.
 	 */
 
 	/*
@@ -93,18 +97,14 @@ public class OGPDocHandler implements DocHandler {
 	
 	// ===== Storage objects for parsed data =====
 	/**
-	 * The list of parsed GeoGebra commands.
+	 * GeoGebra theorem
 	 */
-	private Vector<GeoGebraCommand> geoGebraCmdList = null;
+	private GeoGebraTheorem ggThm;
 	/**
-	 * Map of geometry objects read from XML file. Each object is associated
+	 * Map of GeoGebra objects read from XML file. Each object is associated
 	 * by the GeoGebra command that introduces it in output argument list.
 	 */
-	private Map<String, GeoGebraCommand> geoObjMap = null;
-	/**
-	 * The name of geometry theorem (will be read from 'title' attribute of <construction> tag).
-	 */
-	private String theoremName;
+	private Map<String, GeoGebraCommand> ggObjMap;
 	
 	// ===== Data members for processing of current tag =====
 	/**
@@ -119,17 +119,17 @@ public class OGPDocHandler implements DocHandler {
 	
 	// ===== Data members for processing of command tag =====
 	/**
-	 * Name of construction defined by command tag being processed.
+	 * Name of GG command from command tag being processed.
 	 */
-	private String currConstructionName;
+	private String currCmdName;
 	/**
-	 * Input arguments of current geometry object defined by command tag being processed.
+	 * Input arguments of current GG command defined by command tag being processed.
 	 */
-	private ArrayList<String> currGeoObjInputArgs;
+	private ArrayList<String> currCmdInputArgs;
 	/**
-	 * Output arguments of current geometry object defined by command tag being processed.
+	 * Output arguments of current GG command defined by command tag being processed.
 	 */
-	private ArrayList<String> currGeoObjOutputArgs;
+	private ArrayList<String> currCmdOutputArgs;
 	
 	// ===== Parsing result =====
 	/**
@@ -148,19 +148,11 @@ public class OGPDocHandler implements DocHandler {
 	 * ======================================================================
 	 */
 	/**
-	 * @return the geoGebraCmdList
+	 * @return the ggThm
 	 */
-	public Vector<GeoGebraCommand> getGeoGebraCmdList() {
-		return geoGebraCmdList;
+	public GeoGebraTheorem getTheorem() {
+		return ggThm;
 	}
-	
-	/**
-	 * @return the theoremName
-	 */
-	public String getTheoremName() {
-		return theoremName;
-	}
-
 	/**
 	 * @return the bSuccess
 	 */
@@ -177,13 +169,11 @@ public class OGPDocHandler implements DocHandler {
 	 */
 	/**
 	 * Constructor method.
-	 * 
-	 * @param ggCmdList		Collection for storage of parsed GeoGebra commands
 	 */
-	public OGPDocHandler(Vector<GeoGebraCommand> ggCmdList) {
-		this.geoGebraCmdList = ggCmdList;
-		this.geoObjMap = new HashMap<String, GeoGebraCommand>();
-		this.theoremName = "";
+	public OGPDocHandler() {
+		this.ggThm = null; // this is instantiated when XML parsing starts
+		this.ggObjMap = new HashMap<String, GeoGebraCommand>();
+		this.bSuccess = true;
 	}
 	
 	
@@ -193,7 +183,6 @@ public class OGPDocHandler implements DocHandler {
 	 * ========================== SPECIFIC METHODS ==========================
 	 * ======================================================================
 	 */
-	
 	/*
 	 * Overridden methods of DocHandler interface.
 	 */
@@ -221,9 +210,10 @@ public class OGPDocHandler implements DocHandler {
 				return;
 			}
 			
-			this.theoremName = h.get(OGPDocHandler.ATTR_NAME_TITLE); // Construction title will hold the name of theorem to be proved
-			if (this.theoremName == null)
-				this.theoremName = "";
+			String theoremName = h.get(OGPDocHandler.ATTR_NAME_TITLE); // Construction title will hold the name of theorem to be proved
+			if (theoremName == null)
+				theoremName = "";
+			this.ggThm.setTheoremName(theoremName);
 			this.currentTagType = OGPDocHandler.TAG_TYPE_CONSTRUCTION;
 		}
 		// === <element> ===
@@ -249,42 +239,44 @@ public class OGPDocHandler implements DocHandler {
 			}
 			
 			// Find command for this element
-			GeoGebraCommand ggCmd = this.geoObjMap.get(elementLabel);
+			GeoGebraCommand ggCmd = this.ggObjMap.get(elementLabel);
 			
 			if (ggCmd == null) {
 				// Object could not be found and this is allowed only for points
 				if (elementType.equalsIgnoreCase(GeoGebraObject.OBJ_TYPE_POINT)) {
 					// create new free point
-					GeoGebraCommand newGGCmd = new FreePointCmd(elementLabel);
-					this.geoGebraCmdList.add(newGGCmd);
-					this.geoObjMap.put(elementLabel, newGGCmd);
+					GeoGebraConstructionCommand newGGCmd = new FreePointCmd(elementLabel);
+					if (this.ggThm.getStatement() != null || this.ggThm.getProveCmd() != null) {
+						logger.error("Construction command read after statement or prove command");
+						this.bSuccess = false;
+						return;
+					}
+					this.ggThm.getConstructionList().add(newGGCmd);
+					this.ggObjMap.put(elementLabel, newGGCmd);
 				}
 				else {
-					logger.error("Definition of object which is not constructed");
+					logger.error("Definition of object which is not introduced by command");
 					this.bSuccess = false;
 					return;
 				}
 			}
 			else {
 				// If command is transformation, set the object type if not already set, otherwise check type
-				String cmdName = ggCmd.getCommandName();
-				boolean bCheck = true;
-				if (cmdName.equals(GeoGebraCommand.COMMAND_MIRROR) || cmdName.equals(GeoGebraCommand.COMMAND_ROTATE) ||
-					cmdName.equals(GeoGebraCommand.COMMAND_TRANSLATE) || cmdName.equals(GeoGebraCommand.COMMAND_DILATE)) {
-					if (ggCmd.getObjectType().equals(GeoGebraObject.OBJ_TYPE_NONE)) {
-						ggCmd.setObjectType(elementType);
-						bCheck = false;
-					} 
-				}
-				
-				if (bCheck) {
-					// Check the type of object in command
-					if (!elementType.equalsIgnoreCase(ggCmd.getObjectType())) {
-						logger.error("Definition of object doesn't match the construction of that object");
-						this.bSuccess = false;
-						return;
+				if (ggCmd instanceof GeoGebraConstructionCommand) {
+					String cmdName = ggCmd.getCommandName();
+					GeoGebraConstructionCommand consCmd = (GeoGebraConstructionCommand)ggCmd;
+					if (cmdName.equals(GeoGebraConstructionCommand.COMMAND_MIRROR) || cmdName.equals(GeoGebraConstructionCommand.COMMAND_ROTATE) ||
+						cmdName.equals(GeoGebraConstructionCommand.COMMAND_TRANSLATE) || cmdName.equals(GeoGebraConstructionCommand.COMMAND_DILATE)) {
+						if (consCmd.getObjectType().equals(GeoGebraObject.OBJ_TYPE_NONE)) {
+							consCmd.setObjectType(elementType);
+						} 
 					}
 				}
+				
+				// Note: we won't check if the element type matches the type of object from command since it will be
+				// provided by GeoGebra. If we do check it, we must process special cases when there are multiple 
+				// output objects - this is not a problem for Intersection Points or Tangent Lines since all output objects
+				// are of same type, but it is more complicated for polygons which can define polygon, segments and points. 
 			}
 			
 			this.currentTagType = OGPDocHandler.TAG_TYPE_ELEMENT;
@@ -305,7 +297,7 @@ public class OGPDocHandler implements DocHandler {
 				return;
 			}
 			
-			this.currConstructionName = commandName;
+			this.currCmdName = commandName;
 			this.currentTagType = OGPDocHandler.TAG_TYPE_COMMAND;
 		}
 		// === <input> ===
@@ -317,11 +309,11 @@ public class OGPDocHandler implements DocHandler {
 			}
 			
 			// Populate list of input arguments
-			this.currGeoObjInputArgs = new ArrayList<String>();
+			this.currCmdInputArgs = new ArrayList<String>();
 			String genArg = null;
 			Integer argNum = new Integer(0);
 			while ((genArg = h.get(OGPDocHandler.ATTR_NAME_GEN + argNum.toString())) != null) {
-				this.currGeoObjInputArgs.add(genArg);
+				this.currCmdInputArgs.add(genArg);
 				argNum++;
 			}
 			
@@ -336,11 +328,11 @@ public class OGPDocHandler implements DocHandler {
 			}
 			
 			// Populate list of output arguments
-			this.currGeoObjOutputArgs = new ArrayList<String>();
+			this.currCmdOutputArgs = new ArrayList<String>();
 			String genArg = null;
 			Integer argNum = new Integer(0);
 			while ((genArg = h.get(OGPDocHandler.ATTR_NAME_GEN + argNum.toString())) != null) {
-				this.currGeoObjOutputArgs.add(genArg);
+				this.currCmdOutputArgs.add(genArg);
 				argNum++;
 			}
 			
@@ -411,27 +403,57 @@ public class OGPDocHandler implements DocHandler {
 				return;
 			}
 			
-			GeoGebraCommand ggCmd = GeoGebraCommandFactory.createGeoGebraCommand(this.currConstructionName, this.currGeoObjInputArgs, this.currGeoObjOutputArgs, GeoGebraObject.OBJ_TYPE_NONE);
+			GeoGebraCommand ggCmd = GeoGebraCommandFactory.createGeoGebraCommand(this.currCmdName, this.currCmdInputArgs, this.currCmdOutputArgs, GeoGebraObject.OBJ_TYPE_NONE);
 			
 			if (ggCmd == null) {
-				logger.error("Failed to create geometry object for current command tag");
+				logger.error("Failed to create command object for current command tag");
 				this.bSuccess = false;
 				return;
 			}	
 			
+			// Add this command to theorem object
+			if (ggCmd instanceof GeoGebraConstructionCommand) {
+				if (this.ggThm.getStatement() != null || this.ggThm.getProveCmd() != null) {
+					logger.error("Construction command read after statement or prove command");
+					this.bSuccess = false;
+					return;
+				}
+				this.ggThm.getConstructionList().add((GeoGebraConstructionCommand)ggCmd);
+			}
+			else if (ggCmd instanceof GeoGebraStatementCommand) {
+				if (this.ggThm.getStatement() != null || this.ggThm.getProveCmd() != null) {
+					logger.error("Statament command read after statement or prove command");
+					this.bSuccess = false;
+					return;
+				}
+				this.ggThm.setStatement((GeoGebraStatementCommand)ggCmd);
+			}
+			else if (ggCmd instanceof ProveCmd) {
+				if (this.ggThm.getProveCmd() != null) {
+					logger.error("Prove command read after prove command");
+					this.bSuccess = false;
+					return;
+				}
+				this.ggThm.setProveCmd((ProveCmd)ggCmd);
+			}
+			else {
+				logger.error("Unknown GeoGebra command type");
+				this.bSuccess = false;
+				return;
+			}
+			
 			/*
-			 * Store this geometry object in collections of geometry objects obtained by parsing.
+			 * Store this command object in collection of GeoGebra objects obtained by parsing.
 			 */
-			this.geoGebraCmdList.add(ggCmd);
-			for (String outLabel : this.currGeoObjOutputArgs) {
+			for (String outLabel : this.currCmdOutputArgs) {
 				if (outLabel.length() > 0) // "not empty label"
-					this.geoObjMap.put(outLabel, ggCmd);
+					this.ggObjMap.put(outLabel, ggCmd);
 			}
 			
 			// reset elements used for processing of command tag - prepare for next <command> tag
-			this.currConstructionName = null;
-			this.currGeoObjInputArgs = null;
-			this.currGeoObjOutputArgs = null;
+			this.currCmdName = null;
+			this.currCmdInputArgs = null;
+			this.currCmdOutputArgs = null;
 			
 			this.currentTagType = OGPDocHandler.TAG_TYPE_CONSTRUCTION;
 		}
@@ -486,18 +508,17 @@ public class OGPDocHandler implements DocHandler {
 		// Put initializations for parsing process here ...
 		
 		// ===== Storage objects for parsed data =====
-		this.geoGebraCmdList.clear();
-		this.geoObjMap.clear();
-		this.theoremName = "";
+		this.ggThm = new GeoGebraTheorem();
+		this.ggObjMap.clear();
 		
 		// ===== Data members for processing of current tag =====
 		this.currentTagType = OGPDocHandler.TAG_TYPE_NONE;
 		this.currentTagName = null;
 		
 		// ===== Data members for processing of command tag =====
-		this.currConstructionName = null;
-		this.currGeoObjInputArgs = null;
-		this.currGeoObjOutputArgs = null;
+		this.currCmdName = null;
+		this.currCmdInputArgs = null;
+		this.currCmdOutputArgs = null;
 		
 		// ===== Parsing result =====
 		this.bSuccess = true; // reset the flag which determines whether parsing was successful
@@ -521,6 +542,32 @@ public class OGPDocHandler implements DocHandler {
 			logger.error(message);
 			throw new SAXException(message);
 		}
+		
+		// Validate parsed GG theorem
+		boolean bValidThm = true;
+		if (this.ggThm == null)
+			bValidThm = false;
+		else {
+			Vector<GeoGebraConstructionCommand> consList = this.ggThm.getConstructionList();
+			if (consList == null || consList.size() == 0)
+				bValidThm = false;
+			else if (this.ggThm.getProveCmd() == null)
+				bValidThm = false;
+			else if (this.ggThm.getStatement() == null) {
+				GeoGebraStatementCommand ggStmCmd = this.createStatementFromText(this.ggThm.getProveCmd().getInputArg());
+				
+				if (ggStmCmd == null)
+					bValidThm = false;
+				else
+					this.ggThm.setStatement(ggStmCmd);
+			}
+		}
+		if (bValidThm == false) {
+			message = "Parsed theorem is in incorrect format";
+			logger.error(message);
+			this.bSuccess = false;
+			throw new SAXException(message);
+		}
 	}
 
 	/**
@@ -536,5 +583,56 @@ public class OGPDocHandler implements DocHandler {
 	public int getConsStep() {
 		// Default implementation - not required for XML parsing in OGP
 		return 0;
-	}	
+	}
+	
+	/**
+	 * Method which parses statement text and creates corresponding statement object.
+	 * 
+	 * @return	TRUE if operation was successful, FALSE otherwise
+	 */
+	private GeoGebraStatementCommand createStatementFromText(String statementText) {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (statementText == null){
+			logger.error("Statement in bad format - missing statement text");
+			return null;
+		}
+		
+		// === Brackets ===
+		int length = statementText.length();
+		int lbracIdx = statementText.indexOf('[');
+		int rbracIdx = statementText.lastIndexOf(']');
+		if (lbracIdx == -1 || rbracIdx == -1) {
+			logger.error("Statement in bad format - missing bracket");
+			return null;
+		}
+		if (length != rbracIdx + 1) {
+			logger.error("Statement in bad format - statement text doesn't end with right bracket");
+			return null;
+		}
+		
+		// === Statement name ===
+		String statementName = statementText.substring(0, lbracIdx);
+		if (statementName.length() == 0) {
+			logger.error("Statement in bad format - missing statement name");
+			return null;
+		}
+		
+		// === Argument list ===
+		String args = statementText.substring(lbracIdx + 1, rbracIdx);
+		String[] argsArray = args.split(",");
+		ArrayList<String> statementArgs = new ArrayList<String>();
+		for (String arg : argsArray)
+			statementArgs.add(arg.trim());
+		
+		// === Create statement command ===
+		Long rndLabelNum = new Long(Math.round(Math.random() * 1000));
+		String statResultLabel = "statRes_" + rndLabelNum.toString();
+		ArrayList<String> outputArgs = new ArrayList<String>();
+		outputArgs.add(statResultLabel);
+		GeoGebraCommand ggCmd = GeoGebraCommandFactory.createGeoGebraCommand(statementName, statementArgs, outputArgs, GeoGebraObject.OBJ_TYPE_NONE);
+		if (ggCmd == null || !(ggCmd instanceof GeoGebraStatementCommand))
+			return null;
+		return (GeoGebraStatementCommand)ggCmd;
+	}
 }
