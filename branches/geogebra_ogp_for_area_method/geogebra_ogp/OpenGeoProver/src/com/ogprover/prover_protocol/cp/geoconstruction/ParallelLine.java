@@ -511,5 +511,14 @@ public class ParallelLine extends Line {
 		return sb.toString();
 	}
 
-	
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[2];
+		inputLabels[0] = this.points.get(0).getGeoObjectLabel();
+		inputLabels[1] = this.baseLine.getGeoObjectLabel();
+		return inputLabels;
+	}
 }

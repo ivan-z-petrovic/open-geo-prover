@@ -289,6 +289,18 @@ public class AngleTrisector extends Line {
 		return sb.toString();
 	}
 
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[3];
+		inputLabels[0] = this.angle.getFirstRayPoint().getGeoObjectLabel();
+		inputLabels[1] = this.angle.getVertex().getGeoObjectLabel();
+		inputLabels[2] = this.angle.getSecondRayPoint().getGeoObjectLabel();
+		return inputLabels;
+	}
+
 }
 
 

@@ -684,6 +684,9 @@ public class OGPCP {
 		// First of all, set the number of zero coordinates used for instantiation of points
 		this.setNumberOfZeroCoordinates();
 		
+		// Remove unnecessary geometry objects
+		this.simplify();
+		
 		try {
 			//output.openSection("Transformation of Construction Protocol to algebraic form");
 			
@@ -740,6 +743,49 @@ public class OGPCP {
 		}
 		
 		return OGPConstants.RET_CODE_SUCCESS;
+	}
+	
+	/**
+	 * Method which simplifies CP by removing all constructions that are not necessary for theorem statement.
+	 */
+	public void simplify() {
+		if (this.theoremStatement == null || this.constructionMap == null)
+			return;
+		
+		Map<String, String> usedLabelsMap = new HashMap<String, String>();
+		Vector<String> usedLabelsList = new Vector<String>();
+		
+		// labels from statement
+		for (String label : this.theoremStatement.getInputLabels()) {
+			if (usedLabelsMap.get(label) == null) {
+				usedLabelsMap.put(label, label);
+				usedLabelsList.add(label);
+			}
+		}
+		
+		// labels from constructions
+		for (int ii = 0; ii < usedLabelsList.size(); ii++) {
+			String[] consLabels = this.constructionMap.get(usedLabelsList.get(ii)).getInputLabels();
+			
+			if (consLabels != null) {
+				for (String label : consLabels) {
+					if (usedLabelsMap.get(label) == null) {
+						usedLabelsMap.put(label, label);
+						usedLabelsList.add(label);
+					}
+				}
+			}
+ 		}
+		
+		// remove unnecessary constructions
+		for (int ii = 0; ii < this.constructionSteps.size(); ii++) {
+			GeoConstruction gc = this.constructionSteps.get(ii);
+			if (usedLabelsMap.get(gc.getGeoObjectLabel()) == null) {
+				this.constructionSteps.remove(ii);
+				this.constructionMap.remove(gc.getGeoObjectLabel());
+				ii--;
+			}
+		}
 	}
 	
 	/**

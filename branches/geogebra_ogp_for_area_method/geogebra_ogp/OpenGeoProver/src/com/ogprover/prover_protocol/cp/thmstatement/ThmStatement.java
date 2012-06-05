@@ -64,7 +64,13 @@ public abstract class ThmStatement {
 	 * @return	Textual description of theorem statement
 	 */
 	public abstract String getStatementDesc();
-	
+	/**
+	 * Method which retrieves a string array with labels of input elements for this statement.
+	 * The retrieved array doesn't contain duplicate labels.
+	 * 
+	 * @return	Array with labels of input elements.
+	 */
+	public abstract String[] getInputLabels();
 	
 
 	/*

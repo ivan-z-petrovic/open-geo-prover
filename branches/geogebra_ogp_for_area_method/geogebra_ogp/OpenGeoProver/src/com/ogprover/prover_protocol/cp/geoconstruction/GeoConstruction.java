@@ -308,6 +308,13 @@ public abstract class GeoConstruction implements GeoObject {
 	 * @return	Textual description of geometric construction
 	 */
 	public abstract String getConstructionDesc();
+	/**
+	 * Method which retrieves a string array with labels of input elements for this construction.
+	 * The retrieved array doesn't contain duplicate labels.
+	 * 
+	 * @return	Array with labels of input elements.
+	 */
+	public abstract String[] getInputLabels();
 	
 	
 
