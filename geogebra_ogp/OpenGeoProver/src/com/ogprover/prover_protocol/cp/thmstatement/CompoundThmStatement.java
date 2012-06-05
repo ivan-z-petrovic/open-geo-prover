@@ -4,6 +4,8 @@
 
 package com.ogprover.prover_protocol.cp.thmstatement;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
@@ -104,6 +106,32 @@ public abstract class CompoundThmStatement extends ThmStatement {
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * @see com.ogprover.prover_protocol.cp.thmstatement.ThmStatement#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels;
+		
+		if (this.particleThmStatements == null || this.particleThmStatements.size() == 0)
+			return null;
+		
+		Map<String, String> labelMap = new HashMap<String, String>();
+		for (ThmStatement ts : this.particleThmStatements) {
+			for (String label : ts.getInputLabels()) // recursion
+				labelMap.put(label, label);
+		}
+		
+		if (labelMap.size() == 0)
+			return null;
+		
+		inputLabels = new String[labelMap.size()];
+		int ii = 0;
+		for (String label : labelMap.keySet())
+			inputLabels[ii++] = label;
+		return inputLabels;
 	}
 	
 }

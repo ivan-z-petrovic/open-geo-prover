@@ -161,6 +161,14 @@ public class FreePoint extends Point {
 		sb.append(this.geoObjectLabel);
 		return sb.toString();
 	}
+	
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		return null;
+	}
 
 }
 
