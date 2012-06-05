@@ -33,7 +33,7 @@
  * issue 12: Replacement of log4j logger by !GeoGebra's logger.
  * issue 13: Implementation of converter for geometry theorem statements.
  * issue 14: Improvement of CP - implementing simplification.
- * issue 15: Conversion of GeoGebra commands for transformations to OGP format.
+ * issue 15: Conversion of !GeoGebra commands for transformations to OGP format.
  * issue 16: Improvements of NDG conditions - implementing general representation.
  * ...
 
