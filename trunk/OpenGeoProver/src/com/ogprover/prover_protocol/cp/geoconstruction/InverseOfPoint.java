@@ -561,5 +561,16 @@ public class InverseOfPoint extends SelfConditionalPoint {
 		return sb.toString();
 	}
 
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[2];
+		inputLabels[0] = this.originalPoint.getGeoObjectLabel();
+		inputLabels[1] = this.circleOfInversion.getGeoObjectLabel();
+		return inputLabels;
+	}
+
 }
 

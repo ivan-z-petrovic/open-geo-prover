@@ -346,6 +346,20 @@ public class AngleRay extends Line {
 		return sb.toString();
 	}
 
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[5];
+		inputLabels[0] = this.firstRayPoint.getGeoObjectLabel();
+		inputLabels[1] = this.points.get(0).getGeoObjectLabel();
+		inputLabels[2] = this.congAngle.getFirstRayPoint().getGeoObjectLabel();
+		inputLabels[3] = this.congAngle.getVertex().getGeoObjectLabel();
+		inputLabels[4] = this.congAngle.getSecondRayPoint().getGeoObjectLabel();
+		return inputLabels;
+	}
+
 	
 
 }

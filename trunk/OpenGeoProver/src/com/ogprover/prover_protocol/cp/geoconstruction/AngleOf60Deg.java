@@ -247,4 +247,12 @@ public class AngleOf60Deg extends GeoConstruction implements SpecialConstantAngl
     		ndgCond.setBestDescription(sb.toString());
     	}
     }
+
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		return null;
+	}
 }

@@ -175,5 +175,16 @@ public class CircleWithDiameter extends Circle {
 		sb.append(this.diameter.getDescription());
 		return sb.toString();
 	}
+
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[2];
+		inputLabels[0] = this.diameter.getFirstEndPoint().getGeoObjectLabel();
+		inputLabels[1] = this.diameter.getSecondEndPoint().getGeoObjectLabel();
+		return inputLabels;
+	}
 	
 }
