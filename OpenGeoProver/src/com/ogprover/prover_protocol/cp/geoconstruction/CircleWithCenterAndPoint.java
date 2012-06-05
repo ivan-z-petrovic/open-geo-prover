@@ -157,4 +157,15 @@ public class CircleWithCenterAndPoint extends Circle {
 		sb.append(this.points.get(0).getGeoObjectLabel());
 		return sb.toString();
 	}
+
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[2];
+		inputLabels[0] = this.center.getGeoObjectLabel();
+		inputLabels[1] = this.points.get(0).getGeoObjectLabel();
+		return inputLabels;
+	}
 }

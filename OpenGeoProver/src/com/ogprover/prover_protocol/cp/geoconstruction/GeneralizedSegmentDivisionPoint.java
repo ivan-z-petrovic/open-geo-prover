@@ -399,5 +399,34 @@ public class GeneralizedSegmentDivisionPoint extends SelfConditionalPoint {
 		return sb.toString();
 	}
 
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		Map<String, String> labels = new HashMap<String, String>(); // map is used to avoid duplicate labels
+		String Alabel = this.segment.getFirstEndPoint().getGeoObjectLabel();
+		String Blabel = this.segment.getSecondEndPoint().getGeoObjectLabel();
+		labels.put(Alabel, Alabel);
+		labels.put(Blabel, Blabel);
+		for (RatioOfTwoCollinearSegments ratio : this.ratioProduct.getRatios()) {
+			Segment numSeg = ratio.getNumeratorSegment();
+			Segment denSeg = ratio.getDenominatorSegment();
+			String A1label = numSeg.getFirstEndPoint().getGeoObjectLabel();
+			String B1label = numSeg.getSecondEndPoint().getGeoObjectLabel();
+			String A2label = denSeg.getFirstEndPoint().getGeoObjectLabel();
+			String B2label = denSeg.getSecondEndPoint().getGeoObjectLabel();
+			labels.put(A1label, A1label);
+			labels.put(B1label, B1label);
+			labels.put(A2label, A2label);
+			labels.put(B2label, B2label);
+		}
+		
+		String[] inputLabels = new String[labels.size()];
+		int ii = 0;
+		for (String label : labels.keySet())
+			inputLabels[ii++] = label;
+		return inputLabels;
+	}
 }
 

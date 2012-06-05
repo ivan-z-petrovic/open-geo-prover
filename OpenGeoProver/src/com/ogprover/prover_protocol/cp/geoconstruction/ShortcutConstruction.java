@@ -138,4 +138,12 @@ public abstract class ShortcutConstruction extends GeoConstruction {
 		 */
 		return false;
 	}
+	
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		return null; // this is shortcut construction and will be expanded in CP, so partial constructions will return input labels
+	}
 }
