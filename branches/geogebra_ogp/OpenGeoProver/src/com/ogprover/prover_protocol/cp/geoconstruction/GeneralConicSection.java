@@ -468,4 +468,12 @@ public class GeneralConicSection extends FreeParametricSet implements ConicSecti
 		return 0;
 	}
 	
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		return null;
+	}
+	
 }

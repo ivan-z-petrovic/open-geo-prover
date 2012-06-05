@@ -377,5 +377,17 @@ public class TranslatedPoint extends SelfConditionalPoint {
 		return sb.toString();
 	}
 
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[3];
+		inputLabels[0] = this.pointA.getGeoObjectLabel();
+		inputLabels[1] = this.pointB.getGeoObjectLabel();
+		inputLabels[2] = this.originalPoint.getGeoObjectLabel();
+		return inputLabels;
+	}
+
 }
 

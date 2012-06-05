@@ -523,5 +523,16 @@ public class IntersectionPoint extends Point {
 		return sb.toString();
 	}
 
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[2];
+		inputLabels[0] = ((GeoConstruction)this.firstPointSet).getGeoObjectLabel();
+		inputLabels[1] = ((GeoConstruction)this.secondPointSet).getGeoObjectLabel();
+		return inputLabels;
+	}
+
 }
 

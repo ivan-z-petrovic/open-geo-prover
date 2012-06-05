@@ -191,6 +191,16 @@ public abstract class RandomPointFromSetOfPoints extends Point {
 		
 		return null; // unknown type of point set
 	}
+	
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[1];
+		inputLabels[0] = ((GeoConstruction)this.baseSetOfPoints).getGeoObjectLabel();
+		return inputLabels;
+	}
 
 }
 
