@@ -102,4 +102,21 @@ public abstract class ElementaryThmStatement extends ThmStatement {
 		
 		return true;
 	}
+	
+	/**
+	 * @see com.ogprover.prover_protocol.cp.thmstatement.ThmStatement#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels;
+		
+		if (this.geoObjects == null || this.geoObjects.size() == 0)
+			return null;
+		
+		inputLabels = new String[this.geoObjects.size()];
+		int ii = 0;
+		for (GeoConstruction gc : this.geoObjects)
+			inputLabels[ii++] = gc.getGeoObjectLabel();
+		return inputLabels;
+	}
 }

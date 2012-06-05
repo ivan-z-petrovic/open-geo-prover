@@ -186,5 +186,17 @@ public class CircleWithCenterAndRadius extends Circle {
 		sb.append(this.radius.getDescription());
 		return sb.toString();
 	}
+
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[3];
+		inputLabels[0] = this.center.getGeoObjectLabel();
+		inputLabels[1] = this.radius.getFirstEndPoint().getGeoObjectLabel();
+		inputLabels[2] = this.radius.getSecondEndPoint().getGeoObjectLabel();
+		return inputLabels;
+	}
 	
 }

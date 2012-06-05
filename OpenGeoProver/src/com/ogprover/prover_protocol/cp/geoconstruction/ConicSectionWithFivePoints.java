@@ -448,5 +448,19 @@ public class ConicSectionWithFivePoints extends ParametricSet implements ConicSe
     	// This type of conic section is always instantiated as non-degenerate conic,
     	// so there aren't NDG conditions for it.
     }
+
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[5];
+		inputLabels[0] = this.points.get(0).getGeoObjectLabel();
+		inputLabels[1] = this.points.get(1).getGeoObjectLabel();
+		inputLabels[2] = this.points.get(2).getGeoObjectLabel();
+		inputLabels[3] = this.points.get(3).getGeoObjectLabel();
+		inputLabels[4] = this.points.get(4).getGeoObjectLabel();
+		return inputLabels;
+	}
 	
 }

@@ -174,4 +174,16 @@ public class CircumscribedCircle extends Circle {
 		sb.append(this.points.get(2).getGeoObjectLabel());
 		return sb.toString();
 	}
+
+	/**
+	 * @see com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction#getInputLabels()
+	 */
+	@Override
+	public String[] getInputLabels() {
+		String[] inputLabels = new String[3];
+		inputLabels[0] = this.points.get(0).getGeoObjectLabel();
+		inputLabels[1] = this.points.get(1).getGeoObjectLabel();
+		inputLabels[2] = this.points.get(2).getGeoObjectLabel();
+		return inputLabels;
+	}
 }
