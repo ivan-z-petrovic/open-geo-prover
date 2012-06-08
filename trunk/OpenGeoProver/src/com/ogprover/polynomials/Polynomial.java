@@ -27,7 +27,7 @@ import com.ogprover.utilities.logger.ILogger;
  * @version 1.00
  * @author Ivan Petrovic
  */
-public abstract class Polynomial implements Cloneable{
+public abstract class Polynomial implements Cloneable, RationalAlgebraicExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -84,18 +84,8 @@ public abstract class Polynomial implements Cloneable{
 	 * @see java.lang.Object#clone()
 	 */
 	public abstract Polynomial clone();
-	/**
-	 * Method for printing polynomial in LaTeX format
-	 * 
-	 * @return	String representing LaTeX format of polynomial
-	 */
-	public abstract String printToLaTeX();
-	/**
-	 * Method for printing polynomial in XML format
-	 * 
-	 * @return	String representing XML format of polynomial
-	 */
-	public abstract String printToXML();
+	
+	
 	
 	/*
 	 * ======================================================================

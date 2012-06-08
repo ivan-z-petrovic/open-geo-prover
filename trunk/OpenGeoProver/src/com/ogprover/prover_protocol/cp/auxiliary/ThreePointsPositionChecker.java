@@ -105,19 +105,11 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Points ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(", ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" are not collinear");
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_COLLINEAR, pointsV);
 			return true;
 		}
 		
@@ -151,18 +143,11 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 		if ((statementXPoly != null && statementXPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) ||
 			(statementYPoly != null && statementYPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) ||
 			(statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial()))) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Point ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" is not the midpoint of segment with endpoints ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_MIDPOINT, pointsV);
 			return true;
 		}
 		
@@ -188,18 +173,11 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Point ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" is not on perpendicular bisector of segment with endpoints ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_ON_PERP_BIS, pointsV);
 			return true;
 		}
 		
@@ -227,20 +205,11 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Line through points ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" is not perpendicular to line through points ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_RIGHT_ANG, pointsV);
 			return true;
 		}
 		
@@ -266,18 +235,11 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Point ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" is not on circle with center ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and point from it ");
-			sb.append(B.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_ON_CIRCLE, pointsV);
 			return true;
 		}
 		
@@ -301,24 +263,11 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Segment with endpoints ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(" is not sum of two segments: segment with endpoints ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and segment with endpoints ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_SEG_SUM, pointsV);
 			return true;
 		}
 		

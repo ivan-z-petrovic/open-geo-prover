@@ -16,7 +16,7 @@ import com.ogprover.main.OpenGeoProver;
  * @author Ivan Petrovic
  *
  */
-public class Power implements Comparable<Power>, Cloneable{
+public class Power implements Comparable<Power>, Cloneable, RationalAlgebraicExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -258,9 +258,7 @@ public class Power implements Comparable<Power>, Cloneable{
 	}
 	
 	/**
-	 * Method for printing power object in LaTex format.
-	 * 
-	 * @return	String object with power object printed in LaTeX format.
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToLaTeX()
 	 */
 	public String printToLaTeX() {
 		StringBuilder sb = new StringBuilder();
@@ -280,9 +278,7 @@ public class Power implements Comparable<Power>, Cloneable{
 	}
 	
 	/**
-	 * Method for printing power object in XML format.
-	 * 
-	 * @return	String object with power object printed in XML format.
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToXML()
 	 */
 	public String printToXML() {
 		StringBuilder sb = new StringBuilder();
@@ -327,5 +323,17 @@ public class Power implements Comparable<Power>, Cloneable{
 		
 		return sb.toString();
 	}
-
+	
+	/**
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#print()
+	 */
+	public String print() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.variable.print());
+		if (this.exponent > 1) {
+			sb.append("^");
+			sb.append(this.exponent);
+		}
+		return sb.toString();
+	}
 }

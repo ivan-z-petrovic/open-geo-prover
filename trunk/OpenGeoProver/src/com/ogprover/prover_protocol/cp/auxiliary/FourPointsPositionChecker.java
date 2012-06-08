@@ -116,22 +116,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Points ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(", ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(", ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(D.getGeoObjectLabel());
-			sb.append(" are not collinear");
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_COLLINEAR, pointsV);
 			return true;
 		}
 		
@@ -182,22 +172,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Points ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(", ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(", ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(D.getGeoObjectLabel());
-			sb.append(" are not concyclic");
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_CONCYCLIC, pointsV);
 			return true;
 		}
 		
@@ -223,22 +203,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Segment with endpoints ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(" and segment with endpoints ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(D.getGeoObjectLabel());
-			sb.append(" are not of same lengths");
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_EQ_SEG, pointsV);
 			return true;
 		}
 		
@@ -268,21 +238,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Line through points ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(" is not parallel with line through points ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(D.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_PARALLEL, pointsV);
 			return true;
 		}
 		
@@ -312,21 +273,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Line through points ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(" is not perpendicular to line through points ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(D.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_PERPENDICULAR, pointsV);
 			return true;
 		}
 		
@@ -360,21 +312,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		if ((statementXPoly != null && statementXPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) ||
 			(statementYPoly != null && statementYPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) ||
 			(statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial()))) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Pair of points ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(" is not in harmonic conjunction with pair of points ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(D.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_HARMONIC, pointsV);
 			return true;
 		}
 		
@@ -409,21 +352,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Segment with endpoints ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(" is not collinear and congruent with segment with endpoints ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(D.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_CONG_COLL_SEG, pointsV);
 			return true;
 		}
 		
@@ -455,21 +389,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Point ");
-			sb.append(D.getGeoObjectLabel());
-			sb.append(" is not on angle bisector of angle with vertex ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(" and two points from different rays ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(C.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_ON_ANG_BIS, pointsV);
 			return true;
 		}
 		
@@ -504,21 +429,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			                                                    .addPolynomial(statementPolyD.clone().multiplyByPolynomial(statementPolyD));
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Points ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(D.getGeoObjectLabel());
-			sb.append(" are not together on circle with center ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and one point on it ");
-			sb.append(B.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_2_ON_CIRCLE, pointsV);
 			return true;
 		}
 		
@@ -546,21 +462,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Point ");
-			sb.append(D.getGeoObjectLabel());
-			sb.append(" is not on circle with center ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and radius equal to segment with endpoints ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(C.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_ON_CIRCLE, pointsV);
 			return true;
 		}
 		
@@ -597,21 +504,12 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		if ((statementXPoly != null && statementXPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) ||
 			(statementYPoly != null && statementYPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) ||
 			(statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial()))) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Points ");
-			sb.append(C.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(D.getGeoObjectLabel());
-			sb.append(" are not two inverse points with respect to circle with center ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and one point from it ");
-			sb.append(B.getGeoObjectLabel());
 			Vector<Point> pointsV = new Vector<Point>();
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewText(pointsV, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_INVERSE, pointsV);
 			return true;
 		}
 		
@@ -889,7 +787,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 		// check two points on perpendicular bisector of same segment
 		// TODO
 		
-		// check two right angles (<ABC && <BCD)
+		// check two right angles (<ABC && <BCD) - isn't this sub-case of AB || CD ?
 		// TODO
 		
 		// check two touching circles (each either with center and point or with diameter)
