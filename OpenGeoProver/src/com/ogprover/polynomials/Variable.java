@@ -15,7 +15,7 @@ import com.ogprover.main.OpenGeoProver;
  * @version 1.00
  * @author Ivan Petrovic
  */
-public abstract class Variable implements Comparable<Variable>, Cloneable {
+public abstract class Variable implements Comparable<Variable>, Cloneable, RationalAlgebraicExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -189,9 +189,7 @@ public abstract class Variable implements Comparable<Variable>, Cloneable {
 	 * ======================================================================
 	 */
 	/**
-	 * Method for printing variable object in LaTex format.
-	 * 
-	 * @return	String object with variable object printed in LaTeX format.
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToLaTeX()
 	 */
 	public String printToLaTeX() {
 		StringBuilder sb = new StringBuilder();
@@ -224,9 +222,7 @@ public abstract class Variable implements Comparable<Variable>, Cloneable {
 	}
 	
 	/**
-	 * Method for printing variable object in XML format.
-	 * 
-	 * @return	String object with variable object printed in XML format.
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToXML()
 	 */
 	public String printToXML() {
 		StringBuilder sb = new StringBuilder();
@@ -276,6 +272,23 @@ public abstract class Variable implements Comparable<Variable>, Cloneable {
 		}
 		sb.append("</proof_var>");
 		
+		return sb.toString();
+	}
+	
+	/**
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#print()
+	 */
+	public String print() {
+		short varType = this.getVariableType();
+		StringBuilder sb = new StringBuilder();
+		if (varType == Variable.VAR_TYPE_UX_U || varType == Variable.VAR_TYPE_UX_X) {
+			sb.append((varType == Variable.VAR_TYPE_UX_U) ? "u" : "x");
+			sb.append(this.getIndex());
+		}
+		else if (varType == Variable.VAR_TYPE_SYMB_X || varType == Variable.VAR_TYPE_SYMB_Y) {
+			sb.append((varType == Variable.VAR_TYPE_SYMB_X) ? "x" : "y");
+			sb.append(((SymbolicVariable)this).getPointLabel());
+		}
 		return sb.toString();
 	}
 }

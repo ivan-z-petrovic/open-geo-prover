@@ -293,13 +293,8 @@ public class XTerm extends Term {
 	}
 	
 	/**
-	 * Method for printing x-term object in LaTex format
-	 * 
-	 * @return	String object with x-term object printed in LaTeX format
-	 * 
-	 * @see com.ogprover.polynomials.Term#printToLaTeX()
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToLaTeX()
 	 */
-	@Override
 	public String printToLaTeX() {
 		int size = this.powers.size(), ii = 0;
 		StringBuilder sb = new StringBuilder();
@@ -355,13 +350,8 @@ public class XTerm extends Term {
 	}
 	
 	/**
-	 * Method for printing x-term object in XML format
-	 * 
-	 * @return	String object with x-term object printed in XML format
-	 * 
-	 * @see com.ogprover.polynomials.Term#printToXML()
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToXML()
 	 */
-	@Override
 	public String printToXML() {
 		StringBuilder sb = new StringBuilder();
 		
@@ -425,5 +415,53 @@ public class XTerm extends Term {
 			return "??"; // too long term for output
 		
 		return xmlText;
+	}
+
+	/**
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#print()
+	 */
+	public String print() {
+		int size = this.powers.size(), ii = 0;
+		StringBuilder sb = new StringBuilder();
+		
+		// don't print zero term
+		if (this.uCoeff.isZero())
+			return "";
+		
+		// print coefficient
+		String stringUCoeff = this.uCoeff.print();
+		int len = 0, lenUCoeff = stringUCoeff.length();
+		
+		if (lenUCoeff == 0) {
+			// if uCoeff is equals to 1 or -1 print it if there are no powers in x-term
+			double uCoeff = ((UTerm)this.uCoeff.getNumerator().getTermsAsDescList().get(0)).getCoeff(); // coefficient of single u-term from u-fraction
+			double shiftedUCoeff = (uCoeff > 0) ? uCoeff - 1 : uCoeff + 1;
+			
+			if (shiftedUCoeff > -OGPConstants.EPSILON && shiftedUCoeff < OGPConstants.EPSILON) {
+				if (this.powers.size() == 0)
+					return (uCoeff > 0) ? "1" : "-1";
+			}
+		}
+		
+		if (stringUCoeff.startsWith("...")) // this means that coefficient is too long
+			return "...";
+
+		sb.append(stringUCoeff);
+		len = lenUCoeff;
+		
+		// print all powers one by one in descending order - they are already sorted
+		StringBuilder tempSb = new StringBuilder();
+		while (ii < size) {
+			tempSb.append(this.powers.get(ii).print());
+			ii++;
+		}
+		
+		String stringPowers = tempSb.toString();
+		int lenPowers = stringPowers.length();
+		
+		if (len + lenPowers > OGPConstants.MAX_OUTPUT_POLY_CHARS_NUM)
+			return "...";
+		sb.append(stringPowers);
+		return sb.toString();
 	}
 }

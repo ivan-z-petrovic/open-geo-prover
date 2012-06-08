@@ -1,4 +1,4 @@
-<project name="OpenGeoProver" default="dist" basedir=".">
+<project name="OGPForGeoGebra" default="dist" basedir=".">
 	
 	<!-- Set global properties for this build -->
 	<property file="build.properties"/>

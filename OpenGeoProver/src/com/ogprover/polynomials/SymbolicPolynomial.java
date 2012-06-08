@@ -155,11 +155,8 @@ public class SymbolicPolynomial extends Polynomial {
 	 * ======================================================================
 	 */
 	/**
-	 * Method to print polynomial in LaTeX format
-	 * 
-	 * @see com.ogprover.polynomials.Polynomial#printToLaTeX()
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToLaTeX()
 	 */
-	@Override
 	public String printToLaTeX() {
 		StringBuilder sb = new StringBuilder();
 		boolean firstTerm = true;
@@ -199,11 +196,8 @@ public class SymbolicPolynomial extends Polynomial {
 	}
 	
 	/**
-	 * Method to print polynomial in XML format
-	 * 
-	 * @see com.ogprover.polynomials.Polynomial#printToXML()
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToXML()
 	 */
-	@Override
 	public String printToXML() {
 		StringBuilder sb = new StringBuilder();
 		ArrayList<Term> list = this.getTermsAsDescList();
@@ -244,6 +238,36 @@ public class SymbolicPolynomial extends Polynomial {
 			return "??"; // polynomial is too long for output
 		
 		return xmlText;
+	}
+	
+	/**
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#print()
+	 */
+	public String print() {
+		StringBuilder sb = new StringBuilder();
+		boolean firstTerm = true;
+		ArrayList<Term> list = this.getTermsAsDescList();
+		
+		for (int ii = 0, size = list.size(); ii < size; ii++) {
+			Term t = list.get(ii);
+			String stringTerm = t.print();
+			
+			if (stringTerm.startsWith("..."))
+				return "..."; // term is too long for output
+			
+			if (!firstTerm && ((UTerm)t).getCoeff() > 0)
+				sb.append("+");
+			
+			sb.append(stringTerm);
+			
+			if (firstTerm)
+				firstTerm = false;
+		}
+		
+		String stringPoly = sb.toString();
+		if (stringPoly.length() > OGPConstants.MAX_OUTPUT_POLY_CHARS_NUM)
+			return "...";
+		return stringPoly;
 	}
 	
 	/**
