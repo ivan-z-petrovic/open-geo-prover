@@ -77,6 +77,10 @@ public class NDGCondition {
 	 */
 	private String bestDescription = null;
 	/**
+	 * List of points whose special position best describes this NDG condition.
+	 */
+	private Vector<Point> bestPointList = null;
+	/**
 	 * Number of free points in list of points whose special 
 	 * position best describes this NDG condition.
 	 */
@@ -98,6 +102,36 @@ public class NDGCondition {
 	 */
 	private int numOfAllPts = 0;
 	
+	/*
+	 * Types of NDG conditions
+	 */
+	public static final String NDG_TYPE_POLYNOMIAL			= "ndgPolynomial";
+	public static final String NDG_TYPE_2PT_IDENTICAL		= "ndg2IdenticalPoints";
+	public static final String NDG_TYPE_3PT_COLLINEAR		= "ndg3CollinearPoints";
+	public static final String NDG_TYPE_3PT_MIDPOINT		= "ndgSegmentMidpoint";
+	public static final String NDG_TYPE_3PT_ON_PERP_BIS		= "ndgOnPerpendicularBisector";
+	public static final String NDG_TYPE_3PT_RIGHT_ANG		= "ndgRightAngle";
+	public static final String NDG_TYPE_3PT_ON_CIRCLE		= "ndgOnCircleWithCenterAndPoint";
+	public static final String NDG_TYPE_3PT_SEG_SUM			= "ndg3SegmentsSum";
+	public static final String NDG_TYPE_4PT_COLLINEAR		= "ndg4CollinearPoints";
+	public static final String NDG_TYPE_4PT_CONCYCLIC		= "ndg4ConcyclicPoints";
+	public static final String NDG_TYPE_4PT_EQ_SEG			= "ndg2EqualSegments";
+	public static final String NDG_TYPE_4PT_PARALLEL		= "ndg2ParallelLines";
+	public static final String NDG_TYPE_4PT_PERPENDICULAR	= "ndg2PerpendicularLines";
+	public static final String NDG_TYPE_4PT_HARMONIC		= "ndg4HarmonicPoints";
+	public static final String NDG_TYPE_4PT_CONG_COLL_SEG	= "ndg2CollinearCongruentSegments";
+	public static final String NDG_TYPE_4PT_ON_ANG_BIS		= "ndgOnAngleBisector";
+	public static final String NDG_TYPE_4PT_2_ON_CIRCLE		= "ndg2PointsOnCircle";
+	public static final String NDG_TYPE_4PT_ON_CIRCLE		= "ndgOnCircleWithCenterAndRadius";
+	public static final String NDG_TYPE_4PT_INVERSE			= "ndg2InversePoints";
+	public static final String NDG_TYPE_4PT_2_ON_PERP_BIS	= "ndg2PointsOnPerpendicularBisector";
+	public static final String NDG_TYPE_4PT_TOUCH_CIRCLES	= "ndg2TouchingCircles";
+	// TODO - other types of NDGs ...
+	
+	/**
+	 * Type of this NDG condition - one of NDG_TYPE_xxx constants.
+	 */
+	private String ndgType;
 	
 	
 	
@@ -177,6 +211,20 @@ public class NDGCondition {
 	}
 
 	/**
+	 * @param bestPointList the bestPointList to set
+	 */
+	public void setBestPointList(Vector<Point> bestPointList) {
+		this.bestPointList = bestPointList;
+	}
+	
+	/**
+	 * @return the bestPointList
+	 */
+	public Vector<Point> getBestPointList() {
+		return bestPointList;
+	}
+
+	/**
 	 * @param numOfFreePts the numOfFreePts to set
 	 */
 	public void setNumOfFreePts(int numOfFreePts) {
@@ -231,10 +279,23 @@ public class NDGCondition {
 	public int getNumOfAllPts() {
 		return numOfAllPts;
 	}
+	
+	/**
+	 * @return the ndgType
+	 */
+	public String getNdgType() {
+		return ndgType;
+	}
 
+	/**
+	 * @param ndgType the ndgType to set
+	 */
+	public void setNdgType(String ndgType) {
+		this.ndgType = ndgType;
+	}
 	
 	
-	
+
 	/*
 	 * ======================================================================
 	 * ========================== CONSTRUCTORS ==============================
@@ -245,6 +306,7 @@ public class NDGCondition {
 	 */
 	public NDGCondition(XPolynomial ndgPoly){
 		this.polynomial = ((XPolynomial) ndgPoly.clone()).reduceUTerms(false); // partial reduction of u-terms
+		this.ndgType = NDGCondition.NDG_TYPE_POLYNOMIAL;
 	}
 	
 	
@@ -259,21 +321,23 @@ public class NDGCondition {
 	 * Method for adding new text in list of strings that describe positions
 	 * of points that make this NDG condition. Also, best description is updated.
 	 * 
+	 * @param ndgType	Type of this NDG condition - one of NDG_TYPE_xxx constants.
 	 * @param pointList	List of points whose special position generates this NDG condition.
-	 * @param textStr	Text for description of this NDG condition.
 	 */
-	public void addNewText(Vector<Point> pointList, String textStr) {
-		if (pointList== null || textStr == null)
-			return;
+	public void addNewTranslation(String ndgType, Vector<Point> pointList) {
+		// Assumption: arguments are not null.
 		
 		if (this.textList == null)
 			this.textList = new Vector<String>();
 		
+		String textStr = NDGCondition.getNDGConditionText(ndgType, pointList);
 		this.textList.add(textStr);
 		
 		// Update elements for best description
 		if (this.bestDescription == null) {
+			this.ndgType = ndgType;
 			this.bestDescription = textStr;
+			this.bestPointList = pointList;
 			this.numOfAllPts = pointList.size();
 			this.numOfFreePts = 0;
 			this.numOfRndPts = 0;
@@ -314,7 +378,9 @@ public class NDGCondition {
 				this.numOfFreePts = newNumOfFreePts;
 				this.numOfRndPts = newNumOfRndPts;
 				this.numOfDependentPts = newNumOfDependentPts;
+				this.ndgType = ndgType;
 				this.bestDescription = textStr;
+				this.bestPointList = pointList;
 			}
 		}
 	}
@@ -458,5 +524,251 @@ public class NDGCondition {
 		// Couldn't find readable form - text of this NDG condition remains empty
 		// but this NDG condition will be printed as polynomial
 		return OGPConstants.RET_CODE_SUCCESS;
+	}
+	
+	/**
+	 * <i>
+	 * Method that retrieves the textual description of NDG condition based on its type and by using
+	 * list of points that are arguments of NDG condition.
+	 * </i>
+	 * 
+	 * @param ndgType		The type of some NDG condition
+	 * @param points		List of points which make the NDG condition
+	 * @return				Textual description of NDG condition, or null if not found
+	 */
+	public static String getNDGConditionText(String ndgType, Vector<Point> points) {
+		// Note: it is assumed that passed in list of points isn't empty and has correct number of points.
+		Point pt1 = points.get(0);
+		Point pt2 = points.get(1);
+		Point pt3 = (points.size() > 2) ? points.get(2) : null;
+		Point pt4 = (points.size() > 3) ? points.get(3) : null;
+		
+		StringBuilder sb = new StringBuilder();
+		
+		if (ndgType == NDGCondition.NDG_TYPE_2PT_IDENTICAL) {
+			sb.append("Points ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(" are not identical");
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_3PT_COLLINEAR) {
+			sb.append("Points ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(", ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" are not collinear");
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_3PT_MIDPOINT) {
+			sb.append("Point ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" is not the midpoint of segment with endpoints ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_3PT_ON_PERP_BIS) {
+			sb.append("Point ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" is not on perpendicular bisector of segment with endpoints ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_3PT_RIGHT_ANG) {
+			sb.append("Line through points ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" is not perpendicular to line through points ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_3PT_ON_CIRCLE) {
+			sb.append("Point ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" is not on circle with center ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and point from it ");
+			sb.append(pt2.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_3PT_SEG_SUM) {
+			sb.append("Segment with endpoints ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(" is not sum of two segments: segment with endpoints ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and segment with endpoints ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_COLLINEAR) {
+			sb.append("Points ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(", ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(", ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt4.getGeoObjectLabel());
+			sb.append(" are not collinear");
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_CONCYCLIC) {
+			sb.append("Points ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(", ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(", ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt4.getGeoObjectLabel());
+			sb.append(" are not concyclic");
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_EQ_SEG) {
+			sb.append("Segment with endpoints ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(" and segment with endpoints ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt4.getGeoObjectLabel());
+			sb.append(" are not of same lengths");
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_PARALLEL) {
+			sb.append("Line through points ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(" is not parallel with line through points ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt4.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_PERPENDICULAR) {
+			sb.append("Line through points ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(" is not perpendicular to line through points ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt4.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_HARMONIC) {
+			sb.append("Pair of points ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(" is not in harmonic conjunction with pair of points ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt4.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_CONG_COLL_SEG) {
+			sb.append("Segment with endpoints ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(" is not collinear and congruent with segment with endpoints ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt4.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_ON_ANG_BIS) {
+			sb.append("Point ");
+			sb.append(pt4.getGeoObjectLabel());
+			sb.append(" is not on angle bisector of angle with vertex ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(" and two points from different rays ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt3.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_2_ON_CIRCLE) {
+			sb.append("Points ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt4.getGeoObjectLabel());
+			sb.append(" are not together on circle with center ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and one point on it ");
+			sb.append(pt2.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_ON_CIRCLE) {
+			sb.append("Point ");
+			sb.append(pt4.getGeoObjectLabel());
+			sb.append(" is not on circle with center ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and radius equal to segment with endpoints ");
+			sb.append(pt2.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt3.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_INVERSE) {
+			sb.append("Points ");
+			sb.append(pt3.getGeoObjectLabel());
+			sb.append(" and ");
+			sb.append(pt4.getGeoObjectLabel());
+			sb.append(" are not two inverse points with respect to circle with center ");
+			sb.append(pt1.getGeoObjectLabel());
+			sb.append(" and one point from it ");
+			sb.append(pt2.getGeoObjectLabel());
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_2_ON_PERP_BIS) {
+			// TODO
+			return sb.toString();
+		}
+		
+		if (ndgType == NDGCondition.NDG_TYPE_4PT_TOUCH_CIRCLES) {
+			// TODO
+			return sb.toString();
+		}
+		// TODO - other types of NDG conditions
+		
+		return null;
 	}
 }

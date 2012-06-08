@@ -19,7 +19,7 @@ import com.ogprover.utilities.logger.ILogger;
  * @version 1.00
  * @author Ivan Petrovic
  */
-public abstract class Term implements Comparable<Term>, Cloneable{
+public abstract class Term implements Comparable<Term>, Cloneable, RationalAlgebraicExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -114,18 +114,7 @@ public abstract class Term implements Comparable<Term>, Cloneable{
 	 * @return	True if term is zero and false otherwise
 	 */
 	public abstract boolean isZero();
-	/**
-	 * Method for printing this term in LaTeX format
-	 * 
-	 * @return	String representing this term in LaTeX format
-	 */
-	public abstract String printToLaTeX();
-	/**
-	 * Method for printing this term in XML format
-	 * 
-	 * @return	String representing this term in XML format
-	 */
-	public abstract String printToXML();
+	
 	
 	
 	/*
