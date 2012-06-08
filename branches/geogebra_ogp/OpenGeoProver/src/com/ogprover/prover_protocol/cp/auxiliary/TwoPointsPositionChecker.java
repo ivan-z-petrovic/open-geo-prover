@@ -105,13 +105,7 @@ public class TwoPointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Points ");
-			sb.append(A.getGeoObjectLabel());
-			sb.append(" and ");
-			sb.append(B.getGeoObjectLabel());
-			sb.append(" are not identical");
-			this.ndgCond.addNewText(pointList, sb.toString());
+			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_2PT_IDENTICAL, pointList);
 			return true;
 		}
 		

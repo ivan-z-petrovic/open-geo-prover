@@ -729,13 +729,13 @@ public class MTestPolynomials {
 		r = r.pseudoReminder(q, 3);
 		s.endMeasureTime();
 		
-		System.out.println("p = " + p.printToLaTeX());
+		System.out.println("p = " + p.print());
 		System.out.println();
-		System.out.println("q = " + q.printToLaTeX());
+		System.out.println("q = " + q.print());
 		System.out.println();
 		System.out.println("==================================");
 		System.out.println();
-		System.out.println("prem(p, q, x_3) = " + r.printToLaTeX());
+		System.out.println("prem(p, q, x_3) = " + r.print());
 		System.out.println();
 		System.out.println("Reminder calculated in " + s.getTimeIntMillisec() + " millisec.");
 		
@@ -821,13 +821,13 @@ public class MTestPolynomials {
 		r1 = r1.pseudoReminder(q1, 2);
 		s.endMeasureTime();
 		
-		System.out.println("p1 = " + p1.printToLaTeX());
+		System.out.println("p1 = " + p1.print());
 		System.out.println();
-		System.out.println("q1 = " + q1.printToLaTeX());
+		System.out.println("q1 = " + q1.print());
 		System.out.println();
 		System.out.println("==================================");
 		System.out.println();
-		System.out.println("prem(p1, q1, x_2) = " + r1.printToLaTeX());
+		System.out.println("prem(p1, q1, x_2) = " + r1.print());
 		System.out.println();
 		System.out.println("Reminder calculated in " + s.getTimeIntMillisec() + " millisec.");
 		
@@ -882,9 +882,9 @@ public class MTestPolynomials {
 		
 		System.out.println();
 		System.out.println();
-		System.out.println("Reducing polynomial:" + testXP.printToLaTeX());
+		System.out.println("Reducing polynomial:" + testXP.print());
 		System.out.println();
-		System.out.println("Result of reduction:" + testXP.reduceByUTermDivision().printToLaTeX());
+		System.out.println("Result of reduction:" + testXP.reduceByUTermDivision().print());
 		System.out.println();
 		
 	}
