@@ -133,11 +133,8 @@ public class XPolynomial extends Polynomial {
 	 * ======================================================================
 	 */
 	/**
-	 * Method to print polynomial in LaTeX format
-	 * 
-	 * @see com.ogprover.polynomials.Polynomial#printToLaTeX()
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToLaTeX()
 	 */
-	@Override
 	public String printToLaTeX() {
 		StringBuilder sb = new StringBuilder();
 		boolean firstTerm = true;
@@ -188,11 +185,8 @@ public class XPolynomial extends Polynomial {
 	}
 	
 	/**
-	 * Method to print polynomial in XML format
-	 * 
-	 * @see com.ogprover.polynomials.Polynomial#printToXML()
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToXML()
 	 */
-	@Override
 	public String printToXML() {
 		StringBuilder sb = new StringBuilder();
 		ArrayList<Term> list = this.getTermsAsDescList();
@@ -239,6 +233,45 @@ public class XPolynomial extends Polynomial {
 			return "??"; // polynomial is too long for output
 		
 		return xmlText;
+	}
+	
+	/**
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#print()
+	 */
+	public String print() {
+		StringBuilder sb = new StringBuilder();
+		ArrayList<Term> list = this.getTermsAsDescList();
+		int size = list.size(), textSize = 0;
+		
+		if (size == 0)
+			return "0";
+		
+		for (int ii = 0; ii < size; ii++) {
+			Term t = list.get(ii);
+			((XTerm)t).reduce();
+			String stringTerm = t.print();
+			
+			if (stringTerm.startsWith("...")) {
+				sb.append("+...");
+				return sb.toString();
+			}
+			
+			int len = stringTerm.length();
+			
+			if (ii != 0 && !((XTerm)t).getUCoeff().isSingleNegativeTerm())
+				sb.append("+");
+			
+			if (textSize + len <= OGPConstants.MAX_OUTPUT_POLY_CHARS_NUM) {
+				sb.append(stringTerm);
+				textSize += len;
+			}
+			else {
+				sb.append("+...");
+				return sb.toString();
+			}
+		}
+		
+		return sb.toString();
 	}
 	
 	/**
@@ -794,5 +827,4 @@ public class XPolynomial extends Polynomial {
 		
 		return posPolyResidum.equals(conditionPoly);
 	}
-	
 }

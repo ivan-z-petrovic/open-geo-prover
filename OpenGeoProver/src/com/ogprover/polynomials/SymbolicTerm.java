@@ -258,13 +258,8 @@ public class SymbolicTerm extends Term {
 	}
 	
 	/**
-	 * Method for printing generic term object in LaTeX format
-	 * 
-	 * @return	String object with generic term object printed in LaTeX format
-	 * 
-	 * @see com.ogprover.polynomials.Term#printToLaTeX()
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToLaTeX()
 	 */
-	@Override
 	public String printToLaTeX() {
 		int size = this.powers.size(), ii = 0;
 		StringBuilder sb = new StringBuilder();
@@ -307,13 +302,8 @@ public class SymbolicTerm extends Term {
 	}
 	
 	/**
-	 * Method for printing generic term object in XML format
-	 * 
-	 * @return	String object with generic term object printed in XML format
-	 * 
-	 * @see com.ogprover.polynomials.Term#printToXML()
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToXML()
 	 */
-	@Override
 	public String printToXML() {
 		int size = this.powers.size(), ii = 0;
 		StringBuilder sb = new StringBuilder();
@@ -365,6 +355,50 @@ public class SymbolicTerm extends Term {
 			return "??"; // term is too long for output
 		
 		return xmlTerm;
+	}
+	
+	/**
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#print()
+	 */
+	public String print() {
+		int size = this.powers.size(), ii = 0;
+		StringBuilder sb = new StringBuilder();
+		double coeffSqr = this.coeff * this.coeff, 
+			   decrCoeffSqr = coeffSqr - 1,
+			   incrCoeff = this.coeff + 1;
+		long wholeCoeffPart = 0;
+		double diff = 0;
+		
+		// don't print zero term
+		if (this.coeff > -OGPConstants.EPSILON && this.coeff < OGPConstants.EPSILON)
+			return "";
+		
+		// if term is constant or coefficient is not 1 and -1, add coefficient
+		if (size == 0 || decrCoeffSqr <= -OGPConstants.EPSILON || decrCoeffSqr >= OGPConstants.EPSILON) {
+			// special case - printing integer coefficient
+			wholeCoeffPart = Math.round(this.coeff);
+			diff = this.coeff - wholeCoeffPart;
+			if (diff > -OGPConstants.EPSILON && diff < OGPConstants.EPSILON)
+				sb.append(wholeCoeffPart);
+			else // print double coefficient
+				sb.append(OGPUtilities.roundUpToPrecision(this.coeff));
+		}
+		// if term is not constant and coefficient is -1, just write sign
+		else if (incrCoeff > -OGPConstants.EPSILON && incrCoeff < OGPConstants.EPSILON)
+			sb.append("-");
+		
+		// print all powers one by one in descending order - they are already sorted
+		while (ii < size) {
+			sb.append(this.powers.get(ii).print());
+			ii++;
+		}
+		
+		String stringTerm = sb.toString();
+		
+		if (stringTerm.length() > OGPConstants.MAX_OUTPUT_POLY_CHARS_NUM)
+			return "..."; // term is too long for output
+		
+		return stringTerm;
 	}
 	
 	// Overriding unnecessary methods from Term class - no Javadoc comments for these

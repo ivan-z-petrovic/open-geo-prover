@@ -18,7 +18,7 @@ import com.ogprover.main.OGPConstants;
  * @version 1.00
  * @author Ivan Petrovic
  */
-public class UFraction implements Cloneable {
+public class UFraction implements Cloneable, RationalAlgebraicExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -393,9 +393,7 @@ public class UFraction implements Cloneable {
 	}
 	
 	/**
-	 * Method for printing fraction in LaTeX format
-	 * 
-	 * @return	String object with fraction object printed in LaTeX format
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToLaTeX()
 	 */
 	public String printToLaTeX() {
 		StringBuilder sb = new StringBuilder();
@@ -454,9 +452,7 @@ public class UFraction implements Cloneable {
 	}
 	
 	/**
-	 * Method for printing fraction in XML format
-	 * 
-	 * @return	String object with fraction object printed in XML format
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#printToXML()
 	 */
 	public String printToXML() {
 		StringBuilder sb = new StringBuilder();
@@ -520,5 +516,70 @@ public class UFraction implements Cloneable {
 			return "??";
 		
 		return xmlText;
+	}
+
+	/**
+	 * @see com.ogprover.polynomials.RationalAlgebraicExpression#print()
+	 */
+	public String print() {
+		StringBuilder sb = new StringBuilder();
+		boolean isDenOne = false;
+		
+		// check whether denominator is constant 1.
+		if (this.denominator.getTerms().size() == 1) {
+			UTerm ut = (UTerm)this.denominator.getTerms().get(this.denominator.getTerms().firstKey());
+			double coeffDiff = ut.getCoeff() - 1;
+			
+			// check whether this term is constant 1
+			if (coeffDiff > -OGPConstants.EPSILON && coeffDiff < OGPConstants.EPSILON && ut.getPowers().size() == 0)
+				isDenOne = true;
+		}
+		
+		String stringNum = this.numerator.print();
+		String stringDen;
+		
+		if (isDenOne) {
+			if (stringNum.startsWith("...")) // numerator is too long for output
+				return "...";
+			
+			if (this.numerator.getTerms().size() > 1) {
+				sb.append("(");
+				sb.append(stringNum);
+				sb.append(")");
+			}
+			else {
+				UTerm ut = (UTerm)this.numerator.getTerms().get(this.numerator.getTerms().firstKey());
+				double uCoeff = ut.getCoeff();
+				double uCoeffDiff = ((uCoeff > 0) ? uCoeff - 1 : uCoeff + 1);
+				
+				// this single term in u-polynomial is -1 or 1
+				if (ut.getPowers().size() == 0 && uCoeffDiff > -OGPConstants.EPSILON && uCoeffDiff < OGPConstants.EPSILON) {
+					if (uCoeff < 0)
+						sb.append("-");
+				}
+				else
+					sb.append(stringNum);
+			}
+		}
+		else {
+			stringDen = this.denominator.print();
+			if (stringNum.length() > OGPConstants.MAX_OUTPUT_POLY_CHARS_NUM ||
+				stringDen.length() > OGPConstants.MAX_OUTPUT_POLY_CHARS_NUM)
+				return "..."; // impossible to divide fraction
+				
+			sb.append("(");
+			sb.append(stringNum);
+			sb.append(")");
+			sb.append("/");
+			if (this.denominator.getTerms().size() > 1) {
+				sb.append("(");
+				sb.append(stringDen);
+				sb.append(")");
+			}
+			else
+				sb.append(stringDen);
+		}
+		
+		return sb.toString();
 	}
 }

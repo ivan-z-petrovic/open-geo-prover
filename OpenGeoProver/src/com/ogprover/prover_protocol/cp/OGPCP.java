@@ -1082,12 +1082,50 @@ public class OGPCP {
 		
 		for (NDGCondition ndgCond : this.ndgConditions) {
 			if (ndgCond.transformToUserReadableForm() != OGPConstants.RET_CODE_SUCCESS) {
-				OpenGeoProver.settings.getLogger().error("Failed to translate NDG condition " + ndgCond.getPolynomial().printToLaTeX());
+				OpenGeoProver.settings.getLogger().error("Failed to translate NDG condition " + ndgCond.getPolynomial().print());
 				return OGPConstants.ERR_CODE_GENERAL;
 			}
 		}
 		
 		return OGPConstants.RET_CODE_SUCCESS;
+	}
+	
+	/**
+	 * Method which creates and populates a vector with translated NDG conditions.
+	 * First of all it calls translation of NDG conditions to user readable format.
+	 * Elements of vector are strings in format:
+	 *    <b>"ndgType[A1, A2, ..., An]"</b>
+	 * where Ai are points which generate the special position for this NDG condition.
+	 * If ndgType is polynomial representation, then string will be
+	 *    <b>"ndgType[polynomial in textual format]"</b>.
+	 * Generated list can be used outside of OGP.
+	 *  
+	 * @return	List with NDG conditions.
+	 */
+	public Vector<String> exportTranslatedNDGConditions() {
+		if (this.translateNDGConditionsToUserReadableForm() != OGPConstants.RET_CODE_SUCCESS)
+			return null;
+		
+		Vector<String> ndgList = new Vector<String>();
+		for (NDGCondition ndgc : this.ndgConditions) {
+			StringBuilder sbNdgText = new StringBuilder(ndgc.getNdgType());
+			
+			sbNdgText.append("[");
+			if (ndgc.getNdgType().equals(NDGCondition.NDG_TYPE_POLYNOMIAL))
+				sbNdgText.append(ndgc.getPolynomial().print());
+			else {
+				Vector<Point> ptList = ndgc.getBestPointList();
+				for (int ii = 0, jj = ptList.size(); ii < jj; ii++) {
+					if (ii > 0)
+						sbNdgText.append(", ");
+					sbNdgText.append(ptList.get(ii).getGeoObjectLabel());
+				}
+			}
+			sbNdgText.append("]");
+			ndgList.add(sbNdgText.toString());
+		}
+		
+		return ndgList;
 	}
 	
 	/**
