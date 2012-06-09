@@ -4,8 +4,8 @@
 
 package com.ogprover.test.formats.ogp_xml;
 
-import com.ogprover.prover_protocol.cp.auxiliary.RatioProduct;
-import com.ogprover.prover_protocol.cp.thmstatement.EqualityOfRatioProducts;
+import com.ogprover.pp.tp.auxiliary.RatioProduct;
+import com.ogprover.pp.tp.thmstatement.EqualityOfRatioProducts;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;

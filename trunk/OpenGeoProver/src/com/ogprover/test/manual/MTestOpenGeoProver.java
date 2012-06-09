@@ -13,7 +13,7 @@ import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OGPParameters;
 import com.ogprover.main.OGPReport;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
+import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.test.formats.ogp_xml.OGPCPXMLParser;
 import com.ogprover.thmprover.AlgebraicMethodProver;
 import com.ogprover.thmprover.TheoremProver;
@@ -44,7 +44,7 @@ public class MTestOpenGeoProver {
 	 * 
 	 * @param cp	Construction Protocol
 	 */
-	public static void simulateTheoremProving(OGPCP cp) {
+	public static void simulateTheoremProving(OGPTP cp) {
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
@@ -144,7 +144,7 @@ public class MTestOpenGeoProver {
 	 */
 	public static void testTheoremProving(String inputFileName) {
 		OGPCPXMLParser parser = new OGPCPXMLParser();
-		OGPCP consProtocol = parser.readGeoTheoremFromXML(inputFileName);
+		OGPTP consProtocol = parser.readGeoTheoremFromXML(inputFileName);
 		MTestOpenGeoProver.simulateTheoremProving(consProtocol);
 	}
 	

@@ -4,7 +4,7 @@
 
 package com.ogprover.test.formats.ogp_xml;
 
-import com.ogprover.prover_protocol.cp.geoconstruction.GeneralConicSection;
+import com.ogprover.pp.tp.geoconstruction.GeneralConicSection;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;

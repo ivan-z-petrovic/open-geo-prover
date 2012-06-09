@@ -5,11 +5,11 @@
 package com.ogprover.test.formats.ogp_xml;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
-import com.ogprover.prover_protocol.cp.geoconstruction.Point;
-import com.ogprover.prover_protocol.cp.geoconstruction.SetOfPoints;
-import com.ogprover.prover_protocol.cp.geoconstruction.TangentLine;
+import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
+import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.geoconstruction.SetOfPoints;
+import com.ogprover.pp.tp.geoconstruction.TangentLine;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -42,7 +42,7 @@ public class TangentLineConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
 		String label = reader.getAttribute("label");
 		String basept = reader.getAttribute("basept");
 		String pointset = reader.getAttribute("pointset");

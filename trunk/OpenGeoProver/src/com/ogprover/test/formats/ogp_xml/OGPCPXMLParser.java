@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
+import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.utilities.io.CustomFileReader;
 import com.ogprover.utilities.io.CustomFileWriter;
 import com.ogprover.utilities.logger.ILogger;
@@ -36,7 +36,7 @@ public class OGPCPXMLParser {
 	public OGPCPXMLParser() {
 		xstream = new XStream();
 		// configuring xstream
-		xstream.alias("geothm", OGPCP.class); // main tag is associated with GeoTheorem class
+		xstream.alias("geothm", OGPTP.class); // main tag is associated with GeoTheorem class
 		/*
 		 *  registering custom converters
 		 */
@@ -151,7 +151,7 @@ public class OGPCPXMLParser {
 	 * @return				GeoTheorem object if successfully read from xml file, 
 	 * 						null otherwise
 	 */
-	public OGPCP readGeoTheoremFromXML(String fileName) {
+	public OGPTP readGeoTheoremFromXML(String fileName) {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (fileName == null) {
@@ -159,7 +159,7 @@ public class OGPCPXMLParser {
 			return null;
 		}
 		
-		OGPCP consProtocol = null;
+		OGPTP consProtocol = null;
 		InputStream input = null;
 		String xstreamFileName = this.getAbsoluteFileName(fileName);
 		
@@ -177,7 +177,7 @@ public class OGPCPXMLParser {
 			Object obj = this.xstream.fromXML(input);
 			
 			if (obj != null)
-				consProtocol = (OGPCP)obj;
+				consProtocol = (OGPTP)obj;
 		} catch (FileNotFoundException e) {
 			logger.error("Error happend when reading file " + xstreamFileName);			
 		} finally {
@@ -196,10 +196,10 @@ public class OGPCPXMLParser {
 	/**
 	 * Method for writing passed in GeoTheorem object to XML file.
 	 * 
-	 * @param consProtocol		Construction protocol to be converted to XML format
+	 * @param consProtocol		Theorem protocol to be converted to XML format
 	 * @param fileName			Name of output xml file
 	 */
-	public void writeGeoTheoremToXML(OGPCP consProtocol, String fileName) {
+	public void writeGeoTheoremToXML(OGPTP consProtocol, String fileName) {
 		CustomFileWriter writer = null;
 		try {
 			writer = new CustomFileWriter(OGPCPXMLParser.XML_DIR_NAME, fileName, "xml");

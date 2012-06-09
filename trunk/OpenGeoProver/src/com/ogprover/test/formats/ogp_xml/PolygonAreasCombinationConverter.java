@@ -7,9 +7,9 @@ package com.ogprover.test.formats.ogp_xml;
 import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoconstruction.Point;
-import com.ogprover.prover_protocol.cp.thmstatement.LinearCombinationOfDoubleSignedPolygonAreas;
+import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.thmstatement.LinearCombinationOfDoubleSignedPolygonAreas;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -54,7 +54,7 @@ public class PolygonAreasCombinationConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
 		Vector<Double> coeffs = new Vector<Double>();
 		Vector<Vector<Point>> polygons = new Vector<Vector<Point>>();
 		

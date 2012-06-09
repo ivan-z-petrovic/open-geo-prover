@@ -7,7 +7,7 @@ package com.ogprover.main;
 import java.io.IOException;
 
 import com.ogprover.polynomials.GeoTheorem;
-import com.ogprover.prover_protocol.cp.OGPCP;
+import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.test.formats.geothm_xml.GeoTheoremXMLParser;
 import com.ogprover.test.formats.ogp_xml.OGPCPXMLParser;
 import com.ogprover.thmprover.AlgebraicMethodProver;
@@ -156,7 +156,7 @@ public class OpenGeoProver {
 		logger.info("Reading input geometry problem...");
 		GeoTheorem theorem = null;
 		OGPReport report = null;
-		OGPCP consProtocol = null;
+		OGPTP consProtocol = null;
 		
 		if (parameters.getInputFile() != null) { // reading problem from file
 			if (parameters.getInputFormat().equals("O")) { // xml file which contains geometric construction and theorem statement
@@ -184,7 +184,7 @@ public class OpenGeoProver {
 					return;
 				}
 				
-				consProtocol = new OGPCP();
+				consProtocol = new OGPTP();
 				consProtocol.setAlgebraicGeoTheorem(theorem);
 				consProtocol.setTheoremName(theorem.getName());
 				report = new OGPReport(consProtocol);

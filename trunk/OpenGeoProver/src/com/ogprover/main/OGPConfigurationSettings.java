@@ -7,7 +7,7 @@ package com.ogprover.main;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import com.ogprover.prover_protocol.cp.OGPCP;
+import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.utilities.OGPTimer;
 import com.ogprover.utilities.Stopwatch;
 import com.ogprover.utilities.io.OGPOutput;
@@ -103,9 +103,9 @@ public class OGPConfigurationSettings {
 	 */
 	private ILogger logger = null;
 	/**
-	 * Construction protocol obtained from OGP xml file
+	 * Theorem protocol obtained from OGP xml file
 	 */
-	private OGPCP parsedCP = null;
+	private OGPTP parsedCP = null;
 	/*
 	 * Return codes of some operations 
 	 */
@@ -234,14 +234,14 @@ public class OGPConfigurationSettings {
 	/**
 	 * @param parsedCP the parsedCP to set
 	 */
-	public void setParsedCP(OGPCP parsedCP) {
+	public void setParsedCP(OGPTP parsedCP) {
 		this.parsedCP = parsedCP;
 	}
 
 	/**
 	 * @return the parsedCP
 	 */
-	public OGPCP getParsedCP() {
+	public OGPTP getParsedCP() {
 		return parsedCP;
 	}
 

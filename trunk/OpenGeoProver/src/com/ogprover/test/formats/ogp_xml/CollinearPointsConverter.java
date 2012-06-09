@@ -7,9 +7,9 @@ package com.ogprover.test.formats.ogp_xml;
 import java.util.ArrayList;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
-import com.ogprover.prover_protocol.cp.geoconstruction.Point;
-import com.ogprover.prover_protocol.cp.thmstatement.CollinearPoints;
+import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
+import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.thmstatement.CollinearPoints;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;

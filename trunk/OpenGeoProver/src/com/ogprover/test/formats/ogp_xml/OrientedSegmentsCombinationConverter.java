@@ -6,8 +6,8 @@ package com.ogprover.test.formats.ogp_xml;
 
 import java.util.Vector;
 
-import com.ogprover.prover_protocol.cp.auxiliary.Segment;
-import com.ogprover.prover_protocol.cp.thmstatement.LinearCombinationOfOrientedSegments;
+import com.ogprover.pp.tp.auxiliary.Segment;
+import com.ogprover.pp.tp.thmstatement.LinearCombinationOfOrientedSegments;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;

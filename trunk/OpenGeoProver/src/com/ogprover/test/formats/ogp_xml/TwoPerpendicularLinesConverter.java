@@ -5,9 +5,9 @@
 package com.ogprover.test.formats.ogp_xml;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoconstruction.Line;
-import com.ogprover.prover_protocol.cp.thmstatement.TwoPerpendicularLines;
+import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.geoconstruction.Line;
+import com.ogprover.pp.tp.thmstatement.TwoPerpendicularLines;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -39,7 +39,7 @@ public class TwoPerpendicularLinesConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPCP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
 		String line1 = reader.getAttribute("line1");
 		String line2 = reader.getAttribute("line2");
 		
