@@ -7,7 +7,7 @@ package com.ogprover.main;
 import java.io.IOException;
 
 import com.ogprover.polynomials.GeoTheorem;
-import com.ogprover.prover_protocol.cp.OGPCP;
+import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.thmprover.AlgebraicMethodProver;
 import com.ogprover.thmprover.TheoremProver;
 import com.ogprover.thmprover.WuMethodProver;
@@ -154,11 +154,11 @@ public class OpenGeoProver {
 		logger.info("Reading input geometry problem...");
 		GeoTheorem theorem = null;
 		OGPReport report = null;
-		OGPCP consProtocol = null;
+		OGPTP consProtocol = null;
 		
 		if (parameters.getInputFile() != null) { // reading problem from file
 			// temp code - BEGIN
-			consProtocol = new OGPCP();
+			consProtocol = new OGPTP();
 			report = new OGPReport(consProtocol);
 			// temp code - END
 			

@@ -4,7 +4,7 @@
 
 package com.ogprover.geogebra;
 
-import com.ogprover.prover_protocol.cp.geoobject.GeoObject;
+import com.ogprover.pp.tp.geoobject.GeoObject;
 
 /**
  * <dl>

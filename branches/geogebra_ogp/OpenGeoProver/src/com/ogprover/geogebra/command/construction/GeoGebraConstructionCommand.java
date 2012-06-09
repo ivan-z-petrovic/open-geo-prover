@@ -144,7 +144,7 @@ public abstract class GeoGebraConstructionCommand implements GeoGebraCommand, Ge
 	}
 	
 	/**
-	 * @see com.ogprover.prover_protocol.cp.geoobject.GeoObject#getGeoObjectLabel()
+	 * @see com.ogprover.pp.tp.geoobject.GeoObject#getGeoObjectLabel()
 	 */
 	public String getGeoObjectLabel() {
 		/*
