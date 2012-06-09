@@ -5,7 +5,7 @@
 package com.ogprover.api.converter;
 
 import com.ogprover.geogebra.GeoGebraTheorem;
-import com.ogprover.prover_protocol.cp.OGPCP;
+import com.ogprover.pp.tp.OGPTP;
 
 /**
 * <dl>
@@ -51,9 +51,9 @@ public class GGThmConverterForAlgebraicProvers extends GeoGebraTheoremConverter 
 	 * Constructor method.
 	 * 
 	 * @param theorem	Theorem to be proved
-	 * @param ogpCP		OGP construction protocol object for storage of converted theorem
+	 * @param ogpCP		OGP theorem protocol object for storage of converted theorem
 	 */
-	public GGThmConverterForAlgebraicProvers(GeoGebraTheorem theorem, OGPCP ogpCP) {
+	public GGThmConverterForAlgebraicProvers(GeoGebraTheorem theorem, OGPTP ogpCP) {
 		super(theorem, ogpCP);
 		this.consConverter = new GGConsConverterForAlgebraicProvers(this); // note: must be called after base class constructor has been called!
 		this.statConverter = new GGStatConverterForAlgebraicProvers(this); // note: must be called after consConverter has been instantiated!

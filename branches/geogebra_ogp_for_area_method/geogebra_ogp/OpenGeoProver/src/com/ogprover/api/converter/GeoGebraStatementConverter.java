@@ -8,9 +8,9 @@ import java.util.Map;
 
 import com.ogprover.geogebra.command.statement.GeoGebraStatementCommand;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoobject.GeoObject;
-import com.ogprover.prover_protocol.cp.thmstatement.ThmStatement;
+import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.geoobject.GeoObject;
+import com.ogprover.pp.tp.thmstatement.ThmStatement;
 import com.ogprover.utilities.logger.ILogger;
 
 
@@ -46,7 +46,7 @@ public abstract class GeoGebraStatementConverter {
 	 * OGP's Construction Protocol for storage of converted statement.
 	 * It also contains converted geometry constructions except auxiliary objects.
 	 */
-	protected OGPCP consProtocol;
+	protected OGPTP consProtocol;
 	/**
 	 * Map with auxiliary geometry objects (angles, segments, vectors, polygons etc.), used in constructions 
 	 * of other geometry objects.
@@ -118,7 +118,7 @@ public abstract class GeoGebraStatementConverter {
 	/**
 	 * @return the consProtocol
 	 */
-	public OGPCP getConsProtocol() {
+	public OGPTP getConsProtocol() {
 		return this.consProtocol;
 	}
 	/**

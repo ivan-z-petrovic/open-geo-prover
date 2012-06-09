@@ -12,8 +12,8 @@ import com.ogprover.api.converter.GeoGebraTheoremConverter;
 import com.ogprover.geogebra.GeoGebraTheorem;
 import com.ogprover.main.OGPConfigurationSettings;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
+import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.utilities.io.CustomFileReader;
 import com.ogprover.utilities.io.OGPDocHandler;
 import com.ogprover.utilities.io.QDParser;
@@ -102,7 +102,7 @@ public class MTestQDParser {
 		// Check results of parsing
 		if (dh.isSuccess()) {
 			// Convert parsed GeoGebra theorem
-			OGPCP consProtocol = new OGPCP();
+			OGPTP consProtocol = new OGPTP();
 			GeoGebraTheorem ggThm = dh.getTheorem(); // always different from null if parsing was successful
 			GeoGebraTheoremConverter thmCnv = new GGThmConverterForAlgebraicProvers(ggThm, consProtocol);
 			

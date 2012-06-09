@@ -35,10 +35,10 @@ public interface OGPAPI {
 	 * ======================================================================
 	 */
 	/**
-	 * Method that accepts input parameters and construction protocol
+	 * Method that accepts input parameters and theorem protocol
 	 * and calls specific prover method.
 	 * 
-	 * @param proverInput	Input object that contains construction protocol
+	 * @param proverInput	Input object that contains theorem protocol
 	 *                      (with construction steps and statement to be proved)
 	 *                      and other input parameters necessary for prover execution
 	 * @return	Output object that contains names of report and log files and

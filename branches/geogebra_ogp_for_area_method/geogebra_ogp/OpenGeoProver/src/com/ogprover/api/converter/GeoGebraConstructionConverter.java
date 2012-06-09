@@ -12,9 +12,9 @@ import java.util.Vector;
 import com.ogprover.geogebra.command.GeoGebraCommand;
 import com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoconstruction.*;
-import com.ogprover.prover_protocol.cp.geoobject.*;
+import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.geoconstruction.*;
+import com.ogprover.pp.tp.geoobject.*;
 import com.ogprover.utilities.logger.ILogger;
 
 /**
@@ -49,7 +49,7 @@ public abstract class GeoGebraConstructionConverter {
 	/**
 	 * OGP's Construction Protocol for storage of converted construction.
 	 */
-	protected OGPCP consProtocol;
+	protected OGPTP consProtocol;
 	/**
 	 * List of constructions to be removed from Construction Protocol after each
 	 * step of conversion. 
@@ -375,7 +375,7 @@ public abstract class GeoGebraConstructionConverter {
 	/**
 	 * @return the consProtocol
 	 */
-	public OGPCP getConsProtocol() {
+	public OGPTP getConsProtocol() {
 		return this.consProtocol;
 	}
 	/**
@@ -646,7 +646,7 @@ public abstract class GeoGebraConstructionConverter {
 			/*
 			 * Format of output label - it can be empty string in some cases
 			 * and can be regular label of geometry object which must not exist
-			 * in construction protocol among object constructed previously.
+			 * in theorem protocol among object constructed previously.
 			 */
 			if (this.getGeoObject(oLabel) != null) { // note: this condition covers the case of empty label as well
 				logger.error("Bad output label (already used in previous construction) for command " + ggCmd.getDescription());
