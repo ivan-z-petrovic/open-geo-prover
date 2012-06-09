@@ -7,19 +7,19 @@ package com.ogprover.pp;
 /**
  * <dl>
  * <dt><b>Class description:</b></dt>
- * <dd>Class for input prover protocol</dd>
+ * <dd>Abstract class for input prover protocol</dd>
  * </dl>
  * 
  * @version 1.00
  * @author Ivan Petrovic
  */
-public class OGPInputProverProtocol extends OGPProverProtocol {
+public abstract class OGPInputProverProtocol implements OGPProverProtocol {
 	/*
-	 * TODO
+	 * Input prover protocol is used to pass input elements necessary for
+	 * theorem proving from external system to OGP. It should contain 
+	 * following information:
 	 * 
-	 * Input prover protocol should contain following information:
-	 * 
-	 * 1. Construction Protocol (CP) with description of theorem:
+	 * 1. Description of theorem:
 	 * 		theorem name, construction steps and theorem statement.
 	 * 2. Prover execution parameters like:
 	 * 		names and format of input files and output reports, 
@@ -60,21 +60,9 @@ public class OGPInputProverProtocol extends OGPProverProtocol {
 	
 	
 	
-	
-	/*
-	 * ======================================================================
-	 * ========================== CONSTRUCTORS ==============================
-	 * ======================================================================
-	 */
-	
-	
-	
-
 	/*
 	 * ======================================================================
 	 * ========================== SPECIFIC METHODS ==========================
 	 * ======================================================================
 	 */
-
-	
 }
