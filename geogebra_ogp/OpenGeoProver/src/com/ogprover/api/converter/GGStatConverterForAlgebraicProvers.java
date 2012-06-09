@@ -7,9 +7,9 @@ package com.ogprover.api.converter;
 import java.util.ArrayList;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.geoconstruction.*;
-import com.ogprover.prover_protocol.cp.geoobject.*;
-import com.ogprover.prover_protocol.cp.thmstatement.*;
+import com.ogprover.pp.tp.geoconstruction.*;
+import com.ogprover.pp.tp.geoobject.*;
+import com.ogprover.pp.tp.thmstatement.*;
 import com.ogprover.utilities.logger.ILogger;
 
 

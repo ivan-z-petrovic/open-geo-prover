@@ -6,8 +6,8 @@ package com.ogprover.main;
 
 import java.io.IOException;
 
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.ndgcondition.NDGCondition;
 import com.ogprover.thmprover.TheoremProver;
 import com.ogprover.utilities.OGPUtilities;
 import com.ogprover.utilities.Stopwatch;
@@ -41,9 +41,9 @@ public class OGPReport {
 	public static final String VERSION_NUM = "1.00"; // this should match the version number from class comment
 	
 	/**
-	 * Construction protocol assigned to this report
+	 * Theorem protocol assigned to this report
 	 */
-	private OGPCP consProtocol = null;
+	private OGPTP consProtocol = null;
 	
 	
 	
@@ -56,14 +56,14 @@ public class OGPReport {
 	/**
 	 * @param consProtocol the consProtocol to set
 	 */
-	public void setConsProtocol(OGPCP consProtocol) {
+	public void setConsProtocol(OGPTP consProtocol) {
 		this.consProtocol = consProtocol;
 	}
 
 	/**
 	 * @return the consProtocol
 	 */
-	public OGPCP getConsProtocol() {
+	public OGPTP getConsProtocol() {
 		return consProtocol;
 	}
 	
@@ -77,9 +77,9 @@ public class OGPReport {
 	/**
 	 * Constructor method.
 	 * 
-	 * @param cp	Construction protocol assigned to this report
+	 * @param cp	Theorem protocol assigned to this report
 	 */
-	public OGPReport(OGPCP cp) {
+	public OGPReport(OGPTP cp) {
 		this.consProtocol = cp;
 	}
 	

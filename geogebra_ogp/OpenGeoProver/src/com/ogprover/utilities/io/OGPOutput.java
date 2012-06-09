@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.prover_protocol.cp.geoconstruction.Point;
+import com.ogprover.pp.tp.geoconstruction.Point;
 
 /**
 * <dl>
