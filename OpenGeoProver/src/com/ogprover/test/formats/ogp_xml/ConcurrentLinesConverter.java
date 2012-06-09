@@ -7,9 +7,9 @@ package com.ogprover.test.formats.ogp_xml;
 import java.util.ArrayList;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
-import com.ogprover.prover_protocol.cp.geoconstruction.Line;
-import com.ogprover.prover_protocol.cp.thmstatement.ConcurrentLines;
+import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
+import com.ogprover.pp.tp.geoconstruction.Line;
+import com.ogprover.pp.tp.thmstatement.ConcurrentLines;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;

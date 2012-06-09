@@ -16,71 +16,71 @@ import com.ogprover.main.OGPParameters;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.auxiliary.Angle;
-import com.ogprover.prover_protocol.cp.auxiliary.ProductOfTwoSegments;
-import com.ogprover.prover_protocol.cp.auxiliary.RatioOfTwoCollinearSegments;
-import com.ogprover.prover_protocol.cp.auxiliary.RatioProduct;
-import com.ogprover.prover_protocol.cp.auxiliary.Segment;
-import com.ogprover.prover_protocol.cp.geoconstruction.AngleBisector;
-import com.ogprover.prover_protocol.cp.geoconstruction.CentralSymmetricPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.Circle;
-import com.ogprover.prover_protocol.cp.geoconstruction.CircleWithCenterAndPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.CircleWithCenterAndRadius;
-import com.ogprover.prover_protocol.cp.geoconstruction.CircleWithDiameter;
-import com.ogprover.prover_protocol.cp.geoconstruction.CircumscribedCircle;
-import com.ogprover.prover_protocol.cp.geoconstruction.FootPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.FreePoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeneralConicSection;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeneralizedSegmentDivisionPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.GeoConstruction;
-import com.ogprover.prover_protocol.cp.geoconstruction.HarmonicConjugatePoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.IntersectionPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.InverseOfPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.Line;
-import com.ogprover.prover_protocol.cp.geoconstruction.LineThroughTwoPoints;
-import com.ogprover.prover_protocol.cp.geoconstruction.MidPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.ParallelLine;
-import com.ogprover.prover_protocol.cp.geoconstruction.PerpendicularBisector;
-import com.ogprover.prover_protocol.cp.geoconstruction.PerpendicularLine;
-import com.ogprover.prover_protocol.cp.geoconstruction.Point;
-import com.ogprover.prover_protocol.cp.geoconstruction.Polar;
-import com.ogprover.prover_protocol.cp.geoconstruction.Pole;
-import com.ogprover.prover_protocol.cp.geoconstruction.RadicalAxis;
-import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromCircle;
-import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromGeneralConic;
-import com.ogprover.prover_protocol.cp.geoconstruction.RandomPointFromLine;
-import com.ogprover.prover_protocol.cp.geoconstruction.ReflectedPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.RotatedPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.ShortcutConstruction;
-import com.ogprover.prover_protocol.cp.geoconstruction.TangentLine;
-import com.ogprover.prover_protocol.cp.geoconstruction.TranslatedPoint;
-import com.ogprover.prover_protocol.cp.ndgcondition.NDGCondition;
-import com.ogprover.prover_protocol.cp.thmstatement.AlgebraicSumOfThreeAngles;
-import com.ogprover.prover_protocol.cp.thmstatement.AlgebraicSumOfThreeSegments;
-import com.ogprover.prover_protocol.cp.thmstatement.CollinearPoints;
-import com.ogprover.prover_protocol.cp.thmstatement.ConcurrentCircles;
-import com.ogprover.prover_protocol.cp.thmstatement.ConcurrentLines;
-import com.ogprover.prover_protocol.cp.thmstatement.ConcyclicPoints;
-import com.ogprover.prover_protocol.cp.thmstatement.CongruentTriangles;
-import com.ogprover.prover_protocol.cp.thmstatement.EqualAngles;
-import com.ogprover.prover_protocol.cp.thmstatement.EqualityOfRatioProducts;
-import com.ogprover.prover_protocol.cp.thmstatement.EqualityOfTwoRatios;
-import com.ogprover.prover_protocol.cp.thmstatement.False;
-import com.ogprover.prover_protocol.cp.thmstatement.FourHarmonicConjugatePoints;
-import com.ogprover.prover_protocol.cp.thmstatement.IdenticalPoints;
-import com.ogprover.prover_protocol.cp.thmstatement.LinearCombinationOfDoubleSignedPolygonAreas;
-import com.ogprover.prover_protocol.cp.thmstatement.LinearCombinationOfOrientedSegments;
-import com.ogprover.prover_protocol.cp.thmstatement.PointOnSetOfPoints;
-import com.ogprover.prover_protocol.cp.thmstatement.RatioOfOrientedSegments;
-import com.ogprover.prover_protocol.cp.thmstatement.RatioOfTwoSegments;
-import com.ogprover.prover_protocol.cp.thmstatement.SegmentsOfEqualLengths;
-import com.ogprover.prover_protocol.cp.thmstatement.SimilarTriangles;
-import com.ogprover.prover_protocol.cp.thmstatement.TouchingCircles;
-import com.ogprover.prover_protocol.cp.thmstatement.True;
-import com.ogprover.prover_protocol.cp.thmstatement.TwoInversePoints;
-import com.ogprover.prover_protocol.cp.thmstatement.TwoParallelLines;
-import com.ogprover.prover_protocol.cp.thmstatement.TwoPerpendicularLines;
+import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.Angle;
+import com.ogprover.pp.tp.auxiliary.ProductOfTwoSegments;
+import com.ogprover.pp.tp.auxiliary.RatioOfTwoCollinearSegments;
+import com.ogprover.pp.tp.auxiliary.RatioProduct;
+import com.ogprover.pp.tp.auxiliary.Segment;
+import com.ogprover.pp.tp.geoconstruction.AngleBisector;
+import com.ogprover.pp.tp.geoconstruction.CentralSymmetricPoint;
+import com.ogprover.pp.tp.geoconstruction.Circle;
+import com.ogprover.pp.tp.geoconstruction.CircleWithCenterAndPoint;
+import com.ogprover.pp.tp.geoconstruction.CircleWithCenterAndRadius;
+import com.ogprover.pp.tp.geoconstruction.CircleWithDiameter;
+import com.ogprover.pp.tp.geoconstruction.CircumscribedCircle;
+import com.ogprover.pp.tp.geoconstruction.FootPoint;
+import com.ogprover.pp.tp.geoconstruction.FreePoint;
+import com.ogprover.pp.tp.geoconstruction.GeneralConicSection;
+import com.ogprover.pp.tp.geoconstruction.GeneralizedSegmentDivisionPoint;
+import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
+import com.ogprover.pp.tp.geoconstruction.HarmonicConjugatePoint;
+import com.ogprover.pp.tp.geoconstruction.IntersectionPoint;
+import com.ogprover.pp.tp.geoconstruction.InverseOfPoint;
+import com.ogprover.pp.tp.geoconstruction.Line;
+import com.ogprover.pp.tp.geoconstruction.LineThroughTwoPoints;
+import com.ogprover.pp.tp.geoconstruction.MidPoint;
+import com.ogprover.pp.tp.geoconstruction.ParallelLine;
+import com.ogprover.pp.tp.geoconstruction.PerpendicularBisector;
+import com.ogprover.pp.tp.geoconstruction.PerpendicularLine;
+import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.geoconstruction.Polar;
+import com.ogprover.pp.tp.geoconstruction.Pole;
+import com.ogprover.pp.tp.geoconstruction.RadicalAxis;
+import com.ogprover.pp.tp.geoconstruction.RandomPointFromCircle;
+import com.ogprover.pp.tp.geoconstruction.RandomPointFromGeneralConic;
+import com.ogprover.pp.tp.geoconstruction.RandomPointFromLine;
+import com.ogprover.pp.tp.geoconstruction.ReflectedPoint;
+import com.ogprover.pp.tp.geoconstruction.RotatedPoint;
+import com.ogprover.pp.tp.geoconstruction.ShortcutConstruction;
+import com.ogprover.pp.tp.geoconstruction.TangentLine;
+import com.ogprover.pp.tp.geoconstruction.TranslatedPoint;
+import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.thmstatement.AlgebraicSumOfThreeAngles;
+import com.ogprover.pp.tp.thmstatement.AlgebraicSumOfThreeSegments;
+import com.ogprover.pp.tp.thmstatement.CollinearPoints;
+import com.ogprover.pp.tp.thmstatement.ConcurrentCircles;
+import com.ogprover.pp.tp.thmstatement.ConcurrentLines;
+import com.ogprover.pp.tp.thmstatement.ConcyclicPoints;
+import com.ogprover.pp.tp.thmstatement.CongruentTriangles;
+import com.ogprover.pp.tp.thmstatement.EqualAngles;
+import com.ogprover.pp.tp.thmstatement.EqualityOfRatioProducts;
+import com.ogprover.pp.tp.thmstatement.EqualityOfTwoRatios;
+import com.ogprover.pp.tp.thmstatement.False;
+import com.ogprover.pp.tp.thmstatement.FourHarmonicConjugatePoints;
+import com.ogprover.pp.tp.thmstatement.IdenticalPoints;
+import com.ogprover.pp.tp.thmstatement.LinearCombinationOfDoubleSignedPolygonAreas;
+import com.ogprover.pp.tp.thmstatement.LinearCombinationOfOrientedSegments;
+import com.ogprover.pp.tp.thmstatement.PointOnSetOfPoints;
+import com.ogprover.pp.tp.thmstatement.RatioOfOrientedSegments;
+import com.ogprover.pp.tp.thmstatement.RatioOfTwoSegments;
+import com.ogprover.pp.tp.thmstatement.SegmentsOfEqualLengths;
+import com.ogprover.pp.tp.thmstatement.SimilarTriangles;
+import com.ogprover.pp.tp.thmstatement.TouchingCircles;
+import com.ogprover.pp.tp.thmstatement.True;
+import com.ogprover.pp.tp.thmstatement.TwoInversePoints;
+import com.ogprover.pp.tp.thmstatement.TwoParallelLines;
+import com.ogprover.pp.tp.thmstatement.TwoPerpendicularLines;
 import com.ogprover.thmprover.AlgebraicMethodProver;
 import com.ogprover.thmprover.TheoremProver;
 import com.ogprover.thmprover.WuMethodProver;
@@ -111,7 +111,7 @@ public class MTestCP {
 	 * 
 	 * @param cp	Construction Protocol
 	 */
-	public static void testConstructions(OGPCP cp) {
+	public static void testConstructions(OGPTP cp) {
 		// Here statement is not important, therefore set it to default statement
 		cp.addThmStatement(new True(cp));
 		
@@ -174,7 +174,7 @@ public class MTestCP {
 	 * 
 	 * @param cp	Construction Protocol
 	 */
-	public static void testTheorem(OGPCP cp) {
+	public static void testTheorem(OGPTP cp) {
 		String[] strArr;
 		
 		System.out.println();
@@ -445,7 +445,7 @@ public class MTestCP {
 	 */
 	// example of Butterfly theorem
 	public static void testConstructionTransformationToAlgebraicForm1() {
-		OGPCP cp = new OGPCP();
+		OGPTP cp = new OGPTP();
 		cp.setTheoremName("Butterfly");
 		
 		// Constructions for the Butterfly theorem
@@ -490,7 +490,7 @@ public class MTestCP {
 	
 	// custom example
 	public static void testConstructionTransformationToAlgebraicForm2() {
-		OGPCP cp = new OGPCP();
+		OGPTP cp = new OGPTP();
 		cp.setTheoremName("Square, circle and tangent line");
 		
 		/*
@@ -532,7 +532,7 @@ public class MTestCP {
 	
 	// example for inverse of point
 	public static void testConstructionTransformationToAlgebraicForm3() {
-		OGPCP cp = new OGPCP();
+		OGPTP cp = new OGPTP();
 		cp.setTheoremName("Inverse point");
 		
 		/*
@@ -560,7 +560,7 @@ public class MTestCP {
 	
 	// example of square theorem
 	public static void testConstructionTransformationToAlgebraicForm4() {
-		OGPCP cp = new OGPCP();
+		OGPTP cp = new OGPTP();
 		cp.setTheoremName("Square with reflexion about line");
 		
 		/*
@@ -618,8 +618,8 @@ public class MTestCP {
 	 * @param theoNum	Index of a theorem in list of theorems inside this method
 	 * @return			Prepared CP
 	 */
-	public static OGPCP getPreparedCPForTheorem(int theoNum) {
-		OGPCP cp = new OGPCP();
+	public static OGPTP getPreparedCPForTheorem(int theoNum) {
+		OGPTP cp = new OGPTP();
 		
 		switch(theoNum) {
 		case 1:

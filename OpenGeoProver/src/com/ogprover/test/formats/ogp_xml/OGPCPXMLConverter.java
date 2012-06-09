@@ -5,9 +5,9 @@
 package com.ogprover.test.formats.ogp_xml;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoconstruction.*;
-import com.ogprover.prover_protocol.cp.thmstatement.*;
+import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.geoconstruction.*;
+import com.ogprover.pp.tp.thmstatement.*;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -27,12 +27,12 @@ public class OGPCPXMLConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
 	public boolean canConvert(Class clazz) {
-		return clazz.equals(OGPCP.class);
+		return clazz.equals(OGPTP.class);
 	}
 
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
-		OGPCP consProtocol = (OGPCP)obj;
+		OGPTP consProtocol = (OGPTP)obj;
 		
 		if (consProtocol == null)
 			return;
@@ -180,7 +180,7 @@ public class OGPCPXMLConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPCP consProtocol = new OGPCP();
+		OGPTP consProtocol = new OGPTP();
 		OpenGeoProver.settings.setParsedCP(consProtocol); // this CP will be visible while parsing inner tags
 		
 		consProtocol.setTheoremName(reader.getAttribute("name"));
