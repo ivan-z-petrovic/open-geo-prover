@@ -4,11 +4,14 @@
 
 package com.ogprover.api;
 
+import com.ogprover.pp.OGPInputProverProtocol;
+import com.ogprover.pp.OGPOutputProverProtocol;
+
 /**
  * <dl>
  * <dt><b>Interface description:</b></dt>
- * <dd>OGPAPI is interface for all APIs from external dynamic 
- *     geometry systems toward OpenGeoProver.</dd>
+ * <dd>OGPAPI is interface for all APIs between external dynamic 
+ *     geometry systems and OpenGeoProver.</dd>
  * </dl>
  * 
  * @version 1.00
@@ -35,16 +38,16 @@ public interface OGPAPI {
 	 * ======================================================================
 	 */
 	/**
-	 * Method that accepts input parameters and theorem protocol
-	 * and calls specific prover method.
+	 * Method that accepts input prover protocol and calls specific prover method.
 	 * 
-	 * @param proverInput	Input object that contains theorem protocol
+	 * @param proverInput	Input object that contains geometry theorem
 	 *                      (with construction steps and statement to be proved)
-	 *                      and other input parameters necessary for prover execution
-	 * @return	Output object that contains names of report and log files and
-	 *          other necessary data like non-degenerative conditions and result
-	 *          of prover (whether theorem has been proved or disproved or could not
-	 *          be proved)
+	 *                      and other input parameters necessary for prover execution.
+	 *                      
+	 * @return				Output object that contains names of report and log files and
+	 *          			other necessary data like non-degenerative conditions and result
+	 *          			of prover (whether theorem has been proved or disproved or 
+	 *          			could not be proved).
 	 */
-	public Object prove(Object proverInput);
+	public OGPOutputProverProtocol prove(OGPInputProverProtocol proverInput);
 }
