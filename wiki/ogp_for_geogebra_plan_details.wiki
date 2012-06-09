@@ -10,12 +10,12 @@ Following table outlines main stages of development work.
 
 || *Stage or sub-stage of work* || *Work Description* || *Work Status* || *Comment* ||
 || *A* || _Initial development work_ || Ongoing || ||
-|| *A.1* || _Preparations for main work_ || Ongoing || Making decisions about implementation ||
+|| *A.1* || _Preparations for main work_ || *Finished* || Making decisions about implementation ||
 || *A.2* || _Improvements on main development trunk <br>required for integration of OGP with !GeoGebra_ || Ongoing || ||
 || *A.3* || _XML parsing of geometry constructions_ || Ongoing || Only transformations are not done ||
 || *A.4* || _Parsing of theorem statements_ || *Finished* || Only a couple of basic statements <br>are supported in initial stage ||
 || *A.5* || _Replacement of logger_ || *Finished* || ||
-|| *A.6* || _Implementation of output format_ || Not Yet Started || ||
+|| *A.6* || _Implementation of output format and API_ || Ongoing || ||
 || *A.7* || _Preparing documentation and examples_ || Ongoing || ||
 || *A.8* || _Testing and bug fixing_ || Ongoing || ||
 || ... || ... || ... || ||
