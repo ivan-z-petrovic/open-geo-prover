@@ -35,6 +35,9 @@
  * issue 14: Improvement of CP - implementing simplification.
  * issue 15: Conversion of !GeoGebra commands for transformations to OGP format.
  * issue 16: Improvements of NDG conditions - implementing general representation.
+ * issue 17: Renaming Construction Protocol to Theorem Protocol.
+ * issue 18: Build scripts.
+ * issue 19: OGP API for !GeoGebra.
  * ...
 
 ===Stage free issues===
