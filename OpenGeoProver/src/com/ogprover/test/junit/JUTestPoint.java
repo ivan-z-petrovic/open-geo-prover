@@ -16,10 +16,10 @@ import com.ogprover.polynomials.UXVariable;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
-import com.ogprover.prover_protocol.cp.OGPCP;
-import com.ogprover.prover_protocol.cp.geoconstruction.FreePoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.MidPoint;
-import com.ogprover.prover_protocol.cp.geoconstruction.Point;
+import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.geoconstruction.FreePoint;
+import com.ogprover.pp.tp.geoconstruction.MidPoint;
+import com.ogprover.pp.tp.geoconstruction.Point;
 
 import junit.framework.TestCase;
 
@@ -34,7 +34,7 @@ import junit.framework.TestCase;
 */
 public class JUTestPoint extends TestCase {
 	private Point point;
-	private OGPCP consProtocol = null;
+	private OGPTP consProtocol = null;
 	
 	public JUTestPoint(String name) {
 		super(name);
@@ -42,7 +42,7 @@ public class JUTestPoint extends TestCase {
 	
 	@Before
 	public void setUp() throws Exception{
-		consProtocol = new OGPCP();
+		consProtocol = new OGPTP();
 		consProtocol.setNumZeroIndices(3);
 		point = new FreePoint("A");
 		consProtocol.addGeoConstruction(point);

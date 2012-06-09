@@ -6,7 +6,7 @@ package com.ogprover.api.converter;
 
 import com.ogprover.geogebra.GeoGebraTheorem;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.prover_protocol.cp.OGPCP;
+import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.utilities.logger.ILogger;
 
 /**
@@ -48,7 +48,7 @@ public abstract class GeoGebraTheoremConverter {
 	/**
 	 * OGP's Construction Protocol for storage of converted geometry theorem.
 	 */
-	protected OGPCP consProtocol;
+	protected OGPTP consProtocol;
 	/**
 	 * Flag which is used for success or failure of conversion operation.
 	 */
@@ -91,7 +91,7 @@ public abstract class GeoGebraTheoremConverter {
 	/**
 	 * @return the consProtocol
 	 */
-	public OGPCP getConsProtocol() {
+	public OGPTP getConsProtocol() {
 		return this.consProtocol;
 	}
 	/**
@@ -112,9 +112,9 @@ public abstract class GeoGebraTheoremConverter {
 	 * Constructor method.
 	 * 
 	 * @param theorem	Theorem to be proved
-	 * @param ogpCP		OGP construction protocol object for storage of converted theorem
+	 * @param ogpCP		OGP theorem protocol object for storage of converted theorem
 	 */
-	public GeoGebraTheoremConverter(GeoGebraTheorem theorem, OGPCP ogpCP) {
+	public GeoGebraTheoremConverter(GeoGebraTheorem theorem, OGPTP ogpCP) {
 		this.theorem = theorem;
 		this.consProtocol = ogpCP;
 		this.bSuccess = true;
