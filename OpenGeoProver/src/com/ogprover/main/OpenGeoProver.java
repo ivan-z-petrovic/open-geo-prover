@@ -6,18 +6,10 @@ package com.ogprover.main;
 
 import java.io.IOException;
 
-import com.ogprover.polynomials.GeoTheorem;
-import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.thmprover.AlgebraicMethodProver;
-import com.ogprover.thmprover.TheoremProver;
-import com.ogprover.thmprover.WuMethodProver;
-import com.ogprover.utilities.OGPTimer;
-import com.ogprover.utilities.OGPUtilities;
-import com.ogprover.utilities.Stopwatch;
-import com.ogprover.utilities.io.LaTeXFileWriter;
-import com.ogprover.utilities.io.OGPOutput;
-import com.ogprover.utilities.io.SpecialFileFormatting;
-import com.ogprover.utilities.io.XMLFileWriter;
+import com.ogprover.api.GeoGebraOGPInterface;
+import com.ogprover.pp.GeoGebraOGPInputProverProtocol;
+import com.ogprover.pp.GeoGebraOGPOutputProverProtocol;
+import com.ogprover.utilities.io.CustomFileReader;
 import com.ogprover.utilities.logger.ILogger;
 
 
@@ -59,16 +51,16 @@ public class OpenGeoProver {
 	 */
 	/**
 	 * <i>[static method]</i><br>
-	 * MAIN method - starting point of OGP
+	 * MAIN method - starting point of OGP - simulation of usage of OGP API for GeoGebra.
 	 * 
 	 * @param args		Arguments of command line
 	 */
 	public static void main(String[] args) {
+		// Set working directory
+		System.setProperty("user.dir", System.getProperty("user.dir") + "/OpenGeoProver");	// adjust working directory (enter directory where input sub-directory resides);
+
 		OpenGeoProver.settings = new OGPConfigurationSettings();
-		OGPParameters parameters = OpenGeoProver.settings.getParameters();
-		OGPOutput output = OpenGeoProver.settings.getOutput();
 		ILogger logger = OpenGeoProver.settings.getLogger();
-		Stopwatch stopwatch = OpenGeoProver.settings.getStopwacth();
 		
 		// prover's introduction message
 		StringBuilder sb = new StringBuilder();
@@ -80,182 +72,69 @@ public class OpenGeoProver {
 		sb.append("Type \"-h\" or \"--help\" if necessary, for explanaition about correct usage of command line.\n\n");
 		System.out.println(sb.toString());
 		
-		int retCode = OGPConstants.RET_CODE_SUCCESS;
+		if (args.length != 1) {
+			logger.error("Incorrect number of command line arguments - only one is expected");
+			OpenGeoProver.settings.getTimer().cancel(); // cancel default timer task
+			return;
+		}
 		
-		/*
-		 *  STEP 1 - Parsing command line and filling parameters
-		 */
-		if (args.length == 1 && (args[0].equals("-h") || args[0].equals("--help"))) {
+		if (args[0].equals("-h") || args[0].equals("--help")) {
 			OGPParameters.printHelp();
 			OpenGeoProver.settings.getTimer().cancel(); // cancel default timer task
 			return;
 		}
 		
+		// Reading input file with theorem in GeoGebra's XML format
 		logger.info("Parsing command line...");
-		retCode = OGPParameters.readParametersFromCommandLine(args);
+		// Extract only file name without extension
+		String xmlFileNameWithExtension = args[0];
+		int pointIndex = xmlFileNameWithExtension.indexOf('.');
+		String xmlFileName;
 		
-		if (retCode != OGPConstants.RET_CODE_SUCCESS) {
-			System.out.println("Error happened in parsing command line - will exit the prover!\nPlease provide correct parameters.\n\n");
-			OGPParameters.printHelp();
-			return;
-		}
-		
-		// setting log level and verbose flag in logger
-		//logger.setLevel(parameters.getLogLevel());
-		//logger.setVerbose(parameters.getVerbose());
-		
-		// creating output files
-		if (parameters.createReport()) {
-			String outputFmt = parameters.getOutputFormat();
-			String outputFile = parameters.getOutputFile();
-			LaTeXFileWriter latexWriter = null;
-			XMLFileWriter xmlWriter = null;
-			
-			if (outputFile == null) {
-				logger.error("Error: Null name for output file.");
-				return;
-			}
-			
-			if (!outputFmt.equals("A") && !outputFmt.equals("L") && !outputFmt.equals("X")) {
-				logger.error("Invalid format of output file.");
-				return;
-			}
-			
-			if (outputFmt.equals("A") || outputFmt.equals("L")) {
-				try {
-					latexWriter = new LaTeXFileWriter(outputFile);
-				} catch (IOException e) {
-					logger.error("Failed to open LaTeX output file.");
-					if (latexWriter != null)
-						latexWriter.close();
-					latexWriter = null;
-				}
-			}
-			
-			if (outputFmt.equals("A") || outputFmt.equals("X")) {
-				try {
-					xmlWriter = new XMLFileWriter(outputFile);
-				} catch (IOException e) {
-					logger.error("Failed to open XML output file.");
-					if (xmlWriter != null)
-						xmlWriter.close();
-					xmlWriter = null;
-				}
-			}
-			
-			output = new OGPOutput(latexWriter, xmlWriter);
-			OpenGeoProver.settings.setOutput(output);
-		}
-		
-		
-		/*
-		 *  STEP 2 - Reading input geometry problem and transforming it into algebraic form.
-		 */
-		logger.info("Reading input geometry problem...");
-		GeoTheorem theorem = null;
-		OGPReport report = null;
-		OGPTP consProtocol = null;
-		
-		if (parameters.getInputFile() != null) { // reading problem from file
-			// temp code - BEGIN
-			consProtocol = new OGPTP();
-			report = new OGPReport(consProtocol);
-			// temp code - END
-			
-			if (parameters.getInputFormat().equals("G")) { // gcl file with representation of problem in GCLC language
-				// TODO
-			}
-			else { // unknown format
-				logger.error("Unknown format of input file.");
-				output.close();
-				return;
-			}
-		}
-		else { // reading problem from internal memory
-			// TODO
-		}
-		
-		if (consProtocol == null)
-			return;
-		
-		
-		/*
-		 *  STEP 3 - Invoking prover
-		 */
-		if (parameters.getInputFormat().equals("O")) {
-			/*
-			 * Validation of CP
-			 */
-			if (!consProtocol.isValid()) {
-				output.close();
-				return;
-			}
-			
-			/*
-			 * Transformation to Algebraic form
-			 */
-			OpenGeoProver.settings.getStopwacth().startMeasureTime();
-			try {
-				output.openSection("Transformation of Construction Protocol to algebraic form");
-			} catch (IOException e) {
-				logger.error("Failed to write to output file(s).");
-				output.close();
-				return;
-			}
-			
-			retCode = consProtocol.convertToAlgebraicForm();
-			theorem = consProtocol.getAlgebraicGeoTheorem();
-			
-			if (retCode != OGPConstants.RET_CODE_SUCCESS) {
-				output.close();
-				return;
-			}
-			
-			OpenGeoProver.settings.getStopwacth().endMeasureTime();
-			try {
-				output.openSubSection("Time spent for transformation of Construction Protocol to algebraic form", false);
-				output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
-				output.openItem();
-				output.writePlainText(OGPUtilities.roundUpToPrecision(stopwatch.getTimeIntSec()) + " seconds");
-				output.closeItem();
-				output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
-				output.closeSubSection();
-				output.closeSection();
-			} catch (IOException e) {
-				logger.error("Failed to write to output file(s).");
-				output.close();
-				return;
-			}
-		}
-		
-		logger.info("Invoking prover method...");
-		int proverType = parameters.getProver();
-		AlgebraicMethodProver proverMethod = null;
-		
-		OGPTimer timer = OpenGeoProver.settings.getTimer();
-		if (proverType == TheoremProver.TP_TYPE_WU) { // Wu's method
-			proverMethod = new WuMethodProver(theorem);
-			
-			timer.setTimer(parameters.getTimeLimit()); // setting timer
-			stopwatch.startMeasureTime();
-			retCode = proverMethod.prove();
-			stopwatch.endMeasureTime();
-		}
-		else if (proverType == TheoremProver.TP_TYPE_GROEBNER) { // Groebner basis method
-			// TODO
+		if (pointIndex == -1) { // no extension
+			xmlFileName = xmlFileNameWithExtension;
 		}
 		else {
-			System.out.println("Invalid prover type.");
+			xmlFileName = xmlFileNameWithExtension.substring(0, pointIndex);
+		}
+		
+		// Create custom file reader for the file with name passed as an argument; read its contents and copy to string
+		String xmlString;
+		try {
+			CustomFileReader fileReader = new CustomFileReader(xmlFileName, "xml");
+			// Read one by one line and append to string buffer
+			StringBuffer sbuff = new StringBuffer();
+			String line = null;
+			while ((line = fileReader.readLine()) != null) {
+				sbuff.append(line);
+			}
+			// Close file reader
+			fileReader.close();
+			xmlString = sbuff.toString();
+		} catch (IOException e) {
+			logger.error("I/O Exception caught: " + e.toString());
+			e.printStackTrace();
 			return;
 		}
-		timer.cancel(); // canceling timer
 		
+		// Input prover object
+		GeoGebraOGPInputProverProtocol inputObject = new GeoGebraOGPInputProverProtocol();
+		inputObject.setGeometryTheoremText(xmlString);
+		inputObject.setMethod(GeoGebraOGPInputProverProtocol.OGP_METHOD_WU);
+		inputObject.setTimeOut(10);
+		inputObject.setMaxTerms(10000);
 		
-		/*
-		 *  STEP 4 - Presenting results to standard output and in report file(s)
-		 */
-		logger.info("Prover results:\n");
-		if (report != null)
-			report.printProverResults(retCode);
+		// OGP API
+		GeoGebraOGPInterface ogpInterface = new GeoGebraOGPInterface();
+		GeoGebraOGPOutputProverProtocol outputObject = (GeoGebraOGPOutputProverProtocol)ogpInterface.prove(inputObject); // safe cast
+		
+		// Print results
+		System.out.println("Prover results");
+		System.out.println(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS + ": " + outputObject.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS));
+		System.out.println(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG + ": " + outputObject.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG));
+		System.out.println(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER + ": " + outputObject.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER));
+		System.out.println(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER_MSG + ": " + outputObject.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER_MSG));
+		System.out.println(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME + ": " + outputObject.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME));
+		System.out.println(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_NUMTERMS + ": " + outputObject.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_NUMTERMS));
 	}
 }
