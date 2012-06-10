@@ -457,8 +457,14 @@ public class OGPTP {
 			return;
 		
 		int consInd = this.constructionSteps.indexOf(gc); // uses equals()
-		this.constructionSteps.remove(consInd);
+		this.constructionSteps.remove(consInd); // this also shifts all following objects to the left for one place
 		this.constructionMap.remove(gc.getGeoObjectLabel());
+		gc.setConsProtocol(null);
+		gc.setIndex(-1);
+		
+		// Shift indices of all constructed objects from object's index till the end
+		for (int ii = consInd, jj = this.constructionSteps.size(); ii < jj; ii++)
+			this.constructionSteps.get(ii).setIndex(ii);
 	}
 	
 	/**
@@ -781,8 +787,7 @@ public class OGPTP {
 		for (int ii = 0; ii < this.constructionSteps.size(); ii++) {
 			GeoConstruction gc = this.constructionSteps.get(ii);
 			if (usedLabelsMap.get(gc.getGeoObjectLabel()) == null) {
-				this.constructionSteps.remove(ii);
-				this.constructionMap.remove(gc.getGeoObjectLabel());
+				this.removeGeoConstruction(gc);
 				ii--;
 			}
 		}
@@ -1107,22 +1112,24 @@ public class OGPTP {
 			return null;
 		
 		Vector<String> ndgList = new Vector<String>();
-		for (NDGCondition ndgc : this.ndgConditions) {
-			StringBuilder sbNdgText = new StringBuilder(ndgc.getNdgType());
+		if (this.ndgConditions != null && this.ndgConditions.size() > 0) {
+			for (NDGCondition ndgc : this.ndgConditions) {
+				StringBuilder sbNdgText = new StringBuilder(ndgc.getNdgType());
 			
-			sbNdgText.append("[");
-			if (ndgc.getNdgType().equals(NDGCondition.NDG_TYPE_POLYNOMIAL))
-				sbNdgText.append(ndgc.getPolynomial().print());
-			else {
-				Vector<Point> ptList = ndgc.getBestPointList();
-				for (int ii = 0, jj = ptList.size(); ii < jj; ii++) {
-					if (ii > 0)
-						sbNdgText.append(", ");
-					sbNdgText.append(ptList.get(ii).getGeoObjectLabel());
+				sbNdgText.append("[");
+				if (ndgc.getNdgType().equals(NDGCondition.NDG_TYPE_POLYNOMIAL))
+					sbNdgText.append(ndgc.getPolynomial().print());
+				else {
+					Vector<Point> ptList = ndgc.getBestPointList();
+					for (int ii = 0, jj = ptList.size(); ii < jj; ii++) {
+						if (ii > 0)
+							sbNdgText.append(", ");
+						sbNdgText.append(ptList.get(ii).getGeoObjectLabel());
+					}
 				}
+				sbNdgText.append("]");
+				ndgList.add(sbNdgText.toString());
 			}
-			sbNdgText.append("]");
-			ndgList.add(sbNdgText.toString());
 		}
 		
 		return ndgList;

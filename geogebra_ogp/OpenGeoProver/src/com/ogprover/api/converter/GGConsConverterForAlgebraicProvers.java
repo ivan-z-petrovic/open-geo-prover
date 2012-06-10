@@ -110,14 +110,14 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			if (iArgs.get(0).contains("Circle["))
 				return new FreePoint(oArgs.get(0));
 			
-			GeoConstruction gc = this.consProtocol.getConstructionMap().get(iArgs.get(0));
+			GeoConstruction gc = this.thmProtocol.getConstructionMap().get(iArgs.get(0));
 			if (gc != null)
 				return RandomPointFromSetOfPoints.createRandomPoint(oArgs.get(0), (SetOfPoints)gc);
 			
 			// If point is on polygon or polygon line, construct it as it is on first edge line
 			GeoObject gobj = this.auxiliaryObjectsMap.get(iArgs.get(0));
 			if (gobj != null && (gobj instanceof PolygonLine))
-				return new RandomPointFromLine(oArgs.get(0), (Line)this.consProtocol.getConstructionMap().get(((PolygonLine)gobj).getEdgesLabels().get(0)));
+				return new RandomPointFromLine(oArgs.get(0), (Line)this.thmProtocol.getConstructionMap().get(((PolygonLine)gobj).getEdgesLabels().get(0)));
 			return null;
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -172,8 +172,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			SetOfPoints firstSet = (SetOfPoints)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			SetOfPoints secondSet = (SetOfPoints)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			SetOfPoints firstSet = (SetOfPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			SetOfPoints secondSet = (SetOfPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			
 			if (oArgs.size() == 1)
 				return new IntersectionPoint(oArgs.get(0), firstSet, secondSet);
@@ -214,14 +214,14 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
 			if (iArgs.size() == 1) {
-				Line s = (Line)this.consProtocol.getConstructionMap().get(iArgs.get(0)); // line representing a segment
+				Line s = (Line)this.thmProtocol.getConstructionMap().get(iArgs.get(0)); // line representing a segment
 				Vector<Point> points = s.getPoints();
 				return new MidPoint(oArgs.get(0), points.get(0), points.get(1));
 			}
 			
 			// iArgs.size() == 2
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			return new MidPoint(oArgs.get(0), pt1, pt2);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -259,7 +259,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			SetOfPoints conic = (SetOfPoints)this.consProtocol.getConstructionMap().get(iArgs.get(0));
+			SetOfPoints conic = (SetOfPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
 			
 			if (!(conic instanceof Circle) /*&& !(conic instanceof ConicSection)*/) {
 				logger.error("Can't construct center on object which is not circle and conic section.");
@@ -301,8 +301,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			GeoObject obj2 = this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			GeoObject obj2 = this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			
 			if (obj2 instanceof Point)
 				return new LineThroughTwoPoints(oArgs.get(0), pt1, (Point)obj2);
@@ -336,8 +336,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point pt = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Line line = (Line)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Line line = (Line)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			
 			return new PerpendicularLine(oArgs.get(0), line, pt);
 		} catch (ClassCastException ex) {
@@ -370,14 +370,14 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
 			if (iArgs.size() == 1) {
-				Line s = (Line)this.consProtocol.getConstructionMap().get(iArgs.get(0)); // line representing a segment
+				Line s = (Line)this.thmProtocol.getConstructionMap().get(iArgs.get(0)); // line representing a segment
 				Vector<Point> points = s.getPoints();
 				return new PerpendicularBisector(oArgs.get(0), points.get(0), points.get(1));
 			}
 			
 			// iArgs.size() == 2
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			return new PerpendicularBisector(oArgs.get(0), pt1, pt2);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -408,9 +408,9 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point ptRay1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point ptVertex = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
-			Point ptRay2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(2));
+			Point ptRay1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point ptVertex = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			Point ptRay2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
 			
 			return new AngleBisector(oArgs.get(0), ptRay1, ptVertex, ptRay2);
 		} catch (ClassCastException ex) {
@@ -448,8 +448,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point pt = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			SetOfPoints conic = (SetOfPoints)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			SetOfPoints conic = (SetOfPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			
 			if (!(conic instanceof Circle) && !(conic instanceof ConicSection)) {
 				logger.error("Can't construct tangent on object which is not circle and conic section.");
@@ -496,8 +496,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point pt = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			SetOfPoints conic = (SetOfPoints)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			SetOfPoints conic = (SetOfPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			
 			if (!(conic instanceof Circle) && !(conic instanceof ConicSection)) {
 				logger.error("Can't construct polar on object which is not circle and conic section.");
@@ -541,8 +541,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Line line = (Line)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			SetOfPoints conic = (SetOfPoints)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Line line = (Line)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			SetOfPoints conic = (SetOfPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			
 			if (!(conic instanceof Circle) /*&& !(conic instanceof ConicSection)*/) {
 				logger.error("Can't construct diameter line on object which is not circle and conic section.");
@@ -597,15 +597,15 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
 			if (iArgs.size() == 3) {
-				Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-				Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
-				Point pt3 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(2));
+				Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+				Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+				Point pt3 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
 				
 				return new CircumscribedCircle(oArgs.get(0), pt1, pt2, pt3);
 			}
 			
 			// iArgs.size() == 2
-			Point pt = (Point)(this.consProtocol.getConstructionMap().get(iArgs.get(0)));
+			Point pt = (Point)(this.thmProtocol.getConstructionMap().get(iArgs.get(0)));
 			String label2 = iArgs.get(1);
 			
 			if (label2.startsWith("Segment[")) {
@@ -617,13 +617,13 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 				String pt1Label = label2.substring(pt1Idx, commaIdx);
 				String pt2Label = label2.substring(pt2Idx, rbracIdx);
 				
-				Point pt1 = (Point)this.consProtocol.getConstructionMap().get(pt1Label);
-				Point pt2 = (Point)this.consProtocol.getConstructionMap().get(pt2Label);
+				Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(pt1Label);
+				Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(pt2Label);
 				
 				return new CircleWithCenterAndRadius(oArgs.get(0), pt, pt1, pt2);
 			}
 			
-			GeoObject geoObj = this.consProtocol.getConstructionMap().get(label2);
+			GeoObject geoObj = this.thmProtocol.getConstructionMap().get(label2);
 			
 			if (geoObj == null) {
 				// Check whether second argument is a measure of radius
@@ -682,11 +682,11 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
-			Point pt3 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(2));
-			Point pt4 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(3));
-			Point pt5 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(4));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt3 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
+			Point pt4 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(3));
+			Point pt5 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(4));
 			
 			return new ConicSectionWithFivePoints(oArgs.get(0), pt1, pt2, pt3, pt4, pt5);
 		} catch (ClassCastException ex) {
@@ -718,7 +718,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point conicPt = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(2)); // third point is a point from conic
+			Point conicPt = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2)); // third point is a point from conic
 			// Remove the current point from CP since it will be redefined
 			this.constructionsToRemove.add(conicPt);
 			
@@ -756,7 +756,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point conicPt = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(2)); // third point is a point from conic
+			Point conicPt = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2)); // third point is a point from conic
 			// Remove the current point from CP since it will be redefined
 			this.constructionsToRemove.add(conicPt);
 			
@@ -828,7 +828,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		String label1 = set1.getGeoObjectLabel();
 		String label2 = set1.getGeoObjectLabel();
 		
-		for (GeoConstruction gc : this.consProtocol.getConstructionSteps()) {
+		for (GeoConstruction gc : this.thmProtocol.getConstructionSteps()) {
 			if (gc instanceof IntersectionPoint) {
 				IntersectionPoint intP = (IntersectionPoint)gc;
 				String intPLabel1 = intP.getFirstPointSet().getGeoObjectLabel();
@@ -1263,8 +1263,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			Segment seg = new Segment(pt1, pt2, oArgs.get(0));
 			this.auxiliaryObjectsMap.put(seg.getGeoObjectLabel(), seg);
 			return new LineThroughTwoPoints(oArgs.get(0), pt1, pt2);
@@ -1296,8 +1296,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			Segment seg = new Segment(pt1, pt2, oArgs.get(0));
 			this.auxiliaryObjectsMap.put(seg.getGeoObjectLabel(), seg);
 			return new LineThroughTwoPoints(oArgs.get(0), pt1, pt2);
@@ -1329,8 +1329,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			return new LineThroughTwoPoints(oArgs.get(0), pt1, pt2);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -1362,9 +1362,9 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			Vector<GeoConstruction> consList = new Vector<GeoConstruction>();
 			
 			if (iArgs.size() == 3) {
-				Point ptRay1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-				Point ptVertex = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
-				Point ptRay2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(2));
+				Point ptRay1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+				Point ptVertex = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+				Point ptRay2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
 				
 				Angle ang = new Angle(ptRay1, ptVertex, ptRay2, oArgs.get(0));
 				this.auxiliaryObjectsMap.put(ang.getGeoObjectLabel(), ang);
@@ -1372,12 +1372,12 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			}
 			
 			// iArgs.size() == 2
-			Line line1 = (Line)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Line line2 = (Line)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Line line1 = (Line)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Line line2 = (Line)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			
 			// Find intersection point of these two lines in CP
 			Point intersecPt = null;
-			for (GeoConstruction gc : this.consProtocol.getConstructionSteps()) {
+			for (GeoConstruction gc : this.thmProtocol.getConstructionSteps()) {
 				if (gc instanceof IntersectionPoint) {
 					IntersectionPoint intPt = (IntersectionPoint)gc; // safe cast
 					
@@ -1491,7 +1491,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 				}
 				
 				for (String ptLabel : iArgs) {
-					Point pt = (Point)this.consProtocol.getConstructionMap().get(ptLabel);
+					Point pt = (Point)this.thmProtocol.getConstructionMap().get(ptLabel);
 					vertices.add(pt);
 				}
 			}
@@ -1503,8 +1503,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 				}
 				
 				// Take labels of new vertices and create these points by rotation for the measure of inner angle
-				Point originalPt = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0)); // point to rotate
-				Point center = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1)); // center of rotation
+				Point originalPt = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0)); // point to rotate
+				Point center = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1)); // center of rotation
 				vertices.add(originalPt);
 				vertices.add(center);
 				double angMeasureInDegrees = -(numVertices - 2) * 180.0 / numVertices; // take negative measure i.e. rotate clockwise to order vertices counterclockwise 
@@ -1565,7 +1565,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			
 			// Populate vertices
 			for (String ptLabel : iArgs) {
-				Point pt = (Point)this.consProtocol.getConstructionMap().get(ptLabel);
+				Point pt = (Point)this.thmProtocol.getConstructionMap().get(ptLabel);
 				vertices.add(pt);
 				consList.add(pt);
 			}
@@ -1616,8 +1616,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		try {
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			return new CircleWithCenterAndPoint(oArgs.get(0), pt1, pt2);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -1647,9 +1647,9 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		try {
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
-			Point pt3 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(2));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt3 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
 			return new CircumscribedCircle(oArgs.get(0), pt1, pt2, pt3);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -1680,8 +1680,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		try {
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			return new CircleWithCenterAndPoint(oArgs.get(0), pt1, pt2);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -1711,9 +1711,9 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		try {
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
-			Point pt3 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(2));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt3 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
 			return new CircumscribedCircle(oArgs.get(0), pt1, pt2, pt3);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -1743,8 +1743,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		try {
 			ArrayList<String> iArgs = ggCmd.getInputArgs();
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
-			Point pt1 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(0));
-			Point pt2 = (Point)this.consProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			return new CircleWithDiameter(oArgs.get(0), pt1, pt2);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));

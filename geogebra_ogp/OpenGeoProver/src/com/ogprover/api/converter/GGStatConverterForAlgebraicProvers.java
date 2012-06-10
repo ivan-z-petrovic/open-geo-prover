@@ -76,9 +76,9 @@ public class GGStatConverterForAlgebraicProvers extends GeoGebraStatementConvert
 		}
 		
 		try {
-			Point p1 = (Point)this.consProtocol.getConstructionMap().get(statementArgs.get(0));
-			Point p2 = (Point)this.consProtocol.getConstructionMap().get(statementArgs.get(1));
-			Point p3 = (Point)this.consProtocol.getConstructionMap().get(statementArgs.get(2));
+			Point p1 = (Point)this.thmProtocol.getConstructionMap().get(statementArgs.get(0));
+			Point p2 = (Point)this.thmProtocol.getConstructionMap().get(statementArgs.get(1));
+			Point p3 = (Point)this.thmProtocol.getConstructionMap().get(statementArgs.get(2));
 			
 			if (p1 == null || p2 == null || p3 == null) {
 				logger.error("Failed to convert statement - missing input argument");
@@ -114,9 +114,9 @@ public class GGStatConverterForAlgebraicProvers extends GeoGebraStatementConvert
 		}
 		
 		try {
-			GeoObject gobj1 = this.consProtocol.getConstructionMap().get(statementArgs.get(0));
-			GeoObject gobj2 = this.consProtocol.getConstructionMap().get(statementArgs.get(1));
-			GeoObject gobj3 = this.consProtocol.getConstructionMap().get(statementArgs.get(2));
+			GeoObject gobj1 = this.thmProtocol.getConstructionMap().get(statementArgs.get(0));
+			GeoObject gobj2 = this.thmProtocol.getConstructionMap().get(statementArgs.get(1));
+			GeoObject gobj3 = this.thmProtocol.getConstructionMap().get(statementArgs.get(2));
 			
 			if (gobj1 == null || gobj2 == null || gobj3 == null) {
 				logger.error("Failed to convert statement - missing input argument");
@@ -171,8 +171,8 @@ public class GGStatConverterForAlgebraicProvers extends GeoGebraStatementConvert
 			
 			if (gobj1 == null || gobj2 == null) {
 				// try with constructed geometry objects
-				gobj1 = this.consProtocol.getConstructionMap().get(statementArgs.get(0));
-				gobj2 = this.consProtocol.getConstructionMap().get(statementArgs.get(1));
+				gobj1 = this.thmProtocol.getConstructionMap().get(statementArgs.get(0));
+				gobj2 = this.thmProtocol.getConstructionMap().get(statementArgs.get(1));
 			}
 			
 			if (gobj1 == null || gobj2 == null) {
@@ -218,8 +218,8 @@ public class GGStatConverterForAlgebraicProvers extends GeoGebraStatementConvert
 		}
 		
 		try {
-			Line l1 = (Line)this.consProtocol.getConstructionMap().get(statementArgs.get(0));
-			Line l2 = (Line)this.consProtocol.getConstructionMap().get(statementArgs.get(1));
+			Line l1 = (Line)this.thmProtocol.getConstructionMap().get(statementArgs.get(0));
+			Line l2 = (Line)this.thmProtocol.getConstructionMap().get(statementArgs.get(1));
 			
 			if (l1 == null || l2 == null) {
 				logger.error("Failed to convert statement - missing input argument");
@@ -250,8 +250,8 @@ public class GGStatConverterForAlgebraicProvers extends GeoGebraStatementConvert
 		}
 		
 		try {
-			Line l1 = (Line)this.consProtocol.getConstructionMap().get(statementArgs.get(0));
-			Line l2 = (Line)this.consProtocol.getConstructionMap().get(statementArgs.get(1));
+			Line l1 = (Line)this.thmProtocol.getConstructionMap().get(statementArgs.get(0));
+			Line l2 = (Line)this.thmProtocol.getConstructionMap().get(statementArgs.get(1));
 			
 			if (l1 == null || l2 == null) {
 				logger.error("Failed to convert statement - missing input argument");

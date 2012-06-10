@@ -43,10 +43,10 @@ public abstract class GeoGebraStatementConverter {
 	 */
 	protected GeoGebraStatementCommand ggStatCmd;
 	/**
-	 * OGP's Construction Protocol for storage of converted statement.
+	 * OGP's Theorem Protocol for storage of converted statement.
 	 * It also contains converted geometry constructions except auxiliary objects.
 	 */
-	protected OGPTP consProtocol;
+	protected OGPTP thmProtocol;
 	/**
 	 * Map with auxiliary geometry objects (angles, segments, vectors, polygons etc.), used in constructions 
 	 * of other geometry objects.
@@ -116,10 +116,10 @@ public abstract class GeoGebraStatementConverter {
 		return this.ggStatCmd;
 	}
 	/**
-	 * @return the consProtocol
+	 * @return the thmProtocol
 	 */
-	public OGPTP getConsProtocol() {
-		return this.consProtocol;
+	public OGPTP getThmProtocol() {
+		return this.thmProtocol;
 	}
 	/**
 	 * @return the auxiliaryObjectsMap
@@ -148,7 +148,7 @@ public abstract class GeoGebraStatementConverter {
 	 */
 	public GeoGebraStatementConverter(GeoGebraTheoremConverter ggThmCnv) {
 		this.ggStatCmd = ggThmCnv.getTheorem().getStatement();
-		this.consProtocol = ggThmCnv.getConsProtocol();
+		this.thmProtocol = ggThmCnv.getThmProtocol();
 		this.auxiliaryObjectsMap = ggThmCnv.getConsConverter().getAuxiliaryObjectsMap(); // note: consCnv must be instantiated before this constructor!
 		this.bSuccess = true;
 	}
@@ -189,7 +189,7 @@ public abstract class GeoGebraStatementConverter {
 			return this.bSuccess;
 		}
 		
-		this.consProtocol.setTheoremStatement(thmStat);
+		this.thmProtocol.addThmStatement(thmStat);
 		return true;
 	}
 }

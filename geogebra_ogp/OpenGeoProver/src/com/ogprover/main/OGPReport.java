@@ -5,7 +5,9 @@
 package com.ogprover.main;
 
 import java.io.IOException;
+import java.util.Vector;
 
+import com.ogprover.pp.GeoGebraOGPOutputProverProtocol;
 import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.pp.tp.ndgcondition.NDGCondition;
 import com.ogprover.thmprover.TheoremProver;
@@ -43,7 +45,7 @@ public class OGPReport {
 	/**
 	 * Theorem protocol assigned to this report
 	 */
-	private OGPTP consProtocol = null;
+	private OGPTP thmProtocol = null;
 	
 	
 	
@@ -54,17 +56,17 @@ public class OGPReport {
 	 * ======================================================================
 	 */
 	/**
-	 * @param consProtocol the consProtocol to set
+	 * @param thmProtocol the thmProtocol to set
 	 */
-	public void setConsProtocol(OGPTP consProtocol) {
-		this.consProtocol = consProtocol;
+	public void setThmProtocol(OGPTP thmProtocol) {
+		this.thmProtocol = thmProtocol;
 	}
 
 	/**
-	 * @return the consProtocol
+	 * @return the thmProtocol
 	 */
-	public OGPTP getConsProtocol() {
-		return consProtocol;
+	public OGPTP getThmProtocol() {
+		return thmProtocol;
 	}
 	
 	
@@ -77,10 +79,10 @@ public class OGPReport {
 	/**
 	 * Constructor method.
 	 * 
-	 * @param cp	Theorem protocol assigned to this report
+	 * @param tp	Theorem protocol assigned to this report
 	 */
-	public OGPReport(OGPTP cp) {
-		this.consProtocol = cp;
+	public OGPReport(OGPTP tp) {
+		this.thmProtocol = tp;
 	}
 	
 	
@@ -103,7 +105,7 @@ public class OGPReport {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (parameters.createReport()) {	
-			String title = "OpenGeoProver Output for conjecture ``" + this.consProtocol.getTheoremName() + "'' ";
+			String title = "OpenGeoProver Output for conjecture ``" + this.thmProtocol.getTheoremName() + "'' ";
 			String author = null;
 			
 			if (parameters.getProver() == TheoremProver.TP_TYPE_WU)
@@ -125,12 +127,13 @@ public class OGPReport {
 	
 	/**
 	 * <i>[static method]</i><br>
-	 * Method for printing final report results.
+	 * Method for printing final report results to output files and to output GeoGebra object.
 	 * 
 	 * @param proverRetCode		Return code of prover execution.
-	 * @return					SUCCESS if succeeded to print results, general error otherwise
+	 * @param outputObject		GeoGebra output prover object.
+	 * @return					SUCCESS if succeeded to print results, general error otherwise.
 	 */
-	public int printProverResults(int proverRetCode) {
+	public int printProverResults(int proverRetCode, GeoGebraOGPOutputProverProtocol outputObject) {
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		ILogger logger = OpenGeoProver.settings.getLogger();
@@ -145,136 +148,77 @@ public class OGPReport {
 			} catch (IOException e) {
 				logger.error("Failed to write to output file(s).");
 				output.close();
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed to write to output file");
 				return OGPConstants.ERR_CODE_GENERAL;
 			}
 		}
 		
-		String statusText;
-		
+		String statusText = "";
 		switch (proverRetCode) {
 		case TheoremProver.THEO_PROVE_RET_CODE_FALSE:
 			statusText = "Theorem has been disproved.";
-			System.out.println(statusText);
-			if (parameters.createReport()) {
-				try {
-					output.closeItemWithDesc(statusText);
-				} catch (IOException e) {
-					logger.error("Failed to write to output file(s).");
-					output.close();
-					return OGPConstants.ERR_CODE_GENERAL;
-				}
-			}
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER, "false");
 			break;
 		case TheoremProver.THEO_PROVE_RET_CODE_TRUE:
 			statusText = "Theorem has been proved.";
-			System.out.println(statusText);
-			if (parameters.createReport()) {
-				try {
-					output.closeItemWithDesc(statusText);
-				} catch (IOException e) {
-					logger.error("Failed to write to output file(s).");
-					output.close();
-					return OGPConstants.ERR_CODE_GENERAL;
-				}
-			}
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER, "true");
 			break;
 		case TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN:
 			statusText = "Theorem can't be neither proved nor disproved.";
-			System.out.println(statusText);
-			if (parameters.createReport()) {
-				try {
-					output.closeItemWithDesc(statusText);
-				} catch (IOException e) {
-					logger.error("Failed to write to output file(s).");
-					output.close();
-					return OGPConstants.ERR_CODE_GENERAL;
-				}
-			}
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER, "unknown");
 			break;
 		case OGPConstants.ERR_CODE_GENERAL:
 			statusText = "Proving failed - general error occurred.";
-			System.out.println(statusText);
-			if (parameters.createReport()) {
-				boolean exceptionCaught = false;
-				try {
-					output.closeItemWithDesc(statusText); 
-				} catch (IOException e) {
-					logger.error("Failed to write to output file(s).");
-					exceptionCaught = true;
-				} finally {
-					output.close();
-					if (exceptionCaught)
-						return OGPConstants.ERR_CODE_GENERAL;
-				}
-			}
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed proving of geometry theorem");
 			break;
 		case OGPConstants.ERR_CODE_NULL:
 			statusText = "Proving failed - Found null object when expected non-null.";
-			System.out.println(statusText);
-			if (parameters.createReport()) {
-				boolean exceptionCaught = false;
-				try {
-					output.closeItemWithDesc(statusText);
-				} catch (IOException e) {
-					logger.error("Failed to write to output file(s).");
-					exceptionCaught = true;
-				} finally {
-					output.close();
-					if (exceptionCaught)
-						return OGPConstants.ERR_CODE_GENERAL;
-				}
-			}
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed proving of geometry theorem");
 			break;
 		case OGPConstants.ERR_CODE_SPACE:
 			statusText = "Proving failed - Space limit has been reached.";
-			System.out.println(statusText);
-			if (parameters.createReport()) {
-				try {
-					output.closeItemWithDesc(statusText);
-				} catch (IOException e) {
-					logger.error("Failed to write to output file(s).");
-					output.close();
-					return OGPConstants.ERR_CODE_GENERAL;
-				}
-			}
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER_MSG, statusText);
 			break;
 		case OGPConstants.ERR_CODE_TIME:
 			statusText = "Proving failed - Time for prover execution has been expired.";
-			System.out.println(statusText);
-			if (parameters.createReport()) {
-				try {
-					output.closeItemWithDesc(statusText);
-				} catch (IOException e) {
-					logger.error("Failed to write to output file(s).");
-					output.close();
-					return OGPConstants.ERR_CODE_GENERAL;
-				}
-			}
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER_MSG, statusText);
 			break;
 		}
+		// Print status message to output reports
+		if (parameters.createReport()) {
+			try {
+				output.closeItemWithDesc(statusText);
+			} catch (IOException e) {
+				logger.error("Failed to write to output file(s).");
+				output.close();
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed to write to output file");
+				return OGPConstants.ERR_CODE_GENERAL;
+			}
+		}
+		// Prover execution message to output object
+		if (proverRetCode == OGPConstants.ERR_CODE_GENERAL || proverRetCode == OGPConstants.ERR_CODE_NULL)
+			return OGPConstants.ERR_CODE_GENERAL;
 		
+		// Time of prover execution
+		Double timeInSec = OGPUtilities.roundUpToPrecision(stopwatch.getTimeIntSec());
+		outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME, timeInSec.toString());
 		StringBuilder sb = new StringBuilder();
 		sb.append("Time spent by the prover is ");
-		sb.append(OGPUtilities.roundUpToPrecision(stopwatch.getTimeIntSec()));
+		sb.append(timeInSec.toString());
 		sb.append(" seconds.");
 		String timeReportSec = sb.toString();
-		sb = new StringBuilder();
-		sb.append("Time spent by the prover is ");
-		sb.append(stopwatch.getTimeIntMillisec());
-		sb.append(" milliseconds.");
-		String timeReportMiliSec = sb.toString();
+		// Maximal number of terms
+		Integer maxNumTerms = OpenGeoProver.settings.getMaxNumOfTerms();
+		outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_NUMTERMS, maxNumTerms.toString());
 		sb = new StringBuilder();
 		sb.append("The biggest polynomial obtained during prover execution contains ");
-		sb.append(OpenGeoProver.settings.getMaxNumOfTerms());
+		sb.append(maxNumTerms.toString());
 		sb.append(" terms.");
 		String spaceReport = sb.toString();
-		
-		System.out.println(timeReportMiliSec);
-		System.out.println();
-		System.out.println();
-		System.out.println(spaceReport);
-		System.out.println();
-		System.out.println();
 		
 		if (parameters.createReport()) {
 			try {
@@ -287,6 +231,8 @@ public class OGPReport {
 			} catch (IOException e) {
 				logger.error("Failed to write to output file(s).");
 				output.close();
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed to write to output file");
 				return OGPConstants.ERR_CODE_GENERAL;
 			}
 		}
@@ -298,6 +244,8 @@ public class OGPReport {
 			} catch (IOException e) {
 				logger.error("Failed to write to output file(s).");
 				output.close();
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed to write to output file");
 				return OGPConstants.ERR_CODE_GENERAL;
 			}
 			return retCode;
@@ -315,14 +263,14 @@ public class OGPReport {
 			} catch (IOException e) {
 				logger.error("Failed to write to output file(s).");
 				output.close();
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed to write to output file");
 				return OGPConstants.ERR_CODE_GENERAL;
 			}
 		}
 		
-		retCode = this.consProtocol.translateNDGConditionsToUserReadableForm();
-		
-		if (retCode != OGPConstants.RET_CODE_SUCCESS) {
-			boolean exceptionCaught = false;
+		Vector<String> ndgList = this.thmProtocol.exportTranslatedNDGConditions();
+		if (ndgList == null) {
 			try {
 				output.openItem();
 				output.writePlainText("Failed to translate NDG Conditions to readable form");
@@ -330,20 +278,20 @@ public class OGPReport {
 				output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
 				output.closeSubSection();
 				output.closeSection();
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed to translate NDG conditions");
 			} catch (IOException e) {
 				logger.error("Failed to write to output file(s).");
-				exceptionCaught = true;
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed to write to output file");
 			}
 			finally {
 				output.close();
-				if (exceptionCaught)
-					retCode =  OGPConstants.ERR_CODE_GENERAL;
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
 			}
-			
-			return retCode;
+			return OGPConstants.ERR_CODE_GENERAL;
 		}
+		outputObject.setNdgList(ndgList);
 		
-		if (this.consProtocol.getNdgConditions() == null) {
+		if (this.thmProtocol.getNdgConditions() == null) { // might not be an error
 			boolean exceptionCaught = false;
 			try {
 				output.openItem();
@@ -354,6 +302,8 @@ public class OGPReport {
 				output.closeSection();
 			} catch (IOException e) {
 				logger.error("Failed to write to output file(s).");
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed to write to output file");
 				exceptionCaught = true;
 			}
 			finally {
@@ -361,13 +311,11 @@ public class OGPReport {
 				if (exceptionCaught)
 					retCode =  OGPConstants.ERR_CODE_GENERAL;
 			}
-			
 			return retCode;
 		}
-		
-		for (NDGCondition ndgc : this.consProtocol.getNdgConditions()) {
+		// Write NDGs to output files
+		for (NDGCondition ndgc : this.thmProtocol.getNdgConditions()) {
 			String ndgcText = ndgc.getBestDescription();
-				
 			try {
 				if (ndgcText == null || ndgcText.length() == 0) {
 					output.openItem();
@@ -382,6 +330,8 @@ public class OGPReport {
 			} catch (IOException e) {
 				logger.error("Failed to write to output file(s).");
 				output.close();
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
+				outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed to write to output file");
 				return OGPConstants.ERR_CODE_GENERAL;
 			}
 		}
@@ -403,6 +353,8 @@ public class OGPReport {
 		} catch (IOException e) {
 			logger.error("Failed to write to output file(s).");
 			output.close();
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS, "false");
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG, "Failed to write to output file");
 			return OGPConstants.ERR_CODE_GENERAL;
 		}
 		
