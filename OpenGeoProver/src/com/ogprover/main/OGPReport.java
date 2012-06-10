@@ -43,7 +43,7 @@ public class OGPReport {
 	/**
 	 * Theorem protocol assigned to this report
 	 */
-	private OGPTP consProtocol = null;
+	private OGPTP thmProtocol = null;
 	
 	
 	
@@ -54,17 +54,17 @@ public class OGPReport {
 	 * ======================================================================
 	 */
 	/**
-	 * @param consProtocol the consProtocol to set
+	 * @param thmProtocol the thmProtocol to set
 	 */
-	public void setConsProtocol(OGPTP consProtocol) {
-		this.consProtocol = consProtocol;
+	public void setThmProtocol(OGPTP thmProtocol) {
+		this.thmProtocol = thmProtocol;
 	}
 
 	/**
-	 * @return the consProtocol
+	 * @return the thmProtocol
 	 */
-	public OGPTP getConsProtocol() {
-		return consProtocol;
+	public OGPTP getThmProtocol() {
+		return thmProtocol;
 	}
 	
 	
@@ -77,10 +77,10 @@ public class OGPReport {
 	/**
 	 * Constructor method.
 	 * 
-	 * @param cp	Theorem protocol assigned to this report
+	 * @param tp	Theorem protocol assigned to this report
 	 */
-	public OGPReport(OGPTP cp) {
-		this.consProtocol = cp;
+	public OGPReport(OGPTP tp) {
+		this.thmProtocol = tp;
 	}
 	
 	
@@ -103,7 +103,7 @@ public class OGPReport {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (parameters.createReport()) {	
-			String title = "OpenGeoProver Output for conjecture ``" + this.consProtocol.getTheoremName() + "'' ";
+			String title = "OpenGeoProver Output for conjecture ``" + this.thmProtocol.getTheoremName() + "'' ";
 			String author = null;
 			
 			if (parameters.getProver() == TheoremProver.TP_TYPE_WU)
@@ -319,7 +319,7 @@ public class OGPReport {
 			}
 		}
 		
-		retCode = this.consProtocol.translateNDGConditionsToUserReadableForm();
+		retCode = this.thmProtocol.translateNDGConditionsToUserReadableForm();
 		
 		if (retCode != OGPConstants.RET_CODE_SUCCESS) {
 			boolean exceptionCaught = false;
@@ -343,7 +343,7 @@ public class OGPReport {
 			return retCode;
 		}
 		
-		if (this.consProtocol.getNdgConditions() == null) {
+		if (this.thmProtocol.getNdgConditions() == null) {
 			boolean exceptionCaught = false;
 			try {
 				output.openItem();
@@ -365,7 +365,7 @@ public class OGPReport {
 			return retCode;
 		}
 		
-		for (NDGCondition ndgc : this.consProtocol.getNdgConditions()) {
+		for (NDGCondition ndgc : this.thmProtocol.getNdgConditions()) {
 			String ndgcText = ndgc.getBestDescription();
 				
 			try {
