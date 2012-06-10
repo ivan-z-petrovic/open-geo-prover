@@ -47,9 +47,9 @@ public abstract class GeoGebraConstructionConverter {
 	 */
 	protected Vector<GeoGebraConstructionCommand> ggCmdList;
 	/**
-	 * OGP's Construction Protocol for storage of converted construction.
+	 * OGP's Theorem Protocol for storage of converted construction.
 	 */
-	protected OGPTP consProtocol;
+	protected OGPTP thmProtocol;
 	/**
 	 * List of constructions to be removed from Construction Protocol after each
 	 * step of conversion. 
@@ -373,10 +373,10 @@ public abstract class GeoGebraConstructionConverter {
 		return ggCmdList;
 	}
 	/**
-	 * @return the consProtocol
+	 * @return the thmProtocol
 	 */
-	public OGPTP getConsProtocol() {
-		return this.consProtocol;
+	public OGPTP getThmProtocol() {
+		return this.thmProtocol;
 	}
 	/**
 	 * @return the auxiliaryObjectsMap
@@ -405,7 +405,7 @@ public abstract class GeoGebraConstructionConverter {
 	 */
 	public GeoGebraConstructionConverter(GeoGebraTheoremConverter ggThmCnv) {
 		this.ggCmdList = ggThmCnv.getTheorem().getConstructionList();
-		this.consProtocol = ggThmCnv.getConsProtocol();
+		this.thmProtocol = ggThmCnv.getThmProtocol();
 		this.constructionsToRemove = new Vector<GeoConstruction>();
 		this.auxiliaryObjectsMap = new HashMap<String, GeoObject>();
 		this.bSuccess = true;
@@ -434,7 +434,7 @@ public abstract class GeoGebraConstructionConverter {
 			return false;
 		}
 		
-		if (this.consProtocol == null) {
+		if (this.thmProtocol == null) {
 			logger.error("Can't convert constructions - Missing storage for converted constructions");
 			this.bSuccess = false;
 			return false;
@@ -452,9 +452,9 @@ public abstract class GeoGebraConstructionConverter {
 			
 			if (this.constructionsToRemove.size() > 0) {
 				for (GeoConstruction gc : this.constructionsToRemove)
-					this.consProtocol.removeGeoConstruction(gc);
+					this.thmProtocol.removeGeoConstruction(gc);
 			}
-			this.consProtocol.addGeoConstruction(geoCons);
+			this.thmProtocol.addGeoConstruction(geoCons);
 		}
 		
 		return true;
@@ -665,7 +665,7 @@ public abstract class GeoGebraConstructionConverter {
 	 * @return			The object found by label or null if not found.
 	 */
 	protected GeoObject getGeoObject(String objLabel) {
-		GeoConstruction gc = this.consProtocol.getConstructionMap().get(objLabel);
+		GeoConstruction gc = this.thmProtocol.getConstructionMap().get(objLabel);
 		
 		if (gc != null)
 			return gc;
