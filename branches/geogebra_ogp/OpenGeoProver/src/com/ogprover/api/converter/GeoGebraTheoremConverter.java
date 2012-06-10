@@ -46,9 +46,9 @@ public abstract class GeoGebraTheoremConverter {
 	 */
 	protected GeoGebraStatementConverter statConverter;
 	/**
-	 * OGP's Construction Protocol for storage of converted geometry theorem.
+	 * OGP's Theorem Protocol for storage of converted geometry theorem.
 	 */
-	protected OGPTP consProtocol;
+	protected OGPTP thmProtocol;
 	/**
 	 * Flag which is used for success or failure of conversion operation.
 	 */
@@ -89,10 +89,10 @@ public abstract class GeoGebraTheoremConverter {
 		return this.statConverter;
 	}
 	/**
-	 * @return the consProtocol
+	 * @return the thmProtocol
 	 */
-	public OGPTP getConsProtocol() {
-		return this.consProtocol;
+	public OGPTP getThmProtocol() {
+		return this.thmProtocol;
 	}
 	/**
 	 * @return the bSuccess
@@ -112,11 +112,11 @@ public abstract class GeoGebraTheoremConverter {
 	 * Constructor method.
 	 * 
 	 * @param theorem	Theorem to be proved
-	 * @param ogpCP		OGP theorem protocol object for storage of converted theorem
+	 * @param ogpTP		OGP theorem protocol object for storage of converted theorem
 	 */
-	public GeoGebraTheoremConverter(GeoGebraTheorem theorem, OGPTP ogpCP) {
+	public GeoGebraTheoremConverter(GeoGebraTheorem theorem, OGPTP ogpTP) {
 		this.theorem = theorem;
-		this.consProtocol = ogpCP;
+		this.thmProtocol = ogpTP;
 		this.bSuccess = true;
 		this.consConverter = null; // instantiated in sub-class
 		this.statConverter = null; // instantiated in sub-class
@@ -142,7 +142,7 @@ public abstract class GeoGebraTheoremConverter {
 		// on objects that don't have instantiated converters for constructions and statement.
 		
 		// Theorem name
-		this.consProtocol.setTheoremName(this.getTheorem().getTheoremName());
+		this.thmProtocol.setTheoremName(this.getTheorem().getTheoremName());
 		
 		// Convert constructions
 		if (this.consConverter.convert() == false) {
