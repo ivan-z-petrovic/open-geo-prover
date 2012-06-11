@@ -67,14 +67,14 @@ public class AMConstruction {
 	 * ======================================================================
 	 */
 	/**
-	 * @return An empty geometrical construction.
+	 * An empty geometrical construction.
 	 */
 	public AMConstruction() {
 		this.points = new Vector<AMPoint>();
 	}
 	
 	/**
-	 * @return A geometrical construction containing just one free point.
+	 * A geometrical construction containing just one free point.
 	 */
 	public AMConstruction(AMPoint p) {
 		this.points = new Vector<AMPoint>();

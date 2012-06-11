@@ -33,7 +33,7 @@ public class AMIntersectionPoint extends AMPoint {
 	/**
 	 * Points used to construct this point
 	 */
-	protected final AMPoint u,v,p,q;
+	protected AMPoint u,v,p,q;
 
 	
 	/*
@@ -43,13 +43,13 @@ public class AMIntersectionPoint extends AMPoint {
 	 */
 	/**
 	 * Constructor method
+	 * Returns the point with a given label, intersection between the lines (uv) and (pq)
 	 * 
-	 * @param pointLabel	Label of point
-	 * @param u				Previously constructed point
-	 * @param v 			Previously constructed point
-	 * @param p				Previously constructed point
-	 * @param q				Previously constructed point
-	 * @return The point of label pointLabel, intersection between the lines (uv) and (pq)
+	 * @param label 	Label of point
+	 * @param u			Previously constructed point
+	 * @param v 		Previously constructed point
+	 * @param p			Previously constructed point
+	 * @param q			Previously constructed point
 	 */
 	public AMIntersectionPoint(String label,AMPoint u, AMPoint v, AMPoint p, AMPoint q) {
 		type = 2;
@@ -67,12 +67,12 @@ public class AMIntersectionPoint extends AMPoint {
 	
 	/**
 	 * Constructor method
+	 * Returns the point with an automatically generated label, intersection between the lines (uv) and (pq)
 	 * 
 	 * @param u				Previously constructed point
 	 * @param v 			Previously constructed point
 	 * @param p				Previously constructed point
 	 * @param q				Previously constructed point
-	 * @return The point of label pointLabel, intersection between the lines (uv) and (pq)
 	 */
 	public AMIntersectionPoint(AMPoint u, AMPoint v, AMPoint p, AMPoint q) {
 		type = 2;
