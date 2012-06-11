@@ -37,9 +37,9 @@ public class AMFreePoint extends AMPoint {
 	 */
 	/**
 	 * Constructor method
+	 * Returns a free point with a given label
 	 * 
-	 * @param pointLabel	Label of point
-	 * @return 				A point of label pointLabel
+	 * @param label 	Label of point
 	 */
 	public AMFreePoint(String label) {
 		type = 0;
@@ -49,8 +49,7 @@ public class AMFreePoint extends AMPoint {
 	
 	/**
 	 * Constructor method
-	 * 
-	 * @return	A point of label automatically generated (of the form "AMn", where n is an integer)
+	 * Returns a free point with an automatically generated label (of the form "AMn", where n is an integer)
 	 */
 	public AMFreePoint() {
 		type = 0;

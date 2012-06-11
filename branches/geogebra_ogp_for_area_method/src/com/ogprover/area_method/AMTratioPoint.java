@@ -33,11 +33,11 @@ public class AMTratioPoint extends AMPoint {
 	/**
 	 * Points used to construct this point
 	 */
-	protected final AMPoint y,u,v;
+	protected AMPoint y,u,v;
 	/**
 	 * Ratio used to construct this point
 	 */
-	protected final AMRatio r;
+	protected AMRatio r;
 
 	
 	/*
@@ -47,16 +47,16 @@ public class AMTratioPoint extends AMPoint {
 	 */
 	/**
 	 * Constructor method
+	 * Returns the point with a given label, constructed as TRATIO(y,u,v,r)
+	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf
 	 * 
-	 * @param pointLabel	Label of point
-	 * @param y				Previously constructed point
-	 * @param u				Previously constructed point
-	 * @param v 			Previously constructed point
-	 * @param r				Ratio
-	 * @return The point of label pointLabel, constructed as TRATIO(y,u,v,r)
-	 * @see http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf
+	 * @param label		Label of point
+	 * @param y			Previously constructed point
+	 * @param u			Previously constructed point
+	 * @param v 		Previously constructed point
+	 * @param r			Ratio
 	 */
-	public AMTratioPoint(String label,AMPoint y,AMPoint w,AMPoint u, AMPoint v) {
+	public AMTratioPoint(String label,AMPoint y,AMPoint w,AMPoint u, AMPoint v, AMRatio r) {
 		type = 2;
 		this.label = label;
 		this.y = y;
@@ -69,16 +69,16 @@ public class AMTratioPoint extends AMPoint {
 	}
 	
 	/**
-	 * Constructor method
+	 * Constructor method.
+	 * Returns the point with an automatically generated label, constructed as TRATIO(y,u,v,r)
+	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf
 	 * 
-	 * @param y				Previously constructed point
-	 * @param u				Previously constructed point
-	 * @param v 			Previously constructed point
-	 * @param r				Ratio
-	 * @return The point of label automatically generated, constructed as TRATIO(y,u,v,r)
-	 * @see http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf
+	 * @param y		Previously constructed point
+	 * @param u		Previously constructed point
+	 * @param v 	Previously constructed point
+	 * @param r		Ratio
 	 */
-	public AMTratioPoint(AMPoint y,AMPoint w,AMPoint u, AMPoint v) {
+	public AMTratioPoint(AMPoint y,AMPoint w,AMPoint u, AMPoint v, AMRatio r) {
 		type = 2;
 		this.label = nextAvailableName();
 		this.y = y;

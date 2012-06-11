@@ -33,7 +33,7 @@ public class AMFootPoint extends AMPoint {
 	/**
 	 * Points used to construct this point
 	 */
-	protected final AMPoint p,u,v;
+	protected AMPoint p,u,v;
 
 	
 	/*
@@ -43,12 +43,12 @@ public class AMFootPoint extends AMPoint {
 	 */
 	/**
 	 * Constructor method
+	 * Returns the point with a given label, foot from the point p on the line (uv).
 	 * 
-	 * @param pointLabel	Label of point
+	 * @param label	Label of point
 	 * @param p				Previously constructed point
 	 * @param u				Previously constructed point
 	 * @param v 			Previously constructed point
-	 * @return The point of label pointLabel, foot from the point p on the line (uv).
 	 */
 	public AMFootPoint(String label,AMPoint p, AMPoint u, AMPoint v) {
 		type = 2;
@@ -64,11 +64,11 @@ public class AMFootPoint extends AMPoint {
 	
 	/**
 	 * Constructor method
+	 * Returns the point with an automatically generated label, foot from the point p on the line (uv).
 	 * 
 	 * @param p				Previously constructed point
 	 * @param u				Previously constructed point
 	 * @param v 			Previously constructed point
-	 * @return The point of label automatically generated, foot from the point p on the line (uv).
 	 */
 	public AMFootPoint(AMPoint p, AMPoint u, AMPoint v) {
 		type = 2;
