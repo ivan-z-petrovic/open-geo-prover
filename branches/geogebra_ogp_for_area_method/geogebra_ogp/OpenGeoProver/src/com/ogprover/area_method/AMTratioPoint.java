@@ -9,7 +9,7 @@ import java.util.Vector;
 /**
  * <dl>
  * <dt><b>Class description:</b></dt>
- * <dd>Class for construction of a P-ratio point in an area method construction</dd>
+ * <dd>Class for construction of a T-ratio point in an area method construction</dd>
  * </dl>
  * 
  * @version 1.00
@@ -51,19 +51,16 @@ public class AMTratioPoint extends AMPoint {
 	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf
 	 * 
 	 * @param label 	Label of point
-	 * @param y			Previously constructed point
 	 * @param u			Previously constructed point
 	 * @param v 		Previously constructed point
 	 * @param r			Ratio
 	 */
-	public AMTratioPoint(String label,AMPoint y,AMPoint w,AMPoint u, AMPoint v, AMRatio r) {
+	public AMTratioPoint(String label,AMPoint u, AMPoint v, AMRatio r) {
 		type = 2;
 		this.label = label;
-		this.y = y;
 		this.u = u;
 		this.v = v;
 		dependantPoints = new Vector<AMPoint>();
-		dependantPoints.add(y);
 		dependantPoints.add(u);
 		dependantPoints.add(v);
 	}
@@ -73,19 +70,16 @@ public class AMTratioPoint extends AMPoint {
 	 * Returns the point with an automatically generated label, constructed as TRATIO(y,u,v,r)
 	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf
 	 * 
-	 * @param y		Previously constructed point
 	 * @param u		Previously constructed point
 	 * @param v 	Previously constructed point
 	 * @param r		Ratio
 	 */
-	public AMTratioPoint(AMPoint y,AMPoint w,AMPoint u, AMPoint v, AMRatio r) {
+	public AMTratioPoint(AMPoint u, AMPoint v, AMRatio r) {
 		type = 2;
 		this.label = nextAvailableName();
-		this.y = y;
 		this.u = u;
 		this.v = v;
 		dependantPoints = new Vector<AMPoint>();
-		dependantPoints.add(y);
 		dependantPoints.add(u);
 		dependantPoints.add(v);
 	}
