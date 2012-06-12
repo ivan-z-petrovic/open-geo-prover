@@ -102,7 +102,26 @@ public abstract class GeoConstruction implements GeoObject {
 	 * </b></i>
 	 */
 	public static final int GEOCONS_TYPE_GEN_SEGMENT_RATIO = 8;
-	// put other special point constructions here => [9 .. 19]
+	/**
+	 * <i><b>
+	 * Construction of a foot from a point to a line, where the line is 
+	 * given by two points, for the area method
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_AM_FOOT_POINT = 9;
+	/**
+	 * <i><b>
+	 * TRATIO construction of a point -
+	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf
+	 */
+	public static final int GEOCONS_TYPE_TRATIO_POINT = 10;
+	/**
+	 * <i><b>
+	 * PRATIO construction of a point -
+	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf
+	 */
+	public static final int GEOCONS_TYPE_PRATIO_POINT = 11;
+	// put other special point constructions here => [12 .. 19]
 	// --- Intersection points ---
 	/**
 	 * <i><b>
@@ -111,7 +130,14 @@ public abstract class GeoConstruction implements GeoObject {
 	 * </b></i>
 	 */
 	public static final int GEOCONS_TYPE_INTERSECTION = 20;
-	// put other intersection point constructions here => [21 .. 29]
+	/**
+	 * <i><b>
+	 * Construction of intersection of two lines given by 
+	 * two points each, for the area method
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_AM_INTERSECTION_POINT = 21;
+	// put other intersection point constructions here => [22 .. 29]
 	// --- Random points ---
 	/**
 	 * <i><b>
