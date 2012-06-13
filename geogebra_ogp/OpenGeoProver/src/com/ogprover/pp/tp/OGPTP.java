@@ -178,14 +178,6 @@ public class OGPTP {
 	public Map<String, GeoConstruction> getConstructionMap() {
 		return constructionMap;
 	}
-	
-	/**
-	 * Method that adds a new construction
-	 */
-	public void addConstruction(String label, GeoConstruction construction) {
-		constructionSteps.add(construction);
-		constructionMap.put(label, construction);
-	}
 
 	/**
 	 * Method that sets theorem statement
