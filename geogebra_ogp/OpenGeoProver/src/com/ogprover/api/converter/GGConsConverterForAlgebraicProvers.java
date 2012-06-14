@@ -428,13 +428,15 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 	protected GeoConstruction convertTangentCmd(GeoGebraConstructionCommand ggCmd) {
 		/*
 		 * TODO - In GeoGebra there is a construction of tangent lines to conic parallel with given line.
-		 * It is not yet supported by OGP. Only tangents on conic through given point are currently supported.
+		 * It is not supported by OGP. Only tangents on conic through given point are currently supported.
 		 *
 		 * Construction of tangent line requires exactly two input arguments
 		 * which are label of a point and label of circle or conic. It produces
 		 * one or two tangent lines depending on whether the point is on 
 		 * circle/conic or not, but always has two output labels - if has one
 		 * tangent, the label of second is empty string.
+		 * 
+		 * With the area method, one can not produce more than one tangent line, so  
 		 */
 		
 		ILogger logger = OpenGeoProver.settings.getLogger();
