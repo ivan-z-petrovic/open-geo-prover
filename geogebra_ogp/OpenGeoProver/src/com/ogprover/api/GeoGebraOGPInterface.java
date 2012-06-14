@@ -198,6 +198,7 @@ public class GeoGebraOGPInterface implements OGPAPI {
 		OGPTP thmProtocol = new OGPTP();
 		int retCode = OGPConstants.RET_CODE_SUCCESS;
 		GeoTheorem theorem = null;
+		OpenGeoProver.settings.setParsedTP(null); // clean previous parsed TP
 		
 		// Prepare output object
 		GeoGebraOGPOutputProverProtocol outputObject = new GeoGebraOGPOutputProverProtocol();
@@ -214,6 +215,7 @@ public class GeoGebraOGPInterface implements OGPAPI {
 		logger.info("Reading input geometry problem...");
 		if (this.readGeometryTheorem(inputObject, thmProtocol) == false)
 			return exitProver(outputObject, "Failed in reading input geometry theorem");
+		OpenGeoProver.settings.setParsedTP(thmProtocol);
 		
 		// Creating output files
 		if (parameters.createReport()) {

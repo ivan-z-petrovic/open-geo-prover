@@ -94,6 +94,12 @@ public class OGPDocHandler implements DocHandler {
 	// generic arguments
 	public static final String ATTR_NAME_GEN = "a"; // base name of all generic arguments: a0, a1, a2, a3, a4, ...	
 	
+	/**
+	 * Special characters
+	 */
+	public static final char CH_QUESTION_EQ = '\u225f'; // special Unicode character for question equality
+	// TODO - add other characters here
+	
 	
 	// ===== Storage objects for parsed data =====
 	/**
@@ -554,7 +560,8 @@ public class OGPDocHandler implements DocHandler {
 			else if (this.ggThm.getProveCmd() == null)
 				bValidThm = false;
 			else if (this.ggThm.getStatement() == null) {
-				GeoGebraStatementCommand ggStmCmd = this.createStatementFromText(this.ggThm.getProveCmd().getInputArg());
+				ProveCmd proveCmd = this.ggThm.getProveCmd();
+				GeoGebraStatementCommand ggStmCmd = this.createStatementFromText(proveCmd.getInputArg());
 				
 				if (ggStmCmd == null)
 					bValidThm = false;
@@ -598,36 +605,55 @@ public class OGPDocHandler implements DocHandler {
 			return null;
 		}
 		
-		// === Brackets ===
-		int length = statementText.length();
-		int lbracIdx = statementText.indexOf('[');
-		int rbracIdx = statementText.lastIndexOf(']');
-		if (lbracIdx == -1 || rbracIdx == -1) {
-			logger.error("Statement in bad format - missing bracket");
-			return null;
-		}
-		if (length != rbracIdx + 1) {
-			logger.error("Statement in bad format - statement text doesn't end with right bracket");
-			return null;
-		}
-		
-		// === Statement name ===
-		String statementName = statementText.substring(0, lbracIdx);
-		if (statementName.length() == 0) {
-			logger.error("Statement in bad format - missing statement name");
-			return null;
-		}
-		
-		// === Argument list ===
-		String args = statementText.substring(lbracIdx + 1, rbracIdx);
-		String[] argsArray = args.split(",");
+		String statementName;
 		ArrayList<String> statementArgs = new ArrayList<String>();
-		for (String arg : argsArray)
-			statementArgs.add(arg.trim());
+		String statResultLabel;
+		
+		// First of all check special infix formats of theorem statement
+		if (statementText.indexOf(OGPDocHandler.CH_QUESTION_EQ) != -1) {
+			String[] strArr = statementText.split((new Character(OGPDocHandler.CH_QUESTION_EQ)).toString());
+			
+			if (strArr.length != 2) {
+				logger.error("Statement in bad format - incorrect number of statement arguments in infix notation");
+				return null;
+			}
+			
+			statementName = GeoGebraStatementCommand.COMMAND_EQUAL;
+			statementArgs.add(strArr[0].trim());
+			statementArgs.add(strArr[1].trim());
+		}
+		// TODO - "else if" statements for other special infix notations
+		else { // prefix notation
+			// === Brackets ===
+			int length = statementText.length();
+			int lbracIdx = statementText.indexOf('[');
+			int rbracIdx = statementText.lastIndexOf(']');
+			if (lbracIdx == -1 || rbracIdx == -1) {
+				logger.error("Statement in bad format - missing bracket");
+				return null;
+			}
+			if (length != rbracIdx + 1) {
+				logger.error("Statement in bad format - statement text doesn't end with right bracket");
+				return null;
+			}
+		
+			// === Statement name ===
+			statementName = statementText.substring(0, lbracIdx);
+			if (statementName.length() == 0) {
+				logger.error("Statement in bad format - missing statement name");
+				return null;
+			}
+		
+			// === Argument list ===
+			String args = statementText.substring(lbracIdx + 1, rbracIdx);
+			String[] argsArray = args.split(",");
+			for (String arg : argsArray)
+				statementArgs.add(arg.trim());
+		}
 		
 		// === Create statement command ===
 		Long rndLabelNum = new Long(Math.round(Math.random() * 1000));
-		String statResultLabel = "statRes_" + rndLabelNum.toString();
+		statResultLabel = "statRes_" + rndLabelNum.toString();
 		ArrayList<String> outputArgs = new ArrayList<String>();
 		outputArgs.add(statResultLabel);
 		GeoGebraCommand ggCmd = GeoGebraCommandFactory.createGeoGebraCommand(statementName, statementArgs, outputArgs, GeoGebraObject.OBJ_TYPE_NONE);

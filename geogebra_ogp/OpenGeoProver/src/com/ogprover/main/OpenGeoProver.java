@@ -9,6 +9,7 @@ import java.io.IOException;
 import com.ogprover.api.GeoGebraOGPInterface;
 import com.ogprover.pp.GeoGebraOGPInputProverProtocol;
 import com.ogprover.pp.GeoGebraOGPOutputProverProtocol;
+import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.utilities.io.CustomFileReader;
 import com.ogprover.utilities.logger.ILogger;
 
@@ -129,7 +130,11 @@ public class OpenGeoProver {
 		GeoGebraOGPOutputProverProtocol outputObject = (GeoGebraOGPOutputProverProtocol)ogpInterface.prove(inputObject); // safe cast
 		
 		// Print results
-		System.out.println("Prover results");
+		OGPTP tp = OpenGeoProver.settings.getParsedTP();
+		if (tp != null)
+			System.out.println("Prover results for theorem \"" + tp.getTheoremName() + "\":");
+		else
+			System.out.println("Prover results");
 		System.out.println(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS + ": " + outputObject.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS));
 		System.out.println(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG + ": " + outputObject.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_FAILURE_MSG));
 		System.out.println(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER + ": " + outputObject.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_PROVER));
