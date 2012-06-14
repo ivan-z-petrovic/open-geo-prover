@@ -77,7 +77,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 	 *  - TRatioPoint
 	 *  - LineThroughTwoPoints
 	 *  - CircleWithCenterAndPoint
-	 * and add in the  
+	 * and add only constructions of these types in thmProtocol.
 	 */
 	
 	/*
@@ -243,10 +243,21 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 							" have been generated using the same point");
 					return null;
 				}
+				if (firstSet instanceof Circle || firstSet instanceof Line) {
+					// This shouldn't happen
+					logger.error("Object " + firstSet.getGeoObjectLabel() + " has not been converted into an area method-compatible class.");
+					return null;
+				}
+				if (secondSet instanceof Circle || secondSet instanceof Line) {
+					// This shouldn't happen
+					logger.error("Object " + secondSet.getGeoObjectLabel() + " has not been converted into an area method-compatible class.");
+					return null;
+				}
+				logger.error("The area method cannot deal with intersection between general conics.");
 			}
 
 			// oArgs.size() > 1
-			logger.error("The area method cannot handle intersection between objects which " +
+			logger.error("The area method cannot deal with intersection between objects which " +
 					"intersect themselves several times");
 			return null;
 		} catch (ClassCastException ex) {
@@ -257,6 +268,549 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			return null;
 		}
 	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertMidpointCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertMidpointCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Construction of segment's midpoint requires two input arguments
+		 * which are labels of two points or one input argument which is label of segment.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 1, 2, 1, 1) == false) {
+			logger.error("Failed to validate command: " + MidpointCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			Point pt1 = null;
+			Point pt2 = null;
+			
+			if (iArgs.size() == 1) {
+				Line s = (Line)this.thmProtocol.getConstructionMap().get(iArgs.get(0)); // line representing a segment
+				Vector<Point> points = s.getPoints();
+				pt1 = points.get(0);
+				pt2 = points.get(1);
+			}
+			if (iArgs.size() == 2) {
+				pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+				pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			}
+			return new PRatioPoint(oArgs.get(0), pt1, pt1, pt2, new AMRatio(1,2));
+			
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertCenterCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertCenterCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * For the area method can construct the center of a conic only if this is a circle.
+		 * 
+		 * Construction of center of circle/conic requires exactly one input argument
+		 * which is the label of a circle/conic. 
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 1, 1, 1, 1) == false) {
+			logger.error("Failed to validate command: " + CenterCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			SetOfPoints conic = (SetOfPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			
+			if (!(conic instanceof Circle) /*&& !(conic instanceof ConicSection)*/) {
+				logger.error("Can't construct center on object which is not circle and conic section.");
+				return null;
+			}
+			
+			if (!(conic instanceof CircleWithCenterAndPoint)) {
+				// This shouldn't happen
+				logger.error("Object " + conic.getGeoObjectLabel() + " has not been converted into an area method-compatible class.");
+				return null;
+			}
+			
+			Circle c = (Circle)conic;
+			return new CenterOfCircle(oArgs.get(0), c);
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	
+	/*
+	 * LINES
+	 * 
+	 * When reading the following, remember that we always want to return a LineThroughTwoPoints,
+	 * that's why the constructions may be a little complicated sometimes.
+	 */
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertLineCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertLineCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Construction of line requires exactly two input arguments
+		 * which are labels of either two points or a point and line.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
+			logger.error("Failed to validate command: " + LineCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			GeoObject obj2 = this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			
+			if (obj2 instanceof Point)
+				return new LineThroughTwoPoints(oArgs.get(0), pt1, (Point)obj2);
+			
+			// Else, obj2 is supposed to be a line
+			LineThroughTwoPoints line = (LineThroughTwoPoints)obj2;
+			Point pointOnLine1 = line.getPoints().get(0);
+			Point pointOnLine2 = line.getPoints().get(1);
+			Point aux = new PRatioPoint(nextAvailableName(), pt1, pointOnLine1, pointOnLine2, new AMRatio(1));
+			this.thmProtocol.addGeoConstruction(aux);
+			return new LineThroughTwoPoints(oArgs.get(0), aux, pt1);
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertOrthogonalLineCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertOrthogonalLineCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Construction of perpendicular line requires exactly two input arguments
+		 * which are labels of a point and a line.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
+			logger.error("Failed to validate command: " + OrthogonalLineCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			Point pt = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			LineThroughTwoPoints line = (LineThroughTwoPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pointOnLine1 = line.getPoints().get(0);
+			Point pointOnLine2 = line.getPoints().get(1);
+			Point footPoint = new AMFootPoint(nextAvailableName(), pt, pointOnLine1, pointOnLine2);
+			this.thmProtocol.addGeoConstruction(footPoint);
+			return new LineThroughTwoPoints(oArgs.get(0), footPoint, pt);
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertLineBisectorCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertLineBisectorCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Construction of perpendicular bisector requires two input arguments
+		 * which are labels of points or one input argument which is label of segment.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 1, 2, 1, 1) == false) {
+			logger.error("Failed to validate command: " + LineBisectorCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			Point pt1 = null;
+			Point pt2 = null;
+			
+			if (iArgs.size() == 1) {
+				LineThroughTwoPoints line = (LineThroughTwoPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+				pt1 = line.getPoints().get(0);
+				pt2 = line.getPoints().get(1);
+			}
+			else {
+				pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+				pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			}
+			
+			Point midPoint = new PRatioPoint (nextAvailableName(), pt1, pt1, pt2, new AMRatio(1,2));
+			this.thmProtocol.addGeoConstruction(midPoint);
+			
+			Point aux = new TRatioPoint (nextAvailableName(), midPoint, pt2, new AMRatio(1));
+			this.thmProtocol.addGeoConstruction(aux);
+			
+			return new LineThroughTwoPoints(oArgs.get(0), midPoint, aux);
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertAngularBisectorCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertAngularBisectorCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Construction of angular bisector requires exactly three input arguments
+		 * which are labels of three points. 
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
+			logger.error("Failed to validate command: " + AngularBisectorCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			//ArrayList<String> iArgs = ggCmd.getInputArgs();
+			//ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			//Point ptRay1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			//Point ptVertex = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			//Point ptRay2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
+			
+			// TODO See if we can compute this using the area method
+			return null;
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertTangentCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertTangentCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * TODO - In GeoGebra there is a construction of tangent lines to conic parallel with given line.
+		 * It is not supported by OGP. Only tangents on conic through given point are currently supported.
+		 *
+		 * Construction of tangent line requires exactly two input arguments
+		 * which are label of a point and label of circle or conic. It produces
+		 * one or two tangent lines depending on whether the point is on 
+		 * circle/conic or not, but always has two output labels - if has one
+		 * tangent, the label of second is empty string.
+		 * 
+		 * With the area method, one can not produce more than one tangent line, and currently, one is not
+		 * able to deal with conics.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 2, 2, 2) == false) {
+			logger.error("Failed to validate command: " + TangentCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			Point pt = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			SetOfPoints conic = (SetOfPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			
+			if (!(conic instanceof Circle) && !(conic instanceof ConicSection)) {
+				logger.error("Can't construct tangent on object which is not circle and conic section.");
+				return null;
+			}
+			
+			if (!(conic instanceof Circle)) {
+				logger.error("Currently, the area method cannot deal with conics.");
+				return null;
+			}
+			
+			String secondLabel = oArgs.get(1);
+			
+			if (secondLabel.length() != 0) {
+				logger.error("The area method cannot deal with the construction of two tangents at the same time");
+				return null;
+			}
+			
+			CircleWithCenterAndPoint circle = (CircleWithCenterAndPoint) conic;
+			Point center = circle.getCenter();
+			
+			if (circle.getPoints().contains(pt)) {
+				Point aux = new TRatioPoint(nextAvailableName(), pt, center, new AMRatio(1));
+				this.thmProtocol.addGeoConstruction(aux);
+				return new LineThroughTwoPoints(oArgs.get(0), pt, aux);
+			}
+			
+			// Only one label but two tangents
+			logger.error("Invalid input (the point is not on the circle, but only one label is given)");
+			return null;
+			
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertPolarCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertPolarCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * In GeoGebra the "Polar" construction for selected point and circle/conic gives the polar
+		 * line of that selected point w.r.t. that circle/conic.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
+			logger.error("Failed to validate command: " + PolarCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			logger.error("convertPolarCmd() command is not compatible with the area method.");
+			return null;
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	// TODO handle convertDiameterCmd() for circles
+	
+	
+	/*
+	 * CONICS
+	 */
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertCircleCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertCircleCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Construction of circle requires 2 or 3 arguments. When has two arguments,
+		 * the first is always the center and the second can be: a point from circle, 
+		 * a segment either by its label or in form of command "Segment[X,Y]" or 
+		 * the measure of radius. Three arguments are used in form with three points 
+		 * for construction of circumscribed circle.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 3, 1, 1) == false) {
+			logger.error("Failed to validate command: " + CircleCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			if (iArgs.size() == 3) {
+				Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+				Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+				Point pt3 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
+				
+				// The circumscribed circle is the intersection of two bisectors of the segments
+				Point midPoint1 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new AMRatio(1,2));
+				this.thmProtocol.addGeoConstruction(midPoint1);
+				Point aux1 = new TRatioPoint(nextAvailableName(), midPoint1, pt1, new AMRatio(1));
+				this.thmProtocol.addGeoConstruction(aux1);
+				
+				Point midPoint2 = new PRatioPoint(nextAvailableName(), pt2, pt2, pt3, new AMRatio(1,2));
+				this.thmProtocol.addGeoConstruction(midPoint2);
+				Point aux2 = new TRatioPoint(nextAvailableName(), midPoint2, pt2, new AMRatio(1));
+				this.thmProtocol.addGeoConstruction(aux2);
+				
+				Point center = new AMIntersectionPoint(nextAvailableName(), midPoint1, aux1, midPoint2, aux2);
+				this.thmProtocol.addGeoConstruction(center);
+				return new CircleWithCenterAndPoint(oArgs.get(0), center, pt1);
+			}
+			
+			// iArgs.size() == 2
+			Point pt = (Point)(this.thmProtocol.getConstructionMap().get(iArgs.get(0)));
+			String label2 = iArgs.get(1);
+			
+			if (label2.startsWith("Segment[")) {
+				int pt1Idx = label2.indexOf("[") + 1;
+				int commaIdx = label2.indexOf(",");
+				int pt2Idx = commaIdx + 2; // skip one blank space character
+				int rbracIdx = label2.indexOf("]");
+				
+				String pt1Label = label2.substring(pt1Idx, commaIdx);
+				String pt2Label = label2.substring(pt2Idx, rbracIdx);
+				
+				Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(pt1Label);
+				Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(pt2Label);
+				
+				Point pointOnCircle = new PRatioPoint(nextAvailableName(), pt, pt1, pt2, new AMRatio(1));
+				
+				return new CircleWithCenterAndPoint(oArgs.get(0), pt, pointOnCircle);
+			}
+			
+			GeoObject geoObj = this.thmProtocol.getConstructionMap().get(label2);
+			
+			if (geoObj == null) {
+				// Check whether second argument is a measure of radius
+				try {
+					// TODO this need to be changed : label2 can be something else than an integer,
+					// and the area method can deal with constant numbers.
+					Integer.parseInt(label2);
+					/*
+					 *  Since parsing of number was successful, and since constant numbers/measures
+					 *  can't be used in algebraic provers (they deal with symbolic calculus), new
+					 *  point will be introduced and the circle will be represented as a circle with
+					 *  center and one point.
+					 */
+					Point pt1 = new FreePoint(nextAvailableName());
+					this.thmProtocol.addGeoConstruction(pt1);
+					return new CircleWithCenterAndPoint(oArgs.get(0), pt, pt1);
+				} catch (NumberFormatException ex) {
+					logger.error("Incorrect second input argument for construction of circle.");
+					return null;
+				}
+			}
+			
+			if (geoObj instanceof LineThroughTwoPoints) { // line represent a segment
+				LineThroughTwoPoints l = (LineThroughTwoPoints)geoObj;
+				Point pt1 = l.getPoints().get(0); 
+				Point pt2 = l.getPoints().get(1); 
+				Point pointOnCircle = new PRatioPoint(nextAvailableName(), pt, pt1, pt2, new AMRatio(1));
+				
+				return new CircleWithCenterAndPoint(oArgs.get(0), pt, pointOnCircle);
+			}
+			
+			if (geoObj instanceof Line) {
+				// This shouldn't happen
+				logger.error("Object " + geoObj.getGeoObjectLabel() + " has not been converted into an area method-compatible class.");
+			}
+			
+			return new CircleWithCenterAndPoint(oArgs.get(0), pt, (Point)geoObj); // safe casts
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertConicCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertConicCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * "Construction" of conic section through 5 given points.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 5, 5, 1, 1) == false) {
+			logger.error("Failed to validate command: " + ConicCmd.cmdName);
+			return null;
+		}
+		
+		logger.error("The use of general conics is impossible wih the area method.");
+		return null;
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertEllipseCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertEllipseCmd(GeoGebraConstructionCommand ggCmd) {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
+			logger.error("Failed to validate command: " + EllipseCmd.cmdName);
+			return null;
+		}
+		
+		logger.error("The use of general conics is impossible wih the area method.");
+		return null;
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertHyperbolaCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertHyperbolaCmd(GeoGebraConstructionCommand ggCmd) {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
+			logger.error("Failed to validate command: " + HyperbolaCmd.cmdName);
+			return null;
+		}
+		
+		logger.error("The use of general conics is impossible wih the area method.");
+		return null;
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertParabolaCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertParabolaCmd(GeoGebraConstructionCommand ggCmd) {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
+			logger.error("Failed to validate command: " + ParabolaCmd.cmdName);
+			return null;
+		}
+		
+		logger.error("The use of general conics is impossible wih the area method.");
+		return null;
+	}
+	
 	
 	/**
 	 * @return the next name available for an intermediary point
