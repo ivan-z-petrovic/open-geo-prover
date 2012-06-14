@@ -38,6 +38,8 @@
  * issue 17: Renaming Construction Protocol to Theorem Protocol.
  * issue 18: Build scripts.
  * issue 19: OGP API for !GeoGebra.
+ * issue 20: Modifying input format.
+ * issue 21: Custom log files.
  * ...
 
 ===Stage free issues===
