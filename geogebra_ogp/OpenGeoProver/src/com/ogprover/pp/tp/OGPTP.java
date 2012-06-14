@@ -1111,11 +1111,12 @@ public class OGPTP {
 		if (this.translateNDGConditionsToUserReadableForm() != OGPConstants.RET_CODE_SUCCESS)
 			return null;
 		
-		Vector<String> ndgList = new Vector<String>();
+		Map<String, String> ndgMap = new HashMap<String, String>();
 		if (this.ndgConditions != null && this.ndgConditions.size() > 0) {
 			for (NDGCondition ndgc : this.ndgConditions) {
 				StringBuilder sbNdgText = new StringBuilder(ndgc.getNdgType());
-			
+				String ndgText = null;
+				
 				sbNdgText.append("[");
 				if (ndgc.getNdgType().equals(NDGCondition.NDG_TYPE_POLYNOMIAL))
 					sbNdgText.append(ndgc.getPolynomial().print());
@@ -1128,11 +1129,14 @@ public class OGPTP {
 					}
 				}
 				sbNdgText.append("]");
-				ndgList.add(sbNdgText.toString());
+				ndgText = sbNdgText.toString();
+				
+				if (ndgMap.get(ndgText) == null) // use map to avoid duplicate values
+					ndgMap.put(ndgText, ndgText);
 			}
 		}
 		
-		return ndgList;
+		return new Vector<String>(ndgMap.values());
 	}
 	
 	/**

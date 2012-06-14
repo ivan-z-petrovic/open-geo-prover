@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
 /**
 * <dl>
@@ -104,7 +105,7 @@ public class CustomFileReader {
 			this.inputFile = new File(inDir, this.fileName + '.' + this.fileExtension);
 		else
 			this.inputFile = new File(inDir, this.fileName);
-		this.inputSR = new InputStreamReader(new FileInputStream(this.inputFile));
+		this.inputSR = new InputStreamReader(new FileInputStream(this.inputFile), Charset.forName("UTF-8"));
 		this.buffReader = new BufferedReader(this.inputSR);
 	}
 	
