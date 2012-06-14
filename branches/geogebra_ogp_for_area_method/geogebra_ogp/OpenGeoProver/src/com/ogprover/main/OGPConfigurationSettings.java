@@ -7,6 +7,7 @@ package com.ogprover.main;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.utilities.OGPTimer;
 import com.ogprover.utilities.Stopwatch;
 import com.ogprover.utilities.io.OGPOutput;
@@ -101,6 +102,10 @@ public class OGPConfigurationSettings {
 	 * of prover execution in log file
 	 */
 	private ILogger logger = null;
+	/**
+	 * Theorem protocol obtained from parsing and conversion
+	 */
+	private OGPTP parsedTP = null;
 	/*
 	 * Return codes of some operations 
 	 */
@@ -224,6 +229,20 @@ public class OGPConfigurationSettings {
 	 */
 	public ILogger getLogger() {
 		return logger;
+	}
+
+	/**
+	 * @param parsedTP the parsedTP to set
+	 */
+	public void setParsedTP(OGPTP parsedTP) {
+		this.parsedTP = parsedTP;
+	}
+
+	/**
+	 * @return the parsedTP
+	 */
+	public OGPTP getParsedTP() {
+		return parsedTP;
 	}
 
 	/**
