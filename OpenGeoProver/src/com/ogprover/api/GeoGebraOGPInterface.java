@@ -172,11 +172,17 @@ public class GeoGebraOGPInterface implements OGPAPI {
 		
 		// Convert parsed GeoGebra theorem
 		GeoGebraTheorem ggThm = dh.getTheorem(); // always different from null if parsing was successful
-		GeoGebraTheoremConverter thmCnv = new GGThmConverterForAlgebraicProvers(ggThm, theoremProtocol);
-		if (thmCnv.convert() == false) {
-			logger.error("Failed to convert geometry theorem");
-			return false;
+		GeoGebraTheoremConverter thmCnv = null;
+		int proverType = OpenGeoProver.settings.getParameters().getProver();
+		
+		if (proverType == TheoremProver.TP_TYPE_WU || proverType == TheoremProver.TP_TYPE_GROEBNER) {
+			thmCnv = new GGThmConverterForAlgebraicProvers(ggThm, theoremProtocol);
+			if (thmCnv.convert() == false) {
+				logger.error("Failed to convert geometry theorem");
+				return false;
+			}
 		}
+		// TODO - other types of prover
 		
 		return true;
 	}
