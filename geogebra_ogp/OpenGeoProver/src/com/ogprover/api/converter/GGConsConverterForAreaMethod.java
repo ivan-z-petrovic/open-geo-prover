@@ -7,7 +7,6 @@ package com.ogprover.api.converter;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import com.ogprover.geogebra.*;
 import com.ogprover.geogebra.command.construction.*;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.geoconstruction.*;
