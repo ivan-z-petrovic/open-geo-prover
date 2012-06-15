@@ -812,6 +812,210 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 	}
 	
 	
+	
+	// TODO - Rotate command, Translate command, Dilate command.
+	
+	/*
+	 * PARTIAL AND AUXILIARY OBJECTS
+	 */
+	
+	// Segments, vectors, rays, etc. are seen as lines.
+	
+	// convertSegmentCmd -- Superclass' behavior is fine.
+	
+	// convertVectorCmd -- Superclass' behavior is fine.
+	
+	// convertRayCmd -- Superclass' behavior is fine.
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertAngleCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertAngleCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Angle is defined by three points or by two lines.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 3, 1, 1) == false) {
+			logger.error("Failed to validate command: " + AngleCmd.cmdName);
+			return null;
+		}
+		
+		logger.error("The use of angles is impossible wih the area method - " +
+				"please describe you angles using lines.");
+		return null;
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertPolygonCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertPolygonCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * General polygon is defined by the array of its vertices. Regular polygon is
+		 * defined by two subsequent vertices and number of vertices.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 3, -1, 1, -1) == false) {
+			logger.error("Failed to validate command: " + PolygonCmd.cmdName);
+			return null;
+		}
+		
+		logger.error("The use of polygons is impossible wih the area method - " +
+				"please describe your polygons using lines.");
+		return null;
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertPolyLineCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertPolyLineCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Polygon line is defined by the array of its vertices.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 3, -1, 1, 1) == false) {
+			logger.error("Failed to validate command: " + PolyLineCmd.cmdName);
+			return null;
+		}
+		
+		logger.error("The use of polygons is impossible wih the area method - " +
+				"please describe your polygon using lines.");
+		return null;
+	}
+	
+	// convertCircleArc -- Superclass' behavior is fine.
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertCircumcircleArcCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertCircumcircleArcCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Circumcircle arc is defined by three points from that arc.
+		 * It will be stored as a circle since algebraic provers can't distinguish circle arcs. 
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
+			logger.error("Failed to validate command: " + CircumcircleArcCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			// The bisector of a segment formed by two points on a circle passes by the center of the circle.
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt3 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
+			
+			Point midPoint1 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new AMRatio(1,2));
+			this.thmProtocol.addGeoConstruction(midPoint1);
+			Point midPoint2 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt3, new AMRatio(1,2));
+			this.thmProtocol.addGeoConstruction(midPoint2);
+			
+			Point pointOnLine1 = new TRatioPoint(nextAvailableName(), midPoint1, pt1, new AMRatio(1));
+			this.thmProtocol.addGeoConstruction(pointOnLine1);
+			Point pointOnLine2 = new TRatioPoint(nextAvailableName(), midPoint2, pt1, new AMRatio(1));
+			this.thmProtocol.addGeoConstruction(pointOnLine2);
+			
+			return new AMIntersectionPoint(oArgs.get(0), midPoint1, pointOnLine1, midPoint2, pointOnLine2);
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	// convertCircleSectorCmd -- Superclass' behavior is fine.
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertCircumcircleSectorCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertCircumcircleSectorCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Circumcircle sector is defined by three points from its arc.
+		 * It will be stored as a circle since algebraic provers can't distinguish circle arcs. 
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 3, 3, 1, 1) == false) {
+			logger.error("Failed to validate command: " + CircumcircleSectorCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			// The bisector of a segment formed by two points on a circle passes by the center of the circle.
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			Point pt3 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
+			
+			Point midPoint1 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new AMRatio(1,2));
+			this.thmProtocol.addGeoConstruction(midPoint1);
+			Point midPoint2 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt3, new AMRatio(1,2));
+			this.thmProtocol.addGeoConstruction(midPoint2);
+			
+			Point pointOnLine1 = new TRatioPoint(nextAvailableName(), midPoint1, pt1, new AMRatio(1));
+			this.thmProtocol.addGeoConstruction(pointOnLine1);
+			Point pointOnLine2 = new TRatioPoint(nextAvailableName(), midPoint2, pt1, new AMRatio(1));
+			this.thmProtocol.addGeoConstruction(pointOnLine2);
+			
+			return new AMIntersectionPoint(oArgs.get(0), midPoint1, pointOnLine1, midPoint2, pointOnLine2);
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertSemicircleCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertSemicircleCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Semicircle is defined by two diameter points.
+		 * It will be stored as a circle since the area method can't distinguish circle arcs. 
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
+			logger.error("Failed to validate command: " + SemicircleCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			Point midPoint = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new AMRatio(1,2));
+			this.thmProtocol.addGeoConstruction(midPoint);
+			return new CircleWithCenterAndPoint(oArgs.get(0), midPoint, pt2);
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	
 	/**
 	 * @return the next name available for an intermediary point
 	 */
