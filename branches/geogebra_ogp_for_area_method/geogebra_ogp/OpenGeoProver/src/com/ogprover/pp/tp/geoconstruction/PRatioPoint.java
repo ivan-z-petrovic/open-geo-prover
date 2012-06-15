@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.geoconstruction;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.polynomials.UXVariable;
+import com.ogprover.pp.tp.auxiliary.AMExpression;
 
 
 
@@ -43,7 +44,7 @@ public class PRatioPoint extends Point {
 	/**
 	 * Ratio used to construct this point
 	 */
-	protected AMRatio r;
+	protected AMExpression r;
 
 	
 	/*
@@ -78,7 +79,7 @@ public class PRatioPoint extends Point {
 	 * @param v 			Previously constructed point
 	 * @param r				Ratio
 	 */
-	public PRatioPoint(String pointLabel, Point w, Point u, Point v, AMRatio r) {
+	public PRatioPoint(String pointLabel, Point w, Point u, Point v, AMExpression r) {
 		this.geoObjectLabel = pointLabel;
 		this.w = w;
 		this.u = u;

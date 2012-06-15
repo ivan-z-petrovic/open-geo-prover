@@ -20,6 +20,7 @@ import com.ogprover.polynomials.UXVariable;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
+import com.ogprover.pp.tp.auxiliary.AMRatio;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.logger.ILogger;
