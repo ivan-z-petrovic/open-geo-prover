@@ -84,4 +84,12 @@ public class False extends ElementaryThmStatement {
 	public String getStatementDesc() {
 		return "False";
 	}
+	
+	/**
+	 * @see com.ogprover.pp.tp.thmstatement.ThmStatement#isValid()
+	 */
+	@Override
+	public boolean isValid() {
+		return this.consProtocol != null;
+	}
 }

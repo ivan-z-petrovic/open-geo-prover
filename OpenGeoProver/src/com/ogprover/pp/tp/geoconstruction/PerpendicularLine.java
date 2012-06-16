@@ -241,7 +241,7 @@ public class PerpendicularLine extends Line {
 		
 		try {
 			// Perpendicular line is valid if both its point and base line 
-			// have been already constructed 
+			// have been already constructed and if base line has at least 2 points 
 			Point pointC = this.points.get(0);
 			int indexC, indexLine;
 		
@@ -266,8 +266,60 @@ public class PerpendicularLine extends Line {
 				output.closeItemWithDesc("Cannot construct perpendicular line " + this.getGeoObjectLabel() + " because its base line or point that it is passing through are not yet constructed");
 				return false; // some object is not constructed before this line
 			}
+			
+			// Validation of base line
+			Point secondPoint = null;
+			if (this.baseLine.getPoints().size() > 1)
+				secondPoint = this.baseLine.getPoints().get(1); // get second point from perpendicular's base line (this is one of initial points of base line or the first point constructed on that line so it has the smallest index among all points other then initial)
+			
+			/*
+			 * Find minimal index of points from this perpendicular line (disregard initial point of perpendicular line).
+			 * This is used to check second point from base line - if there is at least one point from this 
+			 * perpendicular line which is not initial point, for its instantiation there must be constructed second
+			 * point from base line before that point from perpendicular line. If there is not such a point from perpendicular
+			 * line, then second point from base line can be any point from that line.
+			 */
+			int minIdx = -1;
+			for (int ii = 1, jj = this.points.size(); ii < jj; ii++) {
+				Point pt = this.points.get(ii);
+				int ptIdx = pt.getIndex();
+				if (ptIdx < minIdx || ii == 1)
+					minIdx = ptIdx;
+			}
+					
+			if (secondPoint == null || secondPoint.getIndex() < 0 || (minIdx > -1 && secondPoint.getIndex() >= minIdx)) {
+				// there is no second point yet constructed - create random point with random label
+				RandomPointFromLine rndOnPerpBaseLine = new RandomPointFromLine("tempPoint-" + Math.round(Math.random()*1000) + this.baseLine.getGeoObjectLabel(), this.baseLine);
+				// add this construction to protocol when necessary for construction of some other point from perpendicular line or right after construction of baseline
+				output.openItemWithDesc("Info: ");
+				output.closeItemWithDesc("Attempting to add the construction of new random point " + rndOnPerpBaseLine.getGeoObjectLabel() + " necessary for completion of construction of line " + this.getGeoObjectLabel());
+				this.consProtocol.addGeoConstruction((minIdx > -1) ? minIdx : this.baseLine.getIndex() + 1, rndOnPerpBaseLine); // here it will not be checked whether object with same name/label is already in CP since the probability for this event is zero
+				// then validate this construction - it may generate new random point constructions
+				if (rndOnPerpBaseLine.isValidConstructionStep() == false)
+					return false;
+				
+				output.openItemWithDesc("Warrning: ");
+				StringBuilder sb = new StringBuilder();
+				sb.append("Generated new random point ");
+				sb.append(rndOnPerpBaseLine.getGeoObjectLabel());
+				sb.append(" on line ");
+				sb.append(this.baseLine.getGeoObjectLabel());
+				sb.append(" in order to complete the construction of perpendicular line ");
+				sb.append(this.getGeoObjectLabel());
+				output.closeItemWithDesc(sb.toString());
+			}
 		
 			return true;
+		} catch (NullPointerException e) {
+			logger.error("Perpendicular line verified as correctly constructed, but some elements are null");
+			try {
+				output.openItemWithDesc("Error: ");
+				output.closeItemWithDesc("Unexpected error has occured during validity check for construction of perpendicular line " + this.getGeoObjectLabel());
+			} catch (IOException e1) {
+				logger.error("Failed to write to output file(s).");
+				output.close();
+			}
+			return false;
 		} catch (IOException e) {
 			logger.error("Failed to write to output file(s).");
 			output.close();
@@ -391,75 +443,6 @@ public class PerpendicularLine extends Line {
 		//return this.instantiateCondition(pointsMap).reduceByUTermDivision();
 		return this.instantiateCondition(pointsMap); // don't reduce polynomial
 	}
-	
-	/**
-	 * Method that checks the validity of construction of some point from 
-	 * perpendicular line. It will be called from validation method for
-	 * construction of some point from point set.
-	 * 
-	 * @param P	Point from perpendicular line whose construction is being verified
-	 * @return	True if construction is valid, false otherwise
-	 */
-	public boolean isPerpendicularLinePointConstructionValid(Point P) {
-		ILogger logger = OpenGeoProver.settings.getLogger();
-		OGPOutput output = OpenGeoProver.settings.getOutput();
-		
-		try {
-			// Construction of some point on perpendicular line is valid if that line has been 
-			// already constructed and there are two points on base line of that perpendicular line;
-			// if one point from perpendicular's base line is missing, then new random point is chosen
-		
-			// check perpendicular's base line
-			Line perpBaseLine = this.getBaseLine();
-			// since perpendicular line has been already constructed, the validity
-			// of that construction has already been verified; therefore its base line
-			// has been already constructed (it's not null and has at least one 
-			// constructed point) and it is only required to check the second point
-			Point secondPoint = null;
-			if (perpBaseLine.getPoints().size() > 1)
-				secondPoint = perpBaseLine.getPoints().get(1); // get second point from perpendicular's base line
-			
-			if (secondPoint == null || secondPoint.getIndex() < 0 || secondPoint.getIndex() >= P.getIndex()) {
-				// there is no second point yet constructed - create random point with random label starting with GP - "General Point"
-				RandomPointFromLine rndOnPerpBaseLine = new RandomPointFromLine("GP#" + Math.round(Math.random()*1000), perpBaseLine);
-				// add this theorem to protocol right before this current construction
-				output.openItemWithDesc("Info: ");
-				output.closeItemWithDesc("Attempting to add the construction of new random point " + rndOnPerpBaseLine.getGeoObjectLabel() + " necessary for completion of construction of point " + P.getGeoObjectLabel());
-				this.consProtocol.addGeoConstruction(P.getIndex(), rndOnPerpBaseLine); // here it will not be checked whether object with same name/label is already in CP since the probability for this event is zero
-				// then validate this construction - it may generate new random point constructions
-				if (rndOnPerpBaseLine.isValidConstructionStep() == false)
-					return false;
-				
-				output.openItemWithDesc("Warrning: ");
-				StringBuilder sb = new StringBuilder();
-				sb.append("Generated new random point ");
-				sb.append(rndOnPerpBaseLine.getGeoObjectLabel());
-				sb.append(" on line ");
-				sb.append(perpBaseLine.getGeoObjectLabel());
-				sb.append(" in order to complete the construction of point ");
-				sb.append(P.getGeoObjectLabel());
-				sb.append(" on perpendicular line ");
-				sb.append(this.getGeoObjectLabel());
-				output.closeItemWithDesc(sb.toString());
-			}
-		} catch (NullPointerException e) {
-			logger.error("Perpendicular line verified as correctly constructed, but some elements are null");
-			try {
-				output.openItemWithDesc("Error: ");
-				output.closeItemWithDesc("Unexpected error has occured during validity check for construction of point " + P.getGeoObjectLabel() + " on perpendicular line " + this.getGeoObjectLabel());
-			} catch (IOException e1) {
-				logger.error("Failed to write to output file(s).");
-				output.close();
-			}
-			return false;
-		} catch (IOException e1) {
-			logger.error("Failed to write to output file(s).");
-			output.close();
-			return false;
-		}
-		
-		return true;
-	}
 
 	/**
 	 * @see com.ogprover.pp.tp.geoconstruction.Line#getAllPossibleConditionsWithMappings()
@@ -513,9 +496,17 @@ public class PerpendicularLine extends Line {
 	 */
 	@Override
 	public String[] getInputLabels() {
-		String[] inputLabels = new String[2];
-		inputLabels[0] = this.points.get(0).getGeoObjectLabel();
-		inputLabels[1] = this.baseLine.getGeoObjectLabel();
-		return inputLabels;
+		String[] strArr = new String[0];
+		ArrayList<String> inputLabels = new ArrayList<String>();
+		Point firstPt = this.points.get(0);
+		inputLabels.add(firstPt.getGeoObjectLabel());
+		inputLabels.add(this.baseLine.getGeoObjectLabel());
+		// Add points from base line too since they are important for this construction
+		// (they are implicit input arguments) - there can be some new random points added.
+		for (Point pt : this.baseLine.getPoints()) {
+			if (!pt.equals(firstPt))
+				inputLabels.add(pt.getGeoObjectLabel());
+		}
+		return inputLabels.toArray(strArr);
 	}
 }
