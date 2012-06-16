@@ -11,30 +11,11 @@ import java.util.Vector;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.polynomials.GeoTheorem;
-import com.ogprover.polynomials.Power;
-import com.ogprover.polynomials.SymbolicPolynomial;
-import com.ogprover.polynomials.SymbolicTerm;
-import com.ogprover.polynomials.SymbolicVariable;
-import com.ogprover.polynomials.Term;
-import com.ogprover.polynomials.UFraction;
-import com.ogprover.polynomials.UPolynomial;
-import com.ogprover.polynomials.UTerm;
-import com.ogprover.polynomials.UXVariable;
-import com.ogprover.polynomials.Variable;
-import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.polynomials.XTerm;
-import com.ogprover.pp.tp.auxiliary.PointListManager;
-import com.ogprover.pp.tp.geoconstruction.FreeParametricSet;
-import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
-import com.ogprover.pp.tp.geoconstruction.ParametricSet;
-import com.ogprover.pp.tp.geoconstruction.Point;
-import com.ogprover.pp.tp.geoconstruction.RandomPointFromParametricSet;
-import com.ogprover.pp.tp.geoconstruction.ShortcutConstruction;
-import com.ogprover.pp.tp.geoconstruction.SpecialConstantAngle;
+import com.ogprover.polynomials.*;
+import com.ogprover.pp.tp.auxiliary.*;
+import com.ogprover.pp.tp.geoconstruction.*;
 import com.ogprover.pp.tp.ndgcondition.NDGCondition;
-import com.ogprover.pp.tp.thmstatement.CompoundThmStatement;
-import com.ogprover.pp.tp.thmstatement.ThmStatement;
+import com.ogprover.pp.tp.thmstatement.*;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.logger.ILogger;
@@ -453,7 +434,7 @@ public class OGPTP {
 	 * 				non-overridden equals() it won't be found in CP.
 	 */
 	public void removeGeoConstruction(GeoConstruction gc) {
-		if (gc == null)
+		if (gc == null || (gc instanceof ShortcutConstruction))
 			return;
 		
 		int consInd = this.constructionSteps.indexOf(gc); // uses equals()
@@ -461,6 +442,27 @@ public class OGPTP {
 		this.constructionMap.remove(gc.getGeoObjectLabel());
 		gc.setConsProtocol(null);
 		gc.setIndex(-1);
+		
+		if (gc instanceof IntersectionPoint) {
+			IntersectionPoint pt = (IntersectionPoint)gc;
+			SetOfPoints set1 = pt.getFirstPointSet();
+			SetOfPoints set2 = pt.getSecondPointSet();
+			int idx1 = set1.getPoints().indexOf(pt);
+			int idx2 = set2.getPoints().indexOf(pt);
+			
+			if (idx1 != -1)
+				set1.getPoints().remove(idx1);
+			if (idx2 != -1)
+				set2.getPoints().remove(idx2);
+		}
+		else if (gc instanceof RandomPointFromSetOfPoints) {
+			RandomPointFromSetOfPoints pt = (RandomPointFromSetOfPoints)gc;
+			SetOfPoints set = pt.getBaseSetOfPoints();
+			int idx = set.getPoints().indexOf(pt);
+			
+			if (idx != -1)
+				set.getPoints().remove(idx);
+		}
 		
 		// Shift indices of all constructed objects from object's index till the end
 		for (int ii = consInd, jj = this.constructionSteps.size(); ii < jj; ii++)
@@ -539,51 +541,49 @@ public class OGPTP {
 			
 			output.openEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
 			
-			// Empty Construction Protocol is invalid
-			if (this.constructionSteps.size() == 0) {
-				output.openItemWithDesc("Error: ");
-				output.closeItemWithDesc("There are no constructions");
-				valid = false;
-			}
-			else if (this.theoremStatement == null) {
+			// Empty Construction Protocol is valid so don't check number of constructions
+			// Check if statement is set
+			if (this.theoremStatement == null) {
 				output.openItemWithDesc("Error: ");
 				output.closeItemWithDesc("There is no theorem statement");
 				valid = false;
 			}
 			
-			if (valid) {
-				// Check if there are objects with same labels:
-				// each object must appear in map of this CP exactly once,
-				// therefore, if mapping object is null or not that object
-				// that's an error.
-				for (GeoConstruction geoCons : this.constructionSteps) {
-					String label = geoCons.getGeoObjectLabel();
-					GeoConstruction mapCons = this.constructionMap.get(label);
+			if (this.constructionSteps.size() > 0) {
+				if (valid) {
+					// Check if there are objects with same labels:
+					// each object must appear in map of this CP exactly once,
+					// therefore, if mapping object is null or not that object
+					// that's an error.
+					for (GeoConstruction geoCons : this.constructionSteps) {
+						String label = geoCons.getGeoObjectLabel();
+						GeoConstruction mapCons = this.constructionMap.get(label);
 					
-					if (mapCons == null || mapCons != geoCons) {
-						output.openItemWithDesc("Error: ");
-						if (mapCons == null)
-							output.closeItemWithDesc("Object with name " + label + " not correctly mapped in this protocol with its name");
-						else
-							output.closeItemWithDesc("Name " + label + " is used more than once for definition of new constructed object");
-						valid = false;
-						break;
+						if (mapCons == null || mapCons != geoCons) {
+							output.openItemWithDesc("Error: ");
+							if (mapCons == null)
+								output.closeItemWithDesc("Object with name " + label + " not correctly mapped in this protocol with its name");
+							else
+								output.closeItemWithDesc("Name " + label + " is used more than once for definition of new constructed object");
+							valid = false;
+							break;
+						}
 					}
 				}
-			}
 		
-			if (valid) {
-				// Check the validity of each construction step
-				GeoConstruction currGeoCons = this.constructionSteps.get(0); // first construction from list
+				if (valid) {
+					// Check the validity of each construction step
+					GeoConstruction currGeoCons = this.constructionSteps.get(0); // first construction from list
 		
-				while (currGeoCons != null && (valid = currGeoCons.isValidConstructionStep())) {
-					int nextIndex = currGeoCons.getIndex() + 1;
+					while (currGeoCons != null && (valid = currGeoCons.isValidConstructionStep())) {
+						int nextIndex = currGeoCons.getIndex() + 1;
 					
-					if (nextIndex < this.constructionSteps.size())
-						currGeoCons = this.constructionSteps.get(nextIndex); // get next construction step for validation this way
-		                                                                     // because isValidConstructionStep() method can add new constructions to list
-					else
-						currGeoCons = null;
+						if (nextIndex < this.constructionSteps.size())
+							currGeoCons = this.constructionSteps.get(nextIndex);	// get next construction step for validation this way
+																					// because isValidConstructionStep() method can add new constructions to list
+						else
+							currGeoCons = null;
+					}
 				}
 			}
 			
@@ -755,6 +755,8 @@ public class OGPTP {
 	 * Method which simplifies CP by removing all constructions that are not necessary for theorem statement.
 	 */
 	public void simplify() {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
 		if (this.theoremStatement == null || this.constructionMap == null)
 			return;
 		
@@ -762,7 +764,12 @@ public class OGPTP {
 		Vector<String> usedLabelsList = new Vector<String>();
 		
 		// labels from statement
-		for (String label : this.theoremStatement.getInputLabels()) {
+		String[] statementInputLabels = this.theoremStatement.getInputLabels();
+		if (statementInputLabels == null) {
+			logger.warn("Statement doesn't have input arguments");
+			return;
+		}
+		for (String label : statementInputLabels) {
 			if (usedLabelsMap.get(label) == null) {
 				usedLabelsMap.put(label, label);
 				usedLabelsList.add(label);

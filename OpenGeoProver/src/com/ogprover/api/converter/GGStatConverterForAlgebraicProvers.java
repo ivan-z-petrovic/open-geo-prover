@@ -6,6 +6,7 @@ package com.ogprover.api.converter;
 
 import java.util.ArrayList;
 
+import com.ogprover.geogebra.command.statement.BooleanCmd;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.geoconstruction.*;
 import com.ogprover.pp.tp.geoobject.*;
@@ -62,6 +63,29 @@ public class GGStatConverterForAlgebraicProvers extends GeoGebraStatementConvert
 	 * ======================================================================
 	 */
 	/**
+	 * @see com.ogprover.api.converter.GeoGebraStatementConverter#convertBoolean()
+	 */
+	@Override
+	public ThmStatement convertBoolean() {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		ArrayList<String> statementArgs = this.ggStatCmd.getInputArgs();
+		
+		// This statement requires one input argument - the boolean text - true or false.
+		if (statementArgs.size() != 1) {
+			logger.error("Failed to convert statement - incorrect number of arguments");
+			return null;
+		}
+		
+		String statementText = (new String(statementArgs.get(0))).toUpperCase();
+		if (statementText.equals(BooleanCmd.CMD_TEXT_TRUE))
+			return new True(this.thmProtocol);
+		if (statementText.equals(BooleanCmd.CMD_TEXT_FALSE))
+			return new False(this.thmProtocol);
+		logger.error("Failed to convert statement - incorrect boolean statement");
+		return null;
+	}
+	
+	/**
 	 * @see com.ogprover.api.converter.GeoGebraStatementConverter#convertCollinear()
 	 */
 	@Override
@@ -90,6 +114,46 @@ public class GGStatConverterForAlgebraicProvers extends GeoGebraStatementConvert
 			alp.add(p2);
 			alp.add(p3);
 			return new CollinearPoints(alp);
+		} catch (ClassCastException ex) {
+			logger.error("Failed to convert statement due to following reason: " + ex.toString());
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Failed to convert statement - unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
+	
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraStatementConverter#convertConcyclic()
+	 */
+	@Override
+	public ThmStatement convertConcyclic() {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		ArrayList<String> statementArgs = this.ggStatCmd.getInputArgs();
+		
+		// This statement requires four input points.
+		if (statementArgs.size() != 4) {
+			logger.error("Failed to convert statement - incorrect number of arguments");
+			return null;
+		}
+		
+		try {
+			Point p1 = (Point)this.thmProtocol.getConstructionMap().get(statementArgs.get(0));
+			Point p2 = (Point)this.thmProtocol.getConstructionMap().get(statementArgs.get(1));
+			Point p3 = (Point)this.thmProtocol.getConstructionMap().get(statementArgs.get(2));
+			Point p4 = (Point)this.thmProtocol.getConstructionMap().get(statementArgs.get(3));
+			
+			if (p1 == null || p2 == null || p3 == null || p4 == null) {
+				logger.error("Failed to convert statement - missing input argument");
+				return null;
+			}
+			
+			ArrayList<Point> alp = new ArrayList<Point>();
+			alp.add(p1);
+			alp.add(p2);
+			alp.add(p3);
+			alp.add(p4);
+			return new ConcyclicPoints(alp);
 		} catch (ClassCastException ex) {
 			logger.error("Failed to convert statement due to following reason: " + ex.toString());
 			return null;

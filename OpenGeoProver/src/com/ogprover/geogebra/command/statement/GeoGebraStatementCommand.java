@@ -37,7 +37,9 @@ public abstract class GeoGebraStatementCommand implements GeoGebraCommand {
 	/**
 	 * Static constants for command names.
 	 */
+	public static final String COMMAND_BOOLEAN = "boolean"; // note: this is not the name of command from GeoGebra
 	public static final String COMMAND_COLLINEAR = "AreCollinear";
+	public static final String COMMAND_CONCYCLIC = "AreConcyclic";
 	public static final String COMMAND_CONCURRENT = "AreConcurrent";
 	public static final String COMMAND_PARALLEL = "AreParallel";
 	public static final String COMMAND_PERPENDICULAR = "ArePerpendicular";
