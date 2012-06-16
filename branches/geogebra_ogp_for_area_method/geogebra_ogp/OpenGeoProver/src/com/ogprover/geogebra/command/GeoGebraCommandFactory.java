@@ -154,8 +154,12 @@ public class GeoGebraCommandFactory {
 		/*
 		 * Statement commands
 		 */
-		if (ggCmdName.equals(GeoGebraStatementCommand.COMMAND_COLLINEAR)) 
+		if (ggCmdName.equals(GeoGebraStatementCommand.COMMAND_BOOLEAN)) 
+			return new BooleanCmd(inputArgs.get(0), outputArgs.get(0));
+		else if (ggCmdName.equals(GeoGebraStatementCommand.COMMAND_COLLINEAR)) 
 			return new CollinearCmd(inputArgs, outputArgs.get(0));
+		if (ggCmdName.equals(GeoGebraStatementCommand.COMMAND_CONCYCLIC)) 
+			return new ConcyclicCmd(inputArgs, outputArgs.get(0));
 		if (ggCmdName.equals(GeoGebraStatementCommand.COMMAND_CONCURRENT)) 
 			return new ConcurrentCmd(inputArgs, outputArgs.get(0));
 		if (ggCmdName.equals(GeoGebraStatementCommand.COMMAND_PARALLEL)) 
