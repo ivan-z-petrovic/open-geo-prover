@@ -146,13 +146,6 @@ public class RandomPointFromLine extends RandomPointFromSetOfPoints {
 			return false;
 		}
 		
-		// further specific logic depends on line type - add bellow specific logic if necessary
-		if (baseLine instanceof PerpendicularLine)
-			return ((PerpendicularLine)baseLine).isPerpendicularLinePointConstructionValid(this);
-		if (baseLine instanceof ParallelLine)
-			return ((ParallelLine)baseLine).isParallelLinePointConstructionValid(this);
-		// TODO add other conditions for some other line types here (if required) ...
-		
 		return true;
 	}
 

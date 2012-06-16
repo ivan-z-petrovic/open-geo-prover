@@ -202,25 +202,6 @@ public class IntersectionPoint extends Point {
 			return false;
 		}
 		
-		/*
-		 * Check whether both point sets have enough elements to instantiate 
-		 * the condition for this point later.
-		 */
-		
-		// further specific logic depends on set type - add bellow specific logic if necessary
-		if (this.firstPointSet instanceof PerpendicularLine)
-			return ((PerpendicularLine)this.firstPointSet).isPerpendicularLinePointConstructionValid(this);
-		if (this.firstPointSet instanceof ParallelLine)
-			return ((ParallelLine)this.firstPointSet).isParallelLinePointConstructionValid(this);
-		// TODO add other conditions for some other point set types here (if required) ...
-		
-		// further specific logic depends on set type - add bellow specific logic if necessary
-		if (this.secondPointSet instanceof PerpendicularLine)
-			return ((PerpendicularLine)this.secondPointSet).isPerpendicularLinePointConstructionValid(this);
-		if (this.secondPointSet instanceof ParallelLine)
-			return ((ParallelLine)this.secondPointSet).isParallelLinePointConstructionValid(this);
-		// TODO add other conditions for some other point set types here (if required) ...
-		
 		return true;
 	}
 	
