@@ -19,6 +19,7 @@ import com.ogprover.geogebra.command.GeoGebraCommandFactory;
 import com.ogprover.geogebra.command.ProveCmd;
 import com.ogprover.geogebra.command.construction.FreePointCmd;
 import com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand;
+import com.ogprover.geogebra.command.statement.BooleanCmd;
 import com.ogprover.geogebra.command.statement.GeoGebraStatementCommand;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.utilities.logger.ILogger;
@@ -91,13 +92,16 @@ public class OGPDocHandler implements DocHandler {
 	public static final String ATTR_NAME_LABEL = "label";
 	public static final String ATTR_NAME_NAME = "name";
 	public static final String ATTR_NAME_TYPE = "type";
+	public static final String ATTR_NAME_EXP = "exp";
 	// generic arguments
 	public static final String ATTR_NAME_GEN = "a"; // base name of all generic arguments: a0, a1, a2, a3, a4, ...	
 	
 	/**
 	 * Special characters
 	 */
-	public static final char CH_QUESTION_EQ = '\u225f'; // special Unicode character for question equality
+	public static final char CH_QUESTION_EQ = '\u225f';			// special Unicode character for question equality
+	public static final char CH_PARALLEL_TO = '\u2225';			// special Unicode character for parallel sign
+	public static final char CH_PERPENDICULAR = '\u22a5';		// special Unicode character for perpendicular sign
 	// TODO - add other characters here
 	
 	
@@ -136,6 +140,9 @@ public class OGPDocHandler implements DocHandler {
 	 * Output arguments of current GG command defined by command tag being processed.
 	 */
 	private ArrayList<String> currCmdOutputArgs;
+	
+	// ===== Data members for processing of expression tag =====
+	private Map<String, String> expMap; // map of expressions - key is label and value is expression text
 	
 	// ===== Parsing result =====
 	/**
@@ -180,6 +187,7 @@ public class OGPDocHandler implements DocHandler {
 		this.ggThm = null; // this is instantiated when XML parsing starts
 		this.ggObjMap = new HashMap<String, GeoGebraCommand>();
 		this.bSuccess = true;
+		this.expMap = new HashMap<String, String>();
 	}
 	
 	
@@ -244,26 +252,28 @@ public class OGPDocHandler implements DocHandler {
 				return;
 			}
 			
-			// Find command for this element
+			// Find command or expression for this element
 			GeoGebraCommand ggCmd = this.ggObjMap.get(elementLabel);
 			
 			if (ggCmd == null) {
-				// Object could not be found and this is allowed only for points
-				if (elementType.equalsIgnoreCase(GeoGebraObject.OBJ_TYPE_POINT)) {
-					// create new free point
-					GeoGebraConstructionCommand newGGCmd = new FreePointCmd(elementLabel);
-					if (this.ggThm.getStatement() != null || this.ggThm.getProveCmd() != null) {
-						logger.error("Construction command read after statement or prove command");
+				if (this.expMap.get(elementLabel) == null) { // not an expression either
+					// Object could not be found and this is allowed only for points
+					if (elementType.equalsIgnoreCase(GeoGebraObject.OBJ_TYPE_POINT)) {
+						// create new free point
+						GeoGebraConstructionCommand newGGCmd = new FreePointCmd(elementLabel);
+						if (this.ggThm.getStatement() != null || this.ggThm.getProveCmd() != null) {
+							logger.error("Construction command read after statement or prove command");
+							this.bSuccess = false;
+							return;
+						}
+						this.ggThm.getConstructionList().add(newGGCmd);
+						this.ggObjMap.put(elementLabel, newGGCmd);
+					}
+					else {
+						logger.error("Definition of object which is not introduced by command");
 						this.bSuccess = false;
 						return;
 					}
-					this.ggThm.getConstructionList().add(newGGCmd);
-					this.ggObjMap.put(elementLabel, newGGCmd);
-				}
-				else {
-					logger.error("Definition of object which is not introduced by command");
-					this.bSuccess = false;
-					return;
 				}
 			}
 			else {
@@ -352,7 +362,8 @@ public class OGPDocHandler implements DocHandler {
 				return;
 			}
 			
-			// this tag is just skipped ...
+			// store expression to map
+			this.expMap.put(h.get(OGPDocHandler.ATTR_NAME_LABEL), h.get(OGPDocHandler.ATTR_NAME_EXP));
 			
 			this.currentTagType = OGPDocHandler.TAG_TYPE_EXPRESSION;
 		}
@@ -526,6 +537,9 @@ public class OGPDocHandler implements DocHandler {
 		this.currCmdInputArgs = null;
 		this.currCmdOutputArgs = null;
 		
+		// ===== Data members for processing of expression tag =====
+		this.expMap.clear();
+		
 		// ===== Parsing result =====
 		this.bSuccess = true; // reset the flag which determines whether parsing was successful
 	}
@@ -555,13 +569,12 @@ public class OGPDocHandler implements DocHandler {
 			bValidThm = false;
 		else {
 			Vector<GeoGebraConstructionCommand> consList = this.ggThm.getConstructionList();
-			if (consList == null || consList.size() == 0)
+			if (consList == null)
 				bValidThm = false;
 			else if (this.ggThm.getProveCmd() == null)
 				bValidThm = false;
 			else if (this.ggThm.getStatement() == null) {
-				ProveCmd proveCmd = this.ggThm.getProveCmd();
-				GeoGebraStatementCommand ggStmCmd = this.createStatementFromText(proveCmd.getInputArg());
+				GeoGebraStatementCommand ggStmCmd = this.createStatementFromProveCmd();
 				
 				if (ggStmCmd == null)
 					bValidThm = false;
@@ -597,10 +610,11 @@ public class OGPDocHandler implements DocHandler {
 	 * 
 	 * @return	TRUE if operation was successful, FALSE otherwise
 	 */
-	private GeoGebraStatementCommand createStatementFromText(String statementText) {
+	private GeoGebraStatementCommand createStatementFromProveCmd() {
 		ILogger logger = OpenGeoProver.settings.getLogger();
+		String proveCmdInputText = this.ggThm.getProveCmd().getInputArg();
 		
-		if (statementText == null){
+		if (proveCmdInputText == null){
 			logger.error("Statement in bad format - missing statement text");
 			return null;
 		}
@@ -609,46 +623,83 @@ public class OGPDocHandler implements DocHandler {
 		ArrayList<String> statementArgs = new ArrayList<String>();
 		String statResultLabel;
 		
-		// First of all check special infix formats of theorem statement
-		if (statementText.indexOf(OGPDocHandler.CH_QUESTION_EQ) != -1) {
-			String[] strArr = statementText.split((new Character(OGPDocHandler.CH_QUESTION_EQ)).toString());
-			
-			if (strArr.length != 2) {
-				logger.error("Statement in bad format - incorrect number of statement arguments in infix notation");
-				return null;
-			}
-			
-			statementName = GeoGebraStatementCommand.COMMAND_EQUAL;
-			statementArgs.add(strArr[0].trim());
-			statementArgs.add(strArr[1].trim());
+		// Check if input text of prove command is "true" or "false
+		String uppperCaseStatText = (new String(proveCmdInputText)).toUpperCase();
+		if (uppperCaseStatText.equals(BooleanCmd.CMD_TEXT_TRUE) || uppperCaseStatText.equals(BooleanCmd.CMD_TEXT_FALSE)) {
+			statementName = GeoGebraStatementCommand.COMMAND_BOOLEAN;
+			statementArgs.add(uppperCaseStatText);
 		}
-		// TODO - "else if" statements for other special infix notations
-		else { // prefix notation
-			// === Brackets ===
-			int length = statementText.length();
-			int lbracIdx = statementText.indexOf('[');
-			int rbracIdx = statementText.lastIndexOf(']');
-			if (lbracIdx == -1 || rbracIdx == -1) {
-				logger.error("Statement in bad format - missing bracket");
-				return null;
+		else {
+			// Then check if statement text is in expression map - passed in input text of prove command is the label of expression
+			String statementText = this.expMap.get(proveCmdInputText);
+			if (statementText == null)
+				statementText = proveCmdInputText; // if not in map, then use original input text as statement text
+			
+			// First of all check special infix formats of theorem statement
+			if (statementText.indexOf(OGPDocHandler.CH_QUESTION_EQ) != -1) {
+				String[] strArr = statementText.split((new Character(OGPDocHandler.CH_QUESTION_EQ)).toString());
+			
+				if (strArr.length != 2) {
+					logger.error("Statement in bad format - incorrect number of statement arguments in infix notation");
+					return null;
+				}
+			
+				statementName = GeoGebraStatementCommand.COMMAND_EQUAL;
+				statementArgs.add(strArr[0].trim());
+				statementArgs.add(strArr[1].trim());
 			}
-			if (length != rbracIdx + 1) {
-				logger.error("Statement in bad format - statement text doesn't end with right bracket");
-				return null;
+			else if (statementText.indexOf(OGPDocHandler.CH_PARALLEL_TO) != -1) {
+				String[] strArr = statementText.split((new Character(OGPDocHandler.CH_PARALLEL_TO)).toString());
+			
+				if (strArr.length != 2) {
+					logger.error("Statement in bad format - incorrect number of statement arguments in infix notation");
+					return null;
+				}
+			
+				statementName = GeoGebraStatementCommand.COMMAND_PARALLEL;
+				statementArgs.add(strArr[0].trim());
+				statementArgs.add(strArr[1].trim());
 			}
+			else if (statementText.indexOf(OGPDocHandler.CH_PERPENDICULAR) != -1) {
+				String[] strArr = statementText.split((new Character(OGPDocHandler.CH_PERPENDICULAR)).toString());
+			
+				if (strArr.length != 2) {
+					logger.error("Statement in bad format - incorrect number of statement arguments in infix notation");
+					return null;
+				}
+			
+				statementName = GeoGebraStatementCommand.COMMAND_PERPENDICULAR;
+				statementArgs.add(strArr[0].trim());
+				statementArgs.add(strArr[1].trim());
+			}
+			// TODO - "else if" statements for other special infix notations
+			else { // prefix notation
+				// === Brackets ===
+				int length = statementText.length();
+				int lbracIdx = statementText.indexOf('[');
+				int rbracIdx = statementText.lastIndexOf(']');
+				if (lbracIdx == -1 || rbracIdx == -1) {
+					logger.error("Statement in bad format - missing bracket");
+					return null;
+				}
+				if (length != rbracIdx + 1) {
+					logger.error("Statement in bad format - statement text doesn't end with right bracket");
+					return null;
+				}
 		
-			// === Statement name ===
-			statementName = statementText.substring(0, lbracIdx);
-			if (statementName.length() == 0) {
-				logger.error("Statement in bad format - missing statement name");
-				return null;
-			}
+				// === Statement name ===
+				statementName = statementText.substring(0, lbracIdx);
+				if (statementName.length() == 0) {
+					logger.error("Statement in bad format - missing statement name");
+					return null;
+				}
 		
-			// === Argument list ===
-			String args = statementText.substring(lbracIdx + 1, rbracIdx);
-			String[] argsArray = args.split(",");
-			for (String arg : argsArray)
-				statementArgs.add(arg.trim());
+				// === Argument list ===
+				String args = statementText.substring(lbracIdx + 1, rbracIdx);
+				String[] argsArray = args.split(",");
+				for (String arg : argsArray)
+					statementArgs.add(arg.trim());
+			}
 		}
 		
 		// === Create statement command ===

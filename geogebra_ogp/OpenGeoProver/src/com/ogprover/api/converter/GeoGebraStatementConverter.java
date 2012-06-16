@@ -65,12 +65,25 @@ public abstract class GeoGebraStatementConverter {
 	 * ======================================================================
 	 */
 	/**
+	 * Method which performs the conversion of boolean (true-false) geometry theorem statement.
+	 * 
+	 * @return	Theorem statement object if operation was successful, null otherwise.
+	 */
+	public abstract ThmStatement convertBoolean();
+	/**
 	 * Method which performs the conversion of geometry theorem statement
 	 * about three collinear points from GeoGebra to OGP format.
 	 * 
 	 * @return	Theorem statement object if operation was successful, null otherwise.
 	 */
 	public abstract ThmStatement convertCollinear();
+	/**
+	 * Method which performs the conversion of geometry theorem statement
+	 * about four concyclic points from GeoGebra to OGP format.
+	 * 
+	 * @return	Theorem statement object if operation was successful, null otherwise.
+	 */
+	public abstract ThmStatement convertConcyclic();
 	/**
 	 * Method which performs the conversion of geometry theorem statement
 	 * about three concurrent lines or circles from GeoGebra to OGP format.
@@ -171,8 +184,12 @@ public abstract class GeoGebraStatementConverter {
 		this.bSuccess = true;
 		
 		ThmStatement thmStat = null;
-		if (statementName.equalsIgnoreCase(GeoGebraStatementCommand.COMMAND_COLLINEAR))
+		if (statementName.equalsIgnoreCase(GeoGebraStatementCommand.COMMAND_BOOLEAN))
+			thmStat = convertBoolean();
+		else if (statementName.equalsIgnoreCase(GeoGebraStatementCommand.COMMAND_COLLINEAR))
 			thmStat = convertCollinear();
+		else if (statementName.equalsIgnoreCase(GeoGebraStatementCommand.COMMAND_CONCYCLIC))
+			thmStat = convertConcyclic();
 		else if (statementName.equalsIgnoreCase(GeoGebraStatementCommand.COMMAND_CONCURRENT))
 			thmStat = convertConcurrent();
 		else if (statementName.equalsIgnoreCase(GeoGebraStatementCommand.COMMAND_EQUAL))

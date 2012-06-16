@@ -80,4 +80,12 @@ public class True extends ElementaryThmStatement {
 	public String getStatementDesc() {
 		return "True";
 	}
+	
+	/**
+	 * @see com.ogprover.pp.tp.thmstatement.ThmStatement#isValid()
+	 */
+	@Override
+	public boolean isValid() {
+		return this.consProtocol != null;
+	}
 }
