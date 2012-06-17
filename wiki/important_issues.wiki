@@ -40,6 +40,7 @@
  * issue 19: OGP API for !GeoGebra.
  * issue 20: Modifying input format.
  * issue 21: Custom log files.
+ * issue 22: Tracking issue for all small bugs related to usage of OGP in !GeoGebra.
  * ...
 
 ===Stage free issues===
