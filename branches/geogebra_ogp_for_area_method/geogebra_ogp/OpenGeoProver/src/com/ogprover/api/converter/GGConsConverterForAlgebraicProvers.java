@@ -181,7 +181,8 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			// oArgs.size() > 1
 			Vector<GeoConstruction> consList = new Vector<GeoConstruction>();
 			for (String ptLabel : oArgs) {
-				consList.add(new IntersectionPoint(ptLabel, firstSet, secondSet));
+				if (ptLabel != null && ptLabel.length() > 0) // skip empty labels - they appear when set of intersection points has less elements than it should in general case
+					consList.add(new IntersectionPoint(ptLabel, firstSet, secondSet));
 			}
 			return new ListOfConstructions(consList);
 		} catch (ClassCastException ex) {
