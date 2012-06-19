@@ -137,7 +137,6 @@ public class AMIntersectionPoint extends IntersectionPoint {
 		sb.append(((GeoConstruction)this.p).geoObjectLabel);
 		sb.append(((GeoConstruction)this.q).geoObjectLabel);
 		sb.append(")");
-		// TODO describe r too
 		return sb.toString();
 	}
 
