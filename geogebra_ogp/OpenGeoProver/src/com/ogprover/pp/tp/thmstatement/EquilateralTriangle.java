@@ -14,6 +14,10 @@ import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.SymbolicTerm;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.AMDifference;
+import com.ogprover.pp.tp.auxiliary.AMExpression;
+import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.GeneralizedAngleTangent;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
@@ -206,5 +210,28 @@ public class EquilateralTriangle extends DimensionThmStatement {
 		pointsMap.put(CLabel, (Point)this.geoObjects.get(2));
 		
 		return OGPTP.instantiateCondition(conditionForEquilateralTriangle, pointsMap);
+	}
+
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		Point a = (Point)this.geoObjects.get(0);
+		Point b = (Point)this.geoObjects.get(1);
+		Point c = (Point)this.geoObjects.get(2);
+		
+		AMExpression ab = new AMPythagorasDifference(a, b, a);
+		AMExpression bc = new AMPythagorasDifference(c, b, c);
+		AMExpression ac = new AMPythagorasDifference(a, c, a);
+		
+		AMExpression firstDifference = new AMDifference(ab, bc);
+		AMExpression secondDifference = new AMDifference(ab, ac);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		statements.add(firstDifference);
+		statements.add(secondDifference);
+		
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

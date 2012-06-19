@@ -8,9 +8,14 @@ import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
+import com.ogprover.pp.tp.auxiliary.AMDifference;
+import com.ogprover.pp.tp.auxiliary.AMExpression;
+import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Line;
+import com.ogprover.pp.tp.geoconstruction.LineThroughTwoPoints;
 import com.ogprover.pp.tp.geoconstruction.PerpendicularLine;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoconstruction.RandomPointFromLine;
@@ -218,5 +223,28 @@ public class TwoPerpendicularLines extends PositionThmStatement {
 		sb.append(" is perpendicular to line ");
 		sb.append(this.geoObjects.get(1).getGeoObjectLabel());
 		return sb.toString();
+	}
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		/*
+		 *  The lines (AB) and (CD) are perpendicular iff AC² + BD² = BC² + AD², which
+		 *  can be rewritten with the Pythagoras difference : P_ACD = P_BCD.
+		 */
+		LineThroughTwoPoints firstLine = (LineThroughTwoPoints)this.geoObjects.get(0);
+		LineThroughTwoPoints secondLine = (LineThroughTwoPoints)this.geoObjects.get(1);
+		Point a = firstLine.getPoints().get(0);
+		Point b = firstLine.getPoints().get(1);
+		Point c = secondLine.getPoints().get(0);
+		Point d = secondLine.getPoints().get(1);
+		
+		AMExpression areaOfABC = new AMPythagorasDifference(a, c, d);
+		AMExpression areaOfABD = new AMPythagorasDifference(b, c, d);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		statements.add(new AMDifference(areaOfABC, areaOfABD));
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

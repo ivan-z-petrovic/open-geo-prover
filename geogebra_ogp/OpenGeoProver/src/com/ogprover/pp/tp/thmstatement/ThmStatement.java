@@ -10,6 +10,7 @@ import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.logger.ILogger;
@@ -58,6 +59,13 @@ public abstract class ThmStatement {
      *          if successful or null otherwise
      */
     public abstract XPolynomial getAlgebraicForm();
+    /**
+     * Transformation of theorem statement to an equality between geometric quantities, for
+     * the area method algorithm.
+     * 
+     * @return The statement converted into a rational expression in geometric quantities.
+     */
+    public abstract AreaMethodTheoremStatement getAreaMethodStatement();
     /**
 	 * Method that retrieves text description of theorem statement.
 	 * 

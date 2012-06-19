@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.Power;
 import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.SymbolicTerm;
@@ -16,6 +17,7 @@ import com.ogprover.polynomials.SymbolicVariable;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.GeneralizedAngleTangent;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
@@ -176,6 +178,12 @@ public class AngleEqualToSpecialConstantAngle extends DimensionThmStatement {
 		sb.append(" is equal to angle ");
 		sb.append(((GeoConstruction)this.consAngle).getGeoObjectLabel());
 		return sb.toString();
+	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		OpenGeoProver.settings.getLogger().error("Statement not currently supported by the area method.");
+		return null;
 	}
 
 }

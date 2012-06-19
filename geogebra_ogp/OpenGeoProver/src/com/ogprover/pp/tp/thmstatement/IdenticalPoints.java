@@ -11,6 +11,9 @@ import java.util.Vector;
 import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.AMExpression;
+import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoobject.Segment;
@@ -137,5 +140,20 @@ public class IdenticalPoints extends PositionThmStatement {
 		sb.append(this.getGeoObjects().get(1).getGeoObjectLabel());
 		sb.append(" are identical");
 		return sb.toString();
+	}
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		Point a = (Point)this.geoObjects.get(0);
+		Point b = (Point)this.geoObjects.get(1);
+		
+		AMExpression pythagorasDifference = new AMPythagorasDifference(a, b, a);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		statements.add(pythagorasDifference);
+		
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

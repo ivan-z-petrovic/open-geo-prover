@@ -6,8 +6,10 @@ package com.ogprover.pp.tp.thmstatement;
 
 import java.util.Vector;
 
+import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.GeneralizedAngleTangent;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoobject.Angle;
@@ -163,6 +165,12 @@ public class AlgebraicSumOfThreeAngles extends DimensionThmStatement {
 		sb.append(this.thirdAngle.getDescription());
 		sb.append(" is zero");
 		return sb.toString();
+	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		OpenGeoProver.settings.getLogger().error("Statement not currently supported by the area method.");
+		return null;
 	}
 
 }

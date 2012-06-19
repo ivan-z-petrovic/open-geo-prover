@@ -7,6 +7,7 @@ package com.ogprover.pp.tp.thmstatement;
 import java.util.Vector;
 
 import com.ogprover.polynomials.XPolynomial;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoobject.Segment;
 
@@ -211,5 +212,11 @@ public class EqualityOfTwoRatios extends DimensionThmStatement {
 		sb.append("/");
 		sb.append(this.denominatorSegmentOfSecondRatio.getDescription());
 		return sb.toString();
+	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
