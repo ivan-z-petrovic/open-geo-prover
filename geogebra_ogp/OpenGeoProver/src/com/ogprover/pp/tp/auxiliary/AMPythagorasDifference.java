@@ -81,4 +81,23 @@ public class AMPythagorasDifference extends AMExpression {
 		this.b = b;
 		this.c = c;
 	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ======================= COMMON OBJECT METHODS ========================
+	 * ======================================================================
+	 */
+	/**
+	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		s.append("P_");
+		s.append(a.toString());
+		s.append(b.toString());
+		s.append(c.toString());
+		return s.toString();
+	}
 }

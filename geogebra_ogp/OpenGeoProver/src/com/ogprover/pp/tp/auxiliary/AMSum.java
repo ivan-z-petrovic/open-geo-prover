@@ -72,4 +72,23 @@ public class AMSum extends AMExpression {
 		this.term1 = term1;
 		this.term2 = term2;
 	}
+	
+	/*
+	 * ======================================================================
+	 * ======================= COMMON OBJECT METHODS ========================
+	 * ======================================================================
+	 */
+	/**
+	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		s.append("(");
+		s.append(term1.toString());
+		s.append("+");
+		s.append(term2.toString());
+		s.append(")");
+		return s.toString();
+	}
 }
