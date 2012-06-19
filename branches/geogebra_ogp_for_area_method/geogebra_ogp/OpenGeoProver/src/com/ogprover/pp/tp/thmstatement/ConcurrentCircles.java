@@ -11,6 +11,7 @@ import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
 import com.ogprover.pp.tp.geoconstruction.Circle;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
@@ -309,5 +310,13 @@ public class ConcurrentCircles extends PositionThmStatement {
 		}
 		sb.append(" are concurrent");
 		return sb.toString();
+	}
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		OpenGeoProver.settings.getLogger().error("Statement not currently supported by the area method.");
+		return null;
 	}
 }

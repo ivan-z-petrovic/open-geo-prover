@@ -4,10 +4,15 @@
 
 package com.ogprover.pp.tp.thmstatement;
 
+import java.util.Vector;
+
 import com.ogprover.polynomials.UFraction;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.AMExpression;
+import com.ogprover.pp.tp.auxiliary.AMNumber;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 
 
 /**
@@ -91,5 +96,15 @@ public class False extends ElementaryThmStatement {
 	@Override
 	public boolean isValid() {
 		return this.consProtocol != null;
+	}
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		// Same method as in getAlgebraicForm()
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		statements.add(new AMNumber(1));
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

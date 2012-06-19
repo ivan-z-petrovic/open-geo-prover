@@ -11,6 +11,7 @@ import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.IntersectionPoint;
@@ -306,5 +307,13 @@ public class ConcurrentLines extends PositionThmStatement {
 		}
 		sb.append(" are concurrent");
 		return sb.toString();
+	}
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		// TODO Find the good formula to describe it 
+		return null;
 	}
 }

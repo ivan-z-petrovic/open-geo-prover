@@ -9,6 +9,12 @@ import java.util.Vector;
 
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.AMAreaOfTriangle;
+import com.ogprover.pp.tp.auxiliary.AMDifference;
+import com.ogprover.pp.tp.auxiliary.AMExpression;
+import com.ogprover.pp.tp.auxiliary.AMProduct;
+import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.GeneralizedAngleTangent;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
@@ -165,6 +171,33 @@ public class EqualAngles extends DimensionThmStatement {
 		sb.append(beta.getDescription());
 		sb.append(" are equal");
 		return sb.toString();
+	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		/*
+		 * Let S_ABC be the area of the triangle ABC and P_ABC be defined as AB²+BC²-AC².
+		 * Then two angles ABC and DEF are equal iff S_ABC*P_DEF = S_DEF*P_ABC.
+		 */
+		Point a = (Point)this.geoObjects.get(0);
+		Point b = (Point)this.geoObjects.get(1);
+		Point c = (Point)this.geoObjects.get(2);
+		Point d = (Point)this.geoObjects.get(3);
+		Point e = (Point)this.geoObjects.get(4);
+		Point f = (Point)this.geoObjects.get(5);
+		
+		AMExpression sabc = new AMAreaOfTriangle(a, b, c);
+		AMExpression sdef = new AMAreaOfTriangle(d, e, f);
+		AMExpression pabc = new AMPythagorasDifference(a, b, c);
+		AMExpression pdef = new AMPythagorasDifference(d, e, f);
+		AMExpression firstProduct = new AMProduct(sabc,pdef);
+		AMExpression secondProduct = new AMProduct(sdef,pabc);
+		AMExpression difference = new AMDifference(firstProduct, secondProduct);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		statements.add(difference);
+		
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 
 }

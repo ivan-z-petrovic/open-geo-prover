@@ -17,6 +17,7 @@ import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoobject.Segment;
@@ -373,5 +374,11 @@ public class RatioOfOrientedSegments extends DimensionThmStatement {
 		sb.append(" equals ");
 		sb.append(this.ratioCoefficient);
 		return sb.toString();
+	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		OpenGeoProver.settings.getLogger().error("The area method does not currently use floating-point calculus.");
+		return null;
 	}
 }
