@@ -65,4 +65,9 @@ public class AMNumber extends AMExpression {
 	public AMNumber(int n) {
 		this.n = n;
 	}
+
+	@Override
+	public String toString() {
+		return Integer.toString(n);
+	}
 }

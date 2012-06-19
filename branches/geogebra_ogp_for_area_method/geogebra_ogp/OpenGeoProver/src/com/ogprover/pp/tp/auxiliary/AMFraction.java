@@ -89,4 +89,24 @@ public class AMFraction extends AMExpression {
 		this.numerator = new AMNumber(numerator);
 		this.denominator = new AMNumber(denominator);
 	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ======================= COMMON OBJECT METHODS ========================
+	 * ======================================================================
+	 */
+	/**
+	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		s.append("(");
+		s.append(numerator.toString());
+		s.append("/");
+		s.append(denominator.toString());
+		s.append(")");
+		return s.toString();
+	}
 }

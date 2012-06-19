@@ -84,4 +84,24 @@ public class AMRatio extends AMExpression {
 		this.c = c;
 		this.d = d;
 	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ======================= COMMON OBJECT METHODS ========================
+	 * ======================================================================
+	 */
+	/**
+	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		s.append(a.toString());
+		s.append(b.toString());
+		s.append("/");
+		s.append(c.toString());
+		s.append(d.toString());
+		return s.toString();
+	}
 }

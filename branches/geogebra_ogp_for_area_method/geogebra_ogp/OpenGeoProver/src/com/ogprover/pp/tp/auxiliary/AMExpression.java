@@ -31,6 +31,7 @@ public abstract class AMExpression {
 	 */
 	public static final String VERSION_NUM = "1.00"; // this should match the version number from class comment
 	
+	
 	/*
 	 * ======================================================================
 	 * ========================== GETTERS/SETTERS ===========================
@@ -40,4 +41,15 @@ public abstract class AMExpression {
 	 * @return the set of points used in this expression.
 	 */
 	public abstract HashSet<Point> getPoints();
+	
+	
+	/*
+	 * ======================================================================
+	 * ======================= COMMON OBJECT METHODS ========================
+	 * ======================================================================
+	 */
+	/**
+	 * @return a String corresponding to the expression.
+	 */
+	public abstract String toString();
 }

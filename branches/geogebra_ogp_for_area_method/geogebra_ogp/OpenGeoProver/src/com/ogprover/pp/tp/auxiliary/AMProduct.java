@@ -72,4 +72,24 @@ public class AMProduct extends AMExpression {
 		this.factor1 = factor1;
 		this.factor2 = factor2;
 	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ======================= COMMON OBJECT METHODS ========================
+	 * ======================================================================
+	 */
+	/**
+	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		s.append("(");
+		s.append(factor1.toString());
+		s.append("×");
+		s.append(factor2.toString());
+		s.append(")");
+		return s.toString();
+	}
 }

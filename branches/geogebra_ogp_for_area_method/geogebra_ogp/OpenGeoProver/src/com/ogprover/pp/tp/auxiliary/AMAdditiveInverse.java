@@ -64,4 +64,9 @@ public class AMAdditiveInverse extends AMExpression {
 	public AMAdditiveInverse(AMExpression expr) {
 		this.expr = expr;
 	}
+
+	@Override
+	public String toString() {
+		return ("-" + expr.toString());
+	}
 }
