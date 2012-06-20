@@ -150,6 +150,130 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 	}
 	
 	/**
+	 * Method which find perpendicular line among constructed objects.
+	 * 
+	 * @param baseLine		Base line of perpendicular line.
+	 * @param perpLinePt	Point from perpendicular line.
+	 * @return				Line object which represents a perpendicular line from given point to given line; null if can't be found
+	 */
+	private Line findPerpLine(Line baseLine, Point perpLinePt) {
+		// Assumption: baseLine != null && perpLinePt != null
+		
+		/*
+		 * This method could be written as a recursive method to go as deeply as
+		 * necessary to search for perpendicular line. The deep of recursion would depend on
+		 * number of lines that are mutually subsequently perpendicular and parallel. 
+		 * But instead of that, it will be limited to only 2 levels. That means following:
+		 * 		1A. if given line is perpendicular to base line a which contains given point, that line a is returned;
+		 * 		2A. if base line a of given perpendicular line is parallel to some base line b which contains given point, that line b is returned;
+		 * 		1B. if given line is parallel to a perpendicular line whose baseline contains the given point, that base line is retrieved.
+		 */
+		
+		Line perpLBaseLine = null;
+		if (baseLine instanceof PerpendicularLine) {
+			PerpendicularLine perpL = (PerpendicularLine)baseLine;
+			perpLBaseLine = perpL.getBaseLine();
+		}
+		else if (baseLine instanceof PerpendicularBisector) {
+			PerpendicularBisector perpL = (PerpendicularBisector)baseLine;
+			Point ptA = perpL.getSegment().getFirstEndPoint();
+			Point ptB = perpL.getSegment().getSecondEndPoint();
+			
+			for (GeoConstruction gc : this.thmProtocol.getConstructionSteps()) {
+				if (gc instanceof Line) {
+					Line l = (Line)gc;
+					Vector<Point> pts = l.getPoints();
+					
+					if (pts.contains(ptA) && pts.contains(ptB)) {
+						perpLBaseLine = l;
+						break;
+					}
+				}
+			}
+		}
+		
+		if (perpLBaseLine != null) { // baseLine is some kind of perpendicular line
+			if (perpLBaseLine.getPoints().contains(perpLinePt))
+				return perpLBaseLine;
+			if (perpLBaseLine instanceof ParallelLine) {
+				ParallelLine paraL = (ParallelLine)perpLBaseLine;
+				Line paraLBaseLine = paraL.getBaseLine();
+				
+				if (paraLBaseLine.getPoints().contains(perpLinePt))
+					return paraLBaseLine;
+			}
+			else {
+				for (GeoConstruction gc : this.thmProtocol.getConstructionSteps()) {
+					if (gc instanceof ParallelLine) {
+						ParallelLine pl = (ParallelLine)gc;
+						Line plBaseLine = pl.getBaseLine();
+						
+						if (plBaseLine.getGeoObjectLabel() == perpLBaseLine.getGeoObjectLabel() && 
+							pl.getPoints().contains(perpLinePt))
+							return plBaseLine;
+					}
+				}
+			}
+		}
+		else if (baseLine instanceof ParallelLine) {
+			ParallelLine paraL = (ParallelLine)baseLine;
+			Line paraLBaseLine = paraL.getBaseLine();
+			
+			if (paraLBaseLine instanceof PerpendicularLine) {
+				PerpendicularLine perpL = (PerpendicularLine)paraLBaseLine;
+				Line perpLBaseLine2 = perpL.getBaseLine();
+				
+				if (perpLBaseLine2.getPoints().contains(perpLinePt))
+					return perpLBaseLine2;
+			}
+			else {
+				for (GeoConstruction gc : this.thmProtocol.getConstructionSteps()) {
+					if (gc instanceof PerpendicularLine) {
+						PerpendicularLine pl = (PerpendicularLine)gc;
+						Line plBaseLine = pl.getBaseLine();
+						
+						if (plBaseLine.getGeoObjectLabel() == paraLBaseLine.getGeoObjectLabel() && 
+							pl.getPoints().contains(perpLinePt))
+							return plBaseLine;
+					}
+				}
+			}
+		}
+		else {
+			for (GeoConstruction gc : this.thmProtocol.getConstructionSteps()) {
+				if (gc instanceof PerpendicularLine) {
+					PerpendicularLine pl = (PerpendicularLine)gc;
+					Line plBaseLine = pl.getBaseLine();
+					
+					if (plBaseLine.getGeoObjectLabel() == baseLine.getGeoObjectLabel() && plBaseLine.getPoints().contains(perpLinePt))
+						return plBaseLine;
+				}
+			}
+		}
+		
+		return null;
+	}
+		
+	/**
+	 * Method which finds intersection point of two lines in theorem protocol, among constructed points.
+	 * 
+	 * @param line1		First line.
+	 * @param line2		Second line.
+	 * @return			Constructed intersection point of two lines or null if it is not found. 
+	 */
+	private Point findIntersectionPointOfTwoLines(Line line1, Line line2) {
+		for (GeoConstruction gc : this.thmProtocol.getConstructionSteps()) {
+			if (gc instanceof IntersectionPoint) {
+				IntersectionPoint intPt = (IntersectionPoint)gc;
+				if ((intPt.getFirstPointSet().getGeoObjectLabel() == line1.getGeoObjectLabel() && intPt.getSecondPointSet().getGeoObjectLabel() == line2.getGeoObjectLabel()) ||
+					(intPt.getFirstPointSet().getGeoObjectLabel() == line2.getGeoObjectLabel() && intPt.getSecondPointSet().getGeoObjectLabel() == line1.getGeoObjectLabel()))
+					return intPt;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertIntersectCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
 	 */
 	protected GeoConstruction convertIntersectCmd(GeoGebraConstructionCommand ggCmd) {
@@ -175,15 +299,133 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			SetOfPoints firstSet = (SetOfPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
 			SetOfPoints secondSet = (SetOfPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			
+			IntersectionPoint intPt1 = (oArgs.get(0) != null && oArgs.get(0).length() > 0) ? new IntersectionPoint(oArgs.get(0), firstSet, secondSet) : null;
+			
+			if (intPt1 == null) {
+				logger.error("Failed to contruct first intersection point");
+				return null;
+			}
+			
 			if (oArgs.size() == 1)
-				return new IntersectionPoint(oArgs.get(0), firstSet, secondSet);
+				return intPt1;
 
 			// oArgs.size() > 1
 			Vector<GeoConstruction> consList = new Vector<GeoConstruction>();
+			Vector<String> ptLabelList = new Vector<String>();
+			
 			for (String ptLabel : oArgs) {
 				if (ptLabel != null && ptLabel.length() > 0) // skip empty labels - they appear when set of intersection points has less elements than it should in general case
-					consList.add(new IntersectionPoint(ptLabel, firstSet, secondSet));
+					ptLabelList.add(ptLabel);
 			}
+			
+			if (ptLabelList.size() == 1)
+				return intPt1;
+			
+			consList.add(intPt1);
+			if (ptLabelList.size() == 2) {
+				String pt2Label = ptLabelList.get(1);
+				
+				if (firstSet instanceof Circle) {
+					Circle c1 = (Circle)firstSet;
+					Point center1 = c1.getCenter();
+					
+					if (center1 == null) {
+						CenterOfCircle shCenter1 = new CenterOfCircle("center-" + c1.getGeoObjectLabel(), c1);
+						consList.addAll(shCenter1.getShortcutListOfConstructions());
+						center1 = shCenter1.getPoint();
+					}
+
+					if (secondSet instanceof Line) {
+						Line l2 = (Line)secondSet;
+						
+						if (l2.getPoints().contains(center1))
+							consList.add(new CentralSymmetricPoint(pt2Label, intPt1, center1));
+						else {
+							Line n12 = this.findPerpLine(l2, center1);
+							if (n12 == null) {
+								n12 = new PerpendicularLine("perpLine-" + center1.getGeoObjectLabel() + "-" + l2.getGeoObjectLabel(), l2, center1);
+								consList.add(n12);
+							}
+							Point ip = this.findIntersectionPointOfTwoLines(l2, n12);
+							if (ip == null) {
+								ip = new IntersectionPoint("intPt-" + l2.getGeoObjectLabel() + "-" + n12.getGeoObjectLabel(), l2, n12);
+								consList.add(ip);
+							}
+							consList.add(new CentralSymmetricPoint(pt2Label, intPt1, ip));
+						}
+					}
+					else if (secondSet instanceof Circle) {
+						Circle c2 = (Circle)secondSet;
+						Point center2 = c2.getCenter();
+						
+						if (center2 == null) {
+							CenterOfCircle shCenter2 = new CenterOfCircle("center-" + c2.getGeoObjectLabel(), c2);
+							consList.addAll(shCenter2.getShortcutListOfConstructions());
+							center2 = shCenter2.getPoint();
+						}
+						
+						Line centerLine = new LineThroughTwoPoints("centerLine-" + center1.getGeoObjectLabel() + "-" + center2.getGeoObjectLabel(), center1, center2);
+						consList.add(centerLine);
+						Line n12 = this.findPerpLine(centerLine, intPt1);
+						if (n12 != null) {
+							Point ip = this.findIntersectionPointOfTwoLines(centerLine, n12);
+							if (ip == null) {
+								ip = new IntersectionPoint("intPt-" + centerLine.getGeoObjectLabel() + "-" + n12.getGeoObjectLabel(), centerLine, n12);
+								consList.add(ip);
+							}
+							consList.add(new CentralSymmetricPoint(pt2Label, intPt1, ip));
+						}
+						else {
+							ReflectedPoint shRP2 = new ReflectedPoint(pt2Label, intPt1, centerLine);
+							consList.addAll(shRP2.getShortcutListOfConstructions());
+						}
+					}
+					else {
+						consList.add(new IntersectionPoint(pt2Label, firstSet, secondSet));
+					}
+				}
+				else if (secondSet instanceof Circle) {
+					Circle c2 = (Circle)secondSet;
+					Point center2 = c2.getCenter();
+					
+					if (center2 == null) {
+						CenterOfCircle shCenter2 = new CenterOfCircle("center-" + c2.getGeoObjectLabel(), c2);
+						consList.addAll(shCenter2.getShortcutListOfConstructions());
+						center2 = shCenter2.getPoint();
+					}
+					
+					if (firstSet instanceof Line) {
+						Line l1 = (Line)firstSet;
+						
+						if (l1.getPoints().contains(center2))
+							consList.add(new CentralSymmetricPoint(pt2Label, intPt1, center2));
+						else {
+							Line n21 = this.findPerpLine(l1, center2);
+							if (n21 == null) {
+								n21 = new PerpendicularLine("perpLine-" + center2.getGeoObjectLabel() + "-" + l1.getGeoObjectLabel(), l1, center2);
+								consList.add(n21);
+							}
+							Point ip = this.findIntersectionPointOfTwoLines(l1, n21);
+							if (ip == null) {
+								ip = new IntersectionPoint("intPt-" + l1.getGeoObjectLabel() + "-" + n21.getGeoObjectLabel(), l1, n21);
+								consList.add(ip);
+							}
+							consList.add(new CentralSymmetricPoint(pt2Label, intPt1, ip));
+						}
+					}
+					else { // firstSet is not circle and not line
+						consList.add(new IntersectionPoint(pt2Label, firstSet, secondSet));
+					}
+				}
+				else {
+					consList.add(new IntersectionPoint(pt2Label, firstSet, secondSet));
+				}
+			}
+			else { // > 2
+				for (int ii = 1, jj = ptLabelList.size(); ii < jj; ii++)
+					consList.add(new IntersectionPoint(ptLabelList.get(ii), firstSet, secondSet));
+			}
+			
 			return new ListOfConstructions(consList);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
