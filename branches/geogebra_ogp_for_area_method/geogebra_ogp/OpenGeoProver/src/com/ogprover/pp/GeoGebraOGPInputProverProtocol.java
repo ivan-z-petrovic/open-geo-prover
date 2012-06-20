@@ -45,9 +45,10 @@ public class GeoGebraOGPInputProverProtocol extends OGPInputProverProtocol {
 	/**
 	 * Names of GeoGebra input parameters for OGP.
 	 */
-	public static final String GG_INPUT_PARAM_METHOD = "method";		// Name of prover method: "WU", "GROEBNER", "AREA"
-	public static final String GG_INPUT_PARAM_TIMEOUT = "timeout";		// Time limit for prover execution in seconds
-	public static final String GG_INPUT_PARAM_MAXTERMS = "maxterms";	// Maximal number of polynomial terms for prover execution (space limit)
+	public static final String GG_INPUT_PARAM_METHOD = "method";				// Name of prover method: "WU", "GROEBNER", "AREA"
+	public static final String GG_INPUT_PARAM_TIMEOUT = "timeout";				// Time limit for prover execution in seconds
+	public static final String GG_INPUT_PARAM_MAXTERMS = "maxterms";			// Maximal number of polynomial terms for prover execution (space limit)
+	public static final String GG_INPUT_PARAM_REPORT_FORMAT = "reportFormat";	// Format of output report: "TEX", "XML", "ALL", "NONE"
 	// TODO - add here other parameters
 	
 	// OGP prover methods set from GeoGebra
@@ -55,6 +56,12 @@ public class GeoGebraOGPInputProverProtocol extends OGPInputProverProtocol {
 	public static final String OGP_METHOD_GROEBNER = "GROEBNER";
 	public static final String OGP_METHOD_AREA = "AREA";
 	// TODO - add here other prover methods
+	
+	// Format of output report
+	public static final String OGP_REPORT_FORMAT_TEX = "TEX";
+	public static final String OGP_REPORT_FORMAT_XML = "XML";
+	public static final String OGP_REPORT_FORMAT_ALL = "ALL";
+	public static final String OGP_REPORT_FORMAT_NONE = "NONE";
 	
 	
 	
@@ -174,5 +181,14 @@ public class GeoGebraOGPInputProverProtocol extends OGPInputProverProtocol {
 	public void setMaxTerms(int maxterms) {
 		Integer maxTerms = maxterms;
 		this.setInputParmeter(GeoGebraOGPInputProverProtocol.GG_INPUT_PARAM_MAXTERMS, maxTerms.toString());
+	}
+	
+	/**
+	 * Method for setting value of report format parameter.
+	 * 
+	 * @param reportFormat	Value of parameter.
+	 */
+	public void setReportFormat(String reportFormat) {
+		this.setInputParmeter(GeoGebraOGPInputProverProtocol.GG_INPUT_PARAM_REPORT_FORMAT, reportFormat);
 	}
 }
