@@ -41,6 +41,7 @@
  * issue 20: Modifying input format.
  * issue 21: Custom log files.
  * issue 22: Tracking issue for all small bugs related to usage of OGP in !GeoGebra.
+ * issue 23: Converting intersection point construction in such way to distinguish between two intersection points of 2 circles or of circle and line.
  * ...
 
 ===Stage free issues===
