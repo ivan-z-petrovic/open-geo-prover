@@ -124,6 +124,7 @@ public class OpenGeoProver {
 		inputObject.setMethod(GeoGebraOGPInputProverProtocol.OGP_METHOD_WU);
 		inputObject.setTimeOut(10);
 		inputObject.setMaxTerms(10000);
+		inputObject.setReportFormat(GeoGebraOGPInputProverProtocol.OGP_REPORT_FORMAT_NONE);
 		
 		// OGP API
 		GeoGebraOGPInterface ogpInterface = new GeoGebraOGPInterface();

@@ -135,6 +135,21 @@ public class GeoGebraOGPInterface implements OGPAPI {
 			parameters.putSpaceLimit(Integer.parseInt(OGPConstants.DEF_VAL_PARAM_SPACE_LIMIT));
 		}
 		
+		// Format of output report
+		String reportFormat = inputObject.getIntputParameter(GeoGebraOGPInputProverProtocol.GG_INPUT_PARAM_REPORT_FORMAT);
+		if (reportFormat.equals(GeoGebraOGPInputProverProtocol.OGP_REPORT_FORMAT_TEX))
+			parameters.putOutputFormat("L");
+		else if (reportFormat.equals(GeoGebraOGPInputProverProtocol.OGP_REPORT_FORMAT_XML))
+			parameters.putOutputFormat("X");
+		else if (reportFormat.equals(GeoGebraOGPInputProverProtocol.OGP_REPORT_FORMAT_ALL))
+			parameters.putOutputFormat("A");
+		else if (reportFormat.equals(GeoGebraOGPInputProverProtocol.OGP_REPORT_FORMAT_NONE))
+			parameters.putOutputFormat("N");
+		else {
+			logger.warn("Incorrect parameter for format of output report - setting default value of " + OGPConstants.DEF_VAL_PARAM_OUTPUT_FORMAT);
+			parameters.putOutputFormat(OGPConstants.DEF_VAL_PARAM_OUTPUT_FORMAT);
+		}
+		
 		/*
 		 * TODO - Other parameters have their default values (set in constructor of OGP parameters object) until they are defined in GeoGebra. 
 		 */
@@ -266,6 +281,7 @@ public class GeoGebraOGPInterface implements OGPAPI {
 		}
 		int proverType = parameters.getProver();
 		// Transformation to algebraic form
+		Double conversionToAlgFormTime = 0.0;
 		if (proverType == TheoremProver.TP_TYPE_WU || proverType == TheoremProver.TP_TYPE_GROEBNER) {
 			stopwatch.startMeasureTime();
 			try {
@@ -281,13 +297,17 @@ public class GeoGebraOGPInterface implements OGPAPI {
 				return exitProver(outputObject, "Failed conversion of geometry theorem to algebraic form");
 			}
 			theorem = thmProtocol.getAlgebraicGeoTheorem();
-			// Write details about conversion to output files
+			
 			OpenGeoProver.settings.getStopwacth().endMeasureTime();
+			conversionToAlgFormTime = OGPUtilities.roundUpToPrecision(stopwatch.getTimeIntSec());
+			outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME, conversionToAlgFormTime.toString());
+			
+			// Write details about conversion to output files
 			try {
 				output.openSubSection("Time spent for transformation of Construction Protocol to algebraic form", false);
 				output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
 				output.openItem();
-				output.writePlainText(OGPUtilities.roundUpToPrecision(stopwatch.getTimeIntSec()) + " seconds");
+				output.writePlainText(conversionToAlgFormTime + " seconds");
 				output.closeItem();
 				output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
 				output.closeSubSection();

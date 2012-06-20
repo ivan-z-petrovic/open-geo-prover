@@ -205,7 +205,8 @@ public class OGPReport {
 		
 		// Time of prover execution
 		Double timeInSec = OGPUtilities.roundUpToPrecision(stopwatch.getTimeIntSec());
-		outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME, timeInSec.toString());
+		Double totalTimeOfConversionAndExecution = outputObject.getExecutionTime() + timeInSec;
+		outputObject.setOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME, totalTimeOfConversionAndExecution.toString());
 		StringBuilder sb = new StringBuilder();
 		sb.append("Time spent by the prover is ");
 		sb.append(timeInSec.toString());
