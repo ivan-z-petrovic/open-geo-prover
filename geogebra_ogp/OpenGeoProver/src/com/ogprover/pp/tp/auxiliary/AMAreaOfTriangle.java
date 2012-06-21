@@ -5,6 +5,7 @@ package com.ogprover.pp.tp.auxiliary;
 
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
 
 /**
@@ -89,12 +90,54 @@ public class AMAreaOfTriangle extends AMExpression {
 	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
 	 */
 	@Override
-	public String toString() {
+	public String print() {
 		StringBuilder s = new StringBuilder();
 		s.append("S_");
-		s.append(a.toString());
-		s.append(b.toString());
-		s.append(c.toString());
+		s.append(a.getGeoObjectLabel());
+		s.append(b.getGeoObjectLabel());
+		s.append(c.getGeoObjectLabel());
 		return s.toString();
+	}
+	
+	@Override
+	public boolean equals(AMExpression expr) {
+		if (!(expr instanceof AMAreaOfTriangle))
+			return false;
+		AMAreaOfTriangle area = (AMAreaOfTriangle)expr;
+		return (a.equals(area.getA()) && b.equals(area.getB()) && c.equals(area.getC()));
+	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
+	@Override
+	public boolean containsOnlyFreePoints() {
+		if (a instanceof FreePoint && b instanceof FreePoint && c instanceof FreePoint) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public AMExpression uniformize() {
+		if (a.compare(b) && a.compare(c)) {
+			if (b.compare(c)) {
+				return this;
+			}
+			return new AMAdditiveInverse(new AMAreaOfTriangle(a, c, b));
+		}
+		if (b.compare(a) && b.compare(c)) {
+			if (a.compare(c)) {
+				return new AMAdditiveInverse(new AMAreaOfTriangle(b, a, c));
+			}
+			return new AMAreaOfTriangle(b, c, a);
+		}
+		if (a.compare(b)) {
+			return new AMAreaOfTriangle(c, a, b);
+		}
+		return new AMAreaOfTriangle(c, b, a);
 	}
 }

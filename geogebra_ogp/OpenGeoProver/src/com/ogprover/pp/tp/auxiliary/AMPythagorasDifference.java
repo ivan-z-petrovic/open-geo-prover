@@ -5,6 +5,7 @@ package com.ogprover.pp.tp.auxiliary;
 
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
 
 /**
@@ -92,12 +93,45 @@ public class AMPythagorasDifference extends AMExpression {
 	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
 	 */
 	@Override
-	public String toString() {
+	public String print() {
 		StringBuilder s = new StringBuilder();
 		s.append("P_");
-		s.append(a.toString());
-		s.append(b.toString());
-		s.append(c.toString());
+		s.append(a.getGeoObjectLabel());
+		s.append(b.getGeoObjectLabel());
+		s.append(c.getGeoObjectLabel());
 		return s.toString();
+	}
+	
+	@Override
+	public boolean equals(AMExpression expr) {
+		if (!(expr instanceof AMPythagorasDifference))
+			return false;
+		AMPythagorasDifference diff = (AMPythagorasDifference)expr;
+		return (a.equals(diff.getA()) && b.equals(diff.getB()) && c.equals(diff.getC()));
+	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
+	@Override
+	public boolean containsOnlyFreePoints() {
+		if (a instanceof FreePoint && b instanceof FreePoint && c instanceof FreePoint) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public AMExpression uniformize() {
+		if (c.compare(b) && b.compare(a)) {
+			return new AMPythagorasDifference(c, b, a);
+		}
+		if (c.equals(a) && b.compare(a)) {
+			return new AMPythagorasDifference(b, a, b);
+		}
+		return this;
 	}
 }
