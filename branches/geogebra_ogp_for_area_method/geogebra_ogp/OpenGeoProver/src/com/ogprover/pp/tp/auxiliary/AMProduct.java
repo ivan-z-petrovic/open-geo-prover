@@ -83,13 +83,38 @@ public class AMProduct extends AMExpression {
 	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
 	 */
 	@Override
-	public String toString() {
+	public String print() {
 		StringBuilder s = new StringBuilder();
 		s.append("(");
-		s.append(factor1.toString());
+		s.append(factor1.print());
 		s.append("×");
-		s.append(factor2.toString());
+		s.append(factor2.print());
 		s.append(")");
 		return s.toString();
+	}
+	
+	@Override
+	public boolean equals(AMExpression expr) {
+		if (!(expr instanceof AMProduct))
+			return false;
+		AMProduct prod = (AMProduct)expr;
+		return (factor1.equals(prod.getFactor1()) && factor2.equals(prod.getFactor2())
+				|| factor1.equals(prod.getFactor2()) && factor2.equals(prod.getFactor1()));
+	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
+	@Override
+	public boolean containsOnlyFreePoints() {
+		return (factor1.containsOnlyFreePoints() && factor2.containsOnlyFreePoints());
+	}
+	
+	@Override
+	public AMExpression uniformize() {
+		return new AMProduct(factor1.uniformize(), factor2.uniformize());
 	}
 }

@@ -100,13 +100,36 @@ public class AMFraction extends AMExpression {
 	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
 	 */
 	@Override
-	public String toString() {
+	public String print() {
 		StringBuilder s = new StringBuilder();
 		s.append("(");
-		s.append(numerator.toString());
+		s.append(numerator.print());
 		s.append("/");
-		s.append(denominator.toString());
+		s.append(denominator.print());
 		s.append(")");
 		return s.toString();
+	}
+	
+	@Override
+	public boolean equals(AMExpression expr) {
+		if (!(expr instanceof AMFraction))
+			return false;
+		AMFraction frac = (AMFraction)expr;
+		return (numerator.equals(frac.getNumerator()) && denominator.equals(frac.getDenominator()));
+	}
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
+	@Override
+	public boolean containsOnlyFreePoints() {
+		return (numerator.containsOnlyFreePoints() && denominator.containsOnlyFreePoints());
+	}
+	
+	@Override
+	public AMExpression uniformize() {
+		return new AMFraction(numerator.uniformize(), denominator.uniformize());
 	}
 }

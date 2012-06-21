@@ -66,8 +66,38 @@ public class AMNumber extends AMExpression {
 		this.n = n;
 	}
 
+	
+	/*
+	 * ======================================================================
+	 * ======================= COMMON OBJECT METHODS ========================
+	 * ======================================================================
+	 */
 	@Override
-	public String toString() {
+	public String print() {
 		return Integer.toString(n);
+	}
+	
+	@Override
+	public boolean equals(AMExpression expr) {
+		if (!(expr instanceof AMNumber))
+			return false;
+		AMNumber number = (AMNumber)expr;
+		return (n == number.value());
+	}
+
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
+	@Override
+	public boolean containsOnlyFreePoints() {
+		return true;
+	}
+	
+	@Override
+	public AMExpression uniformize() {
+		return this;
 	}
 }

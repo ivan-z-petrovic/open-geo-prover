@@ -83,13 +83,37 @@ public class AMDifference extends AMExpression {
 	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
 	 */
 	@Override
-	public String toString() {
+	public String print() {
 		StringBuilder s = new StringBuilder();
 		s.append("(");
-		s.append(term1.toString());
+		s.append(term1.print());
 		s.append("-");
-		s.append(term2.toString());
+		s.append(term2.print());
 		s.append(")");
 		return s.toString();
+	}
+	
+	@Override
+	public boolean equals(AMExpression expr) {
+		if (!(expr instanceof AMDifference))
+			return false;
+		AMDifference diff = (AMDifference)expr;
+		return (term1.equals(diff.getTerm1()) && term2.equals(diff.getTerm2()));
+	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
+	@Override
+	public boolean containsOnlyFreePoints() {
+		return (term1.containsOnlyFreePoints() && term2.containsOnlyFreePoints());
+	}
+	
+	@Override
+	public AMExpression uniformize() {
+		return new AMDifference(term1.uniformize(), term2.uniformize());
 	}
 }

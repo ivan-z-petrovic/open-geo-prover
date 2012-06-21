@@ -5,6 +5,7 @@ package com.ogprover.pp.tp.auxiliary;
 
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
 
 /**
@@ -95,13 +96,49 @@ public class AMRatio extends AMExpression {
 	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
 	 */
 	@Override
-	public String toString() {
+	public String print() {
 		StringBuilder s = new StringBuilder();
-		s.append(a.toString());
-		s.append(b.toString());
+		s.append(a.getGeoObjectLabel());
+		s.append(b.getGeoObjectLabel());
 		s.append("/");
-		s.append(c.toString());
-		s.append(d.toString());
+		s.append(c.getGeoObjectLabel());
+		s.append(d.getGeoObjectLabel());
 		return s.toString();
+	}
+	
+	@Override
+	public boolean equals(AMExpression expr) {
+		if (!(expr instanceof AMRatio))
+			return false;
+		AMRatio ratio = (AMRatio)expr;
+		return (a.equals(ratio.getA()) && b.equals(ratio.getB()) && c.equals(ratio.getC()) && d.equals(ratio.getD()));
+	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
+	@Override
+	public boolean containsOnlyFreePoints() {
+		if (a instanceof FreePoint && b instanceof FreePoint && c instanceof FreePoint && d instanceof FreePoint) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public AMExpression uniformize() {
+		if (a.compare(b)) {
+			if (c.compare(d)) {
+				return this;
+			}
+			return new AMAdditiveInverse(new AMRatio(a,b,d,c));
+		}
+		if (c.compare(d)) {
+			return new AMAdditiveInverse(new AMRatio(b,a,c,d));
+		}
+		return new AMRatio(b,a,d,c);
 	}
 }

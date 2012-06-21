@@ -65,8 +65,38 @@ public class AMAdditiveInverse extends AMExpression {
 		this.expr = expr;
 	}
 
+	
+	/*
+	 * ======================================================================
+	 * ======================= COMMON OBJECT METHODS ========================
+	 * ======================================================================
+	 */
 	@Override
-	public String toString() {
-		return ("-" + expr.toString());
+	public String print() {
+		return ("-" + expr.print());
+	}
+
+	@Override
+	public boolean equals(AMExpression expr) {
+		if (!(expr instanceof AMAdditiveInverse))
+			return false;
+		AMAdditiveInverse inv = (AMAdditiveInverse)expr;
+		return this.getExpr().equals(inv.getExpr());
+	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
+	@Override
+	public boolean containsOnlyFreePoints() {
+		return this.expr.containsOnlyFreePoints();
+	}
+	
+	@Override
+	public AMExpression uniformize() {
+		return new AMAdditiveInverse(expr.uniformize());
 	}
 }
