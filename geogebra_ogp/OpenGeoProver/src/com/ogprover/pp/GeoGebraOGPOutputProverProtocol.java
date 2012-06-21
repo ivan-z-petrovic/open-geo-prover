@@ -186,7 +186,10 @@ public class GeoGebraOGPOutputProverProtocol extends OGPOutputProverProtocol {
 	 * @return	Time spent in proving.
 	 */
 	public double getExecutionTime() {
-		return Double.parseDouble(this.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME));
+		if (this.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME) != null) {
+			return Double.parseDouble(this.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME));
+		}
+		return 0.0;
 	}
 	
 	/**
