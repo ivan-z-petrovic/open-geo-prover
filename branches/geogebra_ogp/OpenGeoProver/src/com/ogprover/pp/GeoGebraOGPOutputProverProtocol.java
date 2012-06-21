@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import com.ogprover.main.OpenGeoProver;
+import com.ogprover.utilities.logger.ILogger;
+
 /**
  * <dl>
  * <dt><b>Class description:</b></dt>
@@ -150,7 +153,10 @@ public class GeoGebraOGPOutputProverProtocol extends OGPOutputProverProtocol {
 	 * @return	Value of success flag.
 	 */
 	public boolean getSuccess() {
-		return this.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS).equals("true") ? true : false;
+		String successStr = this.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_SUCCESS);
+		if (successStr != null)
+			return successStr.equals("true");
+		return false;
 	}
 	
 	/**
@@ -186,7 +192,19 @@ public class GeoGebraOGPOutputProverProtocol extends OGPOutputProverProtocol {
 	 * @return	Time spent in proving.
 	 */
 	public double getExecutionTime() {
-		return Double.parseDouble(this.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME));
+		String exTimeStr = this.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_TIME);
+		double exTime = 0.0;
+		
+		if (exTimeStr != null) {
+			try {
+				exTime = Double.parseDouble(exTimeStr);
+			} catch (NumberFormatException ex) {
+				ILogger logger = OpenGeoProver.settings.getLogger();
+				logger.warn("Failed to read execution time from string - exception caught: " + ex.toString());
+				exTime = 0.0;
+			}
+		}
+		return exTime;
 	}
 	
 	/**
@@ -196,6 +214,18 @@ public class GeoGebraOGPOutputProverProtocol extends OGPOutputProverProtocol {
 	 * @return	Number of polynomial terms.
 	 */
 	public int getNumberOfTerms() {
-		return Integer.parseInt(this.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_NUMTERMS));
+		String numTermsStr = this.getOutputResult(GeoGebraOGPOutputProverProtocol.OGP_OUTPUT_RES_NUMTERMS);
+		int numTerms = 0;
+		
+		if (numTermsStr != null) {
+			try {
+				numTerms = Integer.parseInt(numTermsStr);
+			} catch (NumberFormatException ex) {
+				ILogger logger = OpenGeoProver.settings.getLogger();
+				logger.warn("Failed to read number of terms from string - exception caught: " + ex.toString());
+				numTerms = 0;
+			}
+		}
+		return numTerms;
 	}
 }
