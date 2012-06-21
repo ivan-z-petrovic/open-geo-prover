@@ -157,12 +157,21 @@
 			<copy todir="${temp.documentation.path}">
 				<fileset dir="${documentation.path}" />
 			</copy>
+		<mkdir dir="${temp.path2}"/>
+			<copy todir="${temp.path2}">
+				<fileset dir="${build.path}">
+					<exclude name="**/${jutest.dirname}/**"/>
+				</fileset>
+			</copy>
 
 		<!-- Put whole ${temp.path} directory into the ${dist.jar.filename} file -->
 		<jar jarfile="${dist.path}/${dist.jar.filename}" manifest="${manifest.filename}" basedir="${temp.path}"/>
+		<!-- Put whole ${temp.path2} directory into the ${dist.minjar.filename} file -->
+		<jar jarfile="${dist.path}/${dist.minjar.filename}" manifest="${manifest.filename}" basedir="${temp.path2}"/>
 		
 		<!-- At the end delete temporary directories -->
 		<delete dir="${temp.path}"/>
+		<delete dir="${temp.path2}"/>
 	</target>
 	
 </project>
