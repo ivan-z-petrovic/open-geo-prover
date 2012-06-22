@@ -112,6 +112,8 @@ public class OGPReport {
 				author = "Wu's method used";
 			else if (parameters.getProver() == TheoremProver.TP_TYPE_GROEBNER)
 				author = "Groebner basis method used";
+			else if (parameters.getProver() == TheoremProver.TP_TYPE_AREA)
+				author = "Area method used";
 			
 			try {
 				output.openDocument(null, title, author);

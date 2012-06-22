@@ -14,7 +14,6 @@ import com.ogprover.polynomials.XTerm;
 import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.pp.tp.auxiliary.AMDifference;
 import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMProduct;
 import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
 import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;

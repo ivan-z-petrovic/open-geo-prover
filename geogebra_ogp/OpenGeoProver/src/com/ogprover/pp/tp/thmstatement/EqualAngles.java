@@ -178,6 +178,14 @@ public class EqualAngles extends DimensionThmStatement {
 		/*
 		 * Let S_ABC be the area of the triangle ABC and P_ABC be defined as AB²+BC²-AC².
 		 * Then two angles ABC and DEF are equal iff S_ABC*P_DEF = S_DEF*P_ABC.
+		 * 
+		 * This can be proved as followed :
+		 * 
+		 * If ABC is a right angle, then P_ABC = 0 by the Pythagoras theorem, so the result is trivial.
+		 * Else, we can remark that S_ABC/P_ABC = tan(ABC)/4. Indeed, by the cosine rule :
+		 * 		S_ABC = AB*BC*sin(ABC)/2
+		 * 		P_ABC = AB² + BC² - (AB² + BC² - 2*AB*BC*cos(ABC))
+		 * 			  = 2*AB*BC*cos(ABC)
 		 */
 		Point a = (Point)this.geoObjects.get(0);
 		Point b = (Point)this.geoObjects.get(1);

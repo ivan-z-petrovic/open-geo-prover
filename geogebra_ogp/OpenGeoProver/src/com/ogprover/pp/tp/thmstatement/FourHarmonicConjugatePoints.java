@@ -17,7 +17,6 @@ import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.AMAdditiveInverse;
 import com.ogprover.pp.tp.auxiliary.AMAreaOfTriangle;
 import com.ogprover.pp.tp.auxiliary.AMDifference;
 import com.ogprover.pp.tp.auxiliary.AMExpression;
