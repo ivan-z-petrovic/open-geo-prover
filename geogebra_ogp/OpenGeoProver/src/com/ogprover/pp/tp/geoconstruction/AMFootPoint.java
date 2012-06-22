@@ -54,6 +54,18 @@ public class AMFootPoint extends Point {
 		return GeoConstruction.GEOCONS_TYPE_AM_FOOT_POINT;
 	}
 	
+	public Point getP() {
+		return p;
+	}
+	
+	public Point getU() {
+		return u;
+	}
+	
+	public Point getV() {
+		return v;
+	}
+	
 	
 	/*
 	 * ======================================================================

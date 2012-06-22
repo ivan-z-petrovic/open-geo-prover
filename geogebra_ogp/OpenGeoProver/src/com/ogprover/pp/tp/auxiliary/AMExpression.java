@@ -57,6 +57,15 @@ public abstract class AMExpression {
 	 */
 	public abstract AMExpression uniformize();
 	
+	/**
+	 * @return the expression in which one point has been eliminated
+	 */
+	public abstract AMExpression eliminate(Point pt);
+	
+	/**
+	 * @return the expression in the form AMFraction(a,b), where a and b do not contain any AMFraction.
+	 */
+	public abstract AMExpression reduceToSingleFraction();
 	
 	/*
 	 * ======================================================================

@@ -113,8 +113,39 @@ public class AMProduct extends AMExpression {
 		return (factor1.containsOnlyFreePoints() && factor2.containsOnlyFreePoints());
 	}
 	
+	
 	@Override
 	public AMExpression uniformize() {
 		return new AMProduct(factor1.uniformize(), factor2.uniformize());
+	}
+	@Override
+	public AMExpression eliminate(Point pt) {
+		return new AMProduct(factor1.eliminate(pt), factor2.eliminate(pt));
+	}
+	@Override
+	public AMExpression reduceToSingleFraction() {
+		AMExpression expr1 = factor1.reduceToSingleFraction();
+		AMExpression expr2 = factor2.reduceToSingleFraction();
+		
+		if (expr1 instanceof AMFraction) {
+			AMExpression num1 = ((AMFraction)expr1).getNumerator();
+			AMExpression den1 = ((AMFraction)expr1).getDenominator();
+			
+			if (expr2 instanceof AMFraction) {
+				AMExpression num2 = ((AMFraction)expr2).getNumerator();
+				AMExpression den2 = ((AMFraction)expr2).getDenominator();
+				return new AMFraction(new AMProduct(num1, num2), new AMProduct(den1, den2));
+			}
+			
+			return new AMFraction(new AMProduct(num1, expr2), den1);
+		}
+		
+		if (expr2 instanceof AMFraction) {
+			AMExpression num2 = ((AMFraction)expr2).getNumerator();
+			AMExpression den2 = ((AMFraction)expr2).getDenominator();
+			return new AMFraction(new AMProduct(num2, expr1), den2);
+		}
+		
+		return new AMProduct(expr1, expr2);
 	}
 }

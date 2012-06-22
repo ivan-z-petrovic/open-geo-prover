@@ -86,7 +86,22 @@ public class PRatioPoint extends Point {
 		this.v = v;
 		this.r = r;
 	}
-
+	
+	public Point getW() {
+		return w;
+	}
+	
+	public Point getU() {
+		return u;
+	}
+	
+	public Point getV() {
+		return v;
+	}
+	
+	public AMExpression getR() {
+		return r;
+	}
 	
 	/*
 	 * ======================================================================
