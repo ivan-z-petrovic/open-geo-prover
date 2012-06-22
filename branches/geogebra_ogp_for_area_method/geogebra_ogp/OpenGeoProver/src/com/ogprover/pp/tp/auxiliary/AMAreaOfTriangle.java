@@ -5,8 +5,12 @@ package com.ogprover.pp.tp.auxiliary;
 
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.geoconstruction.AMFootPoint;
+import com.ogprover.pp.tp.geoconstruction.AMIntersectionPoint;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
+import com.ogprover.pp.tp.geoconstruction.PRatioPoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.geoconstruction.TRatioPoint;
 
 /**
  * <dl>
@@ -139,5 +143,106 @@ public class AMAreaOfTriangle extends AMExpression {
 			return new AMAreaOfTriangle(c, a, b);
 		}
 		return new AMAreaOfTriangle(c, b, a);
+	}
+	
+	/**
+	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf "elimination lemmas"
+	 */
+	@Override
+	public AMExpression eliminate(Point pt) {
+		Point aa = null;
+		Point bb = null;
+		
+		if (pt.equals(c)) {
+			aa = a;
+			bb = b;
+		}
+		else if (pt.equals(b)) {
+			aa = c;
+			bb = a;
+		}
+		else if (pt.equals(a)) {
+			aa = b;
+			bb = c;
+		}
+		else
+			return this;
+		
+		if (pt instanceof AMIntersectionPoint) {
+			Point u = ((AMIntersectionPoint)pt).getU();
+			Point v = ((AMIntersectionPoint)pt).getV();
+			Point p = ((AMIntersectionPoint)pt).getP();
+			Point q = ((AMIntersectionPoint)pt).getQ();
+			
+			AMExpression supq = new AMAreaOfTriangle(u, p, q);
+			AMExpression gv = new AMAreaOfTriangle(aa, bb, v);
+			AMExpression term1 = new AMProduct(supq, gv);
+			AMExpression svpq = new AMAreaOfTriangle(v, p, q);
+			AMExpression gu = new AMAreaOfTriangle(aa, bb, u);
+			AMExpression term2 = new AMProduct(svpq, gu);
+			AMExpression numerator = new AMDifference(term1, term2);
+			AMExpression supv = new AMAreaOfTriangle(u, p, v);
+			AMExpression spvq = new AMAreaOfTriangle(p, v, q);
+			AMExpression denominator = new AMSum(supv, spvq);
+			return new AMFraction(numerator, denominator);
+		}
+		
+		if (pt instanceof AMFootPoint) {
+			Point p = ((AMFootPoint)pt).getP();
+			Point u = ((AMFootPoint)pt).getU();
+			Point v = ((AMFootPoint)pt).getV();
+			
+			AMExpression ppuv = new AMPythagorasDifference(p, u, v);
+			AMExpression gv = new AMAreaOfTriangle(aa, bb, v);
+			AMExpression term1 = new AMProduct(ppuv, gv);
+			AMExpression ppvu = new AMPythagorasDifference(p, v, u);
+			AMExpression gu = new AMAreaOfTriangle(aa, bb, u);
+			AMExpression term2 = new AMProduct(ppvu, gu);
+			AMExpression numerator = new AMSum(term1, term2);
+			AMExpression denominator = new AMPythagorasDifference(u, v, u);
+			return new AMFraction(numerator, denominator);
+		}
+		
+		if (pt instanceof PRatioPoint) {
+			Point w = ((PRatioPoint)pt).getW();
+			Point u = ((PRatioPoint)pt).getU();
+			Point v = ((PRatioPoint)pt).getV();
+			AMExpression r = ((PRatioPoint)pt).getR();
+			
+			AMExpression gw = new AMAreaOfTriangle(aa, bb, w);
+			AMExpression gu = new AMAreaOfTriangle(aa, bb, u);
+			AMExpression gv = new AMAreaOfTriangle(aa, bb, v);
+			AMExpression difference = new AMDifference(gv, gu);
+			AMExpression product = new AMProduct(r, difference);
+			return new AMSum(gw,product);
+		}
+		
+		if (pt instanceof TRatioPoint) {
+			Point p = ((TRatioPoint)pt).getU();
+			Point q = ((TRatioPoint)pt).getV();
+			AMExpression r = ((TRatioPoint)pt).getR();
+			
+			AMExpression sabp = new AMAreaOfTriangle(aa, bb, p);
+			AMExpression ppab = new AMPythagorasDifference(p, aa, bb);
+			AMExpression pqab = new AMPythagorasDifference(q, aa, bb);
+			AMExpression ppaqb = new AMDifference(ppab, pqab);
+			AMExpression coeff = new AMFraction(r, new AMNumber(4));
+			AMExpression product = new AMProduct(coeff, ppaqb);
+			return new AMDifference(sabp, product);
+		}
+		
+		// Theoretically, pt cannot be a free point
+		if (pt instanceof FreePoint) {
+			System.out.println("Trying to eliminate the free point" + pt.getGeoObjectLabel());
+			return null;
+		}
+		
+		System.out.println("Th point " + pt.getGeoObjectLabel() + "has not been generated using the area method");
+		return null;
+	}
+	
+	@Override
+	public AMExpression reduceToSingleFraction() {
+		return this;
 	}
 }

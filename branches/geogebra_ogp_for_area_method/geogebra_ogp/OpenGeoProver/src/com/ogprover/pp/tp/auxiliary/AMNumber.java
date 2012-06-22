@@ -100,4 +100,14 @@ public class AMNumber extends AMExpression {
 	public AMExpression uniformize() {
 		return this;
 	}
+	
+	@Override
+	public AMExpression eliminate(Point pt) {
+		return this;
+	}
+
+	@Override
+	public AMExpression reduceToSingleFraction() {
+		return this;
+	}
 }

@@ -116,4 +116,41 @@ public class AMDifference extends AMExpression {
 	public AMExpression uniformize() {
 		return new AMDifference(term1.uniformize(), term2.uniformize());
 	}
+	
+	@Override
+	public AMExpression eliminate(Point pt) {
+		return new AMDifference(term1.eliminate(pt), term2.eliminate(pt));
+	}
+	
+	@Override
+	public AMExpression reduceToSingleFraction() {
+		AMExpression expr1 = term1.reduceToSingleFraction();
+		AMExpression expr2 = term2.reduceToSingleFraction();
+		
+		if (expr1 instanceof AMFraction) {
+			AMExpression num1 = ((AMFraction)expr1).getNumerator();
+			AMExpression den1 = ((AMFraction)expr1).getDenominator();
+			
+			if (expr2 instanceof AMFraction) {
+				AMExpression num2 = ((AMFraction)expr2).getNumerator();
+				AMExpression den2 = ((AMFraction)expr2).getDenominator();
+				if (den1.equals(den2)) {
+					return new AMFraction(new AMDifference(num1, num2), den1);
+				}
+				AMExpression numerator = new AMDifference(new AMProduct(num1, den2), new AMProduct(num2, den1));
+				AMExpression denominator = new AMProduct(den1, den2);
+				return new AMFraction(numerator, denominator);
+			}
+			
+			return new AMFraction(new AMDifference(num1, new AMProduct(expr2, den1)), den1);
+		}
+		
+		if (expr2 instanceof AMFraction) {
+			AMExpression num2 = ((AMFraction)expr2).getNumerator();
+			AMExpression den2 = ((AMFraction)expr2).getDenominator();
+			return new AMFraction(new AMDifference(new AMProduct(expr1, den2), num2), den2);
+		}
+		
+		return new AMDifference(expr1, expr2);
+	}
 }

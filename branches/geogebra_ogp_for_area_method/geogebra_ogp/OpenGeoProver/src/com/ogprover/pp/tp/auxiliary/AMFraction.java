@@ -132,4 +132,39 @@ public class AMFraction extends AMExpression {
 	public AMExpression uniformize() {
 		return new AMFraction(numerator.uniformize(), denominator.uniformize());
 	}
+	
+	@Override
+	public AMExpression eliminate(Point pt) {
+		return new AMFraction(numerator.eliminate(pt), denominator.eliminate(pt));
+	}
+	
+	@Override
+	public AMExpression reduceToSingleFraction() {
+		AMExpression expr1 = numerator.reduceToSingleFraction();
+		AMExpression expr2 = denominator.reduceToSingleFraction();
+		
+		if (expr1 instanceof AMFraction) {
+			AMExpression num1 = ((AMFraction)expr1).getNumerator();
+			AMExpression den1 = ((AMFraction)expr1).getDenominator();
+			
+			if (expr2 instanceof AMFraction) {
+				AMExpression num2 = ((AMFraction)expr2).getNumerator();
+				AMExpression den2 = ((AMFraction)expr2).getDenominator();
+				if (den1.equals(den2)) {
+					return new AMFraction(num1,num2);
+				}
+				return new AMFraction(new AMProduct(num1, num2), new AMProduct(den1, den2));
+			}
+			
+			return new AMFraction(num1, new AMProduct(den1, expr2));
+		}
+		
+		if (expr2 instanceof AMFraction) {
+			AMExpression num2 = ((AMFraction)expr2).getNumerator();
+			AMExpression den2 = ((AMFraction)expr2).getDenominator();
+			return new AMFraction(new AMProduct(expr1, den2), num2);
+		}
+		
+		return new AMFraction(expr1, expr2);
+	}
 }

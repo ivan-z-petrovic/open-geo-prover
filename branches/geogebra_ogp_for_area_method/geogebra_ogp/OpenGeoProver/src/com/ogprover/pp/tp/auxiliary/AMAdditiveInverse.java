@@ -99,4 +99,20 @@ public class AMAdditiveInverse extends AMExpression {
 	public AMExpression uniformize() {
 		return new AMAdditiveInverse(expr.uniformize());
 	}
+	
+	@Override
+	public AMExpression eliminate(Point pt) {
+		return new AMAdditiveInverse(expr.eliminate(pt));
+	}
+
+	@Override
+	public AMExpression reduceToSingleFraction() {
+		AMExpression term = expr.reduceToSingleFraction();
+		if (term instanceof AMFraction) {
+			AMExpression numerator = ((AMFraction)term).getNumerator();
+			AMExpression denominator = ((AMFraction)term).getDenominator();
+			return new AMFraction(new AMAdditiveInverse(numerator), denominator);
+		}
+		return new AMAdditiveInverse(term);
+	}
 }

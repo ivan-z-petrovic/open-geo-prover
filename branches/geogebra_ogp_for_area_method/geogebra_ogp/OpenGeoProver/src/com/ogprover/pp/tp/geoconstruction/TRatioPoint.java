@@ -62,6 +62,18 @@ public class TRatioPoint extends Point {
 		return GeoConstruction.GEOCONS_TYPE_PRATIO_POINT;
 	}
 	
+	public Point getU() {
+		return u;
+	}
+	
+	public Point getV() {
+		return v;
+	}
+	
+	public AMExpression getR() {
+		return r;
+	}
+	
 	
 	/*
 	 * ======================================================================

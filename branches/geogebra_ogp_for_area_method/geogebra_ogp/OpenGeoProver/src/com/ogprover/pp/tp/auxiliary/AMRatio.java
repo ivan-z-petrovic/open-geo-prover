@@ -141,4 +141,16 @@ public class AMRatio extends AMExpression {
 		}
 		return new AMRatio(b,a,d,c);
 	}
+	
+	@Override
+	public AMExpression eliminate(Point pt) {
+		// TODO write the elimination lemmas for the ratios
+		System.out.println("Not yet implemented");
+		return null;
+	}
+	
+	@Override
+	public AMExpression reduceToSingleFraction() {
+		return this;
+	}
 }

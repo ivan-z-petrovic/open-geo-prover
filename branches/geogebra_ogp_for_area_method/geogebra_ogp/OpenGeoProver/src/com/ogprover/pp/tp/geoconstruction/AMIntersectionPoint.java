@@ -55,6 +55,22 @@ public class AMIntersectionPoint extends IntersectionPoint {
 		return GeoConstruction.GEOCONS_TYPE_AM_INTERSECTION_POINT;
 	}
 	
+	public Point getU() {
+		return u;
+	}
+	
+	public Point getV() {
+		return v;
+	}
+	
+	public Point getP() {
+		return p;
+	}
+	
+	public Point getQ() {
+		return q;
+	}
+	
 	
 	/*
 	 * ======================================================================
