@@ -293,6 +293,12 @@ public abstract class Point extends GeoConstruction implements Cloneable {
 		return this.getGeoObjectLabel().equals(((Point)obj).getGeoObjectLabel());
 	}
 	
+	/**
+	 * Method compare - a total order on points, we do not care about its properties
+	 */
+	public boolean compare(Point pt) {
+		return (this.hashCode() <= pt.hashCode());
+	}
 	
 	
 	/*
