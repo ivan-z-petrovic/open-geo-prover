@@ -4,6 +4,7 @@
 
 package com.ogprover.utilities.logger;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.FileAppender;
@@ -11,6 +12,8 @@ import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
+
+import com.ogprover.utilities.io.CustomFile;
 
 
 
@@ -24,22 +27,65 @@ import org.apache.log4j.PatternLayout;
 * @author Ivan Petrovic
 */
 public class FileLogger extends Logger implements ILogger {
-	// Hierarchy of log levels from lowest to highest:
-	// ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
-	// If log level is set to L then all messages with levels X >= L will be enabled
-	// while others will be disabled.
-	private static FileLoggerFactory loggerFactory = new FileLoggerFactory();
-	private static final String DEFAULT_ROOT_DIR = "log/";
-	private boolean verbose;
-	private String rootDirectory;
+	/*
+	 *  Hierarchy of log levels from lowest to highest:
+	 *  ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
+	 *  
+	 *  If log level is set to some value L then all messages with levels 
+	 *  X >= L will be enabled while others will be disabled.
+	 */
 	
-	public FileLogger (String name) {
-		super(name);
-		this.setLevel(Level.INFO); // this will include info, warn, error and fatal messages 
-		this.setVerbose(false);
-		this.setRootDirectory(System.getProperty("user.dir") + "/" + FileLogger.DEFAULT_ROOT_DIR);
+	/*
+	 * ======================================================================
+	 * ========================== VARIABLES =================================
+	 * ======================================================================
+	 */
+	/**
+	 * <i><b>
+	 * Version number of class in form xx.yy where
+	 * xx is major version/release number and yy is minor
+	 * release number.
+	 * </b></i>
+	 */
+	public static final String VERSION_NUM = "1.00"; // this should match the version number from class comment
+	
+	public static final String DEFAULT_LOG_DIR = "log"; // default name of destination directory for all log files (from current working directory, whatever it is)
+	public static final String DEFAULT_LOG_FILE_EXTENSION = "log"; // default extension for log files
+	public static final String DEFAULT_LOG_FILE_NAME = "tempOGPLogFile";
+	
+	/**
+	 * <i>
+	 * Creator of log file instances
+	 * </i>
+	 */
+	private static FileLoggerFactory loggerFactory = new FileLoggerFactory();
+	/**
+	 * Flag for writing to standard output
+	 */
+	private boolean verbose;
+	/**
+	 * Full path of log directory
+	 */
+	private String logDirectoryPath;
+	/**
+	 * Base name of log file with extension (default extension is ".log")
+	 */
+	private String logBaseFileName;
+	
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== GETTERS/SETTERS ===========================
+	 * ======================================================================
+	 */
+	/**
+	 * @return the loggerFactory
+	 */
+	public FileLoggerFactory getLoggerFactory() {
+		return FileLogger.loggerFactory;
 	}
-
+	
 	/**
 	 * @return the verbose
 	 */
@@ -53,30 +99,100 @@ public class FileLogger extends Logger implements ILogger {
 	public void setVerbose(boolean verbose) {
 		this.verbose = verbose;
 	}
-
+	
 	/**
-	 * @param rootDirectory the rootDirectory to set
+	 * @return the logDirectoryPath
 	 */
-	public void setRootDirectory(String rootDirectory) {
-		this.rootDirectory = rootDirectory;
+	public String getLogDirectoryPath() {
+		return this.logDirectoryPath;
 	}
 
 	/**
-	 * @return the rootDirectory
+	 * @param logDirectoryPath the logDirectoryPath to set
 	 */
-	public String getRootDirectory() {
-		return rootDirectory;
+	public void setLogDirectoryPath(String logDirectoryPath) {
+		this.logDirectoryPath = logDirectoryPath;
+	}
+	
+	/**
+	 * @return the logBaseFileName
+	 */
+	public String getLogBaseFileName() {
+		return this.logBaseFileName;
 	}
 
 	/**
-     * This method overrides getLogger by supplying
-     * its own factory type as a parameter.
+	 * @param logBaseFileName the logBaseFileName to set
+	 */
+	public void setLogBaseFileName(String logBaseFileName) {
+		this.logBaseFileName = logBaseFileName;
+	}
+
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== CONSTRUCTORS ==============================
+	 * ======================================================================
+	 */
+	/**
+	 * Constructor method.
+	 * 
+	 * @param loggerDestDirPath		Absolute or relative (with respect to current working directory) path 
+	 * 								of destination directory where log file is stored (optional)
+	 * @param loggerBaseFileName	Base name of log file (with or without extension - default extension is ".log")
+	 */
+	public FileLogger(String loggerDestDirPath, String loggerBaseFileName) {
+		super((loggerBaseFileName != null) ? loggerBaseFileName : FileLogger.DEFAULT_LOG_FILE_NAME);
+		this.setLevel(Level.INFO); // this will include info, warn, error and fatal messages
+		
+		this.verbose = false;
+		
+		if (loggerDestDirPath == null)
+			this.logDirectoryPath = CustomFile.buildAbsolutePath(FileLogger.DEFAULT_LOG_DIR);
+		else
+			this.logDirectoryPath = CustomFile.buildAbsolutePath(loggerDestDirPath);
+		
+		String initialBaseFileName = (loggerBaseFileName != null) ? loggerBaseFileName : FileLogger.DEFAULT_LOG_FILE_NAME;
+		String baseFileName = (initialBaseFileName.indexOf(File.separatorChar) == -1) ? initialBaseFileName : FileLogger.DEFAULT_LOG_FILE_NAME; // disregard file names that are not base file names i.e. contain file separator
+		int lastDotIdx = baseFileName.lastIndexOf('.');
+		if (lastDotIdx == -1) // extension is not set
+			this.logBaseFileName = CustomFile.buildBaseFileName(baseFileName, FileLogger.DEFAULT_LOG_FILE_EXTENSION);
+		else
+			this.logBaseFileName = baseFileName;
+	}
+	
+	/**
+	 * Constructor method.
+	 * 
+	 * @param loggerBaseFileName	Base name of log file (with or without extension - default extension is ".log")
+	 */
+	public FileLogger(String loggerBaseFileName) {
+		this(null, loggerBaseFileName); // logger file will be created in current working directory
+	}
+
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
+	/**
+     * This method is new method in FileLogger that uses custom destination directory
+     * for log file and custom logger factory object.
+     * 
+     * @param loggerDestDirPath		Absolute or relative path of destination directory where log file is stored (optional)
+     * @param loggerBaseFileName	Base name of log file (with or without extension - default extension is ".log")
      */
-    public static FileLogger getLogger(String name, String rootDirectory) {
-    	FileLogger fl = (FileLogger)Logger.getLogger(name, loggerFactory);
+    public static FileLogger getLogger(String loggerDestDirPath, String loggerBaseFileName) {
+    	if (loggerBaseFileName == null || loggerBaseFileName.indexOf(File.separatorChar) != -1)
+    		return null; // incorrect base file name
     	
-    	if (rootDirectory != null)
-    		fl.setRootDirectory(rootDirectory);
+    	String absoluteFileLoggerPath = CustomFile.buildAbsoluteFilePath((loggerDestDirPath != null) ? loggerDestDirPath : FileLogger.DEFAULT_LOG_DIR, loggerBaseFileName);
+    	FileLogger fl = (FileLogger)Logger.getLogger(absoluteFileLoggerPath, FileLogger.loggerFactory); // safe cast since FileLoggerFactory retrieves FileLogger object
+    	
+    	// Setting layout for log file
     	
     	/*
 		 * The conversion pattern consists of date in ISO8601 format, level,
@@ -90,10 +206,7 @@ public class FileLogger extends Logger implements ILogger {
 		Layout layout = new PatternLayout("%d %-5p [%t] %-17c{2} (%20F:%L) %3x - %m%n");
 		// Logger is associated with file
 		try {
-			String truncatedName = fl.getRootDirectory() + name.substring(name.lastIndexOf(".")+1, name.length()) + ".log";
-
-			// this will open a file with specified name and truncate the previous contents
-			fl.addAppender(new FileAppender(layout, truncatedName, false));
+			fl.addAppender(new FileAppender(layout, absoluteFileLoggerPath, false)); // This will open a file with specified name and truncate the previous contents
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -102,12 +215,20 @@ public class FileLogger extends Logger implements ILogger {
     }
     
     /**
-     * This method overrides getLogger by supplying
-     * its own factory type as a parameter.
+     * This method overrides Logger.getLogger by supplying its own factory type as a parameter.
+     * 
+     * @param loggerBaseFileName	Base name of log file (with or without extension - default extension is ".log")
+     * 
+     * @see org.apache.log4j.Logger#getLogger(java.lang.String)
      */
-    public static FileLogger getLogger(String name) {
-    	return FileLogger.getLogger(name, (String)null);
+    public static FileLogger getLogger(String loggerBaseFileName) {
+    	return FileLogger.getLogger(FileLogger.DEFAULT_LOG_DIR, loggerBaseFileName);
     }
+    
+    
+    /*
+     * Implementation methods from ILogger interface
+     */
     
     /* 
      * Base log functions - they are all made to be thread safe
