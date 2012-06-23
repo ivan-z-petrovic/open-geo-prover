@@ -30,6 +30,8 @@ import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.ogprover.utilities.io.CustomFile;
+
 /**
  * <dl>
  * <dt><b>Class description:</b></dt>
@@ -86,6 +88,7 @@ public class GeoGebraLogger implements ILogger {
 	 */
 	public static final String VERSION_NUM = "1.00"; // this should match the version number from class comment
 
+	public static final String DEFAULT_LOG_DIR = "log";
 	private static Set<String> reportedImplementationNeeded = new TreeSet<String>();
     
     public static Level EMERGENCY = new Level(0, "EMERGENCY");
@@ -461,18 +464,15 @@ public class GeoGebraLogger implements ILogger {
     	GeoGebraLogger logger = new GeoGebraLogger();
 		logger.setLogLevel(GeoGebraLogger.INFO);
 		logger.setLogDestination(GeoGebraLogger.LogDestination.FILE);
-		StringBuilder sb = new StringBuilder();
 		
-		String rootDirPath = logFileRootDirectory;
-		if (rootDirPath == null)
-			rootDirPath = System.getProperty("user.dir") + "/log/"; // assumption: current user directory is "OpenGeoProver"
-		sb.append(rootDirPath);
-		if (logFileName.contains("."))
-			sb.append(logFileName.substring(0, logFileName.lastIndexOf(".")));
+		String rootDirPath = (logFileRootDirectory == null || logFileRootDirectory.length() == 0) ? GeoGebraLogger.DEFAULT_LOG_DIR : logFileRootDirectory;
+		String baseFileName;
+		if (!logFileName.contains("."))
+			baseFileName = CustomFile.buildBaseFileName(logFileName, "log");
 		else
-			sb.append(logFileName);
-		sb.append(".log");
-		String logPath = sb.toString();
+			baseFileName = logFileName;
+		
+		String logPath = CustomFile.buildAbsoluteFilePath(rootDirPath, baseFileName);
 		logger.setLogFile(logPath);
     	return logger;
     }

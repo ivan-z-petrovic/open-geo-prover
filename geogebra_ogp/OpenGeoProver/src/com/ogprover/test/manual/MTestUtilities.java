@@ -7,6 +7,7 @@ package com.ogprover.test.manual;
 import java.io.IOException;
 
 import com.ogprover.main.OpenGeoProver;
+import com.ogprover.utilities.io.CustomFile;
 import com.ogprover.utilities.io.CustomFileWriter;
 import com.ogprover.utilities.io.LaTeXFileWriter;
 import com.ogprover.utilities.io.SpecialFileFormatting;
@@ -44,7 +45,7 @@ public class MTestUtilities {
 			}
 		}
 		
-		System.out.println(cfw.getPath());
+		System.out.println(CustomFile.getFileAbsolutePath(cfw.getOutputFile()));
 		
 		String oneLineOfText = "This is one line of text inserted in file.";
 		
