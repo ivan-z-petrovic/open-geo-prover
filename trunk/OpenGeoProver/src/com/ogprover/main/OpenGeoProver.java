@@ -66,7 +66,7 @@ public class OpenGeoProver {
 	 * @param args		Arguments of command line
 	 */
 	public static void main(String[] args) {
-		OpenGeoProver.settings = new OGPConfigurationSettings();
+		OpenGeoProver.settings = new OGPConfigurationSettings(); // TODO - this currently creates log file with default name and location, but later it should be allowed to set these elements in command line
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		FileLogger logger = (FileLogger) OpenGeoProver.settings.getLogger();

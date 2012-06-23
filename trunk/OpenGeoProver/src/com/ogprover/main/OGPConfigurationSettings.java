@@ -306,7 +306,7 @@ public class OGPConfigurationSettings {
 			this.logFileName = OGPConfigurationSettings.defaultLogFileName + sdf.format(cal.getTime());
 		}
 		
-		this.setLogger(FileLogger.getLogger(this.logFileName, logFileRootDirectory));
+		this.setLogger(FileLogger.getLogger(logFileRootDirectory, this.logFileName));
 	}
 	
 	

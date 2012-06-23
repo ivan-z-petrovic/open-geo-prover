@@ -12,6 +12,7 @@ import com.ogprover.polynomials.GeoTheorem;
 import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.test.formats.geothm_xml.GeoTheoremXMLParser;
+import com.ogprover.utilities.io.CustomFile;
 import com.ogprover.utilities.io.CustomFileReader;
 import com.ogprover.utilities.io.CustomFileWriter;
 import com.ogprover.utilities.io.LaTeXFileWriter;
@@ -50,7 +51,7 @@ public class MTestUtilities {
 			}
 		}
 		
-		System.out.println(cfw.getPath());
+		System.out.println(CustomFile.getFileAbsolutePath(cfw.getOutputFile()));
 		
 		String oneLineOfText = "This is one line of text inserted in file.";
 		

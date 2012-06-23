@@ -152,6 +152,7 @@ public class OGPCPXMLParser {
 	 * 						null otherwise
 	 */
 	public OGPTP readGeoTheoremFromXML(String fileName) {
+		// TODO - Re-factor this code to use CustomFileReader instead of making File object.
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (fileName == null) {
