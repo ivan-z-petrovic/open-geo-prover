@@ -57,9 +57,6 @@ public class OpenGeoProver {
 	 * @param args		Arguments of command line
 	 */
 	public static void main(String[] args) {
-		// Set working directory
-		System.setProperty("user.dir", System.getProperty("user.dir") + "/OpenGeoProver");	// adjust working directory (enter directory where input sub-directory resides);
-
 		OpenGeoProver.settings = new OGPConfigurationSettings();
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
@@ -88,21 +85,12 @@ public class OpenGeoProver {
 		// Reading input file with theorem in GeoGebra's XML format
 		logger.info("Parsing command line...");
 		// Extract only file name without extension
-		String xmlFileNameWithExtension = args[0];
-		int pointIndex = xmlFileNameWithExtension.indexOf('.');
-		String xmlFileName;
-		
-		if (pointIndex == -1) { // no extension
-			xmlFileName = xmlFileNameWithExtension;
-		}
-		else {
-			xmlFileName = xmlFileNameWithExtension.substring(0, pointIndex);
-		}
+		String xmlFileName = args[0]; // absolute or relative file path (relative with respect to current working directory)
 		
 		// Create custom file reader for the file with name passed as an argument; read its contents and copy to string
 		String xmlString;
 		try {
-			CustomFileReader fileReader = new CustomFileReader(xmlFileName, "xml");
+			CustomFileReader fileReader = new CustomFileReader(xmlFileName);
 			// Read one by one line and append to string buffer
 			StringBuffer sbuff = new StringBuffer();
 			String line = null;

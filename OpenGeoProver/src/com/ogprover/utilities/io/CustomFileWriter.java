@@ -19,95 +19,76 @@ import java.io.OutputStream;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class CustomFileWriter {
+public class CustomFileWriter extends CustomFile {
+	/*
+	 * ======================================================================
+	 * ========================== VARIABLES =================================
+	 * ======================================================================
+	 */
+	/**
+	 * <i><b>
+	 * Version number of class in form xx.yy where
+	 * xx is major version/release number and yy is minor
+	 * release number.
+	 * </b></i>
+	 */
+	public static final String VERSION_NUM = "1.00"; // this should match the version number from class comment
+	
 	public static final int BUFFER_SIZE = 4096; // 4K for size of output buffer
-	public static final String OUTPUT_DIR_NAME = "output"; // default name of directory for all output files
-	private String fileName = null;
-	private String fileExtension = null;
+	public static final String OUTPUT_DIR_NAME = "output"; // default name of destination directory for all output files (from current working directory, whatever it is)
+	
+	/**
+	 * Output file object
+	 */
 	private File outputFile = null;
+	/**
+	 * Stream for writing
+	 */
 	private OutputStream outputStream = null;
+	/**
+	 * Buffered output stream for writing
+	 */
 	private BufferedOutputStream buffOS = null;
 	
-	/**
-	 * @return the fileName
-	 */
-	public String getFileName() {
-		return fileName;
-	}
-
-	/**
-	 * @param fileName the fileName to set
-	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	/**
-	 * @return the fileExtension
-	 */
-	public String getFileExtension() {
-		return fileExtension;
-	}
-
-	/**
-	 * @param fileExtension the fileExtension to set
-	 */
-	public void setFileExtension(String fileExtension) {
-		this.fileExtension = fileExtension;
-	}
 	
+	
+	/*
+	 * ======================================================================
+	 * ========================== GETTERS/SETTERS ===========================
+	 * ======================================================================
+	 */
 	/**
 	 * @return the outputFile
 	 */
 	public File getOutputFile() {
 		return outputFile;
 	}
-
-	/**
-	 * 
-	 * @return	full path of this file
-	 */
-	public String getPath() {
-		return this.outputFile.getAbsolutePath();
-	}
 	
-	/**
-	 * 
-	 * @return	name of file with extension
+	
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== CONSTRUCTORS ==============================
+	 * ======================================================================
 	 */
-	public String getFileNameWithExtension() {
-		return this.fileName + '.' + this.fileExtension;
-	}
-
 	/**
-	 * Constructor method.
+	 * Method for initialization of output file.
 	 * 
-	 * @param dirName		name of output directory
-	 * @param fileName		name of file to be created
-	 * @param fileExtension	extension of file to be created
 	 * @throws IOException
 	 */
-	public CustomFileWriter(String dirName, String fileName, String fileExtension) throws IOException {
-		// File outDir = new File(dirName);
-		File outDir = new File(System.getProperty("user.dir") + "/" + dirName); // full path to output directory
-		
+	private void initOutputFile() throws IOException {
+		// Create file object for output folder - if folder doesn't exist, it will be created
+		File outDir = new File(this.destinationDirectoryPath);
 		if (outDir.exists() == false)
 			outDir.mkdir(); // creates output directory
 		else {
 			if (outDir.isDirectory() == false)
-				throw new IllegalArgumentException("File with name " + CustomFileWriter.OUTPUT_DIR_NAME + " is not a directory.");
+				throw new IllegalArgumentException("File with path " + this.destinationDirectoryPath + " is not a directory.");
 		}
 		
-		if (fileExtension != null && fileName.endsWith('.' + fileExtension) == true)
-			this.fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-		else
-			this.fileName = fileName;
-		
-		this.fileExtension = fileExtension;
-		if (this.fileExtension != null)
-			this.outputFile = new File(outDir, this.fileName + '.' + this.fileExtension);
-		else
-			this.outputFile = new File(outDir, this.fileName);
+		// Create file object for output file inside output directory
+		this.outputFile = new File(outDir, CustomFile.buildBaseFileName(this.baseFileName, this.fileExtension));
 		this.outputStream = new FileOutputStream(this.outputFile);
 		this.buffOS = new BufferedOutputStream(this.outputStream);
 	}
@@ -115,24 +96,50 @@ public class CustomFileWriter {
 	/**
 	 * Constructor method.
 	 * 
-	 * @param fileName			name of file to be created
-	 * @param fileExtension		extension of file to be created
+	 * @param dirName			Path or name of output directory
+	 * @param fileName			Name of file to be created (with or without extension)
+	 * @param fileExtension		Extension of file to be created
 	 * @throws IOException
 	 */
-	public CustomFileWriter(String fileName, String fileExtension) throws IOException {
-		this(CustomFileWriter.OUTPUT_DIR_NAME, fileName, fileExtension);
+	public CustomFileWriter(String dirName, String fileName, String fileExtension) throws IOException {
+		// Assumption: fileName argument is not null
+		this.initFilePathElements(dirName, fileName, fileExtension);
+		this.initOutputFile();
 	}
 	
 	/**
 	 * Constructor method.
 	 * 
-	 * @param fileName	name of file to be created
+	 * @param fileName			Name of file to be created (with or without extension)
+	 * @param fileExtension		Extension of file to be created
+	 * @throws IOException
+	 */
+	public CustomFileWriter(String fileName, String fileExtension) throws IOException {
+		this(CustomFileWriter.OUTPUT_DIR_NAME, fileName, fileExtension); // Create file inside default output directory from current working directory
+	}
+	
+	/**
+	 * Constructor method.
+	 * 
+	 * @param fileName		Absolute path or only base name of file to be created (extension is assumed)
 	 * @throws IOException
 	 */
 	public CustomFileWriter(String fileName) throws IOException {
-		this(fileName, null);
+		if (CustomFile.isFilePathAbsolute(fileName))
+			this.extractFilePathElementsFromAbsFilePath(fileName);
+		else
+			this.initFilePathElements(CustomFileWriter.OUTPUT_DIR_NAME, fileName, null);
+		this.initOutputFile();
 	}
 	
+	
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
 	/**
 	 * Method for writing to file.
 	 * 
