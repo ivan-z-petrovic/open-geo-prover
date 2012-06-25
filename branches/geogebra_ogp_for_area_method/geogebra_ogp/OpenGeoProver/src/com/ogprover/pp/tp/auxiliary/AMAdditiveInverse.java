@@ -12,6 +12,9 @@ import com.ogprover.pp.tp.geoconstruction.Point;
  * <dt><b>Class description:</b></dt>
  * <dd>Class for representing the opposite inverse of an expression.</dd>
  * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
  */
 public class AMAdditiveInverse extends AMExpression {
 	/*
@@ -114,5 +117,10 @@ public class AMAdditiveInverse extends AMExpression {
 			return new AMFraction(new AMAdditiveInverse(numerator), denominator);
 		}
 		return new AMAdditiveInverse(term);
+	}
+
+	@Override
+	public AMExpression reductToRightAssociativeForm() {
+		return (new AMProduct(new AMNumber(-1), expr)).reductToRightAssociativeForm();
 	}
 }

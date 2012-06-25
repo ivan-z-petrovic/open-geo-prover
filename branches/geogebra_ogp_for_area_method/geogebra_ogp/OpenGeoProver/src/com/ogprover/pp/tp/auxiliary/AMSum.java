@@ -12,6 +12,9 @@ import com.ogprover.pp.tp.geoconstruction.Point;
  * <dt><b>Class description:</b></dt>
  * <dd>Class for representing sum of two expressions.</dd>
  * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
  */
 public class AMSum extends AMExpression {
 	/*
@@ -151,5 +154,16 @@ public class AMSum extends AMExpression {
 		}
 		
 		return new AMSum(expr1, expr2);
+	}
+	@Override
+	public AMExpression reductToRightAssociativeForm() {
+		AMExpression firstTerm = term1.reductToRightAssociativeForm();
+		AMExpression c = term2.reductToRightAssociativeForm();
+		if (firstTerm instanceof AMSum) {
+			AMExpression a = ((AMSum) firstTerm).getTerm1();
+			AMExpression b = ((AMSum) firstTerm).getTerm2();
+			return (new AMSum (a, new AMSum(b, c))).reductToRightAssociativeForm();
+		}
+		return new AMSum(firstTerm, c);
 	}
 }

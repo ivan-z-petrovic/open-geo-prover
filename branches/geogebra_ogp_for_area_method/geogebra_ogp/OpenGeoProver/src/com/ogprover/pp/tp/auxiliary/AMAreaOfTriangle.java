@@ -17,6 +17,9 @@ import com.ogprover.pp.tp.geoconstruction.TRatioPoint;
  * <dt><b>Class description:</b></dt>
  * <dd>Class for representing the (oriented) area of a triangle for the area method.</dd>
  * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
  */
 public class AMAreaOfTriangle extends AMExpression {
 	/*
@@ -243,6 +246,11 @@ public class AMAreaOfTriangle extends AMExpression {
 	
 	@Override
 	public AMExpression reduceToSingleFraction() {
+		return this;
+	}
+	
+	@Override
+	public AMExpression reductToRightAssociativeForm() {
 		return this;
 	}
 }

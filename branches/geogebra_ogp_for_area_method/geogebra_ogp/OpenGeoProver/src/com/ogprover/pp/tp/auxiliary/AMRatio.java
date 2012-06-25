@@ -14,6 +14,9 @@ import com.ogprover.pp.tp.geoconstruction.Point;
  * <dd>Class for representing the ration between two collinear segments,
  * 		for the area method algorithm.</dd>
  * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
  */
 public class AMRatio extends AMExpression {
 	/*
@@ -152,5 +155,10 @@ public class AMRatio extends AMExpression {
 	@Override
 	public AMExpression reduceToSingleFraction() {
 		return this;
+	}
+	@Override
+	public AMExpression reductToRightAssociativeForm() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

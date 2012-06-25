@@ -12,6 +12,9 @@ import com.ogprover.pp.tp.geoconstruction.Point;
  * <dt><b>Class description:</b></dt>
  * <dd>Class for representing multiplication of two expressions.</dd>
  * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
  */
 public class AMProduct extends AMExpression {
 	/*
@@ -147,5 +150,42 @@ public class AMProduct extends AMExpression {
 		}
 		
 		return new AMProduct(expr1, expr2);
+	}
+	
+	@Override
+	public AMExpression reductToRightAssociativeForm() {
+		AMExpression firstFactor = factor1.reductToRightAssociativeForm();
+		AMExpression secondFactor = factor2.reductToRightAssociativeForm();
+		if (secondFactor instanceof AMSum) {
+			AMExpression firstTerm = ((AMSum) secondFactor).getTerm1();
+			AMExpression secondTerm = ((AMSum) secondFactor).getTerm2();
+			return (new AMSum(new AMProduct(firstFactor, firstTerm), new AMProduct(firstFactor, secondTerm))).reductToRightAssociativeForm();
+		}
+		if (firstFactor instanceof AMSum) {
+			AMExpression firstTerm = ((AMSum) firstFactor).getTerm1();
+			AMExpression secondTerm = ((AMSum) firstFactor).getTerm2();
+			return (new AMSum(new AMProduct(secondFactor, firstTerm), new AMProduct(secondFactor, secondTerm))).reductToRightAssociativeForm();
+		}
+		if (firstFactor instanceof AMProduct) {
+			AMExpression a = ((AMProduct) firstFactor).getFactor1();
+			AMExpression b = ((AMProduct) firstFactor).getFactor2();
+			return (new AMProduct(a, new AMProduct(b, secondFactor))).reductToRightAssociativeForm();
+		}
+		if (firstFactor instanceof AMNumber) {
+			if (secondFactor instanceof AMNumber)
+				return new AMNumber(((AMNumber) firstFactor).value() * ((AMNumber) secondFactor).value());
+			if (secondFactor instanceof AMProduct) {
+				AMExpression a = ((AMProduct) secondFactor).getFactor1();
+				AMExpression b = ((AMProduct) secondFactor).getFactor2();
+				if (a instanceof AMNumber) {
+					int product = ((AMNumber) firstFactor).value() * ((AMNumber) a).value();
+					return new AMProduct(new AMNumber(product), b);
+				}
+			}
+			
+		}
+		if (secondFactor instanceof AMNumber)
+			return (new AMProduct(secondFactor, firstFactor)).reductToRightAssociativeForm();
+		return new AMProduct(firstFactor, secondFactor);
 	}
 }
