@@ -13,6 +13,9 @@ import com.ogprover.pp.tp.geoconstruction.Point;
  * <dd>Class for representing basic numbers in the area method. For the moment,
  * 		they are only integers - not floating numbers, to avoid approximation errors.</dd>
  * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
  */
 public class AMNumber extends AMExpression {
 	/*
@@ -108,6 +111,11 @@ public class AMNumber extends AMExpression {
 
 	@Override
 	public AMExpression reduceToSingleFraction() {
+		return this;
+	}
+
+	@Override
+	public AMExpression reductToRightAssociativeForm() {
 		return this;
 	}
 }

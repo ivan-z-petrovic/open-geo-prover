@@ -20,6 +20,9 @@ import com.ogprover.pp.tp.geoconstruction.TRatioPoint;
  * 		difference equals AB² + BC² - AC². Then, its value is 0 iff ABC is a
  * 		right angle.</dd>
  * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
  */
 public class AMPythagorasDifference extends AMExpression {
 	/*
@@ -309,8 +312,14 @@ public class AMPythagorasDifference extends AMExpression {
 		System.out.println("Th point " + pt.getGeoObjectLabel() + "has not been generated using the area method");
 		return null;
 	}
+	
 	@Override
 	public AMExpression reduceToSingleFraction() {
+		return this;
+	}
+	
+	@Override
+	public AMExpression reductToRightAssociativeForm() {
 		return this;
 	}
 }

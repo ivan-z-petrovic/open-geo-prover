@@ -12,6 +12,9 @@ import com.ogprover.pp.tp.geoconstruction.Point;
  * <dt><b>Class description:</b></dt>
  * <dd>Class for representing the difference between two expressions.</dd>
  * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
  */
 public class AMDifference extends AMExpression {
 	/*
@@ -152,5 +155,11 @@ public class AMDifference extends AMExpression {
 		}
 		
 		return new AMDifference(expr1, expr2);
+	}
+	@Override
+	public AMExpression reductToRightAssociativeForm() {
+		AMExpression firstTerm = term1.reductToRightAssociativeForm();
+		AMExpression secondTerm = term2.reductToRightAssociativeForm();
+		return (new AMSum(firstTerm, new AMProduct(new AMNumber(-1), secondTerm))).reductToRightAssociativeForm();
 	}
 }

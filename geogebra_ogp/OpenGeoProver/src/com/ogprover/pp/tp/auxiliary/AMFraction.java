@@ -12,6 +12,9 @@ import com.ogprover.pp.tp.geoconstruction.Point;
  * <dt><b>Class description:</b></dt>
  * <dd>Class for representing the fraction of two expressions.</dd>
  * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
  */
 public class AMFraction extends AMExpression {
 	/*
@@ -166,5 +169,11 @@ public class AMFraction extends AMExpression {
 		}
 		
 		return new AMFraction(expr1, expr2);
+	}
+	
+	@Override
+	public AMExpression reductToRightAssociativeForm() {
+		System.out.println("Calling reductToRightAssociativeForm() on an expression which contains fractions : " + this.print());
+		return null;
 	}
 }

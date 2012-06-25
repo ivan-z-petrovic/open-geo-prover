@@ -3,7 +3,12 @@
  */
 package com.ogprover.pp.tp.auxiliary;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Vector;
+
+import org.apache.tools.ant.types.resources.selectors.Compare;
 
 import com.ogprover.pp.tp.geoconstruction.Point;
 
@@ -15,6 +20,9 @@ import com.ogprover.pp.tp.geoconstruction.Point;
  * 		area of a triangle, pythagoras difference between three points, or 
  * 		any rational expression formed by those primitives.</dd>
  * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
  */
 public abstract class AMExpression {
 	/*
@@ -66,6 +74,12 @@ public abstract class AMExpression {
 	 * @return the expression in the form AMFraction(a,b), where a and b do not contain any AMFraction.
 	 */
 	public abstract AMExpression reduceToSingleFraction();
+	
+	/**
+	 * @return the expression in a right associative form.
+	 * /!\ This method is supposed to be called on an object without any fraction left.
+	 */
+	public abstract AMExpression reductToRightAssociativeForm();
 	
 	/*
 	 * ======================================================================
@@ -243,5 +257,46 @@ public abstract class AMExpression {
 			current = current.simplifyInOneStep();
 		}
 		return last;
+	}
+	
+	/**
+	 * @return the list of the factors of this product
+	 * /!\ The expression has to be a product, in right associative form, with (or without) a single constant on the left
+	 */
+	public List<AMExpression> productToList() {
+		if (this instanceof AMPythagorasDifference || this instanceof AMAreaOfTriangle) {
+			List<AMExpression> list = new Vector<AMExpression>(); 
+			list.add(this);
+			return list;
+		}
+		
+		if (this instanceof AMNumber)
+			return new Vector<AMExpression>();
+		
+		if (this instanceof AMProduct) {
+			AMExpression leftFactor = ((AMProduct)this).getFactor1();
+			AMExpression rightFactor = ((AMProduct)this).getFactor2();
+			List<AMExpression> list = rightFactor.productToList();
+			if (leftFactor instanceof AMPythagorasDifference || leftFactor instanceof AMAreaOfTriangle)
+				list.add(leftFactor);
+			if (leftFactor instanceof AMNumber)
+				return list;
+		}
+		
+		System.out.println("The expression is not in the good form : " + this.print());
+		return null;
+	}
+	
+	/**
+	 * @return true iff the given product is the same as this. 
+	 * /!\ The expressions has to be products, in right associative form, with (or without) a single constant on the left
+	 */
+	public boolean isSameProduct(AMExpression expr) {
+		List<AMExpression> factorsOfThis = this.productToList();
+		List<AMExpression> factorsOfExpr = expr.productToList();
+		AMExpressionComparator comparator = new AMExpressionComparator();
+		Collections.sort(factorsOfExpr, comparator);
+		Collections.sort(factorsOfThis, comparator);
+		return factorsOfThis.equals(factorsOfExpr);
 	}
 }
