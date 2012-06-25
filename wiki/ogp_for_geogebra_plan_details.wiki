@@ -9,18 +9,20 @@ This development is done in Java 1.5.0_22 version of Java SDK.
 Following table outlines main stages of development work.
 
 || *Stage or sub-stage of work* || *Work Description* || *Work Status* || *Comment* ||
-|| *A* || _Initial development work_ || Ongoing || ||
+|| *A* || _Initial development work_ || Documentation and testing || ||
 || *A.1* || _Preparations for main work_ || *Finished* || Making decisions about implementation ||
-|| *A.2* || _Improvements on main development trunk <br>required for integration of OGP with !GeoGebra_ || Ongoing || ||
-|| *A.3* || _XML parsing of geometry constructions_ || Ongoing || Only transformations are not done ||
+|| *A.2* || _Improvements on main development trunk <br>required for integration of OGP with !GeoGebra_ || *Finished* || ||
+|| *A.3* || _XML parsing of geometry constructions_ || *Finished* || Only transformations are not done ||
 || *A.4* || _Parsing of theorem statements_ || *Finished* || Only a couple of basic statements <br>are supported in initial stage ||
 || *A.5* || _Replacement of logger_ || *Finished* || ||
-|| *A.6* || _Implementation of output format and API_ || Ongoing || ||
+|| *A.6* || _Implementation of output format and API_ || *Finished* || ||
 || *A.7* || _Preparing documentation and examples_ || Ongoing || ||
 || *A.8* || _Testing and bug fixing_ || Ongoing || ||
 || ... || ... || ... || ||
 || || || || ||
-|| *B* || _Further development work_ || Not Yet Started|| TBD - will be split in new stages ||
+|| *B* || _Improving and completing initial implementation_ || Not Yet Started|| ||
+|| *B.1* || _Completing tasks from initial implementation_ || Not Yet Started || ||
+|| *C* || _Further development work_ || Not Yet Started || ||
 || ... || ... || ... || ||
 
 The details about each specific stage of work:
@@ -42,7 +44,15 @@ The details about each specific stage of work:
   * *A.5* - Replacement of 3rd party [http://logging.apache.org/log4j/1.2/ log4j] logger with new one used in !GeoGebra.
   * *A.6* - Implementation of output format:
    * what will be sent from OGP to !GeoGebra and in what type of format
- # *B-stage* - Further development work - To Be Decided
+ # *B-stage* - Improving and completing initial implementation
+  * *B.1* - Completing tasks from initial implementation:
+   * defining disclaimer and putting notes in documentation about licenses of 3rd party libraries (which are compatible with GNU GPL v3 license) - issue #8;
+   * preparing build scripts (for Windows and Unix) - issue #18;
+   * new input parameters for !GeoGebra - destination folder and name of log file, destination folder and name of output report - issue #20;
+   * implementing API to set custom destination and name of log file in OGP settings - issue #21;
+   * improving conversion of input constructions to rename intersection points if they are introduced another time with new label - issue #23;
+   * implementing conversion of constructions for missing geometry transformations (rotations, translations and dialtations) - issue #15;
+ # *C-stage* - Further development work - To Be Decided
 
 *Note:*
  Every project issue created to track a single specific piece of work has to have a mark of at least stage of work it is related to, but better if more detailed sub-stage label is provided. For more information about issues of this project visit [important_issues Issues] page.
