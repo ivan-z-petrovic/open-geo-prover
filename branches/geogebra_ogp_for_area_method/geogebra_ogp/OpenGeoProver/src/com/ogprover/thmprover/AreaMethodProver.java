@@ -8,22 +8,38 @@ import java.util.Vector;
 
 import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.pp.tp.auxiliary.AMExpression;
+import com.ogprover.pp.tp.auxiliary.AMFraction;
+import com.ogprover.pp.tp.auxiliary.AMNumber;
+import com.ogprover.pp.tp.auxiliary.AMProduct;
 import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
+import com.ogprover.pp.tp.geoconstruction.FreePoint;
+import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
+import com.ogprover.pp.tp.geoconstruction.Point;
 
 /**
-* <dl>
-* <dt><b>Class description:</b></dt>
-* <dd>Class for the area method prover</dd>
-* </dl>
-* 
-* @version 1.00
-* @author Damien Desfontaines
-*/
+ * <dl>
+ * <dt><b>Class description:</b></dt>
+ * <dd>Class for the area method prover</dd>
+ * </dl>
+ * 
+ * @version 1.00
+ * @author Damien Desfontaines
+ */
 public class AreaMethodProver implements TheoremProver {
 	/**
 	 * Statement to be proved
 	 */
 	protected AreaMethodTheoremStatement statement;
+	
+	/**
+	 * Steps of the construction
+	 */
+	protected Vector<GeoConstruction> constructions;
+	
+	/**
+	 * Index of the next point to eliminate
+	 */
+	protected int nextPointToEliminate;
 	
 	/**
 	 * Steps of the computation (we store them for future printing)
@@ -37,6 +53,9 @@ public class AreaMethodProver implements TheoremProver {
 	public AreaMethodProver(OGPTP thmProtocol) {
 		steps = new Vector<AMExpression>();
 		this.statement = thmProtocol.getTheoremStatement().getAreaMethodStatement();
+		this.constructions = thmProtocol.getConstructionSteps();
+		nextPointToEliminate = constructions.size()-1;
+		computeNextPointToEliminate();
 	}
 
 	public int prove() {
@@ -46,8 +65,9 @@ public class AreaMethodProver implements TheoremProver {
 			System.out.println("We must prove that : " + expr.print() + " = 0");
 			steps.add(expr);
 			AMExpression current = expr;
-			while (!current.isZero()) {
-				if (current.containsOnlyFreePoints()) {
+			computeNextPointToEliminate();
+			while (nextPointToEliminate >=0  && !current.isZero()) {
+				//if (current.containsOnlyFreePoints()) {
 					/*
 					 * The current expression, after uniformization and simplification, is non-zero 
 					 * but contains only free points : it is maybe false, but it can also be an 
@@ -55,16 +75,48 @@ public class AreaMethodProver implements TheoremProver {
 					 * case, we have to transform it with the area coordinates. 
 					 */
 					// TODO implement this
-					return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
-				}
+				//	return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
+				//}
 				System.out.println("Uniformization of : " + current.print());
 				current = current.uniformize();
 				System.out.println("Simplification of : " + current.print());
 				current = current.simplify();
-				System.out.println("We finally got : " + current.print());
+				System.out.println("Removing of the point " 
+									+ constructions.get(nextPointToEliminate).getGeoObjectLabel() 
+									+ " of the formula : "
+									+ current.print());
+				current = current.eliminate((Point)constructions.get(nextPointToEliminate)); //safe cast
+				nextPointToEliminate--;
+				computeNextPointToEliminate();
+				System.out.println("Second uniformization of : " + current.print());
+				current = current.uniformize();
+				System.out.println("Second simplification of : " + current.print());
+				current = current.simplify();
 			}
+			System.out.println("Reducing into a single fraction of : " + current.print());
+			current = current.reduceToSingleFraction();
+			if (current instanceof AMFraction) {
+				System.out.println("Removing of the denominator of : " + current.print());
+				current = ((AMFraction) current).getNumerator();
+			}
+			//System.out.println("Last simplification of : " + current.print());
+			//current = current.simplify();
+			System.out.println("Reducing into a right associative form of : " + current.print());
+			current = (new AMProduct(new AMNumber(1), current)).reductToRightAssociativeForm();
+			System.out.println("Grouping of : " + current.print());
+			current = current.groupSumOfProducts();
+			System.out.println("Simplification of : " + current.print());
+			current = current.simplify();
+			System.out.println("Result : " + current.print());
 		}
 		
 		return TheoremProver.THEO_PROVE_RET_CODE_TRUE;
+	}
+	
+	private void computeNextPointToEliminate() {
+		while (nextPointToEliminate >= 0 
+				&& (!(constructions.get(nextPointToEliminate) instanceof Point) 
+						|| constructions.get(nextPointToEliminate) instanceof FreePoint))
+			nextPointToEliminate--;
 	}
 }
