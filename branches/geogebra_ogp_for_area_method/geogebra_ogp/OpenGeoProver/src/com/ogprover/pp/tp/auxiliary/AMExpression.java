@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.tools.ant.types.resources.selectors.Compare;
-
 import com.ogprover.pp.tp.geoconstruction.Point;
 
 /**
@@ -76,7 +74,13 @@ public abstract class AMExpression {
 	public abstract AMExpression reduceToSingleFraction();
 	
 	/**
-	 * @return the expression in a right associative form.
+	 * An expression containing additions and products is said to be in a 
+	 * right associative form if it is of the form 
+	 * 		expr = (c1*x1*...*xn_1 + c2*y1*...*yn_2 + ... + cm*z1*...*zn_m)
+	 * where ci are constants, and xi, yi and zi are of type AMAreaOfTriangle, 
+	 * or AMPythagorasDifference, and where the big sum and all the products 
+	 * are in a right associative form.
+	 * @return the expression transformed into a right associative form.
 	 * /!\ This method is supposed to be called on an object without any fraction left.
 	 */
 	public abstract AMExpression reductToRightAssociativeForm();
@@ -253,7 +257,6 @@ public abstract class AMExpression {
 		AMExpression current = last.simplifyInOneStep();
 		while (!last.equals(current)) {
 			last = current;
-			System.out.println("We simplify : " + current.print() + "in one step");
 			current = current.simplifyInOneStep();
 		}
 		return last;
@@ -261,7 +264,7 @@ public abstract class AMExpression {
 	
 	/**
 	 * @return the list of the factors of this product
-	 * /!\ The expression has to be a product, in right associative form, with (or without) a single constant on the left
+	 * /!\ The expression has to be a product, in right associative form, with (or without) a single constant on the left.
 	 */
 	public List<AMExpression> productToList() {
 		if (this instanceof AMPythagorasDifference || this instanceof AMAreaOfTriangle) {
@@ -297,6 +300,57 @@ public abstract class AMExpression {
 		AMExpressionComparator comparator = new AMExpressionComparator();
 		Collections.sort(factorsOfExpr, comparator);
 		Collections.sort(factorsOfThis, comparator);
-		return factorsOfThis.equals(factorsOfExpr);
+		
+		if (factorsOfThis.size() != factorsOfExpr.size())
+			return false;
+		for (int i=0 ; i<factorsOfThis.size() ; i++)
+			if (!(factorsOfThis.get(i).equals(factorsOfExpr.get(i))))
+				return false;
+		return true;
+		//return factorsOfThis.equals(factorsOfExpr);
+	}
+	
+	/**
+	 * If this is a sum of products in right associative form, where all the products contain one single 
+	 * constant on the left, add the given expression to the sum, without repetition of products.
+	 * For example, if this = 2*x*y + 4*z and expr = -7*x*y, this.addProductToSum(AMExpression expr) will be
+	 * equal to -3*x*y + 4*z. This works even if the factors of the products are not in the same order (e.g.
+	 * if expr = -7*y*z.
+	 */
+	public AMExpression addProductToSum(AMExpression expr) {
+		System.out.println("  " + this.print() + ".addProductToSum(" + expr.print() + ")");
+		if(this instanceof AMSum) {
+			System.out.println("    case 1 : this[" + this.print() + "] instanceof AMSum");
+			AMExpression leftTerm = ((AMSum)this).getTerm1();
+			AMExpression restOfSum = ((AMSum)this).getTerm2();
+			if (leftTerm.isSameProduct(expr)) {
+				int constantOfLeftTerm = ((AMNumber)((AMProduct)leftTerm).getFactor1()).value();
+				int constantOfExpr =  ((AMNumber)((AMProduct)expr).getFactor1()).value();
+				int sum = constantOfExpr + constantOfLeftTerm;
+				AMExpression restOfProduct = ((AMProduct)leftTerm).getFactor2();
+				return new AMSum(new AMProduct(new AMNumber(sum), restOfProduct), restOfSum);
+			}
+			return new AMSum(leftTerm, restOfSum.addProductToSum(expr));
+		}
+		if (this.isSameProduct(expr)) {
+			int constantOfThis = ((AMNumber)((AMProduct)this).getFactor1()).value();
+			int constantOfExpr =  ((AMNumber)((AMProduct)expr).getFactor1()).value();
+			int sum = constantOfExpr + constantOfThis;
+			AMExpression restOfProduct = ((AMProduct)this).getFactor2();
+			return new AMProduct(new AMNumber(sum), restOfProduct);
+		}
+		return new AMSum(this, expr);
+	}
+	
+	/**
+	 * If this is a sum of products, groups the terms which are equal up to a constant multiplicative factor.
+	 */
+	public AMExpression groupSumOfProducts() {
+		if (this instanceof AMSum) {
+			AMExpression leftTerm = ((AMSum)this).getTerm1();
+			AMExpression groupedRest = ((AMSum)this).getTerm2().groupSumOfProducts();
+			return groupedRest.addProductToSum(leftTerm);
+		}
+		return this;
 	}
 }
