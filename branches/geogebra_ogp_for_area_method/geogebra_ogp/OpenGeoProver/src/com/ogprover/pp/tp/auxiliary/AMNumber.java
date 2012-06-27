@@ -118,4 +118,9 @@ public class AMNumber extends AMExpression {
 	public AMExpression reductToRightAssociativeForm() {
 		return this;
 	}
+
+	@Override
+	public AMExpression toIndependantVariables() {
+		return this;
+	}
 }

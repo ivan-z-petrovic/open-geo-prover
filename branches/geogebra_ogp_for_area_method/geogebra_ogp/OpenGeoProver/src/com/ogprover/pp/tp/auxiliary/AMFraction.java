@@ -176,4 +176,8 @@ public class AMFraction extends AMExpression {
 		System.out.println("Calling reductToRightAssociativeForm() on an expression which contains fractions : " + this.print());
 		return null;
 	}
+	@Override
+	public AMExpression toIndependantVariables() {
+		return new AMFraction(numerator.toIndependantVariables(), denominator.toIndependantVariables());
+	}
 }

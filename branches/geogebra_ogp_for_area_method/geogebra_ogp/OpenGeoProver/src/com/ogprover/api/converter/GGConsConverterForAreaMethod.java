@@ -432,10 +432,17 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
 			Point pt = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			System.out.println(pt.getConstructionDesc());
 			LineThroughTwoPoints line = (LineThroughTwoPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			System.out.println(line.getConstructionDesc());
+			
 			Point pointOnLine1 = line.getPoints().get(0);
 			Point pointOnLine2 = line.getPoints().get(1);
+			System.out.println(pointOnLine1.getConstructionDesc());
+			System.out.println(pointOnLine2.getConstructionDesc());
 			Point footPoint = new AMFootPoint(nextAvailableName(), pt, pointOnLine1, pointOnLine2);
+			System.out.println(footPoint.getConstructionDesc());
+			System.out.println("coucou");
 			this.thmProtocol.addGeoConstruction(footPoint);
 			return new LineThroughTwoPoints(oArgs.get(0), footPoint, pt);
 		} catch (ClassCastException ex) {

@@ -184,6 +184,10 @@ public class IntersectionPoint extends Point {
 			return false;
 		
 		try {
+			if (this instanceof AMIntersectionPoint) {
+				return true;
+			}
+			
 			if (this.firstPointSet == null || this.secondPointSet == null) {
 				output.openItemWithDesc("Error: ");
 				output.closeItemWithDesc("Intersection point " + this.getGeoObjectLabel() + " can't be constructed since some base points' set is not constructed");

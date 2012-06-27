@@ -272,7 +272,7 @@ public class CollinearPoints extends PositionThmStatement {
 		// If one of the cast fails then the validation will fail
 		Point pt1 = (Point)this.geoObjects.get(0);
 		Point pt2 = (Point)this.geoObjects.get(1);
-		List<GeoConstruction> otherPoints = this.geoObjects.subList(2,this.geoObjects.size() -1);
+		List<GeoConstruction> otherPoints = this.geoObjects.subList(2,this.geoObjects.size());
 		for (GeoConstruction geoCons : otherPoints) {
 			Point pt = (Point)geoCons;
 			AMExpression expr = new AMAreaOfTriangle(pt1, pt2, pt);

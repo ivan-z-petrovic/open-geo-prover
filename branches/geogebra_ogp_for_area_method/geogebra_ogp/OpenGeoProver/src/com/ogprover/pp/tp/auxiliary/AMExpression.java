@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
 
+import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
 
 /**
@@ -36,6 +37,20 @@ public abstract class AMExpression {
 	 * </b></i>
 	 */
 	public static final String VERSION_NUM = "1.00"; // this should match the version number from class comment
+	
+	/**
+	 * Intermediary points used in the last step of the algorithm.
+	 * They are free points, and are supposed not to be collinear, and such as 
+	 * none of them is collinear to two other free points.
+	 */
+	public static Point iO = new FreePoint("iO");
+	public static Point iU = new FreePoint("iU");
+	public static Point iV = new FreePoint("iV");
+	
+	/**
+	 * Area of the triangle formed by iO, iU and iV
+	 */
+	public static AMExpression souv = new AMAreaOfTriangle(iO, iU, iV);
 	
 	
 	/*
@@ -84,6 +99,11 @@ public abstract class AMExpression {
 	 * /!\ This method is supposed to be called on an object without any fraction left.
 	 */
 	public abstract AMExpression reductToRightAssociativeForm();
+	
+	/**
+	 * @return the expression in which all geometric quantities involved are independant.
+	 */
+	public abstract AMExpression toIndependantVariables();
 	
 	/*
 	 * ======================================================================
@@ -273,8 +293,9 @@ public abstract class AMExpression {
 			return list;
 		}
 		
-		if (this instanceof AMNumber)
+		if (this instanceof AMNumber) {
 			return new Vector<AMExpression>();
+		}
 		
 		if (this instanceof AMProduct) {
 			AMExpression leftFactor = ((AMProduct)this).getFactor1();
@@ -282,8 +303,7 @@ public abstract class AMExpression {
 			List<AMExpression> list = rightFactor.productToList();
 			if (leftFactor instanceof AMPythagorasDifference || leftFactor instanceof AMAreaOfTriangle)
 				list.add(leftFactor);
-			if (leftFactor instanceof AMNumber)
-				return list;
+			return list;
 		}
 		
 		System.out.println("The expression is not in the good form : " + this.print());
@@ -318,9 +338,9 @@ public abstract class AMExpression {
 	 * if expr = -7*y*z.
 	 */
 	public AMExpression addProductToSum(AMExpression expr) {
-		System.out.println("  " + this.print() + ".addProductToSum(" + expr.print() + ")");
+		//System.out.println("  " + this.print() + ".addProductToSum(" + expr.print() + ")");
 		if(this instanceof AMSum) {
-			System.out.println("    case 1 : this[" + this.print() + "] instanceof AMSum");
+			//System.out.println("    case 1 : this[" + this.print() + "] instanceof AMSum");
 			AMExpression leftTerm = ((AMSum)this).getTerm1();
 			AMExpression restOfSum = ((AMSum)this).getTerm2();
 			if (leftTerm.isSameProduct(expr)) {
@@ -352,5 +372,21 @@ public abstract class AMExpression {
 			return groupedRest.addProductToSum(leftTerm);
 		}
 		return this;
+	}
+	
+	/**
+	 * Given a point P, returns the expression representing the area of the triangle iOiUP.
+	 * It corresponds to the quantity X_P described in the Julien Narboux' paper.
+	 */
+	protected static AMExpression getX(Point p) {
+		return new AMAreaOfTriangle(iO, iU, p);
+	}
+	
+	/**
+	 * Given a point P, returns the expression representing the area of the triangle iOiVP.
+	 * It corresponds to the quantity Y_P described in the Julien Narboux' paper.
+	 */
+	protected static AMExpression getY(Point p) {
+		return new AMAreaOfTriangle(iO, iV, p);
 	}
 }

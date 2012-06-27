@@ -161,4 +161,11 @@ public class AMRatio extends AMExpression {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public AMExpression toIndependantVariables() {
+		// TODO write the transformation to independant variables for the ratios
+		System.out.println("Not yet implemented");
+		return null;
+	}
 }

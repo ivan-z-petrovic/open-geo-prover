@@ -186,6 +186,17 @@ public class AMProduct extends AMExpression {
 		}
 		if (secondFactor instanceof AMNumber)
 			return (new AMProduct(secondFactor, firstFactor)).reductToRightAssociativeForm();
+		if (secondFactor instanceof AMProduct) {
+			AMExpression a = ((AMProduct) secondFactor).getFactor1();
+			AMExpression b = ((AMProduct) secondFactor).getFactor2();
+			if (a instanceof AMNumber)
+				return new AMProduct(a, new AMProduct(firstFactor, b));
+		}
 		return new AMProduct(firstFactor, secondFactor);
+	}
+	
+	@Override
+	public AMExpression toIndependantVariables() {
+		return new AMProduct(factor1.toIndependantVariables(), factor2.toIndependantVariables());
 	}
 }
