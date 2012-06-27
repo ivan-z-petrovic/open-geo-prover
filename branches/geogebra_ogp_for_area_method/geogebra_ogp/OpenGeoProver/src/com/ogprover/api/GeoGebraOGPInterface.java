@@ -21,7 +21,6 @@ import com.ogprover.pp.GeoGebraOGPOutputProverProtocol;
 import com.ogprover.pp.OGPInputProverProtocol;
 import com.ogprover.pp.OGPOutputProverProtocol;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.thmprover.AlgebraicMethodProver;
 import com.ogprover.thmprover.AreaMethodProver;
 import com.ogprover.thmprover.TheoremProver;
 import com.ogprover.thmprover.WuMethodProver;

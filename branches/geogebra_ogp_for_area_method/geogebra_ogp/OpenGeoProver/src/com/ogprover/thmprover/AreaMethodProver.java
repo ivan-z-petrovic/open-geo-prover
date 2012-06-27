@@ -97,6 +97,19 @@ public class AreaMethodProver implements TheoremProver {
 				System.out.println("Second simplification of : " + current.print());
 				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
 				current = current.simplify();
+				System.out.println("Reducing into a single fraction of : " + current.print());
+				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				current = current.reduceToSingleFraction();
+				if (current instanceof AMFraction) {
+					System.out.println("Removing of the denominator of : " + current.print());
+					System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+					current = ((AMFraction) current).getNumerator();
+				}
+				System.out.println("Last simplification of : " + current.print());
+				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				current = current.simplify();
+				System.out.println("Reducing into a right associative form of : " + current.print());
+				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
 			}
 			System.out.println("Reducing into a single fraction of : " + current.print());
 			System.out.println("  (size = " + Integer.toString(current.size()) + ")");
@@ -106,8 +119,9 @@ public class AreaMethodProver implements TheoremProver {
 				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
 				current = ((AMFraction) current).getNumerator();
 			}
-			//System.out.println("Last simplification of : " + current.print());
-			//current = current.simplify();
+			System.out.println("Last simplification of : " + current.print());
+			System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+			current = current.simplify();
 			System.out.println("Reducing into a right associative form of : " + current.print());
 			System.out.println("  (size = " + Integer.toString(current.size()) + ")");
 			current = (new AMProduct(new AMNumber(1), current)).reductToRightAssociativeForm();
@@ -129,6 +143,9 @@ public class AreaMethodProver implements TheoremProver {
 					System.out.println("  (size = " + Integer.toString(current.size()) + ")");
 					current = ((AMFraction) current).getNumerator();
 				}
+				System.out.println("Simplification of : " + current.print());
+				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				current = current.simplify();
 				System.out.println("Reducing into a right associative form of : " + current.print());
 				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
 				current = (new AMProduct(new AMNumber(1), current)).reductToRightAssociativeForm();
