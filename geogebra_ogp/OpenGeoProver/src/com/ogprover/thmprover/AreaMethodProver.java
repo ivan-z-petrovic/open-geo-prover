@@ -107,7 +107,25 @@ public class AreaMethodProver implements TheoremProver {
 			current = current.groupSumOfProducts();
 			System.out.println("Simplification of : " + current.print());
 			current = current.simplify();
-			System.out.println("Result : " + current.print());
+			if (!(current.isZero())) {
+				System.out.println("Transformation to a formula with only independant variables of : " + current.print());
+				current = current.toIndependantVariables();
+				System.out.println("Reducing into a single fraction of : " + current.print());
+				current = current.reduceToSingleFraction();
+				if (current instanceof AMFraction) {
+					System.out.println("Removing of the denominator of : " + current.print());
+					current = ((AMFraction) current).getNumerator();
+				}
+				System.out.println("Reducing into a right associative form of : " + current.print());
+				current = (new AMProduct(new AMNumber(1), current)).reductToRightAssociativeForm();
+				System.out.println("Grouping of : " + current.print());
+				current = current.groupSumOfProducts();
+				System.out.println("Simplification of : " + current.print());
+				current = current.simplify();
+				System.out.println("Result : " + current.print());
+				if (!(current.isZero()))
+					return TheoremProver.THEO_PROVE_RET_CODE_FALSE;
+			}
 		}
 		
 		return TheoremProver.THEO_PROVE_RET_CODE_TRUE;

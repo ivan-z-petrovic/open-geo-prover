@@ -155,8 +155,10 @@ public class AMSum extends AMExpression {
 		
 		return new AMSum(expr1, expr2);
 	}
+	
 	@Override
 	public AMExpression reductToRightAssociativeForm() {
+		System.out.println("reductToRightAssociativeForm" + this.print());
 		AMExpression firstTerm = term1.reductToRightAssociativeForm();
 		AMExpression c = term2.reductToRightAssociativeForm();
 		if (firstTerm instanceof AMSum) {
@@ -165,5 +167,10 @@ public class AMSum extends AMExpression {
 			return (new AMSum (a, new AMSum(b, c))).reductToRightAssociativeForm();
 		}
 		return new AMSum(firstTerm, c);
+	}
+	
+	@Override
+	public AMExpression toIndependantVariables() {
+		return new AMSum(term1.toIndependantVariables(), term2.toIndependantVariables());
 	}
 }

@@ -260,7 +260,7 @@ public class AMPythagorasDifference extends AMExpression {
 				Point v = ((AMFootPoint)pt).getV();
 				
 				AMExpression ppuv = new AMPythagorasDifference(p, u, v);
-				AMExpression puvu = new AMPythagorasDifference(u, u, u);
+				AMExpression puvu = new AMPythagorasDifference(u, v, u);
 				AMExpression ppvu = new AMPythagorasDifference(p, v, u);
 				AMExpression pavb = new AMPythagorasDifference(aa, v, bb);
 				AMExpression paub = new AMPythagorasDifference(aa, u, bb);
@@ -321,5 +321,21 @@ public class AMPythagorasDifference extends AMExpression {
 	@Override
 	public AMExpression reductToRightAssociativeForm() {
 		return this;
+	}
+	@Override
+	public AMExpression toIndependantVariables() {
+		AMExpression term1 = new AMProduct(getY(a), getY(c));
+		AMExpression term2 = new AMProduct(new AMNumber(-1), new AMProduct(getY(a), getY(b)));
+		AMExpression term3 = new AMProduct(getY(b), getY(b));
+		AMExpression term4 = new AMProduct(new AMNumber(-1), new AMProduct(getY(b), getY(c)));
+		AMExpression term5 = new AMProduct(new AMNumber(-1), new AMProduct(getX(a), getX(b)));
+		AMExpression term6 = new AMProduct(getX(a), getX(c));
+		AMExpression term7 = new AMProduct(getX(b), getX(b));
+		AMExpression term8 = new AMProduct(new AMNumber(-1), new AMProduct(getX(b), getX(c)));
+		AMExpression firstPart = new AMSum(term1, new AMSum(term2, new AMSum(term3, term4)));
+		AMExpression secondPart = new AMSum(term5, new AMSum(term6, new AMSum(term7, term8)));
+		AMExpression numerator = new AMSum(firstPart, secondPart);
+		AMExpression denominator = new AMProduct(souv, souv);
+		return new AMProduct(new AMNumber(4), new AMFraction(numerator, denominator));
 	}
 }

@@ -253,4 +253,13 @@ public class AMAreaOfTriangle extends AMExpression {
 	public AMExpression reductToRightAssociativeForm() {
 		return this;
 	}
+	
+	@Override
+	public AMExpression toIndependantVariables() {
+		AMExpression firstTerm = new AMProduct(new AMDifference(getY(b), getY(c)), getX(a));
+		AMExpression secondTerm = new AMProduct(new AMDifference(getY(c), getY(a)), getX(b));
+		AMExpression thirdTerm = new AMProduct(new AMDifference(getY(a), getY(b)), getX(c));
+		AMExpression numerator = new AMSum(firstTerm, new AMSum(secondTerm, thirdTerm));
+		return new AMFraction(numerator, souv);
+	}
 }

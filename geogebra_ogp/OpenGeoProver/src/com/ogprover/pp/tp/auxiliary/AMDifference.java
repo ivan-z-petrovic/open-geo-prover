@@ -162,4 +162,9 @@ public class AMDifference extends AMExpression {
 		AMExpression secondTerm = term2.reductToRightAssociativeForm();
 		return (new AMSum(firstTerm, new AMProduct(new AMNumber(-1), secondTerm))).reductToRightAssociativeForm();
 	}
+	
+	@Override
+	public AMExpression toIndependantVariables() {
+		return new AMDifference(term1.toIndependantVariables(), term2.toIndependantVariables());
+	}
 }

@@ -4,8 +4,13 @@
 
 package com.ogprover.pp.tp.geoconstruction;
 
+import java.io.IOException;
+
 import com.ogprover.main.OGPConstants;
+import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.UXVariable;
+import com.ogprover.utilities.io.OGPOutput;
+import com.ogprover.utilities.logger.ILogger;
 
 
 
@@ -132,10 +137,48 @@ public class AMIntersectionPoint extends IntersectionPoint {
 	 * 
 	 * @see com.ogprover.pp.tp.geoconstruction.Point#transformToAlgebraicForm()
 	 */
+	
+	/**
+	 * Method to check the validity of this construction step
+	 * 
+	 * @see com.ogprover.pp.tp.geoconstruction.GeoConstruction#isValidConstructionStep()
+	 */
+	@Override
+	public boolean isValidConstructionStep() {
+		OGPOutput output = OpenGeoProver.settings.getOutput();
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (!super.isValidConstructionStep())
+			return false;
+		
+		try {
+			if (this.u == null || this.v == null || this.p == null || this.q == null) {
+				output.openItemWithDesc("Error: ");
+				output.closeItemWithDesc("Intersection point " + this.getGeoObjectLabel() + " can't be constructed since some base points' set is not constructed");
+				return false;
+			}
+			
+			if (((GeoConstruction)this.u).getIndex() < 0 || ((GeoConstruction)this.u).getIndex() >= this.index ||
+				((GeoConstruction)this.v).getIndex() < 0 || ((GeoConstruction)this.v).getIndex() >= this.index ||
+				((GeoConstruction)this.p).getIndex() < 0 || ((GeoConstruction)this.p).getIndex() >= this.index ||
+				((GeoConstruction)this.q).getIndex() < 0 || ((GeoConstruction)this.q).getIndex() >= this.index)  {
+				output.openItemWithDesc("Error: ");
+				output.closeItemWithDesc("Intersection point " + this.getGeoObjectLabel() + " can't be constructed since some base points' set is not yet constructed or not added to theorem protocol");
+				return false;
+			}
+		} catch (IOException e) {
+			logger.error("Failed to write to output file(s).");
+			output.close();
+			return false;
+		}
+		
+		return true;
+	}
+	
 	@Override
 	public int transformToAlgebraicForm() {
 		// We don't do anything here - we never transform this type of point to algebraic form.
-		return OGPConstants.RET_CODE_SUCCESS;
+		return OGPConstants.ERR_CODE_NULL;
 	}
 
 	/** 
