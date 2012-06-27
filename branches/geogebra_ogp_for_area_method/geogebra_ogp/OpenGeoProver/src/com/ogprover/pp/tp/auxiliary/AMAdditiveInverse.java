@@ -138,4 +138,9 @@ public class AMAdditiveInverse extends AMExpression {
 	public AMExpression toIndependantVariables() {
 		return new AMAdditiveInverse(expr.toIndependantVariables());
 	}
+
+	@Override
+	public int size() {
+		return 1 + expr.size();
+	}
 }
