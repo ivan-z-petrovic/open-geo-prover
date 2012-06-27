@@ -121,6 +121,54 @@ public class AMProduct extends AMExpression {
 	public AMExpression uniformize() {
 		return new AMProduct(factor1.uniformize(), factor2.uniformize());
 	}
+	
+	@Override
+	public AMExpression simplifyInOneStep() {
+		AMExpression f1 = factor1.simplifyInOneStep();
+		AMExpression f2 = factor2.simplifyInOneStep();
+		if (f1 instanceof AMNumber) {
+			if (f2 instanceof AMNumber)
+				return new AMNumber(((AMNumber)f1).value() * ((AMNumber)f2).value()); // n.n' -> n*n'
+			int value = ((AMNumber)f1).value();
+			if (value == 0)
+				return new AMNumber(0); // 0.a -> 0
+			if (value == 1)
+				return f2; // 1.a -> a
+			if (value < 0)
+				return new AMAdditiveInverse(new AMProduct(new AMNumber(-value), f2)); // (-n).a -> -(n.a)
+		}
+		if (f2 instanceof AMNumber) {
+			int value = ((AMNumber)f2).value();
+			if (value == 0)
+				return new AMNumber(0); // a.0 -> 0
+			if (value == 1)
+				return f1; // a.1 -> a
+			if (value < 0)
+				return new AMAdditiveInverse(new AMProduct(new AMNumber(-value), f1)); // a.(-n) -> -(n.a)
+		}
+		if (f1 instanceof AMAdditiveInverse) {
+			if (f2 instanceof AMAdditiveInverse)
+				return new AMProduct(((AMAdditiveInverse)f1).getExpr(), 
+									 ((AMAdditiveInverse)f2).getExpr()); // (-a).(-b) -> a.b
+			return new AMAdditiveInverse(new AMProduct(((AMAdditiveInverse)f1).getExpr(), f2)); // (-a).b -> -(a.b)
+		}
+		if (f2 instanceof AMAdditiveInverse)
+			return new AMAdditiveInverse(new AMProduct(((AMAdditiveInverse)f2).getExpr(), f1)); // a.(-b) -> -(a.b)))
+		if (f1 instanceof AMFraction) {
+			AMExpression numerator = ((AMFraction)f1).getNumerator();
+			AMExpression denominator = ((AMFraction)f1).getDenominator();
+			if (numerator.equals(new AMNumber(1)) && denominator.equals(f2))
+				return new AMNumber(1); // a.(1/a) -> 1
+		}
+		if (f2 instanceof AMFraction) {
+			AMExpression numerator = ((AMFraction)f2).getNumerator();
+			AMExpression denominator = ((AMFraction)f2).getDenominator();
+			if (numerator.equals(new AMNumber(1)) && denominator.equals(f1))
+				return new AMNumber(1); // (1/a).a -> 1
+		}
+		return new AMProduct(f1, f2);
+	}
+	
 	@Override
 	public AMExpression eliminate(Point pt) {
 		return new AMProduct(factor1.eliminate(pt), factor2.eliminate(pt));

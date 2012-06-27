@@ -104,6 +104,16 @@ public class AMAdditiveInverse extends AMExpression {
 	}
 	
 	@Override
+	public AMExpression simplifyInOneStep() {
+		AMExpression e = expr.simplifyInOneStep();
+		if (e instanceof AMAdditiveInverse)
+			return ((AMAdditiveInverse)e).getExpr(); // --a -> a
+		if (e.isZero())
+			return new AMNumber(0); // -0 -> 0
+		return new AMAdditiveInverse(e);
+	}
+	
+	@Override
 	public AMExpression eliminate(Point pt) {
 		return new AMAdditiveInverse(expr.eliminate(pt));
 	}

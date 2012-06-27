@@ -137,6 +137,39 @@ public class AMFraction extends AMExpression {
 	}
 	
 	@Override
+	public AMExpression simplifyInOneStep() {
+		AMExpression n = numerator.simplifyInOneStep();
+		AMExpression d = denominator.simplifyInOneStep();
+		if (n.isZero())
+			return new AMNumber(0); // 0/a -> 0
+		if (d.isZero()) {
+			System.out.println("Division by zero in expression : " + this.print());
+			return null;
+		}
+		if (n.equals(d))
+			return new AMNumber(1); // a/a -> 0
+		if (d.equals(new AMNumber(1)))
+			return n; // a/1 -> a
+		if (n instanceof AMAdditiveInverse) {
+			if (d instanceof AMAdditiveInverse)
+				return new AMFraction(((AMAdditiveInverse)n).getExpr(), ((AMAdditiveInverse)d).getExpr()); // (-a)/(-b) -> a/b
+			return new AMAdditiveInverse(new AMFraction(((AMAdditiveInverse)n).getExpr(), d)); // (-a)/b -> -(a/b)
+		}
+		if (d instanceof AMAdditiveInverse)
+			return new AMAdditiveInverse(new AMFraction(n, ((AMAdditiveInverse)d).getExpr())); // a/(-b) -> -(a/b)
+		if (n instanceof AMProduct) {
+			AMProduct product = (AMProduct)n;
+			AMExpression factor1 = product.getFactor1().simplifyInOneStep();
+			AMExpression factor2 = product.getFactor2().simplifyInOneStep();
+			if (factor1.equals(d))
+				return factor2; // (a*b)/a -> b
+			if (factor2.equals(d))
+				return factor1; // (b*a)/a -> b
+		}
+		return new AMFraction(n, d);
+	}
+	
+	@Override
 	public AMExpression eliminate(Point pt) {
 		return new AMFraction(numerator.eliminate(pt), denominator.eliminate(pt));
 	}

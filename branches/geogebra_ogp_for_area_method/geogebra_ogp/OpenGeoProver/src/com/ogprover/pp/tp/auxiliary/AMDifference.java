@@ -121,6 +121,21 @@ public class AMDifference extends AMExpression {
 	}
 	
 	@Override
+	public AMExpression simplifyInOneStep() {
+		AMExpression t1 = term1.simplifyInOneStep();
+		AMExpression t2 = term2.simplifyInOneStep();
+		if (t2.isZero())
+			return t1; // a-0 -> a
+		if (t1.isZero())
+			return new AMAdditiveInverse(t2); // 0-a -> -a
+		if (t1.equals(t2))
+			return new AMNumber(0); // a-a -> 0
+		if (t1 instanceof AMNumber && t2 instanceof AMNumber)
+			return new AMNumber(((AMNumber)t1).value() - ((AMNumber)t2).value()); // n-n' -> n-n'
+		return new AMDifference(t1, t2);
+	}
+	
+	@Override
 	public AMExpression eliminate(Point pt) {
 		return new AMDifference(term1.eliminate(pt), term2.eliminate(pt));
 	}

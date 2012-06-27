@@ -148,6 +148,13 @@ public class AMAreaOfTriangle extends AMExpression {
 		return new AMAreaOfTriangle(c, b, a);
 	}
 	
+	@Override
+	public AMExpression simplifyInOneStep() {
+		if (a.equals(b) || b.equals(c) || c.equals(a))
+			return new AMNumber(0); // S_ABA -> 0, S_AAB -> 0, S_BAA -> 0
+		return this;
+	}
+	
 	/**
 	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf "elimination lemmas"
 	 */

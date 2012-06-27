@@ -105,6 +105,11 @@ public class AMNumber extends AMExpression {
 	}
 	
 	@Override
+	public AMExpression simplifyInOneStep() {
+		return this;
+	}
+	
+	@Override
 	public AMExpression eliminate(Point pt) {
 		return this;
 	}

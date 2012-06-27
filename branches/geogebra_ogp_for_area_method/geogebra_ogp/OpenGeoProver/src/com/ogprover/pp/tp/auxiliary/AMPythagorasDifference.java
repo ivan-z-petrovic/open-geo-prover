@@ -142,6 +142,13 @@ public class AMPythagorasDifference extends AMExpression {
 		return this;
 	}
 	
+	@Override
+	public AMExpression simplifyInOneStep() {
+		if (a.equals(b) || b.equals(c))
+			return new AMNumber(0);
+		return this;
+	}
+	
 	/**
 	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf "elimination lemmas"
 	 */
