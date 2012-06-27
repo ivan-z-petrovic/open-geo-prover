@@ -213,4 +213,9 @@ public class AMFraction extends AMExpression {
 	public AMExpression toIndependantVariables() {
 		return new AMFraction(numerator.toIndependantVariables(), denominator.toIndependantVariables());
 	}
+	
+	@Override
+	public int size() {
+		return 1 + numerator.size() + denominator.size();
+	}
 }

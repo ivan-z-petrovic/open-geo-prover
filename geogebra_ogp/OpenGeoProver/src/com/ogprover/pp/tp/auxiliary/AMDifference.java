@@ -182,4 +182,9 @@ public class AMDifference extends AMExpression {
 	public AMExpression toIndependantVariables() {
 		return new AMDifference(term1.toIndependantVariables(), term2.toIndependantVariables());
 	}
+	
+	@Override
+	public int size() {
+		return 1 + term1.size() + term2.size();
+	}
 }

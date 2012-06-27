@@ -329,6 +329,7 @@ public class AMPythagorasDifference extends AMExpression {
 	public AMExpression reductToRightAssociativeForm() {
 		return this;
 	}
+	
 	@Override
 	public AMExpression toIndependantVariables() {
 		AMExpression term1 = new AMProduct(getY(a), getY(c));
@@ -344,5 +345,10 @@ public class AMPythagorasDifference extends AMExpression {
 		AMExpression numerator = new AMSum(firstPart, secondPart);
 		AMExpression denominator = new AMProduct(souv, souv);
 		return new AMProduct(new AMNumber(4), new AMFraction(numerator, denominator));
+	}
+	
+	@Override
+	public int size() {
+		return 1;
 	}
 }

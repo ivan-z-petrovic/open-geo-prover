@@ -74,6 +74,11 @@ public abstract class AMExpression {
 	public abstract boolean containsOnlyFreePoints();
 	
 	/**
+	 * @return the number of nodes in the syntaxic tree of the formula
+	 */
+	public abstract int size();
+	
+	/**
 	 * @return the expression uniformized
 	 */
 	public abstract AMExpression uniformize();

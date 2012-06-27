@@ -179,4 +179,9 @@ public class AMRatio extends AMExpression {
 		System.out.println("Not yet implemented");
 		return null;
 	}
+	
+	@Override
+	public int size() {
+		return 1;
+	}
 }

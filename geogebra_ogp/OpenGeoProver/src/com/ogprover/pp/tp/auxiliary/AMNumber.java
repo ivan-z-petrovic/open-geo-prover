@@ -128,4 +128,9 @@ public class AMNumber extends AMExpression {
 	public AMExpression toIndependantVariables() {
 		return this;
 	}
+
+	@Override
+	public int size() {
+		return 1;
+	}
 }

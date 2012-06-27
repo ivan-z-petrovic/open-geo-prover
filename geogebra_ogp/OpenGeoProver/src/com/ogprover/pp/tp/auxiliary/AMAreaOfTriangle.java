@@ -269,4 +269,9 @@ public class AMAreaOfTriangle extends AMExpression {
 		AMExpression numerator = new AMSum(firstTerm, new AMSum(secondTerm, thirdTerm));
 		return new AMFraction(numerator, souv);
 	}
+	
+	@Override
+	public int size() {
+		return 1;
+	}
 }

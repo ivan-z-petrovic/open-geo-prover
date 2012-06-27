@@ -247,4 +247,9 @@ public class AMProduct extends AMExpression {
 	public AMExpression toIndependantVariables() {
 		return new AMProduct(factor1.toIndependantVariables(), factor2.toIndependantVariables());
 	}
+	
+	@Override
+	public int size() {
+		return 1 + factor1.size() + factor2.size();
+	}
 }
