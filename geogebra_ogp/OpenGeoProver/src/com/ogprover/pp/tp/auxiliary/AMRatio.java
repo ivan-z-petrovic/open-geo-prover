@@ -146,6 +146,17 @@ public class AMRatio extends AMExpression {
 	}
 	
 	@Override
+	public AMExpression simplifyInOneStep() {
+		if (a.equals(b))
+			return new AMNumber(0); // AA/CD -> 0
+		if (a.equals(c) && b.equals(d))
+			return new AMNumber(1);
+		if (a.equals(d) && b.equals(c))
+			return new AMNumber(-1);
+		return this;
+	}
+	
+	@Override
 	public AMExpression eliminate(Point pt) {
 		// TODO write the elimination lemmas for the ratios
 		System.out.println("Not yet implemented");

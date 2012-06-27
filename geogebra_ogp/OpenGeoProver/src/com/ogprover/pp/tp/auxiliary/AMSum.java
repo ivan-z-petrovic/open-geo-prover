@@ -120,6 +120,23 @@ public class AMSum extends AMExpression {
 	}
 	
 	@Override
+	public AMExpression simplifyInOneStep() {
+		AMExpression t1 = term1.simplifyInOneStep();
+		AMExpression t2 = term2.simplifyInOneStep();
+		if (t1.isZero())
+			return t2; // 0+a -> a
+		if (t2.isZero())
+			return t1; // a+0 -> a
+		if (t2 instanceof AMAdditiveInverse)
+			return new AMDifference(t1, ((AMAdditiveInverse)t2).getExpr()); // a+(-b) -> a-b
+		if (t1 instanceof AMAdditiveInverse)
+			return new AMDifference(t2, ((AMAdditiveInverse)t1).getExpr()); // (-a)+b -> b-a
+		if (t1 instanceof AMNumber && t2 instanceof AMNumber)
+				return new AMNumber(((AMNumber)t1).value() + ((AMNumber)t2).value()); // n+n' -> n+n'
+		return new AMSum(t1, t2);
+	}
+	
+	@Override
 	public AMExpression eliminate(Point pt) {
 		return new AMSum(term1.eliminate(pt), term2.eliminate(pt));
 	}
