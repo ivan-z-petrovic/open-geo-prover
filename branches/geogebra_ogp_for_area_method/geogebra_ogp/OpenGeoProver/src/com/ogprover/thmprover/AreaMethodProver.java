@@ -159,6 +159,7 @@ public class AreaMethodProver implements TheoremProver {
 				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
 				if (!(current.isZero()))
 					return TheoremProver.THEO_PROVE_RET_CODE_FALSE;
+                System.out.println("The formula equals zero : the statement is then proved");
 			}
 		}
 		
