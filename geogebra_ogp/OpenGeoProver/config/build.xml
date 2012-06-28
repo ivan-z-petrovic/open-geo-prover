@@ -97,14 +97,12 @@
 		</junit>
 		
 		<!-- Make JUnit test report -->
-		<!--
 		<junitreport todir="${jutest.data.path}">
 			<fileset dir="${jutest.data.path}">
 				<include name="TEST-*.xml"/>
 			</fileset>
 			<report format="frames" todir="${jutest.reports.path}"/>
 		</junitreport>
-		-->
 		
 		<fail message="JUnit tests failed. Check log and/or reports." if="jutest.failed"/>
 	</target>
