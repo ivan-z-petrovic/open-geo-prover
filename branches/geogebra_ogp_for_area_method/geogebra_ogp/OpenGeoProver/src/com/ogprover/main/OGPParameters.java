@@ -255,7 +255,7 @@ public class OGPParameters {
 		else if (logLevel.equals(GeoGebraLogger.DEBUG))
 			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "D");
 		else // default is basic level
-			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "B");
+			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "D");
 		
 		return retCode;
 	}

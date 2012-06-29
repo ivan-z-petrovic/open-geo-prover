@@ -42,6 +42,12 @@ public abstract class GeoConstruction implements GeoObject {
 	 */
 	/**
 	 * <i><b>
+	 * Ignored construction
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_IGNORED = -2;
+	/**
+	 * <i><b>
 	 * Undefined construction
 	 * </b></i>
 	 */

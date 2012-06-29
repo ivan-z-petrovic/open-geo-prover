@@ -441,6 +441,7 @@ public abstract class GeoGebraConstructionConverter {
 		}
 		
 		for (GeoGebraConstructionCommand ggCmd : this.ggCmdList) {
+			logger.info("Trying to convert command " + ggCmd.getDescription());
 			this.constructionsToRemove.clear();
 			
 			GeoConstruction geoCons = this.convertConstruction(ggCmd);
@@ -454,7 +455,8 @@ public abstract class GeoGebraConstructionConverter {
 				for (GeoConstruction gc : this.constructionsToRemove)
 					this.thmProtocol.removeGeoConstruction(gc);
 			}
-			this.thmProtocol.addGeoConstruction(geoCons);
+			if (!(geoCons instanceof IgnoredConstruction))
+				this.thmProtocol.addGeoConstruction(geoCons);
 		}
 		
 		return true;

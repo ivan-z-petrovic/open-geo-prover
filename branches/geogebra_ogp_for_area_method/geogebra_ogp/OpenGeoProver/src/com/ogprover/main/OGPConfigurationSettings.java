@@ -292,7 +292,9 @@ public class OGPConfigurationSettings {
 	 * 								("log" sub-directory of current directory)
 	 */
 	public OGPConfigurationSettings(String logFileName, String logFileRootDirectory) {
-		this.setParameters(new OGPParameters());
+		OGPParameters params = new OGPParameters();
+		params.putLogLevel(GeoGebraLogger.DEBUG);
+		this.setParameters(params);
 		this.setOutput(new OGPOutput(null, null));
 		this.setTimer(new OGPTimer());
 		this.setStopwacth(new Stopwatch());

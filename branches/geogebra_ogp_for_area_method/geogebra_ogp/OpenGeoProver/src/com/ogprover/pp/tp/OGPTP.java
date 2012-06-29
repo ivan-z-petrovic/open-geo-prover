@@ -97,7 +97,6 @@ public class OGPTP {
 	 * Members necessary for instantiation of points in algebraic form - END
 	 */
 	
-	
 
 	/*
 	 * ======================================================================
