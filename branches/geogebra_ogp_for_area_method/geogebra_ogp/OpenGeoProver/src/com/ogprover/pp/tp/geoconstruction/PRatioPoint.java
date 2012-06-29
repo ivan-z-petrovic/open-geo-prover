@@ -167,8 +167,12 @@ public class PRatioPoint extends Point {
 		sb.append(" and ");
 		sb.append(((GeoConstruction)this.u).geoObjectLabel);
 		sb.append(((GeoConstruction)this.v).geoObjectLabel);
-		sb.append(" are parallel");
-		// TODO describe r too
+		sb.append(" are parallel, and where r = ");
+		int size = r.size();
+		if (size >= 200)
+			sb.append("[too large to be printed : size = " + Integer.toString(size) + "]");
+		else
+			sb.append(this.r.print());
 		return sb.toString();
 	}
 

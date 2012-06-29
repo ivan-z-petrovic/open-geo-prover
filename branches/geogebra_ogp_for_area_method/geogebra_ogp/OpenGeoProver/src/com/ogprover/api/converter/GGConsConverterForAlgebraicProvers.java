@@ -1497,8 +1497,6 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
-		logger.info("Converting the segment " + ggCmd.getOutputArgs().get(0));
-		
 		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
 			logger.error("Failed to validate command: " + SegmentCmd.cmdName);
 			return null;
@@ -1794,7 +1792,6 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 */
 		
 		ILogger logger = OpenGeoProver.settings.getLogger();
-		logger.info("launching convertPolylineCmd");
 		
 		if (this.validateCmdArguments(ggCmd, 3, -1, 1, 1) == false) {
 			logger.error("Failed to validate command: " + PolyLineCmd.cmdName);

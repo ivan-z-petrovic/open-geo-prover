@@ -14,7 +14,8 @@ import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.*;
 import com.ogprover.pp.tp.auxiliary.*;
 import com.ogprover.pp.tp.geoconstruction.*;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
+import com.ogprover.pp.tp.ndgcondition.SimpleNDGCondition;
 import com.ogprover.pp.tp.thmstatement.*;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
@@ -65,7 +66,11 @@ public class OGPTP {
 	/**
 	 * List of NDG conditions associated with algebraic prover for this theorem.
 	 */
-	private Vector<NDGCondition> ndgConditions = null;
+	private Vector<AlgebraicNDGCondition> algebraicNDGConditions = null;
+	/**
+	 * List of NDG conditions associated with the area method prover for this theorem.
+	 */
+	private Vector<SimpleNDGCondition> simpleNDGConditions = null;
 	/**
 	 * Geometry theorem from this Construction Protocol in algebraic form
 	 */
@@ -180,17 +185,30 @@ public class OGPTP {
 	/**
 	 * @param ndgConditions the ndgConditions to set
 	 */
-	public void setNdgConditions(Vector<NDGCondition> ndgConditions) {
-		this.ndgConditions = ndgConditions;
+	public void setAlgebraicNDGConditions(Vector<AlgebraicNDGCondition> ndgConditions) {
+		this.algebraicNDGConditions = ndgConditions;
 	}
 
 	/**
 	 * @return the ndgConditions
 	 */
-	public Vector<NDGCondition> getNdgConditions() {
-		return ndgConditions;
+	public Vector<AlgebraicNDGCondition> getAlgebraicNDGConditions() {
+		return algebraicNDGConditions;
+	}
+	
+	/**
+	 * @param ndgConditions the ndgConditions to set
+	 */
+	public void setSimpleNDGConditions(Vector<SimpleNDGCondition> ndgConditions) {
+		this.simpleNDGConditions = ndgConditions;
 	}
 
+	/**
+	 * @return the ndgConditions
+	 */
+	public Vector<SimpleNDGCondition> getSimpleNDGConditions() {
+		return simpleNDGConditions;
+	}
 	/**
 	 * Method that sets the algebraic form of geometry theorem
 	 * 
@@ -306,7 +324,7 @@ public class OGPTP {
 		this.constructionMap = new HashMap<String, GeoConstruction>();
 		this.theoremStatement = null;
 		this.theoremName = null;
-		this.ndgConditions = null;
+		this.algebraicNDGConditions = null;
 		this.algebraicGeoTheorem = new GeoTheorem();
 		this.zeroPoints = null;
 		this.uIndex = 1;
@@ -494,17 +512,34 @@ public class OGPTP {
 	 * 
 	 * @param ndgCond	NDG condition to add to this theorem protocol.
 	 */
-	public void addNDGCondition(NDGCondition ndgCond) {
+	public void addAlgebraicNDGCondition(AlgebraicNDGCondition ndgCond) {
 		if (ndgCond == null) {
 			OpenGeoProver.settings.getLogger().error("Attempt to add null NDG condition to theorem protocol.");
 			return;
 		}
 		
-		if (this.ndgConditions == null)
-			this.ndgConditions = new Vector<NDGCondition>();
+		if (this.algebraicNDGConditions == null)
+			this.algebraicNDGConditions = new Vector<AlgebraicNDGCondition>();
 		
-		this.ndgConditions.add(ndgCond);
+		this.algebraicNDGConditions.add(ndgCond);
 		ndgCond.setConsProtocol(this);
+	}
+	
+	/**
+	 * Method to add a simple NDG condition to theorem protocol.
+	 *
+	 * @param ndgCond	NDG condition to add to this theorem p
+	 */
+	public void addSimpleNDGCondition(SimpleNDGCondition ndgCond) {
+		if (ndgCond == null) {
+			OpenGeoProver.settings.getLogger().error("Attempt to add null NDG condition to theorem protocol.");
+			return;
+		}
+		
+		if (this.simpleNDGConditions == null)
+			this.simpleNDGConditions = new Vector<SimpleNDGCondition>();
+		
+		this.simpleNDGConditions.add(ndgCond);
 	}
 	
 	/**
@@ -1076,22 +1111,22 @@ public class OGPTP {
 	 */
 	public int translateNDGConditionsToUserReadableForm() {
 		// Fill in NDG conditions
-		if (this.ndgConditions == null) {
+		if (this.algebraicNDGConditions == null) {
 			Vector<XPolynomial> ndgConditionsPolys = this.getAlgebraicGeoTheorem().getNDGConditions().getPolynomials();
 			
 			if (ndgConditionsPolys == null || ndgConditionsPolys.size() == 0)
 				return OGPConstants.RET_CODE_SUCCESS; // there's nothing to translate
 			
 			for (XPolynomial ndgPoly : ndgConditionsPolys)
-				this.addNDGCondition(new NDGCondition(ndgPoly));
+				this.addAlgebraicNDGCondition(new AlgebraicNDGCondition(ndgPoly));
 		}
 		
-		if (this.ndgConditions == null) {
+		if (this.algebraicNDGConditions == null) {
 			OpenGeoProver.settings.getLogger().error("Failed to fill in objects for NDG conditions");
 			return OGPConstants.ERR_CODE_GENERAL;
 		}
 		
-		for (NDGCondition ndgCond : this.ndgConditions) {
+		for (AlgebraicNDGCondition ndgCond : this.algebraicNDGConditions) {
 			if (ndgCond.transformToUserReadableForm() != OGPConstants.RET_CODE_SUCCESS) {
 				OpenGeoProver.settings.getLogger().error("Failed to translate NDG condition " + ndgCond.getPolynomial().print());
 				return OGPConstants.ERR_CODE_GENERAL;
@@ -1118,13 +1153,13 @@ public class OGPTP {
 			return null;
 		
 		Map<String, String> ndgMap = new HashMap<String, String>();
-		if (this.ndgConditions != null && this.ndgConditions.size() > 0) {
-			for (NDGCondition ndgc : this.ndgConditions) {
+		if (this.algebraicNDGConditions != null && this.algebraicNDGConditions.size() > 0) {
+			for (AlgebraicNDGCondition ndgc : this.algebraicNDGConditions) {
 				StringBuilder sbNdgText = new StringBuilder(ndgc.getNdgType());
 				String ndgText = null;
 				
 				sbNdgText.append("[");
-				if (ndgc.getNdgType().equals(NDGCondition.NDG_TYPE_POLYNOMIAL))
+				if (ndgc.getNdgType().equals(AlgebraicNDGCondition.NDG_TYPE_POLYNOMIAL))
 					sbNdgText.append(ndgc.getPolynomial().print());
 				else {
 					Vector<Point> ptList = ndgc.getBestPointList();

@@ -7,6 +7,8 @@ package com.ogprover.api.converter;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import org.junit.internal.builders.IgnoredBuilder;
+
 import com.ogprover.geogebra.command.construction.*;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.auxiliary.AMFraction;
@@ -14,6 +16,8 @@ import com.ogprover.pp.tp.auxiliary.AMNumber;
 import com.ogprover.pp.tp.auxiliary.AMRatio;
 import com.ogprover.pp.tp.geoconstruction.*;
 import com.ogprover.pp.tp.geoobject.*;
+import com.ogprover.pp.tp.ndgcondition.DistinctPoints;
+import com.ogprover.pp.tp.ndgcondition.NonParallelLines;
 import com.ogprover.utilities.logger.ILogger;
 
 /**
@@ -195,6 +199,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 					Point point2 = ((Line)firstSet).getPoints().get(1);
 					Point secondPoint1 = ((Line)secondSet).getPoints().get(0);
 					Point secondPoint2 = ((Line)secondSet).getPoints().get(1);
+					this.thmProtocol.addSimpleNDGCondition(new NonParallelLines(point1, point2, secondPoint1, secondPoint2));
 					return new AMIntersectionPoint(oArgs.get(0),point1,point2,secondPoint1,secondPoint2);
 				}
 				if (firstSet instanceof CircleWithCenterAndPoint && secondSet instanceof LineThroughTwoPoints) {
@@ -392,8 +397,10 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
 			GeoObject obj2 = this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			
-			if (obj2 instanceof Point)
+			if (obj2 instanceof Point) {
+				this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(pt1, (Point)obj2));
 				return new LineThroughTwoPoints(oArgs.get(0), pt1, (Point)obj2);
+			}
 			
 			// Else, obj2 is supposed to be a line
 			LineThroughTwoPoints line = (LineThroughTwoPoints)obj2;
@@ -401,6 +408,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			Point pointOnLine2 = line.getPoints().get(1);
 			Point aux = new PRatioPoint(nextAvailableName(), pt1, pointOnLine1, pointOnLine2, new AMNumber(1));
 			this.thmProtocol.addGeoConstruction(aux);
+			this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(aux, pt1));
 			return new LineThroughTwoPoints(oArgs.get(0), aux, pt1);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -438,6 +446,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			Point pointOnLine2 = line.getPoints().get(1);
 			Point footPoint = new AMFootPoint(nextAvailableName(), pt, pointOnLine1, pointOnLine2);
 			this.thmProtocol.addGeoConstruction(footPoint);
+			this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(footPoint, pt));
 			return new LineThroughTwoPoints(oArgs.get(0), footPoint, pt);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -487,6 +496,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			Point aux = new TRatioPoint (nextAvailableName(), midPoint, pt2, new AMNumber(1));
 			this.thmProtocol.addGeoConstruction(aux);
 			
+			this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(midPoint, aux));
 			return new LineThroughTwoPoints(oArgs.get(0), midPoint, aux);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -587,6 +597,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			if (circle.getPoints().contains(pt)) {
 				Point aux = new TRatioPoint(nextAvailableName(), pt, center, new AMNumber(1));
 				this.thmProtocol.addGeoConstruction(aux);
+				this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(pt, aux));
 				return new LineThroughTwoPoints(oArgs.get(0), pt, aux);
 			}
 			
@@ -824,11 +835,101 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 	
 	// Segments, vectors, rays, etc. are seen as lines.
 	
-	// convertSegmentCmd -- Superclass' behavior is fine.
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertSegmentCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertSegmentCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Segment is always defined by two points.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
+			logger.error("Failed to validate command: " + SegmentCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(pt1, pt2));
+			return new LineThroughTwoPoints(oArgs.get(0), pt1, pt2);
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
 	
-	// convertVectorCmd -- Superclass' behavior is fine.
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertVectorCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertVectorCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Vector is always defined by two points.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
+			logger.error("Failed to validate command: " + VectorCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(pt1, pt2));
+			return new LineThroughTwoPoints(oArgs.get(0), pt1, pt2);
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
 	
-	// convertRayCmd -- Superclass' behavior is fine.
+	/**
+	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertRayCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
+	 */
+	protected GeoConstruction convertRayCmd(GeoGebraConstructionCommand ggCmd) {
+		/*
+		 * Ray is always defined by two points.
+		 */
+		
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		if (this.validateCmdArguments(ggCmd, 2, 2, 1, 1) == false) {
+			logger.error("Failed to validate command: " + RayCmd.cmdName);
+			return null;
+		}
+		
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
+			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
+			this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(pt1, pt2));
+			return new LineThroughTwoPoints(oArgs.get(0), pt1, pt2);
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
+	}
 	
 	/**
 	 * @see com.ogprover.api.converter.GeoGebraConstructionConverter#convertAngleCmd(com.ogprover.geogebra.command.construction.GeoGebraConstructionCommand)
@@ -927,6 +1028,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 				Point pt1 = vertices.get(ii);
 				Point pt2 = vertices.get(jj % numVertices);
 				String lineLabel = oArgs.get(ii + 1); 
+				this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(pt1, pt2));
 				this.thmProtocol.addGeoConstruction(new LineThroughTwoPoints(lineLabel, pt1, pt2));
 				edges.add(lineLabel);
 			}
@@ -955,9 +1057,46 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			return null;
 		}
 		
-		logger.error("The use of polygons is impossible wih the area method - " +
-				"please describe your polygon using lines.");
-		return null;
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			Vector<GeoConstruction> consList = new Vector<GeoConstruction>();
+			
+			Vector<Point> vertices = new Vector<Point>();
+			Vector<String> edges = new Vector<String>();
+			
+			logger.error("The use of polylines is not recommanded wih the area method - " +
+					"you should describe your construction using simple lines.");
+			
+			// Populate vertices
+			for (String ptLabel : iArgs) {
+				Point pt = (Point)this.thmProtocol.getConstructionMap().get(ptLabel);
+				vertices.add(pt);
+				consList.add(pt);
+			}
+			
+			// Add lines of polygon edges
+			for (int ii = 0, jj = 1, numVertices = iArgs.size(); ii < numVertices; ii++, jj++) {
+				Point pt1 = vertices.get(ii);
+				Point pt2 = vertices.get(jj % numVertices);
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append(pt1.getGeoObjectLabel());
+				sb.append(pt2.getGeoObjectLabel());
+				sb.append("_l");
+				String lineLabel = GeoGebraConstructionConverter.generateRandomLabel(sb.toString()); 
+				this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(pt1, pt2));
+				this.thmProtocol.addGeoConstruction(new LineThroughTwoPoints(lineLabel, pt1, pt2));
+				edges.add(lineLabel);
+			}
+			
+			return new IgnoredConstruction();
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
 	}
 	
 	// convertCircleArc -- Superclass' behavior is fine.

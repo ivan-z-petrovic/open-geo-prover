@@ -160,8 +160,12 @@ public class TRatioPoint extends Point {
 		sb.append(" and ");
 		sb.append(((GeoConstruction)this.u).geoObjectLabel);
 		sb.append(((GeoConstruction)this.v).geoObjectLabel);
-		sb.append(" are perpendicular");
-		// TODO describe r too
+		sb.append(" are perpendicular, and where r = ");
+		int size = r.size();
+		if (size >= 200)
+			sb.append("[too large to be printed : size = " + Integer.toString(size) + "]");
+		else
+			sb.append(this.r.print());
 		return sb.toString();
 	}
 
