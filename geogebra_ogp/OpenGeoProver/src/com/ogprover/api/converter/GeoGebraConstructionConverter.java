@@ -441,7 +441,6 @@ public abstract class GeoGebraConstructionConverter {
 		}
 		
 		for (GeoGebraConstructionCommand ggCmd : this.ggCmdList) {
-			logger.info("Trying to convert command " + ggCmd.getDescription());
 			this.constructionsToRemove.clear();
 			
 			GeoConstruction geoCons = this.convertConstruction(ggCmd);

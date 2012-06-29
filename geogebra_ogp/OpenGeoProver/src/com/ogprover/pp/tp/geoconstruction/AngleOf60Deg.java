@@ -20,7 +20,7 @@ import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.logger.ILogger;
@@ -229,9 +229,9 @@ public class AngleOf60Deg extends GeoConstruction implements SpecialConstantAngl
     }
     
     /**
-     * @see com.ogprover.pp.tp.geoconstruction.SpecialConstantAngle#processNDGCondition(com.ogprover.pp.tp.ndgcondition.NDGCondition)
+     * @see com.ogprover.pp.tp.geoconstruction.SpecialConstantAngle#processNDGCondition(com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition)
      */
-    public void processNDGCondition(NDGCondition ndgCond) {
+    public void processNDGCondition(AlgebraicNDGCondition ndgCond) {
     	XTerm xtA = new XTerm(1);
     	xtA.addPower(new Power(this.parametricPoint.getX().clone(), 1));
     	XPolynomial xpA = new XPolynomial();

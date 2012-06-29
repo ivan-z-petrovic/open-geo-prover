@@ -53,7 +53,7 @@ import com.ogprover.pp.tp.geoconstruction.TangentLine;
 import com.ogprover.pp.tp.geoconstruction.TranslatedPoint;
 import com.ogprover.pp.tp.geoobject.Angle;
 import com.ogprover.pp.tp.geoobject.Segment;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 import com.ogprover.pp.tp.thmstatement.AlgebraicSumOfThreeAngles;
 import com.ogprover.pp.tp.thmstatement.AlgebraicSumOfThreeSegments;
 import com.ogprover.pp.tp.thmstatement.CollinearPoints;
@@ -310,11 +310,11 @@ public class MTestCP {
 		System.out.println("-- NDG Conditions as text --");
 		System.out.println();
 		for (XPolynomial xp : cp.getAlgebraicGeoTheorem().getNDGConditions().getPolynomials()) {
-			cp.addNDGCondition(new NDGCondition(xp));
+			cp.addAlgebraicNDGCondition(new AlgebraicNDGCondition(xp));
 		}
 		ii = 1;
 		cp.translateNDGConditionsToUserReadableForm();
-		for (NDGCondition ndgc : cp.getNdgConditions()) {
+		for (AlgebraicNDGCondition ndgc : cp.getAlgebraicNDGConditions()) {
 			System.out.println("Text NDG Condition #" + ii);
 			
 			// Printing all descriptions

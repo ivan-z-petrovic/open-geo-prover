@@ -16,6 +16,7 @@ import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.ndgcondition.SimpleNDGCondition;
 import com.ogprover.utilities.logger.ILogger;
 
 /**
@@ -48,15 +49,21 @@ public class AreaMethodProver implements TheoremProver {
 	 */
 	protected Vector<AMExpression> steps;
 	
+	/**
+	 * NDGs conditions of the theorem
+	 */
+	protected Vector<SimpleNDGCondition> ndgConditions;
+	
 	
 	/**
 	 * Constructor method
 	 */
 	public AreaMethodProver(OGPTP thmProtocol) {
-		steps = new Vector<AMExpression>();
+		this.steps = new Vector<AMExpression>();
 		this.statement = thmProtocol.getTheoremStatement().getAreaMethodStatement();
 		this.constructions = thmProtocol.getConstructionSteps();
-		nextPointToEliminate = constructions.size()-1;
+		this.nextPointToEliminate = constructions.size()-1;
+		this.ndgConditions = thmProtocol.getSimpleNDGConditions();
 		computeNextPointToEliminate();
 	}
 
@@ -65,7 +72,12 @@ public class AreaMethodProver implements TheoremProver {
 		
 		logger.debug("Description of the intern representation of the construction :");
 		for (GeoConstruction cons : constructions) {
-			logger.debug(cons.getConstructionDesc());
+			logger.debug("  " + cons.getConstructionDesc());
+		}
+		
+		logger.debug("Description of the NDGs conditions :");
+		for (SimpleNDGCondition ndgCons : ndgConditions) {
+			logger.debug("  " + ndgCons.print());
 		}
 		
 		logger.debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));

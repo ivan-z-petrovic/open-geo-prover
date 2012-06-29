@@ -6,7 +6,7 @@ package com.ogprover.pp.tp.geoconstruction;
 
 import java.util.Vector;
 
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 
 /**
 * <dl>
@@ -89,7 +89,7 @@ public abstract class ParametricSet extends GeoConstruction implements  SetOfPoi
      * 
      * @param ndgCond	NDG condition to process
      */
-    public abstract void processNDGCondition(NDGCondition ndgCond);
+    public abstract void processNDGCondition(AlgebraicNDGCondition ndgCond);
 	
 }
 
