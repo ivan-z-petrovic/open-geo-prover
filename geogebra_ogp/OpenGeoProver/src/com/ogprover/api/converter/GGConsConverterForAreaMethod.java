@@ -432,17 +432,11 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			
 			Point pt = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
-			System.out.println(pt.getConstructionDesc());
 			LineThroughTwoPoints line = (LineThroughTwoPoints)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
-			System.out.println(line.getConstructionDesc());
 			
 			Point pointOnLine1 = line.getPoints().get(0);
 			Point pointOnLine2 = line.getPoints().get(1);
-			System.out.println(pointOnLine1.getConstructionDesc());
-			System.out.println(pointOnLine2.getConstructionDesc());
 			Point footPoint = new AMFootPoint(nextAvailableName(), pt, pointOnLine1, pointOnLine2);
-			System.out.println(footPoint.getConstructionDesc());
-			System.out.println("coucou");
 			this.thmProtocol.addGeoConstruction(footPoint);
 			return new LineThroughTwoPoints(oArgs.get(0), footPoint, pt);
 		} catch (ClassCastException ex) {
@@ -864,7 +858,6 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 		 * General polygon is defined by the array of its vertices. Regular polygon is
 		 * defined by two subsequent vertices and number of vertices.
 		 */
-		
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (this.validateCmdArguments(ggCmd, 3, -1, 1, -1) == false) {
@@ -872,9 +865,79 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			return null;
 		}
 		
-		logger.error("The use of polygons is impossible wih the area method - " +
-				"please describe your polygons using lines.");
-		return null;
+		logger.info("The use of polygons is strongly not recommanded wih the area method - " +
+				"you should describe your polygons using lines.");
+		try {
+			ArrayList<String> iArgs = ggCmd.getInputArgs();
+			ArrayList<String> oArgs = ggCmd.getOutputArgs();
+			
+			String oLabel = oArgs.get(0);
+			boolean bIsRegular = false;
+			int numVertices = 0;
+			Vector<Point> vertices = new Vector<Point>();
+			Vector<String> edges = new Vector<String>();
+			
+			// Check if input is for regular polygon
+			if (oArgs.size() == 3) {
+				try {
+					numVertices = Integer.parseInt(oArgs.get(2));
+					
+					if (numVertices < 3) {
+						logger.error("Incorrect number of vertices passed in for construction of regular polygon");
+						return null;
+					}
+					
+					bIsRegular = true;
+				} catch (NumberFormatException ex) {
+					// Third argument is not a positive integer number
+				}
+			}
+			
+			/*
+			 * Populate array of vertices
+			 */
+			// Plain polygon
+			if (!bIsRegular) {
+				numVertices = iArgs.size(); // number of points
+				// Check number of output arguments
+				if (oArgs.size() != numVertices + 1) { // number of edges + polygon
+					logger.error("Incorrect number of output arguments for construction of polygon " + oLabel);
+					return null;
+				}
+				
+				for (String ptLabel : iArgs) {
+					Point pt = (Point)this.thmProtocol.getConstructionMap().get(ptLabel);
+					vertices.add(pt);
+				}
+			}
+			else { // regular polygon
+				// Check number of output arguments
+				if (oArgs.size() != 2*numVertices -1) { // number of edges (numVertices) + new vertices (numVertices - 2) + polygon
+					logger.error("Incorrect number of output arguments for construction of polygon " + oLabel);
+					return null;
+				}
+				
+				// Take labels of new vertices and create these points by rotation for the measure of inner angle
+				logger.error("The area method does not currently deal with regular polygons. " +
+						"Please construct the regular polygon by hand");
+			}
+			
+			// Add lines of polygon edges
+			for (int ii = 0, jj = 1; ii < numVertices; ii++, jj++) {
+				Point pt1 = vertices.get(ii);
+				Point pt2 = vertices.get(jj % numVertices);
+				String lineLabel = oArgs.get(ii + 1); 
+				this.thmProtocol.addGeoConstruction(new LineThroughTwoPoints(lineLabel, pt1, pt2));
+				edges.add(lineLabel);
+			}
+			return new IgnoredConstruction();
+		} catch (ClassCastException ex) {
+			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
+			return null;
+		}  catch (Exception ex) {
+			logger.error("Unexpected exception caught: " + ex.toString());
+			return null;
+		}
 	}
 	
 	/**

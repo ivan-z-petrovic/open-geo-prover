@@ -109,8 +109,8 @@ public class OpenGeoProver {
 		// Input prover object
 		GeoGebraOGPInputProverProtocol inputObject = new GeoGebraOGPInputProverProtocol();
 		inputObject.setGeometryTheoremText(xmlString);
-		inputObject.setMethod(GeoGebraOGPInputProverProtocol.OGP_METHOD_WU);
-		//inputObject.setMethod(GeoGebraOGPInputProverProtocol.OGP_METHOD_AREA);
+		//inputObject.setMethod(GeoGebraOGPInputProverProtocol.OGP_METHOD_WU);
+		inputObject.setMethod(GeoGebraOGPInputProverProtocol.OGP_METHOD_AREA);
 		inputObject.setTimeOut(10);
 		inputObject.setMaxTerms(10000);
 		inputObject.setReportFormat(GeoGebraOGPInputProverProtocol.OGP_REPORT_FORMAT_NONE);

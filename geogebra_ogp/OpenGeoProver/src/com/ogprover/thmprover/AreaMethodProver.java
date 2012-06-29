@@ -6,6 +6,7 @@ package com.ogprover.thmprover;
 
 import java.util.Vector;
 
+import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.pp.tp.auxiliary.AMExpression;
 import com.ogprover.pp.tp.auxiliary.AMFraction;
@@ -15,6 +16,7 @@ import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.utilities.logger.ILogger;
 
 /**
  * <dl>
@@ -59,107 +61,93 @@ public class AreaMethodProver implements TheoremProver {
 	}
 
 	public int prove() {
-		System.out.println("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		
+		logger.debug("Description of the intern representation of the construction :");
+		for (GeoConstruction cons : constructions) {
+			logger.debug(cons.getConstructionDesc());
+		}
+		
+		logger.debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
 		
 		for (AMExpression expr : statement.getStatements()) {
-			System.out.println("We must prove that : " + expr.print() + " = 0");
+			logger.debug("We must prove that : " + expr.print() + " = 0");
 			steps.add(expr);
 			AMExpression current = expr;
 			computeNextPointToEliminate();
 			while (nextPointToEliminate >=0  && !current.isZero()) {
 				//if (current.containsOnlyFreePoints()) {
-					/*
-					 * The current expression, after uniformization and simplification, is non-zero 
-					 * but contains only free points : it is maybe false, but it can also be an 
-					 * expression such as S_ABC = S_ABD + S_ADC + S_DBC (which is always true). In this
-					 * case, we have to transform it with the area coordinates. 
-					 */
+					//
+					// The current expression, after uniformization and simplification, is non-zero 
+					// but contains only free points : it is maybe false, but it can also be an 
+					// expression such as S_ABC = S_ABD + S_ADC + S_DBC (which is always true). In this
+					// case, we have to transform it with the area coordinates. 
+					//
 					// TODO implement this
 				//	return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
 				//}
-				System.out.println("Uniformization of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Uniformization of : ", current);
 				current = current.uniformize();
-				System.out.println("Simplification of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Simplification of : ", current);
 				current = current.simplify();
-				System.out.println("Removing of the point " 
-									+ constructions.get(nextPointToEliminate).getGeoObjectLabel() 
-									+ " of the formula : "
-									+ current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				String label = constructions.get(nextPointToEliminate).getGeoObjectLabel();
+				debug("Removing of the point " + label + " of the formula : ", current);
 				current = current.eliminate((Point)constructions.get(nextPointToEliminate)); //safe cast
 				nextPointToEliminate--;
 				computeNextPointToEliminate();
-				System.out.println("Second uniformization of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Second uniformization of : ", current);
 				current = current.uniformize();
-				System.out.println("Second simplification of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Second simplification of : ", current);
 				current = current.simplify();
-				System.out.println("Reducing into a single fraction of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Reducing into a single fraction of : ", current);
 				current = current.reduceToSingleFraction();
 				if (current instanceof AMFraction) {
-					System.out.println("Removing of the denominator of : " + current.print());
-					System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+					debug("Removing of the denominator of : ", current);
 					current = ((AMFraction) current).getNumerator();
 				}
-				System.out.println("Last simplification of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Last simplification of : ", current);
 				current = current.simplify();
-				System.out.println("Reducing into a right associative form of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Reducing into a right associative form of : ", current);
 			}
-			System.out.println("Reducing into a single fraction of : " + current.print());
-			System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+			debug("Reducing into a single fraction of : ", current);
 			current = current.reduceToSingleFraction();
 			if (current instanceof AMFraction) {
-				System.out.println("Removing of the denominator of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Removing of the denominator of : ", current);
 				current = ((AMFraction) current).getNumerator();
 			}
-			System.out.println("Last simplification of : " + current.print());
-			System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+			debug("Last simplification of : ", current);
 			current = current.simplify();
-			System.out.println("Reducing into a right associative form of : " + current.print());
-			System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+			debug("Reducing into a right associative form of : ", current);
 			current = (new AMProduct(new AMNumber(1), current)).reductToRightAssociativeForm();
-			System.out.println("Grouping of : " + current.print());
-			System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+			debug("Grouping of : ", current);
 			current = current.groupSumOfProducts();
-			System.out.println("Simplification of : " + current.print());
-			System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+			debug("Simplification of : ", current);
 			current = current.simplify();
 			if (!(current.isZero())) {
-				System.out.println("Transformation to a formula with only independant variables of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Transformation to a formula with only independant variables of : ", current);
 				current = current.toIndependantVariables();
-				System.out.println("Reducing into a single fraction of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Uniformization of : ", current);
+				current = current.uniformize();
+				debug("Simplification of : ", current);
+				current = current.simplify();
+				debug("Reducing into a single fraction of : ", current);
 				current = current.reduceToSingleFraction();
 				if (current instanceof AMFraction) {
-					System.out.println("Removing of the denominator of : " + current.print());
-					System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+					debug("Removing of the denominator of : ", current);
 					current = ((AMFraction) current).getNumerator();
 				}
-				System.out.println("Simplification of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Simplification of : ", current);
 				current = current.simplify();
-				System.out.println("Reducing into a right associative form of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Reducing into a right associative form of : ", current);
 				current = (new AMProduct(new AMNumber(1), current)).reductToRightAssociativeForm();
-				System.out.println("Grouping of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Grouping of : ", current);
 				current = current.groupSumOfProducts();
-				System.out.println("Simplification of : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Simplification of : ", current);;
 				current = current.simplify();
-				System.out.println("Result : " + current.print());
-				System.out.println("  (size = " + Integer.toString(current.size()) + ")");
+				debug("Result : ", current);
 				if (!(current.isZero()))
 					return TheoremProver.THEO_PROVE_RET_CODE_FALSE;
-                System.out.println("The formula equals zero : the statement is then proved");
+				logger.debug("The formula equals zero : the statement is then proved");
 			}
 		}
 		
@@ -171,5 +159,16 @@ public class AreaMethodProver implements TheoremProver {
 				&& (!(constructions.get(nextPointToEliminate) instanceof Point) 
 						|| constructions.get(nextPointToEliminate) instanceof FreePoint))
 			nextPointToEliminate--;
+	}
+	
+	private static void debug(String str, AMExpression expr) {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		int size = expr.size();
+		int MAX_SIZE = 200;
+		if (size >= MAX_SIZE)
+			logger.debug(str + "Too large to be printed");
+		else
+			logger.debug(str + expr.print());
+		logger.debug("  (Size = " + Integer.toString(size) + ")");
 	}
 }
