@@ -145,7 +145,7 @@ public class AMAreaOfTriangle extends AMExpression {
 		if (a.compare(b)) {
 			return new AMAreaOfTriangle(c, a, b);
 		}
-		return new AMAreaOfTriangle(c, b, a);
+		return new AMAdditiveInverse(new AMAreaOfTriangle(c, b, a));
 	}
 	
 	@Override
@@ -247,7 +247,7 @@ public class AMAreaOfTriangle extends AMExpression {
 			return null;
 		}
 		
-		System.out.println("Th point " + pt.getGeoObjectLabel() + "has not been generated using the area method");
+		System.out.println("The point " + pt.getGeoObjectLabel() + "has not been generated using the area method");
 		return null;
 	}
 	
