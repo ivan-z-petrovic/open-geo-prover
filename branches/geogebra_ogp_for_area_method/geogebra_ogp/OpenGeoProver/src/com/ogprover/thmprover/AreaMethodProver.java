@@ -76,8 +76,10 @@ public class AreaMethodProver implements TheoremProver {
 		}
 		
 		logger.debug("Description of the NDGs conditions :");
-		for (SimpleNDGCondition ndgCons : ndgConditions) {
-			logger.debug("  " + ndgCons.print());
+		if (ndgConditions != null) {
+			for (SimpleNDGCondition ndgCons : ndgConditions) {
+				logger.debug("  " + ndgCons.print());
+			}
 		}
 		
 		logger.debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
