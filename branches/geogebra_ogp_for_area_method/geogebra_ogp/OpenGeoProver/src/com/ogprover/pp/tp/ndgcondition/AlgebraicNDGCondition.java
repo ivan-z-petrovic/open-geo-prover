@@ -105,27 +105,27 @@ public class AlgebraicNDGCondition {
 	/*
 	 * Types of NDG conditions
 	 */
-	public static final String NDG_TYPE_POLYNOMIAL			= "ndgPolynomial";
-	public static final String NDG_TYPE_2PT_IDENTICAL		= "ndg2IdenticalPoints";
-	public static final String NDG_TYPE_3PT_COLLINEAR		= "ndg3CollinearPoints";
-	public static final String NDG_TYPE_3PT_MIDPOINT		= "ndgSegmentMidpoint";
-	public static final String NDG_TYPE_3PT_ON_PERP_BIS		= "ndgOnPerpendicularBisector";
-	public static final String NDG_TYPE_3PT_RIGHT_ANG		= "ndgRightAngle";
-	public static final String NDG_TYPE_3PT_ON_CIRCLE		= "ndgOnCircleWithCenterAndPoint";
-	public static final String NDG_TYPE_3PT_SEG_SUM			= "ndg3SegmentsSum";
-	public static final String NDG_TYPE_4PT_COLLINEAR		= "ndg4CollinearPoints";
-	public static final String NDG_TYPE_4PT_CONCYCLIC		= "ndg4ConcyclicPoints";
-	public static final String NDG_TYPE_4PT_EQ_SEG			= "ndg2EqualSegments";
-	public static final String NDG_TYPE_4PT_PARALLEL		= "ndg2ParallelLines";
-	public static final String NDG_TYPE_4PT_PERPENDICULAR	= "ndg2PerpendicularLines";
-	public static final String NDG_TYPE_4PT_HARMONIC		= "ndg4HarmonicPoints";
-	public static final String NDG_TYPE_4PT_CONG_COLL_SEG	= "ndg2CollinearCongruentSegments";
-	public static final String NDG_TYPE_4PT_ON_ANG_BIS		= "ndgOnAngleBisector";
-	public static final String NDG_TYPE_4PT_2_ON_CIRCLE		= "ndg2PointsOnCircle";
-	public static final String NDG_TYPE_4PT_ON_CIRCLE		= "ndgOnCircleWithCenterAndRadius";
-	public static final String NDG_TYPE_4PT_INVERSE			= "ndg2InversePoints";
-	public static final String NDG_TYPE_4PT_2_ON_PERP_BIS	= "ndg2PointsOnPerpendicularBisector";
-	public static final String NDG_TYPE_4PT_TOUCH_CIRCLES	= "ndg2TouchingCircles";
+	public static final String NDG_TYPE_POLYNOMIAL			= "IsPolynomial";
+	public static final String NDG_TYPE_2PT_IDENTICAL		= "AreEqual";
+	public static final String NDG_TYPE_3PT_COLLINEAR		= "AreCollinear";
+	public static final String NDG_TYPE_3PT_MIDPOINT		= "IsMidpointOf";
+	public static final String NDG_TYPE_3PT_ON_PERP_BIS		= "IsOnBisector";
+	public static final String NDG_TYPE_3PT_RIGHT_ANG		= "ArePerpendicular";
+	public static final String NDG_TYPE_3PT_ON_CIRCLE		= "IsOnCircle";
+	public static final String NDG_TYPE_3PT_SEG_SUM			= "IsSumOf";
+	public static final String NDG_TYPE_4PT_COLLINEAR		= "AreCollinear";
+	public static final String NDG_TYPE_4PT_CONCYCLIC		= "AreConcyclic";
+	public static final String NDG_TYPE_4PT_EQ_SEG			= "AreEqual";
+	public static final String NDG_TYPE_4PT_PARALLEL		= "AreParallel";
+	public static final String NDG_TYPE_4PT_PERPENDICULAR	= "ArePerpendicular";
+	public static final String NDG_TYPE_4PT_HARMONIC		= "AreHarmonic";
+	public static final String NDG_TYPE_4PT_CONG_COLL_SEG	= "AreCollinearCongruentSegments"; // ?
+	public static final String NDG_TYPE_4PT_ON_ANG_BIS		= "IsOnAngleBisector";
+	public static final String NDG_TYPE_4PT_2_ON_CIRCLE		= "AreOnCircle";
+	public static final String NDG_TYPE_4PT_ON_CIRCLE		= "AreOnCircle";
+	public static final String NDG_TYPE_4PT_INVERSE			= "AreInverses";
+	public static final String NDG_TYPE_4PT_2_ON_PERP_BIS	= "AreOnPerpendicularBisector"; // ??
+	public static final String NDG_TYPE_4PT_TOUCH_CIRCLES	= "AreTouchingCircles"; // ??
 	// TODO - other types of NDGs ...
 	
 	/**
