@@ -297,7 +297,7 @@ public abstract class Point extends GeoConstruction implements Cloneable {
 	 * Method compare - a total order on points, we do not care about its properties
 	 */
 	public boolean compare(Point pt) {
-		return (this.hashCode() <= pt.hashCode());
+		return (this.getGeoObjectLabel().compareTo(pt.getGeoObjectLabel())) < 0;
 	}
 	
 	
