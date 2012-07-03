@@ -7,8 +7,6 @@ package com.ogprover.api.converter;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import org.junit.internal.builders.IgnoredBuilder;
-
 import com.ogprover.geogebra.command.construction.*;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.auxiliary.AMFraction;
@@ -857,6 +855,8 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
 			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(pt1, pt2));
+			Segment seg = new Segment(pt1, pt2, oArgs.get(0));
+			this.auxiliaryObjectsMap.put(seg.getGeoObjectLabel(), seg);
 			return new LineThroughTwoPoints(oArgs.get(0), pt1, pt2);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -889,6 +889,8 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
 			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(pt1, pt2));
+			Segment seg = new Segment(pt1, pt2, oArgs.get(0));
+			this.auxiliaryObjectsMap.put(seg.getGeoObjectLabel(), seg);
 			return new LineThroughTwoPoints(oArgs.get(0), pt1, pt2);
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));

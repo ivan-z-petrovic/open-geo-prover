@@ -256,7 +256,11 @@ public class GGStatConverterForAreaMethod extends GeoGebraStatementConverter {
 				return new EqualAngles((Angle)gobj1, (Angle)gobj2);
 			}
 			
-			logger.error("Failed to convert statement - unsupported input argument type");
+			if (gobj1 instanceof GeoConstruction)
+				logger.error("Failed to convert statement - unsupported input argument type : " +((GeoConstruction)gobj1).getConstructionDesc());
+			else
+				logger.error("Failed to convert statement - unsupported input argument type : " + gobj1.getGeoObjectLabel() + " is not a GeoConstruction instance");
+			 
 			return null;
 		} catch (ClassCastException ex) {
 			logger.error("Failed to convert statement due to following reason: " + ex.toString());
