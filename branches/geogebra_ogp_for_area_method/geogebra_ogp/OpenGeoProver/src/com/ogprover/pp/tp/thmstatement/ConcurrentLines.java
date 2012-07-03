@@ -11,6 +11,12 @@ import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
+import com.ogprover.pp.tp.auxiliary.AMAreaOfTriangle;
+import com.ogprover.pp.tp.auxiliary.AMDifference;
+import com.ogprover.pp.tp.auxiliary.AMExpression;
+import com.ogprover.pp.tp.auxiliary.AMFraction;
+import com.ogprover.pp.tp.auxiliary.AMProduct;
+import com.ogprover.pp.tp.auxiliary.AMSum;
 import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
@@ -313,7 +319,54 @@ public class ConcurrentLines extends PositionThmStatement {
 
 	@Override
 	public AreaMethodTheoremStatement getAreaMethodStatement() {
-		// TODO Find the good formula to describe it 
-		return null;
+		Vector<GeoConstruction> lines = this.getGeoObjects();
+		
+		Line line1 = (Line) lines.get(0);
+		Line line2 = (Line) lines.get(1);
+		
+		Point a = line1.getPoints().get(0);
+		Point b = line1.getPoints().get(1);
+		Point c = line2.getPoints().get(0);
+		Point d = line2.getPoints().get(1);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		
+		for (int i = 2 ; i<lines.size(); i++) {
+			Point e = ((Line)lines.get(i)).getPoints().get(0);
+			Point f = ((Line)lines.get(i)).getPoints().get(1);
+			/*
+			 * Let I be the intersection point between the lines (ab) and (cd).
+			 * Let J be the intersection point between the lines (ab) and (ef).
+			 * The three lines are concurrent iff I = J, so iff P_IJI = 0.
+			 * Considering we cannot add new points to the construction at this step
+			 *   of the algorithm, we eliminate the points J and I by hand. It gives
+			 *   us a complicated formula, which can be checked.
+			 * We have simplified the final formula by P_ABA. 
+			 */
+			AMExpression saef = new AMAreaOfTriangle(a, e, f);
+			AMExpression sbfe = new AMAreaOfTriangle(b, f, e);
+			AMExpression saeb = new AMAreaOfTriangle(a, e, b);
+			AMExpression sabf = new AMAreaOfTriangle(a, b, f);
+			AMExpression f1 = new AMFraction(saef, new AMSum(saeb, sabf));
+			AMExpression f2 = new AMFraction(sbfe, new AMSum(saeb, sabf));
+			
+			AMExpression sacd = new AMAreaOfTriangle(a, c, d);
+			AMExpression sbdc = new AMAreaOfTriangle(b, d, c);
+			AMExpression sacb = new AMAreaOfTriangle(a, c, b);
+			AMExpression sabd = new AMAreaOfTriangle(a, b, d);
+			AMExpression g1 = new AMFraction(sacd, new AMSum(sacb, sabd));
+			AMExpression g2 = new AMFraction(sbdc, new AMSum(sacb, sabd));
+			
+			AMExpression pibi = new AMDifference(g2, new AMProduct(g1, g2));
+			AMExpression piai = new AMDifference(g1, new AMProduct(g1, g2));
+			
+			AMExpression term1 = new AMProduct(f1, pibi);
+			AMExpression term2 = new AMProduct(f2, piai);
+			AMExpression term3 = new AMProduct(f1, f2);
+			
+			statements.add(new AMDifference(new AMSum(term1, term2), term3));
+		}
+		
+	return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

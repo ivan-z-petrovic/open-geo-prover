@@ -168,7 +168,7 @@ public class SegmentsOfEqualLengths extends DimensionThmStatement {
 		Point a = (Point)this.geoObjects.get(0);
 		Point b = (Point)this.geoObjects.get(1);
 		Point c = (Point)this.geoObjects.get(2);
-		Point d = (Point)this.geoObjects.get(2);
+		Point d = (Point)this.geoObjects.get(3);
 		
 		AMExpression squareOfAB = new AMPythagorasDifference(a, b, a);
 		AMExpression squareOfCD = new AMPythagorasDifference(c, d, c);

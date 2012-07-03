@@ -82,6 +82,11 @@ public class AreaMethodProver implements TheoremProver {
 			}
 		}
 		
+		if (statement == null) {
+			logger.error("Statement is null");
+			return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
+		}
+		
 		logger.debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
 		
 		for (AMExpression expr : statement.getStatements()) {
@@ -159,9 +164,10 @@ public class AreaMethodProver implements TheoremProver {
 				debug("Simplification of : ", current);;
 				current = current.simplify();
 				debug("Result : ", current);
-				if (!(current.isZero()))
+				if (current.isZero())
+					logger.debug("The formula equals zero : the statement is then proved");
+				else
 					return TheoremProver.THEO_PROVE_RET_CODE_FALSE;
-				logger.debug("The formula equals zero : the statement is then proved");
 			}
 		}
 		
@@ -169,7 +175,7 @@ public class AreaMethodProver implements TheoremProver {
 	}
 	
 	private void computeNextPointToEliminate() {
-		while (nextPointToEliminate >= 0 
+		while (nextPointToEliminate >= 0
 				&& (!(constructions.get(nextPointToEliminate) instanceof Point) 
 						|| constructions.get(nextPointToEliminate) instanceof FreePoint))
 			nextPointToEliminate--;
