@@ -223,7 +223,14 @@ public class AreaMethodProver implements TheoremProver {
 			current = current.simplify();
 			if (!(current.isZero())) {
 				debug("Transformation to a formula with only independant variables of : ", current);
-				current = current.toIndependantVariables();
+				try {
+					current = current.toIndependantVariables(this);
+				} catch (UnknownStatementException e) {
+					logger.error("The transformation to a formula with independant variables" +
+							" required a intermediary lemma to be proved, and the sub-process crashed.");
+					logger.error("It occured on : " + e.getMessage());
+					return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
+				}
 				debug("Uniformization of : ", current);
 				current = current.uniformize();
 				debug("Simplification of : ", current);

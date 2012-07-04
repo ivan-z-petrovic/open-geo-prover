@@ -117,9 +117,11 @@ public abstract class AMExpression {
 	public abstract AMExpression reductToRightAssociativeForm();
 	
 	/**
+	 * @param prover TODO
 	 * @return the expression in which all geometric quantities involved are independant.
+	 * @throws UnknownStatementException TODO
 	 */
-	public abstract AMExpression toIndependantVariables();
+	public abstract AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException;
 	
 	/*
 	 * ======================================================================

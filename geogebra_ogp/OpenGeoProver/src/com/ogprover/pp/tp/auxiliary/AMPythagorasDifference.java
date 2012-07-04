@@ -332,7 +332,7 @@ public class AMPythagorasDifference extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression toIndependantVariables() {
+	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		AMExpression term1 = new AMProduct(getY(a), getY(c));
 		AMExpression term2 = new AMProduct(new AMNumber(-1), new AMProduct(getY(a), getY(b)));
 		AMExpression term3 = new AMProduct(getY(b), getY(b));
