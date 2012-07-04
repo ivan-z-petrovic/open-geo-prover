@@ -115,7 +115,7 @@ public class AMFraction extends AMExpression {
 	}
 	
 	@Override
-	public boolean equals(AMExpression expr) {
+	public boolean equals(Object expr) {
 		if (!(expr instanceof AMFraction))
 			return false;
 		AMFraction frac = (AMFraction)expr;
@@ -171,7 +171,7 @@ public class AMFraction extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
+	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
 		return new AMFraction(numerator.eliminate(pt, prover), denominator.eliminate(pt, prover));
 	}
 	

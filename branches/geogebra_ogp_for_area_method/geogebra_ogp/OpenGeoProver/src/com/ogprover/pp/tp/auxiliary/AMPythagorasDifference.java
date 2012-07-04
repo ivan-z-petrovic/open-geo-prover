@@ -111,7 +111,7 @@ public class AMPythagorasDifference extends AMExpression {
 	}
 	
 	@Override
-	public boolean equals(AMExpression expr) {
+	public boolean equals(Object expr) {
 		if (!(expr instanceof AMPythagorasDifference))
 			return false;
 		AMPythagorasDifference diff = (AMPythagorasDifference)expr;

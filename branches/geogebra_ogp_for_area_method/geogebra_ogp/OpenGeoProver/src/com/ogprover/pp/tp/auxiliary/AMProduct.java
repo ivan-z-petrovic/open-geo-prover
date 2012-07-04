@@ -98,7 +98,7 @@ public class AMProduct extends AMExpression {
 	}
 	
 	@Override
-	public boolean equals(AMExpression expr) {
+	public boolean equals(Object expr) {
 		if (!(expr instanceof AMProduct))
 			return false;
 		AMProduct prod = (AMProduct)expr;
@@ -171,7 +171,7 @@ public class AMProduct extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
+	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
 		return new AMProduct(factor1.eliminate(pt, prover), factor2.eliminate(pt, prover));
 	}
 	

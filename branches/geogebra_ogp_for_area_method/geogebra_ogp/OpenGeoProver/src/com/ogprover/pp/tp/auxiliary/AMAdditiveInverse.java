@@ -81,7 +81,7 @@ public class AMAdditiveInverse extends AMExpression {
 	}
 
 	@Override
-	public boolean equals(AMExpression expr) {
+	public boolean equals(Object expr) {
 		if (!(expr instanceof AMAdditiveInverse))
 			return false;
 		AMAdditiveInverse inv = (AMAdditiveInverse)expr;
@@ -115,7 +115,7 @@ public class AMAdditiveInverse extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
+	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
 		return new AMAdditiveInverse(expr.eliminate(pt, prover));
 	}
 

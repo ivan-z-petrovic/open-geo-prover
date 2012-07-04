@@ -4,6 +4,7 @@
 
 package com.ogprover.thmprover;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
@@ -13,6 +14,7 @@ import com.ogprover.pp.tp.auxiliary.AMFraction;
 import com.ogprover.pp.tp.auxiliary.AMNumber;
 import com.ogprover.pp.tp.auxiliary.AMProduct;
 import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
+import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
@@ -34,6 +36,11 @@ public class AreaMethodProver implements TheoremProver {
 	 * ========================== VARIABLES =================================
 	 * ======================================================================
 	 */
+	/**
+	 * Known results.
+	 */
+	public static HashMap<AreaMethodTheoremStatement, Boolean> alreadyProvedStatements;
+	
 	/**
 	 * Statement to be proved
 	 */
@@ -59,6 +66,9 @@ public class AreaMethodProver implements TheoremProver {
 	 */
 	protected Vector<SimpleNDGCondition> ndgConditions;
 	
+	static {
+		alreadyProvedStatements = new HashMap<AreaMethodTheoremStatement, Boolean>();
+	}
 	
 	/*
 	 * ======================================================================
@@ -121,6 +131,16 @@ public class AreaMethodProver implements TheoremProver {
 	public int prove() {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
+		if (alreadyProvedStatements.containsKey(statement)) {
+			debug("Statement to prove : " + statement.getName());
+			if (alreadyProvedStatements.get(statement).booleanValue()) {
+				debug("-> We have already proved that it was true");
+				return THEO_PROVE_RET_CODE_TRUE;
+			}
+			debug("-> We have already proved that it was false");
+			return THEO_PROVE_RET_CODE_FALSE;
+		}
+		
 		debug("Description of the intern representation of the construction :");
 		for (GeoConstruction cons : constructions) {
 			debug("  " + cons.getConstructionDesc());
@@ -132,6 +152,8 @@ public class AreaMethodProver implements TheoremProver {
 				debug("  " + ndgCons.print());
 			}
 		}
+		
+		debug("Statement to prove " + statement.getName());
 		
 		if (statement == null) {
 			logger.error("Statement is null");
@@ -162,7 +184,13 @@ public class AreaMethodProver implements TheoremProver {
 				current = current.simplify();
 				String label = constructions.get(nextPointToEliminate).getGeoObjectLabel();
 				debug("Removing of the point " + label + " of the formula : ", current);
-				current = current.eliminate((Point)constructions.get(nextPointToEliminate), this); //safe cast
+				try {
+					current = current.eliminate((Point)constructions.get(nextPointToEliminate), this); //safe cast
+				} catch (UnknownStatementException e) {
+					logger.error("The point elimination required a intermediary lemma to be proved, and the sub-process crashed.");
+					logger.error("It occured on : " + e.getMessage());
+					return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
+				}
 				nextPointToEliminate--;
 				computeNextPointToEliminate();
 				debug("Second uniformization of : ", current);
