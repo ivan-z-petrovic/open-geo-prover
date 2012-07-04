@@ -29,6 +29,11 @@ import com.ogprover.utilities.logger.ILogger;
  * @author Damien Desfontaines
  */
 public class AreaMethodProver implements TheoremProver {
+	/*
+	 * ======================================================================
+	 * ========================== VARIABLES =================================
+	 * ======================================================================
+	 */
 	/**
 	 * Statement to be proved
 	 */
@@ -55,8 +60,33 @@ public class AreaMethodProver implements TheoremProver {
 	protected Vector<SimpleNDGCondition> ndgConditions;
 	
 	
+	/*
+	 * ======================================================================
+	 * ========================== GETTERS/SETTERS ===========================
+	 * ======================================================================
+	 */
+	public AreaMethodTheoremStatement getStatement() {
+		return statement;
+	}
+	
+	public Vector<GeoConstruction> getConstructions() {
+		return constructions;
+	}
+	
+	public Vector<SimpleNDGCondition> getNDGConditions() {
+		return ndgConditions;
+	}
+	
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== CONSTRUCTORS ==============================
+	 * ======================================================================
+	 */
 	/**
 	 * Constructor method
+	 * @param thmProtocol	The details of the construction, with the type OGPTP.
 	 */
 	public AreaMethodProver(OGPTP thmProtocol) {
 		this.steps = new Vector<AMExpression>();
@@ -66,19 +96,40 @@ public class AreaMethodProver implements TheoremProver {
 		this.ndgConditions = thmProtocol.getSimpleNDGConditions();
 		computeNextPointToEliminate();
 	}
+	
+	/**
+	 * Constructor method
+	 * @param statement			The statement to prove
+	 * @param constructions		The details of the construction
+	 * @param ndgConditions		The NDGs-conditions
+	 */
+	public AreaMethodProver(AreaMethodTheoremStatement statement, Vector<GeoConstruction> constructions, Vector<SimpleNDGCondition> ndgConditions) {
+		this.steps = new Vector<AMExpression>();
+		this.statement = statement;
+		this.constructions = constructions;
+		this.nextPointToEliminate = constructions.size()-1;
+		this.ndgConditions = ndgConditions;
+		computeNextPointToEliminate();
+	}
 
+	
+	/*
+	 * ======================================================================
+	 * ========================== SPECIFIC METHODS ==========================
+	 * ======================================================================
+	 */
 	public int prove() {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
-		logger.debug("Description of the intern representation of the construction :");
+		debug("Description of the intern representation of the construction :");
 		for (GeoConstruction cons : constructions) {
-			logger.debug("  " + cons.getConstructionDesc());
+			debug("  " + cons.getConstructionDesc());
 		}
 		
-		logger.debug("Description of the NDGs conditions :");
+		debug("Description of the NDGs conditions :");
 		if (ndgConditions != null) {
 			for (SimpleNDGCondition ndgCons : ndgConditions) {
-				logger.debug("  " + ndgCons.print());
+				debug("  " + ndgCons.print());
 			}
 		}
 		
@@ -87,10 +138,10 @@ public class AreaMethodProver implements TheoremProver {
 			return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
 		}
 		
-		logger.debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
+		debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
 		
 		for (AMExpression expr : statement.getStatements()) {
-			logger.debug("We must prove that : " + expr.print() + " = 0");
+			debug("We must prove that : " + expr.print() + " = 0");
 			steps.add(expr);
 			AMExpression current = expr;
 			computeNextPointToEliminate();
@@ -111,7 +162,7 @@ public class AreaMethodProver implements TheoremProver {
 				current = current.simplify();
 				String label = constructions.get(nextPointToEliminate).getGeoObjectLabel();
 				debug("Removing of the point " + label + " of the formula : ", current);
-				current = current.eliminate((Point)constructions.get(nextPointToEliminate)); //safe cast
+				current = current.eliminate((Point)constructions.get(nextPointToEliminate), this); //safe cast
 				nextPointToEliminate--;
 				computeNextPointToEliminate();
 				debug("Second uniformization of : ", current);
@@ -165,7 +216,7 @@ public class AreaMethodProver implements TheoremProver {
 				current = current.simplify();
 				debug("Result : ", current);
 				if (current.isZero())
-					logger.debug("The formula equals zero : the statement is then proved");
+					debug("The formula equals zero : the statement is then proved");
 				else
 					return TheoremProver.THEO_PROVE_RET_CODE_FALSE;
 			}
@@ -190,5 +241,10 @@ public class AreaMethodProver implements TheoremProver {
 		else
 			logger.debug(str + expr.print());
 		logger.debug("  (Size = " + Integer.toString(size) + ")");
+	}
+	
+	private static void debug(String str)  {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		logger.debug(str);
 	}
 }

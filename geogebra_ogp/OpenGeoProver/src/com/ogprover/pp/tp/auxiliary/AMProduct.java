@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.auxiliary;
 import java.util.HashSet;
 
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.thmprover.AreaMethodProver;
 
 /**
  * <dl>
@@ -170,9 +171,10 @@ public class AMProduct extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt) {
-		return new AMProduct(factor1.eliminate(pt), factor2.eliminate(pt));
+	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
+		return new AMProduct(factor1.eliminate(pt, prover), factor2.eliminate(pt, prover));
 	}
+	
 	@Override
 	public AMExpression reduceToSingleFraction() {
 		AMExpression expr1 = factor1.reduceToSingleFraction();

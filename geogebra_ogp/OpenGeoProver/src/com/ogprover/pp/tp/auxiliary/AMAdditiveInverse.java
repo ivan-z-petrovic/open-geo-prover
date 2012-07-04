@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.auxiliary;
 import java.util.HashSet;
 
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.thmprover.AreaMethodProver;
 
 /**
  * <dl>
@@ -114,8 +115,8 @@ public class AMAdditiveInverse extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt) {
-		return new AMAdditiveInverse(expr.eliminate(pt));
+	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
+		return new AMAdditiveInverse(expr.eliminate(pt, prover));
 	}
 
 	@Override
