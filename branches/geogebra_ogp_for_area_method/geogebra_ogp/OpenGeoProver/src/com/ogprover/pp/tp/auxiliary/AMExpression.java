@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.thmprover.AreaMethodProver;
 
 /**
  * <dl>
@@ -91,8 +92,10 @@ public abstract class AMExpression {
 	
 	/**
 	 * @return the expression in which one point has been eliminated
+	 * @param pt		The point to eliminate
+	 * @param prover	The prover which called the function
 	 */
-	public abstract AMExpression eliminate(Point pt);
+	public abstract AMExpression eliminate(Point pt, AreaMethodProver prover);
 	
 	/**
 	 * @return the expression in the form AMFraction(a,b), where a and b do not contain any AMFraction.

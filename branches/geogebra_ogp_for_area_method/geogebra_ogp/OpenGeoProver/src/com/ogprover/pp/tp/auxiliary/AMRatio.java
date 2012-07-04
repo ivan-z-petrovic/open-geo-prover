@@ -7,6 +7,7 @@ import java.util.HashSet;
 
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.thmprover.AreaMethodProver;
 
 /**
  * <dl>
@@ -157,7 +158,7 @@ public class AMRatio extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt) {
+	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
 		// TODO write the elimination lemmas for the ratios
 		System.out.println("Not yet implemented");
 		return null;

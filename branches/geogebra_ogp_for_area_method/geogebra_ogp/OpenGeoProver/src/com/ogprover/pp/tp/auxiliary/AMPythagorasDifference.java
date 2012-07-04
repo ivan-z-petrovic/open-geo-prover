@@ -11,6 +11,7 @@ import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.PRatioPoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoconstruction.TRatioPoint;
+import com.ogprover.thmprover.AreaMethodProver;
 
 /**
  * <dl>
@@ -153,7 +154,7 @@ public class AMPythagorasDifference extends AMExpression {
 	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf "elimination lemmas"
 	 */
 	@Override
-	public AMExpression eliminate(Point pt) {
+	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
 		Point aa = null;
 		Point bb = null;
 		boolean islinear = true;

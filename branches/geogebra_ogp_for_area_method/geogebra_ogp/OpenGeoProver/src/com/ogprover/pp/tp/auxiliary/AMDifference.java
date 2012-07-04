@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.auxiliary;
 import java.util.HashSet;
 
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.thmprover.AreaMethodProver;
 
 /**
  * <dl>
@@ -138,8 +139,8 @@ public class AMDifference extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt) {
-		return new AMDifference(term1.eliminate(pt), term2.eliminate(pt));
+	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
+		return new AMDifference(term1.eliminate(pt, prover), term2.eliminate(pt, prover));
 	}
 	
 	@Override
