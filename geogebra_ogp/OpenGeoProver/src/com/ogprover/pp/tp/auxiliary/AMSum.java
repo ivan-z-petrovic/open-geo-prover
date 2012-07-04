@@ -97,7 +97,7 @@ public class AMSum extends AMExpression {
 	}
 	
 	@Override
-	public boolean equals(AMExpression expr) {
+	public boolean equals(Object expr) {
 		if (!(expr instanceof AMSum))
 			return false;
 		AMSum sum = (AMSum)expr;
@@ -138,7 +138,7 @@ public class AMSum extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
+	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
 		return new AMSum(term1.eliminate(pt, prover), term2.eliminate(pt, prover));
 	}
 	

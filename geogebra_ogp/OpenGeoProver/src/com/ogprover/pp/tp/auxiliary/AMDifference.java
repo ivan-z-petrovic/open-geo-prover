@@ -98,7 +98,7 @@ public class AMDifference extends AMExpression {
 	}
 	
 	@Override
-	public boolean equals(AMExpression expr) {
+	public boolean equals(Object expr) {
 		if (!(expr instanceof AMDifference))
 			return false;
 		AMDifference diff = (AMDifference)expr;
@@ -139,7 +139,7 @@ public class AMDifference extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
+	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
 		return new AMDifference(term1.eliminate(pt, prover), term2.eliminate(pt, prover));
 	}
 	

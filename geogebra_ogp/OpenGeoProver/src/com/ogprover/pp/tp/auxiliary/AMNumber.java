@@ -82,7 +82,7 @@ public class AMNumber extends AMExpression {
 	}
 	
 	@Override
-	public boolean equals(AMExpression expr) {
+	public boolean equals(Object expr) {
 		if (!(expr instanceof AMNumber))
 			return false;
 		AMNumber number = (AMNumber)expr;

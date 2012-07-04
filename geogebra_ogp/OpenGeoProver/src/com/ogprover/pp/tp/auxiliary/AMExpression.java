@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
@@ -94,8 +95,9 @@ public abstract class AMExpression {
 	 * @return the expression in which one point has been eliminated
 	 * @param pt		The point to eliminate
 	 * @param prover	The prover which called the function
+	 * @throws ExecutionException 
 	 */
-	public abstract AMExpression eliminate(Point pt, AreaMethodProver prover);
+	public abstract AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException;
 	
 	/**
 	 * @return the expression in the form AMFraction(a,b), where a and b do not contain any AMFraction.
@@ -124,8 +126,8 @@ public abstract class AMExpression {
 	 * ======================= COMMON OBJECT METHODS ========================
 	 * ======================================================================
 	 */
-	public abstract boolean equals(AMExpression expr);
-	
+	@Override
+	public abstract boolean equals(Object expr);
 	
 	/*
 	 * ======================================================================

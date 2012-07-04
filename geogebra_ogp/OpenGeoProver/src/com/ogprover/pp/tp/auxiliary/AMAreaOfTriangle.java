@@ -108,7 +108,7 @@ public class AMAreaOfTriangle extends AMExpression {
 	}
 	
 	@Override
-	public boolean equals(AMExpression expr) {
+	public boolean equals(Object expr) {
 		if (!(expr instanceof AMAreaOfTriangle))
 			return false;
 		AMAreaOfTriangle area = (AMAreaOfTriangle)expr;
