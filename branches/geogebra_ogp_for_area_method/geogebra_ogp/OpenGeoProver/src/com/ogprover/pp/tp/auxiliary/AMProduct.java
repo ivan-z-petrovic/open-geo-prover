@@ -246,8 +246,8 @@ public class AMProduct extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression toIndependantVariables() {
-		return new AMProduct(factor1.toIndependantVariables(), factor2.toIndependantVariables());
+	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
+		return new AMProduct(factor1.toIndependantVariables(prover), factor2.toIndependantVariables(prover));
 	}
 	
 	@Override

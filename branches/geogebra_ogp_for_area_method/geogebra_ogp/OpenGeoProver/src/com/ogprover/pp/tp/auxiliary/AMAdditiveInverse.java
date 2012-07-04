@@ -136,8 +136,8 @@ public class AMAdditiveInverse extends AMExpression {
 	}
 
 	@Override
-	public AMExpression toIndependantVariables() {
-		return new AMAdditiveInverse(expr.toIndependantVariables());
+	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
+		return new AMAdditiveInverse(expr.toIndependantVariables(prover));
 	}
 
 	@Override

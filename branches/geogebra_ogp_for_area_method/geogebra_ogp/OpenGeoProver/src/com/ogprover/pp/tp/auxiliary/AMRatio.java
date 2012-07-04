@@ -459,10 +459,46 @@ public class AMRatio extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression toIndependantVariables() {
-		// TODO write the transformation to independant variables for the ratios
-		System.out.println("Not yet implemented");
-		return null;
+	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
+		ArrayList<Point> points = new ArrayList<Point>();
+		points.add(a);
+		points.add(c);
+		points.add(d);
+		ThmStatement statementToVerify = new CollinearPoints(points);
+		AreaMethodTheoremStatement areaMethodStatement = statementToVerify.getAreaMethodStatement();
+		AreaMethodProver verifier = new AreaMethodProver(areaMethodStatement, prover.getConstructions(), prover.getNDGConditions());
+		int retCode = verifier.prove();
+		if (retCode == TheoremProver.THEO_PROVE_RET_CODE_TRUE) { // a, c and d are collinear
+			AMExpression xcya = new AMProduct(getX(c), getY(a));
+			AMExpression xcyb = new AMProduct(getX(c), getY(b));
+			AMExpression yaxb = new AMProduct(getY(a), getX(b));
+			AMExpression ybxa = new AMProduct(getY(b), getX(a));
+			AMExpression ycxa = new AMProduct(getY(c), getX(a));
+			AMExpression ycxb = new AMProduct(getY(c), getX(b));
+			AMExpression xcyd = new AMProduct(getX(c), getY(d));
+			AMExpression yaxd = new AMProduct(getY(a), getX(d));
+			AMExpression ycxd = new AMProduct(getY(c), getX(d));
+			AMExpression xayd = new AMProduct(getX(a), getY(d));
+			AMExpression numeratorPart1 = new AMDifference(xcya, new AMSum(xcyb, yaxb));
+			AMExpression numeratorPart2 = new AMSum(new AMDifference(ybxa, ycxa), ycxb);
+			AMExpression numerator = new AMSum(numeratorPart1, numeratorPart2);
+			AMExpression denominatorPart1 = new AMDifference(xcya, new AMSum(xcyd, yaxd));
+			AMExpression denominatorPart2 = new AMSum(ycxd, new AMDifference(xayd, ycxa));
+			AMExpression denominator = new AMSum(denominatorPart1, denominatorPart2);
+			return new AMFraction(numerator, denominator);
+		}
+		if (retCode == TheoremProver.THEO_PROVE_RET_CODE_FALSE) { // a, p and y are not collinear
+			AMExpression xbya = new AMProduct(getX(b), getY(a));
+			AMExpression xayb = new AMProduct(getX(a), getY(b));
+			AMExpression xdyc = new AMProduct(getX(d), getY(c));
+			AMExpression xcyd = new AMProduct(getX(c), getY(d));
+			AMExpression numerator = new AMDifference(xbya, xayb);
+			AMExpression denominator = new AMDifference(xdyc, xcyd);
+			return new AMFraction(numerator, denominator);
+		}
+		// If the prover crashed
+		throw new UnknownStatementException("Reducing to independant variables of : " + this.print());
+		
 	}
 	
 	@Override

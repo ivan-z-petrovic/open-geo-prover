@@ -211,8 +211,8 @@ public class AMFraction extends AMExpression {
 		return null;
 	}
 	@Override
-	public AMExpression toIndependantVariables() {
-		return new AMFraction(numerator.toIndependantVariables(), denominator.toIndependantVariables());
+	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
+		return new AMFraction(numerator.toIndependantVariables(prover), denominator.toIndependantVariables(prover));
 	}
 	
 	@Override

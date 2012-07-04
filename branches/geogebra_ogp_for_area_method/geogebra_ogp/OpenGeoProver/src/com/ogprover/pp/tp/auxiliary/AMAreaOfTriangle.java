@@ -263,7 +263,7 @@ public class AMAreaOfTriangle extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression toIndependantVariables() {
+	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		AMExpression firstTerm = new AMProduct(new AMDifference(getY(b), getY(c)), getX(a));
 		AMExpression secondTerm = new AMProduct(new AMDifference(getY(c), getY(a)), getX(b));
 		AMExpression thirdTerm = new AMProduct(new AMDifference(getY(a), getY(b)), getX(c));

@@ -188,8 +188,8 @@ public class AMSum extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression toIndependantVariables() {
-		return new AMSum(term1.toIndependantVariables(), term2.toIndependantVariables());
+	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
+		return new AMSum(term1.toIndependantVariables(prover), term2.toIndependantVariables(prover));
 	}
 	
 	@Override

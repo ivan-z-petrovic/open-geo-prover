@@ -126,7 +126,7 @@ public class AMNumber extends AMExpression {
 	}
 
 	@Override
-	public AMExpression toIndependantVariables() {
+	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		return this;
 	}
 
