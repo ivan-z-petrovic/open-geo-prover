@@ -206,7 +206,7 @@ public class AMFraction extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression reductToRightAssociativeForm() {
+	public AMExpression reduceToRightAssociativeFormInOneStep() {
 		System.out.println("Calling reductToRightAssociativeForm() on an expression which contains fractions : " + this.print());
 		return null;
 	}

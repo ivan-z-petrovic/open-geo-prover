@@ -454,7 +454,7 @@ public class AMRatio extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression reductToRightAssociativeForm() {
+	public AMExpression reduceToRightAssociativeFormInOneStep() {
 		return this;
 	}
 	

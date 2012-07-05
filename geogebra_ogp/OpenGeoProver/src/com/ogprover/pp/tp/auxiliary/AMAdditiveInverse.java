@@ -131,8 +131,8 @@ public class AMAdditiveInverse extends AMExpression {
 	}
 
 	@Override
-	public AMExpression reductToRightAssociativeForm() {
-		return (new AMProduct(new AMNumber(-17), expr)).reductToRightAssociativeForm();
+	public AMExpression reduceToRightAssociativeFormInOneStep() {
+		return new AMProduct(new AMNumber(-1), expr);
 	}
 
 	@Override

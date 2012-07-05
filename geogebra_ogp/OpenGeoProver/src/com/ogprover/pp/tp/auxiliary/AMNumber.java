@@ -121,7 +121,7 @@ public class AMNumber extends AMExpression {
 	}
 
 	@Override
-	public AMExpression reductToRightAssociativeForm() {
+	public AMExpression reduceToRightAssociativeFormInOneStep() {
 		return this;
 	}
 
