@@ -175,10 +175,10 @@ public class AMDifference extends AMExpression {
 		return new AMDifference(expr1, expr2);
 	}
 	@Override
-	public AMExpression reductToRightAssociativeForm() {
-		AMExpression firstTerm = term1.reductToRightAssociativeForm();
-		AMExpression secondTerm = term2.reductToRightAssociativeForm();
-		return (new AMSum(firstTerm, new AMProduct(new AMNumber(-1), secondTerm))).reductToRightAssociativeForm();
+	public AMExpression reduceToRightAssociativeFormInOneStep() {
+		AMExpression firstTerm = term1.reduceToRightAssociativeFormInOneStep();
+		AMExpression secondTerm = term2.reduceToRightAssociativeFormInOneStep();
+		return new AMSum(firstTerm, new AMProduct(new AMNumber(-1), secondTerm));
 	}
 	
 	@Override

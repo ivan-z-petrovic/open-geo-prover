@@ -175,16 +175,16 @@ public class AMSum extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression reductToRightAssociativeForm() {
-		//System.out.println("reductToRightAssociativeForm" + this.print());
-		AMExpression firstTerm = term1.reductToRightAssociativeForm();
-		AMExpression c = term2.reductToRightAssociativeForm();
+	public AMExpression reduceToRightAssociativeFormInOneStep() {
+		AMExpression firstTerm = term1.reduceToRightAssociativeFormInOneStep();
+		//AMExpression c = term2.reduceToRightAssociativeFormInOneStep();
+		AMExpression c = term2;
 		if (firstTerm instanceof AMSum) {
 			AMExpression a = ((AMSum) firstTerm).getTerm1();
 			AMExpression b = ((AMSum) firstTerm).getTerm2();
-			return (new AMSum (a, new AMSum(b, c))).reductToRightAssociativeForm();
+			return new AMSum (a, new AMSum(b, c));
 		}
-		return new AMSum(firstTerm, c);
+		return new AMSum(firstTerm, c.reduceToRightAssociativeFormInOneStep());
 	}
 	
 	@Override

@@ -114,7 +114,7 @@ public abstract class AMExpression {
 	 * @return the expression transformed into a right associative form.
 	 * /!\ This method is supposed to be called on an object without any fraction left.
 	 */
-	public abstract AMExpression reductToRightAssociativeForm();
+	public abstract AMExpression reduceToRightAssociativeFormInOneStep();
 	
 	/**
 	 * @param prover TODO
@@ -159,6 +159,19 @@ public abstract class AMExpression {
 			current = current.simplifyInOneStep();
 		}
 		return last;
+	}
+	
+	/**
+	 * @return the expression in right associative form
+	 */
+	public AMExpression reduceToRightAssociativeForm() {
+		AMExpression last = this; 
+		AMExpression current = last.reduceToRightAssociativeFormInOneStep();
+		while (!last.equals(current)) {
+			last = current;
+			current = current.reduceToRightAssociativeFormInOneStep();
+		}
+		return last;	
 	}
 	
 	/**

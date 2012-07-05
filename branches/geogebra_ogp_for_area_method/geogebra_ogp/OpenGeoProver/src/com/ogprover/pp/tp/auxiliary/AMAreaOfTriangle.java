@@ -258,7 +258,7 @@ public class AMAreaOfTriangle extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression reductToRightAssociativeForm() {
+	public AMExpression reduceToRightAssociativeFormInOneStep() {
 		return this;
 	}
 	

@@ -216,7 +216,7 @@ public class AreaMethodProver implements TheoremProver {
 			debug("Last simplification of : ", current);
 			current = current.simplify();
 			debug("Reducing into a right associative form of : ", current);
-			current = (new AMProduct(new AMNumber(1), current)).reductToRightAssociativeForm();
+			current = (new AMProduct(new AMNumber(1), current)).reduceToRightAssociativeForm();
 			debug("Grouping of : ", current);
 			current = current.groupSumOfProducts();
 			debug("Simplification of : ", current);
@@ -244,7 +244,7 @@ public class AreaMethodProver implements TheoremProver {
 				debug("Simplification of : ", current);
 				current = current.simplify();
 				debug("Reducing into a right associative form of : ", current);
-				current = (new AMProduct(new AMNumber(1), current)).reductToRightAssociativeForm();
+				current = (new AMProduct(new AMNumber(1), current)).reduceToRightAssociativeForm();
 				debug("Grouping of : ", current);
 				current = current.groupSumOfProducts();
 				debug("Simplification of : ", current);;

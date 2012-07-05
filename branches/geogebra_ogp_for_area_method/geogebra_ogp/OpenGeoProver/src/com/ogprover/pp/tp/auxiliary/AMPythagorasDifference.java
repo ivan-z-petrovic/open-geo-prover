@@ -327,7 +327,7 @@ public class AMPythagorasDifference extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression reductToRightAssociativeForm() {
+	public AMExpression reduceToRightAssociativeFormInOneStep() {
 		return this;
 	}
 	
