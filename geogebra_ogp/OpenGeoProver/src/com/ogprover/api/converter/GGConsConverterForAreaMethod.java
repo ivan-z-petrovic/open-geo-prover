@@ -9,9 +9,9 @@ import java.util.Vector;
 
 import com.ogprover.geogebra.command.construction.*;
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.pp.tp.auxiliary.AMFraction;
-import com.ogprover.pp.tp.auxiliary.AMNumber;
-import com.ogprover.pp.tp.auxiliary.AMRatio;
+import com.ogprover.pp.tp.expressions.Fraction;
+import com.ogprover.pp.tp.expressions.BasicNumber;
+import com.ogprover.pp.tp.expressions.RatioOfCollinearSegments;
 import com.ogprover.pp.tp.geoconstruction.*;
 import com.ogprover.pp.tp.geoobject.*;
 import com.ogprover.pp.tp.ndgcondition.DistinctPoints;
@@ -141,7 +141,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 					this.thmProtocol.addGeoConstruction(freePoint);
 					Point footPoint = new AMFootPoint(nextAvailableName(), freePoint, center, pointOnCircle);
 					this.thmProtocol.addGeoConstruction(footPoint);
-					AMRatio ratio = new AMRatio(center, pointOnCircle, center, footPoint);
+					RatioOfCollinearSegments ratio = new RatioOfCollinearSegments(center, pointOnCircle, center, footPoint);
 					return new PRatioPoint(oArgs.get(0), center, center, freePoint, ratio);
 				}
 				if (gc instanceof Line || gc instanceof Circle) {
@@ -219,12 +219,12 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 					if (point1.equals(pointOnCircle)) {
 						Point footPoint = new AMFootPoint(nextAvailableName(), center, point1, point2);
 						this.thmProtocol.addGeoConstruction(footPoint);
-						return new PRatioPoint(oArgs.get(0), footPoint, point1, footPoint, new AMNumber(1));
+						return new PRatioPoint(oArgs.get(0), footPoint, point1, footPoint, new BasicNumber(1));
 					}
 					if (point2.equals(pointOnCircle)) {
 						Point footPoint = new AMFootPoint(nextAvailableName(), center, point1, point2);
 						this.thmProtocol.addGeoConstruction(footPoint);
-						return new PRatioPoint(oArgs.get(0), footPoint, point2, footPoint, new AMNumber(1));
+						return new PRatioPoint(oArgs.get(0), footPoint, point2, footPoint, new BasicNumber(1));
 					}
 					logger.error("To use the area method on the intersection between a line and a circle, the line " +
 							"must have been generated using one of two intersection points.");
@@ -242,7 +242,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 					if (pointOnCircle1.equals(pointOnCircle2)) {
 						Point midPoint = new AMFootPoint(nextAvailableName(), pointOnCircle1, center1, center2);
 						this.thmProtocol.addGeoConstruction(midPoint);
-						return new PRatioPoint(oArgs.get(0), midPoint, pointOnCircle1, midPoint, new AMNumber(1));
+						return new PRatioPoint(oArgs.get(0), midPoint, pointOnCircle1, midPoint, new BasicNumber(1));
 					}
 					logger.error("To use the area method on the intersection between two circles, the two circles must" +
 							" have been generated using the same point");
@@ -307,7 +307,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 				pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
 				pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			}
-			return new PRatioPoint(oArgs.get(0), pt1, pt1, pt2, new AMFraction(1,2));
+			return new PRatioPoint(oArgs.get(0), pt1, pt1, pt2, new Fraction(1,2));
 			
 		} catch (ClassCastException ex) {
 			logger.error(GeoGebraConstructionConverter.getClassCastExceptionMessage(ggCmd, ex));
@@ -404,7 +404,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			LineThroughTwoPoints line = (LineThroughTwoPoints)obj2;
 			Point pointOnLine1 = line.getPoints().get(0);
 			Point pointOnLine2 = line.getPoints().get(1);
-			Point aux = new PRatioPoint(nextAvailableName(), pt1, pointOnLine1, pointOnLine2, new AMNumber(1));
+			Point aux = new PRatioPoint(nextAvailableName(), pt1, pointOnLine1, pointOnLine2, new BasicNumber(1));
 			this.thmProtocol.addGeoConstruction(aux);
 			this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(aux, pt1));
 			return new LineThroughTwoPoints(oArgs.get(0), aux, pt1);
@@ -488,10 +488,10 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 				pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			}
 			
-			Point midPoint = new PRatioPoint (nextAvailableName(), pt1, pt1, pt2, new AMFraction(1,2));
+			Point midPoint = new PRatioPoint (nextAvailableName(), pt1, pt1, pt2, new Fraction(1,2));
 			this.thmProtocol.addGeoConstruction(midPoint);
 			
-			Point aux = new TRatioPoint (nextAvailableName(), midPoint, pt2, new AMNumber(1));
+			Point aux = new TRatioPoint (nextAvailableName(), midPoint, pt2, new BasicNumber(1));
 			this.thmProtocol.addGeoConstruction(aux);
 			
 			this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(midPoint, aux));
@@ -593,7 +593,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			Point center = circle.getCenter();
 			
 			if (circle.getPoints().contains(pt)) {
-				Point aux = new TRatioPoint(nextAvailableName(), pt, center, new AMNumber(1));
+				Point aux = new TRatioPoint(nextAvailableName(), pt, center, new BasicNumber(1));
 				this.thmProtocol.addGeoConstruction(aux);
 				this.thmProtocol.addSimpleNDGCondition(new DistinctPoints(pt, aux));
 				return new LineThroughTwoPoints(oArgs.get(0), pt, aux);
@@ -676,14 +676,14 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 				Point pt3 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
 				
 				// The circumscribed circle is the intersection of two bisectors of the segments
-				Point midPoint1 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new AMFraction(1,2));
+				Point midPoint1 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new Fraction(1,2));
 				this.thmProtocol.addGeoConstruction(midPoint1);
-				Point aux1 = new TRatioPoint(nextAvailableName(), midPoint1, pt1, new AMNumber(1));
+				Point aux1 = new TRatioPoint(nextAvailableName(), midPoint1, pt1, new BasicNumber(1));
 				this.thmProtocol.addGeoConstruction(aux1);
 				
-				Point midPoint2 = new PRatioPoint(nextAvailableName(), pt2, pt2, pt3, new AMFraction(1,2));
+				Point midPoint2 = new PRatioPoint(nextAvailableName(), pt2, pt2, pt3, new Fraction(1,2));
 				this.thmProtocol.addGeoConstruction(midPoint2);
-				Point aux2 = new TRatioPoint(nextAvailableName(), midPoint2, pt2, new AMNumber(1));
+				Point aux2 = new TRatioPoint(nextAvailableName(), midPoint2, pt2, new BasicNumber(1));
 				this.thmProtocol.addGeoConstruction(aux2);
 				
 				Point center = new AMIntersectionPoint(nextAvailableName(), midPoint1, aux1, midPoint2, aux2);
@@ -707,7 +707,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 				Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(pt1Label);
 				Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(pt2Label);
 				
-				Point pointOnCircle = new PRatioPoint(nextAvailableName(), pt, pt1, pt2, new AMNumber(1));
+				Point pointOnCircle = new PRatioPoint(nextAvailableName(), pt, pt1, pt2, new BasicNumber(1));
 				
 				return new CircleWithCenterAndPoint(oArgs.get(0), pt, pointOnCircle);
 			}
@@ -739,7 +739,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 				LineThroughTwoPoints l = (LineThroughTwoPoints)geoObj;
 				Point pt1 = l.getPoints().get(0); 
 				Point pt2 = l.getPoints().get(1); 
-				Point pointOnCircle = new PRatioPoint(nextAvailableName(), pt, pt1, pt2, new AMNumber(1));
+				Point pointOnCircle = new PRatioPoint(nextAvailableName(), pt, pt1, pt2, new BasicNumber(1));
 				
 				return new CircleWithCenterAndPoint(oArgs.get(0), pt, pointOnCircle);
 			}
@@ -1128,14 +1128,14 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			Point pt3 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
 			
-			Point midPoint1 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new AMFraction(1,2));
+			Point midPoint1 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new Fraction(1,2));
 			this.thmProtocol.addGeoConstruction(midPoint1);
-			Point midPoint2 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt3, new AMFraction(1,2));
+			Point midPoint2 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt3, new Fraction(1,2));
 			this.thmProtocol.addGeoConstruction(midPoint2);
 			
-			Point pointOnLine1 = new TRatioPoint(nextAvailableName(), midPoint1, pt1, new AMNumber(1));
+			Point pointOnLine1 = new TRatioPoint(nextAvailableName(), midPoint1, pt1, new BasicNumber(1));
 			this.thmProtocol.addGeoConstruction(pointOnLine1);
-			Point pointOnLine2 = new TRatioPoint(nextAvailableName(), midPoint2, pt1, new AMNumber(1));
+			Point pointOnLine2 = new TRatioPoint(nextAvailableName(), midPoint2, pt1, new BasicNumber(1));
 			this.thmProtocol.addGeoConstruction(pointOnLine2);
 			
 			return new AMIntersectionPoint(oArgs.get(0), midPoint1, pointOnLine1, midPoint2, pointOnLine2);
@@ -1175,14 +1175,14 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
 			Point pt3 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(2));
 			
-			Point midPoint1 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new AMFraction(1,2));
+			Point midPoint1 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new Fraction(1,2));
 			this.thmProtocol.addGeoConstruction(midPoint1);
-			Point midPoint2 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt3, new AMFraction(1,2));
+			Point midPoint2 = new PRatioPoint(nextAvailableName(), pt1, pt1, pt3, new Fraction(1,2));
 			this.thmProtocol.addGeoConstruction(midPoint2);
 			
-			Point pointOnLine1 = new TRatioPoint(nextAvailableName(), midPoint1, pt1, new AMNumber(1));
+			Point pointOnLine1 = new TRatioPoint(nextAvailableName(), midPoint1, pt1, new BasicNumber(1));
 			this.thmProtocol.addGeoConstruction(pointOnLine1);
-			Point pointOnLine2 = new TRatioPoint(nextAvailableName(), midPoint2, pt1, new AMNumber(1));
+			Point pointOnLine2 = new TRatioPoint(nextAvailableName(), midPoint2, pt1, new BasicNumber(1));
 			this.thmProtocol.addGeoConstruction(pointOnLine2);
 			
 			return new AMIntersectionPoint(oArgs.get(0), midPoint1, pointOnLine1, midPoint2, pointOnLine2);
@@ -1216,7 +1216,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			ArrayList<String> oArgs = ggCmd.getOutputArgs();
 			Point pt1 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(0));
 			Point pt2 = (Point)this.thmProtocol.getConstructionMap().get(iArgs.get(1));
-			Point midPoint = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new AMFraction(1,2));
+			Point midPoint = new PRatioPoint(nextAvailableName(), pt1, pt1, pt2, new Fraction(1,2));
 			this.thmProtocol.addGeoConstruction(midPoint);
 			return new CircleWithCenterAndPoint(oArgs.get(0), midPoint, pt2);
 		} catch (ClassCastException ex) {

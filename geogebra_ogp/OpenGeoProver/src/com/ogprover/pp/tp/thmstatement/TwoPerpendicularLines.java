@@ -8,11 +8,10 @@ import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.pp.tp.auxiliary.AMDifference;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Line;
 import com.ogprover.pp.tp.geoconstruction.LineThroughTwoPoints;
@@ -240,11 +239,11 @@ public class TwoPerpendicularLines extends PositionThmStatement {
 		Point c = secondLine.getPoints().get(0);
 		Point d = secondLine.getPoints().get(1);
 		
-		AMExpression areaOfABC = new AMPythagorasDifference(a, c, d);
-		AMExpression areaOfABD = new AMPythagorasDifference(b, c, d);
+		AMExpression areaOfABC = new PythagorasDifference(a, c, d);
+		AMExpression areaOfABD = new PythagorasDifference(b, c, d);
 		
 		Vector<AMExpression> statements = new Vector<AMExpression>();
-		statements.add(new AMDifference(areaOfABC, areaOfABD));
+		statements.add(new Difference(areaOfABC, areaOfABD));
 		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

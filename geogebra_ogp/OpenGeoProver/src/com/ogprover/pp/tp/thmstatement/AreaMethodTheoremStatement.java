@@ -2,9 +2,11 @@
  * DISCLAIMER PLACEHOLDER 
  */
 
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.thmstatement;
 
 import java.util.Vector;
+
+import com.ogprover.pp.tp.expressions.AMExpression;
 
 
 /**

@@ -6,7 +6,7 @@ package com.ogprover.pp.tp.geoconstruction;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.polynomials.UXVariable;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
+import com.ogprover.pp.tp.expressions.AMExpression;
 
 
 

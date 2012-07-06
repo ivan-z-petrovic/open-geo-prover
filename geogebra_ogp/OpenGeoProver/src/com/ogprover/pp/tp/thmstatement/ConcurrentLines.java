@@ -11,14 +11,13 @@ import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.pp.tp.auxiliary.AMAreaOfTriangle;
-import com.ogprover.pp.tp.auxiliary.AMDifference;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMFraction;
-import com.ogprover.pp.tp.auxiliary.AMProduct;
-import com.ogprover.pp.tp.auxiliary.AMSum;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.Fraction;
+import com.ogprover.pp.tp.expressions.Product;
+import com.ogprover.pp.tp.expressions.Sum;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.IntersectionPoint;
 import com.ogprover.pp.tp.geoconstruction.Line;
@@ -343,28 +342,28 @@ public class ConcurrentLines extends PositionThmStatement {
 			 *   us a complicated formula, which can be checked.
 			 * We have simplified the final formula by P_ABA. 
 			 */
-			AMExpression saef = new AMAreaOfTriangle(a, e, f);
-			AMExpression sbfe = new AMAreaOfTriangle(b, f, e);
-			AMExpression saeb = new AMAreaOfTriangle(a, e, b);
-			AMExpression sabf = new AMAreaOfTriangle(a, b, f);
-			AMExpression f1 = new AMFraction(saef, new AMSum(saeb, sabf));
-			AMExpression f2 = new AMFraction(sbfe, new AMSum(saeb, sabf));
+			AMExpression saef = new AreaOfTriangle(a, e, f);
+			AMExpression sbfe = new AreaOfTriangle(b, f, e);
+			AMExpression saeb = new AreaOfTriangle(a, e, b);
+			AMExpression sabf = new AreaOfTriangle(a, b, f);
+			AMExpression f1 = new Fraction(saef, new Sum(saeb, sabf));
+			AMExpression f2 = new Fraction(sbfe, new Sum(saeb, sabf));
 			
-			AMExpression sacd = new AMAreaOfTriangle(a, c, d);
-			AMExpression sbdc = new AMAreaOfTriangle(b, d, c);
-			AMExpression sacb = new AMAreaOfTriangle(a, c, b);
-			AMExpression sabd = new AMAreaOfTriangle(a, b, d);
-			AMExpression g1 = new AMFraction(sacd, new AMSum(sacb, sabd));
-			AMExpression g2 = new AMFraction(sbdc, new AMSum(sacb, sabd));
+			AMExpression sacd = new AreaOfTriangle(a, c, d);
+			AMExpression sbdc = new AreaOfTriangle(b, d, c);
+			AMExpression sacb = new AreaOfTriangle(a, c, b);
+			AMExpression sabd = new AreaOfTriangle(a, b, d);
+			AMExpression g1 = new Fraction(sacd, new Sum(sacb, sabd));
+			AMExpression g2 = new Fraction(sbdc, new Sum(sacb, sabd));
 			
-			AMExpression pibi = new AMDifference(g2, new AMProduct(g1, g2));
-			AMExpression piai = new AMDifference(g1, new AMProduct(g1, g2));
+			AMExpression pibi = new Difference(g2, new Product(g1, g2));
+			AMExpression piai = new Difference(g1, new Product(g1, g2));
 			
-			AMExpression term1 = new AMProduct(f1, pibi);
-			AMExpression term2 = new AMProduct(f2, piai);
-			AMExpression term3 = new AMProduct(f1, f2);
+			AMExpression term1 = new Product(f1, pibi);
+			AMExpression term2 = new Product(f2, piai);
+			AMExpression term3 = new Product(f1, f2);
 			
-			statements.add(new AMDifference(new AMSum(term1, term2), term3));
+			statements.add(new Difference(new Sum(term1, term2), term3));
 		}
 		
 	return new AreaMethodTheoremStatement(getStatementDesc(), statements);

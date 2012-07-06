@@ -1,18 +1,20 @@
 /* 
  * DISCLAIMER PLACEHOLDER 
  */
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.expressions;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.ogprover.main.OpenGeoProver;
+import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.AMFootPoint;
 import com.ogprover.pp.tp.geoconstruction.AMIntersectionPoint;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.PRatioPoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoconstruction.TRatioPoint;
+import com.ogprover.pp.tp.thmstatement.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.thmstatement.CollinearPoints;
 import com.ogprover.pp.tp.thmstatement.ThmStatement;
 import com.ogprover.thmprover.AreaMethodProver;
@@ -28,7 +30,7 @@ import com.ogprover.thmprover.TheoremProver;
  * @version 1.00
  * @author Damien Desfontaines
  */
-public class AMRatio extends AMExpression {
+public class RatioOfCollinearSegments extends AMExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -69,7 +71,7 @@ public class AMRatio extends AMExpression {
 	
 	
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#getPoints()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#getPoints()
 	 */
 	public HashSet<Point> getPoints() {
 		HashSet<Point> points = new HashSet<Point>();
@@ -92,7 +94,7 @@ public class AMRatio extends AMExpression {
 	 * @param c		Point
 	 * @param d		Point
 	 */
-	public AMRatio(Point a, Point b, Point c, Point d) {
+	public RatioOfCollinearSegments(Point a, Point b, Point c, Point d) {
 		this.a = a;
 		this.b = b;
 		this.c = c;
@@ -106,7 +108,7 @@ public class AMRatio extends AMExpression {
 	 * ======================================================================
 	 */
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#toString()
 	 */
 	@Override
 	public String print() {
@@ -121,9 +123,9 @@ public class AMRatio extends AMExpression {
 	
 	@Override
 	public boolean equals(Object expr) {
-		if (!(expr instanceof AMRatio))
+		if (!(expr instanceof RatioOfCollinearSegments))
 			return false;
-		AMRatio ratio = (AMRatio)expr;
+		RatioOfCollinearSegments ratio = (RatioOfCollinearSegments)expr;
 		return (a.equals(ratio.getA()) && b.equals(ratio.getB()) && c.equals(ratio.getC()) && d.equals(ratio.getD()));
 	}
 	
@@ -147,22 +149,22 @@ public class AMRatio extends AMExpression {
 			if (c.compare(d)) {
 				return this;
 			}
-			return new AMAdditiveInverse(new AMRatio(a,b,d,c));
+			return new AdditiveInverse(new RatioOfCollinearSegments(a,b,d,c));
 		}
 		if (c.compare(d)) {
-			return new AMAdditiveInverse(new AMRatio(b,a,c,d));
+			return new AdditiveInverse(new RatioOfCollinearSegments(b,a,c,d));
 		}
-		return new AMRatio(b,a,d,c);
+		return new RatioOfCollinearSegments(b,a,d,c);
 	}
 	
 	@Override
 	public AMExpression simplifyInOneStep() {
 		if (a.equals(b))
-			return new AMNumber(0); // AA/CD -> 0
+			return new BasicNumber(0); // AA/CD -> 0
 		if (a.equals(c) && b.equals(d))
-			return new AMNumber(1);
+			return new BasicNumber(1);
 		if (a.equals(d) && b.equals(c))
-			return new AMNumber(-1);
+			return new BasicNumber(-1);
 		return this;
 	}
 	
@@ -172,19 +174,19 @@ public class AMRatio extends AMExpression {
 		if (!(a.equals(pt) || b.equals(pt) || c.equals(pt) || d.equals(pt)))
 			return this; // ab/cd -> ab/cd
 		if (a.equals(b))
-			return new AMNumber(0); // aa/cd -> 0
+			return new BasicNumber(0); // aa/cd -> 0
 		if (b.equals(pt) && b.equals(c))
-			return (new AMAdditiveInverse(new AMRatio(a, b, d, c))).eliminate(pt, prover); // ay/yd -> -ay/dy
+			return (new AdditiveInverse(new RatioOfCollinearSegments(a, b, d, c))).eliminate(pt, prover); // ay/yd -> -ay/dy
 		if (a.equals(pt) && a.equals(d))
-			return (new AMAdditiveInverse(new AMRatio(b, a, c, d))).eliminate(pt, prover); // ya/cy -> -ay/cy
+			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, c, d))).eliminate(pt, prover); // ya/cy -> -ay/cy
 		if (a.equals(pt) && a.equals(c))
-			return (new AMAdditiveInverse(new AMRatio(b, a, d, c))).eliminate(pt, prover); // ya/yd -> ay/dy
+			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, d, c))).eliminate(pt, prover); // ya/yd -> ay/dy
 		if (a.equals(pt))
-			return (new AMAdditiveInverse(new AMRatio(b, a, c, d))).eliminate(pt, prover); // ya/cd -> -ay/cd
+			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, c, d))).eliminate(pt, prover); // ya/cd -> -ay/cd
 		if (d.equals(pt))
-			return (new AMFraction(new AMNumber(1), new AMRatio(c, d, a, b))).eliminate(pt, prover); // ab/cy -> 1/(cy/ab)
+			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(c, d, a, b))).eliminate(pt, prover); // ab/cy -> 1/(cy/ab)
 		if (c.equals(pt))
-			return (new AMFraction(new AMNumber(1), new AMRatio(c, d, b, a))).eliminate(pt, prover); // ab/yd -> 1/(yd/ba)
+			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(c, d, b, a))).eliminate(pt, prover); // ab/yd -> 1/(yd/ba)
 		/*
 		 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf for an explanation of the formulas above
 		 */
@@ -204,14 +206,14 @@ public class AMRatio extends AMExpression {
 				AreaMethodProver verifier = new AreaMethodProver(areaMethodStatement, prover.getConstructions(), prover.getNDGConditions());
 				int retCode = verifier.prove();
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_TRUE) { // a, u and v are collinear
-					AMExpression sapq = new AMAreaOfTriangle(a, p, q);
-					AMExpression scpq = new AMAreaOfTriangle(c, p, q);
-					return new AMFraction(sapq, scpq);
+					AMExpression sapq = new AreaOfTriangle(a, p, q);
+					AMExpression scpq = new AreaOfTriangle(c, p, q);
+					return new Fraction(sapq, scpq);
 				}
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_FALSE) { // a, u and v are not collinear
-					AMExpression sauv = new AMAreaOfTriangle(a, u, v);
-					AMExpression scuv = new AMAreaOfTriangle(c, u, v);
-					return new AMFraction(sauv, scuv);
+					AMExpression sauv = new AreaOfTriangle(a, u, v);
+					AMExpression scuv = new AreaOfTriangle(c, u, v);
+					return new Fraction(sauv, scuv);
 				}
 				// If the prover crashed
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
@@ -231,29 +233,29 @@ public class AMRatio extends AMExpression {
 				AreaMethodProver verifier = new AreaMethodProver(areaMethodStatement, prover.getConstructions(), prover.getNDGConditions());
 				int retCode = verifier.prove();
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_TRUE) { // a, u and v are collinear
-					AMExpression ppuv = new AMPythagorasDifference(p, u, v);
-					AMExpression ppcv = new AMPythagorasDifference(p, c, v);
-					AMExpression pacv = new AMPythagorasDifference(a, c, v);
-					AMExpression ppcav = new AMDifference(ppcv, pacv);
-					AMExpression ppvu = new AMPythagorasDifference(p, v, u);
-					AMExpression ppcu = new AMPythagorasDifference(p, c, u);
-					AMExpression pacu = new AMPythagorasDifference(a, c, u);
-					AMExpression ppcau = new AMDifference(ppcu, pacu);
-					AMExpression numerator = new AMSum(new AMProduct(ppuv, ppcav), new AMProduct(ppvu, ppcau));
+					AMExpression ppuv = new PythagorasDifference(p, u, v);
+					AMExpression ppcv = new PythagorasDifference(p, c, v);
+					AMExpression pacv = new PythagorasDifference(a, c, v);
+					AMExpression ppcav = new Difference(ppcv, pacv);
+					AMExpression ppvu = new PythagorasDifference(p, v, u);
+					AMExpression ppcu = new PythagorasDifference(p, c, u);
+					AMExpression pacu = new PythagorasDifference(a, c, u);
+					AMExpression ppcau = new Difference(ppcu, pacu);
+					AMExpression numerator = new Sum(new Product(ppuv, ppcav), new Product(ppvu, ppcau));
 					
-					AMExpression pcvc = new AMPythagorasDifference(c, v, c);
-					AMExpression term1 = new AMProduct(ppuv, pcvc);
-					AMExpression pcuc = new AMPythagorasDifference(c, u, c);
-					AMExpression term2 = new AMProduct(ppvu, pcuc);
-					AMExpression term3 = new AMProduct(ppuv, ppvu);
-					AMExpression denominator = new AMSum(term1, new AMSum(term2, term3));
+					AMExpression pcvc = new PythagorasDifference(c, v, c);
+					AMExpression term1 = new Product(ppuv, pcvc);
+					AMExpression pcuc = new PythagorasDifference(c, u, c);
+					AMExpression term2 = new Product(ppvu, pcuc);
+					AMExpression term3 = new Product(ppuv, ppvu);
+					AMExpression denominator = new Sum(term1, new Sum(term2, term3));
 					
-					return new AMFraction(numerator, denominator);
+					return new Fraction(numerator, denominator);
 				}
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_FALSE) { // a, u and v are not collinear
-					AMExpression sauv = new AMAreaOfTriangle(a, u, v);
-					AMExpression scuv = new AMAreaOfTriangle(c, u, v);
-					return new AMFraction(sauv, scuv);
+					AMExpression sauv = new AreaOfTriangle(a, u, v);
+					AMExpression scuv = new AreaOfTriangle(c, u, v);
+					return new Fraction(sauv, scuv);
 				}
 				// If the prover crashed
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
@@ -274,16 +276,16 @@ public class AMRatio extends AMExpression {
 				AreaMethodProver verifier = new AreaMethodProver(areaMethodStatement, prover.getConstructions(), prover.getNDGConditions());
 				int retCode = verifier.prove();
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_TRUE) { // a, w and y are collinear
-					AMExpression ratioarpq = new AMRatio(a, r, p, q);
-					AMExpression ratiocrpq = new AMRatio(c, r, p, q);
-					return new AMFraction(new AMSum(ratioarpq, coeff), new AMSum(ratiocrpq, coeff));
+					AMExpression ratioarpq = new RatioOfCollinearSegments(a, r, p, q);
+					AMExpression ratiocrpq = new RatioOfCollinearSegments(c, r, p, q);
+					return new Fraction(new Sum(ratioarpq, coeff), new Sum(ratiocrpq, coeff));
 				}
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_FALSE) { // a, w and y are not collinear
-					AMExpression sapr = new AMAreaOfTriangle(a, p, r); 
-					AMExpression sarq = new AMAreaOfTriangle(a, r, q); 
-					AMExpression scpr = new AMAreaOfTriangle(c, p, r); 
-					AMExpression scrq = new AMAreaOfTriangle(c, r, q); 
-					return new AMFraction(new AMSum(sapr, sarq), new AMSum(scpr, scrq));
+					AMExpression sapr = new AreaOfTriangle(a, p, r); 
+					AMExpression sarq = new AreaOfTriangle(a, r, q); 
+					AMExpression scpr = new AreaOfTriangle(c, p, r); 
+					AMExpression scrq = new AreaOfTriangle(c, r, q); 
+					return new Fraction(new Sum(sapr, sarq), new Sum(scpr, scrq));
 				}
 				// If the prover crashed
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
@@ -302,18 +304,18 @@ public class AMRatio extends AMExpression {
 				AreaMethodProver verifier = new AreaMethodProver(areaMethodStatement, prover.getConstructions(), prover.getNDGConditions());
 				int retCode = verifier.prove();
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_TRUE) { // a, p and y are collinear
-					AMExpression coeff = new AMFraction(r, new AMNumber(4));
-					AMExpression sapq = new AMAreaOfTriangle(a, p, q);
-					AMExpression ppqp = new AMPythagorasDifference(p, q, p);
-					AMExpression numerator = new AMDifference(sapq, new AMProduct(coeff, ppqp));
-					AMExpression scpq = new AMAreaOfTriangle(c, p, q);
-					AMExpression denominator = new AMDifference(scpq, new AMProduct(coeff, ppqp));
-					return new AMFraction(numerator, denominator);
+					AMExpression coeff = new Fraction(r, new BasicNumber(4));
+					AMExpression sapq = new AreaOfTriangle(a, p, q);
+					AMExpression ppqp = new PythagorasDifference(p, q, p);
+					AMExpression numerator = new Difference(sapq, new Product(coeff, ppqp));
+					AMExpression scpq = new AreaOfTriangle(c, p, q);
+					AMExpression denominator = new Difference(scpq, new Product(coeff, ppqp));
+					return new Fraction(numerator, denominator);
 				}
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_FALSE) { // a, p and y are not collinear
-					AMExpression papq = new AMPythagorasDifference(a, p, q);
-					AMExpression pcpq = new AMPythagorasDifference(a, p, q);
-					return new AMFraction(papq, pcpq);
+					AMExpression papq = new PythagorasDifference(a, p, q);
+					AMExpression pcpq = new PythagorasDifference(a, p, q);
+					return new Fraction(papq, pcpq);
 				}
 				// If the prover crashed
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
@@ -335,16 +337,16 @@ public class AMRatio extends AMExpression {
 				AreaMethodProver verifier = new AreaMethodProver(areaMethodStatement, prover.getConstructions(), prover.getNDGConditions());
 				int retCode = verifier.prove();
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_TRUE) { // a, u and v are collinear
-					AMExpression sapq = new AMAreaOfTriangle(a, p, q);
-					AMExpression scpd = new AMAreaOfTriangle(c, p, d);
-					AMExpression scdq = new AMAreaOfTriangle(c, d, q);
-					return new AMFraction(sapq, new AMSum(scpd, scdq));
+					AMExpression sapq = new AreaOfTriangle(a, p, q);
+					AMExpression scpd = new AreaOfTriangle(c, p, d);
+					AMExpression scdq = new AreaOfTriangle(c, d, q);
+					return new Fraction(sapq, new Sum(scpd, scdq));
 				}
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_FALSE) { // a, u and v are not collinear
-					AMExpression sauv = new AMAreaOfTriangle(a, u, v);
-					AMExpression scud = new AMAreaOfTriangle(c, u, d);
-					AMExpression scdv = new AMAreaOfTriangle(c, d, v);
-					return new AMFraction(sauv, new AMSum(scud, scdv));
+					AMExpression sauv = new AreaOfTriangle(a, u, v);
+					AMExpression scud = new AreaOfTriangle(c, u, d);
+					AMExpression scdv = new AreaOfTriangle(c, d, v);
+					return new Fraction(sauv, new Sum(scud, scdv));
 				}
 				// If the prover crashed
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
@@ -364,16 +366,16 @@ public class AMRatio extends AMExpression {
 				AreaMethodProver verifier = new AreaMethodProver(areaMethodStatement, prover.getConstructions(), prover.getNDGConditions());
 				int retCode = verifier.prove();
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_TRUE) { // a, u and v are collinear
-					AMExpression ppcd = new AMPythagorasDifference(p, c, d);
-					AMExpression pacd = new AMPythagorasDifference(a, c, d);
-					AMExpression pcdc = new AMPythagorasDifference(c, d, c);
-					return new AMFraction(new AMDifference(ppcd, pacd), pcdc);
+					AMExpression ppcd = new PythagorasDifference(p, c, d);
+					AMExpression pacd = new PythagorasDifference(a, c, d);
+					AMExpression pcdc = new PythagorasDifference(c, d, c);
+					return new Fraction(new Difference(ppcd, pacd), pcdc);
 				}
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_FALSE) { // a, u and v are not collinear
-					AMExpression sauv = new AMAreaOfTriangle(a, u, v);
-					AMExpression scud = new AMAreaOfTriangle(c, u, d);
-					AMExpression scdv = new AMAreaOfTriangle(c, d, v);
-					return new AMFraction(sauv, new AMSum(scud, scdv));
+					AMExpression sauv = new AreaOfTriangle(a, u, v);
+					AMExpression scud = new AreaOfTriangle(c, u, d);
+					AMExpression scdv = new AreaOfTriangle(c, d, v);
+					return new Fraction(sauv, new Sum(scud, scdv));
 				}
 				// If the prover crashed
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
@@ -394,16 +396,16 @@ public class AMRatio extends AMExpression {
 				AreaMethodProver verifier = new AreaMethodProver(areaMethodStatement, prover.getConstructions(), prover.getNDGConditions());
 				int retCode = verifier.prove();
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_TRUE) { // a, w and y are collinear
-					AMExpression ratioarpq = new AMRatio(a, r, p, q);
-					AMExpression ratiocdpq = new AMRatio(c, d, p, q);
-					return new AMFraction(new AMSum(ratioarpq, coeff), ratiocdpq);
+					AMExpression ratioarpq = new RatioOfCollinearSegments(a, r, p, q);
+					AMExpression ratiocdpq = new RatioOfCollinearSegments(c, d, p, q);
+					return new Fraction(new Sum(ratioarpq, coeff), ratiocdpq);
 				}
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_FALSE) { // a, w and y are not collinear
-					AMExpression sapr = new AMAreaOfTriangle(a, p, r);
-					AMExpression sarq = new AMAreaOfTriangle(a, r, q);
-					AMExpression scpd = new AMAreaOfTriangle(c, p, d);
-					AMExpression scdq = new AMAreaOfTriangle(c, d, q);
-					return new AMFraction(new AMSum(sapr, sarq), new AMSum(scpd, scdq));
+					AMExpression sapr = new AreaOfTriangle(a, p, r);
+					AMExpression sarq = new AreaOfTriangle(a, r, q);
+					AMExpression scpd = new AreaOfTriangle(c, p, d);
+					AMExpression scdq = new AreaOfTriangle(c, d, q);
+					return new Fraction(new Sum(sapr, sarq), new Sum(scpd, scdq));
 				}
 				// If the prover crashed
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
@@ -423,20 +425,20 @@ public class AMRatio extends AMExpression {
 				AreaMethodProver verifier = new AreaMethodProver(areaMethodStatement, prover.getConstructions(), prover.getNDGConditions());
 				int retCode = verifier.prove();
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_TRUE) { // a, p and y are collinear
-					AMExpression coeff = new AMFraction(r, new AMNumber(4));
-					AMExpression sapq = new AMAreaOfTriangle(a, p, q);
-					AMExpression ppqp = new AMPythagorasDifference(p, q, p);
-					AMExpression scpd = new AMAreaOfTriangle(c, p, d);
-					AMExpression scdq = new AMAreaOfTriangle(c, d, q);
-					AMExpression numerator = new AMDifference(sapq, new AMProduct(coeff, ppqp));
-					AMExpression denominator = new AMSum(scpd, scdq);
-					return new AMFraction(numerator, denominator);
+					AMExpression coeff = new Fraction(r, new BasicNumber(4));
+					AMExpression sapq = new AreaOfTriangle(a, p, q);
+					AMExpression ppqp = new PythagorasDifference(p, q, p);
+					AMExpression scpd = new AreaOfTriangle(c, p, d);
+					AMExpression scdq = new AreaOfTriangle(c, d, q);
+					AMExpression numerator = new Difference(sapq, new Product(coeff, ppqp));
+					AMExpression denominator = new Sum(scpd, scdq);
+					return new Fraction(numerator, denominator);
 				}
 				if (retCode == TheoremProver.THEO_PROVE_RET_CODE_FALSE) { // a, p and y are not collinear
-					AMExpression papq = new AMPythagorasDifference(a, p, q);
-					AMExpression pcpq = new AMPythagorasDifference(c, p, q);
-					AMExpression pdpq = new AMPythagorasDifference(d, p, q);
-					return new AMFraction(papq, new AMDifference(pcpq, pdpq));
+					AMExpression papq = new PythagorasDifference(a, p, q);
+					AMExpression pcpq = new PythagorasDifference(c, p, q);
+					AMExpression pdpq = new PythagorasDifference(d, p, q);
+					return new Fraction(papq, new Difference(pcpq, pdpq));
 				}
 				// If the prover crashed
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
@@ -469,32 +471,32 @@ public class AMRatio extends AMExpression {
 		AreaMethodProver verifier = new AreaMethodProver(areaMethodStatement, prover.getConstructions(), prover.getNDGConditions());
 		int retCode = verifier.prove();
 		if (retCode == TheoremProver.THEO_PROVE_RET_CODE_TRUE) { // a, c and d are collinear
-			AMExpression xcya = new AMProduct(getX(c), getY(a));
-			AMExpression xcyb = new AMProduct(getX(c), getY(b));
-			AMExpression yaxb = new AMProduct(getY(a), getX(b));
-			AMExpression ybxa = new AMProduct(getY(b), getX(a));
-			AMExpression ycxa = new AMProduct(getY(c), getX(a));
-			AMExpression ycxb = new AMProduct(getY(c), getX(b));
-			AMExpression xcyd = new AMProduct(getX(c), getY(d));
-			AMExpression yaxd = new AMProduct(getY(a), getX(d));
-			AMExpression ycxd = new AMProduct(getY(c), getX(d));
-			AMExpression xayd = new AMProduct(getX(a), getY(d));
-			AMExpression numeratorPart1 = new AMDifference(xcya, new AMSum(xcyb, yaxb));
-			AMExpression numeratorPart2 = new AMSum(new AMDifference(ybxa, ycxa), ycxb);
-			AMExpression numerator = new AMSum(numeratorPart1, numeratorPart2);
-			AMExpression denominatorPart1 = new AMDifference(xcya, new AMSum(xcyd, yaxd));
-			AMExpression denominatorPart2 = new AMSum(ycxd, new AMDifference(xayd, ycxa));
-			AMExpression denominator = new AMSum(denominatorPart1, denominatorPart2);
-			return new AMFraction(numerator, denominator);
+			AMExpression xcya = new Product(getX(c), getY(a));
+			AMExpression xcyb = new Product(getX(c), getY(b));
+			AMExpression yaxb = new Product(getY(a), getX(b));
+			AMExpression ybxa = new Product(getY(b), getX(a));
+			AMExpression ycxa = new Product(getY(c), getX(a));
+			AMExpression ycxb = new Product(getY(c), getX(b));
+			AMExpression xcyd = new Product(getX(c), getY(d));
+			AMExpression yaxd = new Product(getY(a), getX(d));
+			AMExpression ycxd = new Product(getY(c), getX(d));
+			AMExpression xayd = new Product(getX(a), getY(d));
+			AMExpression numeratorPart1 = new Difference(xcya, new Sum(xcyb, yaxb));
+			AMExpression numeratorPart2 = new Sum(new Difference(ybxa, ycxa), ycxb);
+			AMExpression numerator = new Sum(numeratorPart1, numeratorPart2);
+			AMExpression denominatorPart1 = new Difference(xcya, new Sum(xcyd, yaxd));
+			AMExpression denominatorPart2 = new Sum(ycxd, new Difference(xayd, ycxa));
+			AMExpression denominator = new Sum(denominatorPart1, denominatorPart2);
+			return new Fraction(numerator, denominator);
 		}
 		if (retCode == TheoremProver.THEO_PROVE_RET_CODE_FALSE) { // a, p and y are not collinear
-			AMExpression xbya = new AMProduct(getX(b), getY(a));
-			AMExpression xayb = new AMProduct(getX(a), getY(b));
-			AMExpression xdyc = new AMProduct(getX(d), getY(c));
-			AMExpression xcyd = new AMProduct(getX(c), getY(d));
-			AMExpression numerator = new AMDifference(xbya, xayb);
-			AMExpression denominator = new AMDifference(xdyc, xcyd);
-			return new AMFraction(numerator, denominator);
+			AMExpression xbya = new Product(getX(b), getY(a));
+			AMExpression xayb = new Product(getX(a), getY(b));
+			AMExpression xdyc = new Product(getX(d), getY(c));
+			AMExpression xcyd = new Product(getX(c), getY(d));
+			AMExpression numerator = new Difference(xbya, xayb);
+			AMExpression denominator = new Difference(xdyc, xcyd);
+			return new Fraction(numerator, denominator);
 		}
 		// If the prover crashed
 		throw new UnknownStatementException("Reducing to independant variables of : " + this.print());

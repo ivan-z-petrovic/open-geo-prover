@@ -7,7 +7,6 @@ package com.ogprover.pp.tp.thmstatement;
 import java.util.Vector;
 
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoobject.Segment;
 

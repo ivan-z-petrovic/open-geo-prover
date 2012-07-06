@@ -6,7 +6,7 @@ package com.ogprover.pp.tp.ndgcondition;
 
 import java.util.Vector;
 
-import com.ogprover.pp.tp.auxiliary.AMExpression;
+import com.ogprover.pp.tp.expressions.AMExpression;
 import com.ogprover.pp.tp.geoconstruction.Point;
 
 /**

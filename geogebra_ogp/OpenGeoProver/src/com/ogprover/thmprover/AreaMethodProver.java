@@ -9,16 +9,16 @@ import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMFraction;
-import com.ogprover.pp.tp.auxiliary.AMNumber;
-import com.ogprover.pp.tp.auxiliary.AMProduct;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.Fraction;
+import com.ogprover.pp.tp.expressions.BasicNumber;
+import com.ogprover.pp.tp.expressions.Product;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.ndgcondition.SimpleNDGCondition;
+import com.ogprover.pp.tp.thmstatement.AreaMethodTheoremStatement;
 import com.ogprover.utilities.logger.ILogger;
 
 /**
@@ -199,9 +199,9 @@ public class AreaMethodProver implements TheoremProver {
 				current = current.simplify();
 				debug("Reducing into a single fraction of : ", current);
 				current = current.reduceToSingleFraction();
-				if (current instanceof AMFraction) {
+				if (current instanceof Fraction) {
 					debug("Removing of the denominator of : ", current);
-					current = ((AMFraction) current).getNumerator();
+					current = ((Fraction) current).getNumerator();
 				}
 				debug("Last simplification of : ", current);
 				current = current.simplify();
@@ -209,14 +209,14 @@ public class AreaMethodProver implements TheoremProver {
 			}
 			debug("Reducing into a single fraction of : ", current);
 			current = current.reduceToSingleFraction();
-			if (current instanceof AMFraction) {
+			if (current instanceof Fraction) {
 				debug("Removing of the denominator of : ", current);
-				current = ((AMFraction) current).getNumerator();
+				current = ((Fraction) current).getNumerator();
 			}
 			debug("Last simplification of : ", current);
 			current = current.simplify();
 			debug("Reducing into a right associative form of : ", current);
-			current = (new AMProduct(new AMNumber(1), current)).reduceToRightAssociativeForm();
+			current = (new Product(new BasicNumber(1), current)).reduceToRightAssociativeForm();
 			debug("Grouping of : ", current);
 			current = current.groupSumOfProducts();
 			debug("Simplification of : ", current);
@@ -237,14 +237,14 @@ public class AreaMethodProver implements TheoremProver {
 				current = current.simplify();
 				debug("Reducing into a single fraction of : ", current);
 				current = current.reduceToSingleFraction();
-				if (current instanceof AMFraction) {
+				if (current instanceof Fraction) {
 					debug("Removing of the denominator of : ", current);
-					current = ((AMFraction) current).getNumerator();
+					current = ((Fraction) current).getNumerator();
 				}
 				debug("Simplification of : ", current);
 				current = current.simplify();
 				debug("Reducing into a right associative form of : ", current);
-				current = (new AMProduct(new AMNumber(1), current)).reduceToRightAssociativeForm();
+				current = (new Product(new BasicNumber(1), current)).reduceToRightAssociativeForm();
 				debug("Grouping of : ", current);
 				current = current.groupSumOfProducts();
 				debug("Simplification of : ", current);;

@@ -9,7 +9,6 @@ import java.util.Vector;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoobject.Segment;
