@@ -8,12 +8,11 @@ import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.pp.tp.auxiliary.AMAreaOfTriangle;
-import com.ogprover.pp.tp.auxiliary.AMDifference;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
 import com.ogprover.pp.tp.geoconstruction.Circle;
 import com.ogprover.pp.tp.geoconstruction.CircleWithCenterAndPoint;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
@@ -127,7 +126,7 @@ public class PointOnSetOfPoints extends PositionThmStatement {
 			Point a = ((LineThroughTwoPoints)set).getPoints().get(0);
 			Point b = ((LineThroughTwoPoints)set).getPoints().get(1);
 			
-			AMExpression areaOfABP = new AMAreaOfTriangle(a, b, p);
+			AMExpression areaOfABP = new AreaOfTriangle(a, b, p);
 			
 			Vector<AMExpression> statements = new Vector<AMExpression>();
 			statements.add(areaOfABP);
@@ -138,9 +137,9 @@ public class PointOnSetOfPoints extends PositionThmStatement {
 			Point center = ((CircleWithCenterAndPoint)set).getCenter();
 			Point pointOnCircle = ((CircleWithCenterAndPoint)set).getPoints().get(0);
 			
-			AMExpression squareOfRadius = new AMPythagorasDifference(center, pointOnCircle, center);
-			AMExpression squareOfDistanceToP = new AMPythagorasDifference(center, p, center);
-			AMExpression difference = new AMDifference(squareOfDistanceToP, squareOfRadius);
+			AMExpression squareOfRadius = new PythagorasDifference(center, pointOnCircle, center);
+			AMExpression squareOfDistanceToP = new PythagorasDifference(center, p, center);
+			AMExpression difference = new Difference(squareOfDistanceToP, squareOfRadius);
 			
 			Vector<AMExpression> statements = new Vector<AMExpression>();
 			statements.add(difference);

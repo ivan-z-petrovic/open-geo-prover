@@ -1,23 +1,24 @@
 /* 
  * DISCLAIMER PLACEHOLDER 
  */
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.expressions;
 
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
 
 /**
  * <dl>
  * <dt><b>Class description:</b></dt>
- * <dd>Class for representing sum of two expressions.</dd>
+ * <dd>Class for representing the difference between two expressions.</dd>
  * </dl>
  * 
  * @version 1.00
  * @author Damien Desfontaines
  */
-public class AMSum extends AMExpression {
+public class Difference extends AMExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -36,7 +37,7 @@ public class AMSum extends AMExpression {
 	 * The two terms.
 	 */
 	protected AMExpression term1,term2;
-
+	
 	
 	/*
 	 * ======================================================================
@@ -51,7 +52,7 @@ public class AMSum extends AMExpression {
 	}
 	
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#getPoints()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#getPoints()
 	 */
 	public HashSet<Point> getPoints() {
 		HashSet<Point> points = new HashSet<Point>();
@@ -72,10 +73,11 @@ public class AMSum extends AMExpression {
 	 * @param term1 	Expression
 	 * @param term2 	Expression
 	 */
-	public AMSum(AMExpression term1, AMExpression term2) {
+	public Difference(AMExpression term1, AMExpression term2) {
 		this.term1 = term1;
 		this.term2 = term2;
 	}
+	
 	
 	/*
 	 * ======================================================================
@@ -83,14 +85,14 @@ public class AMSum extends AMExpression {
 	 * ======================================================================
 	 */
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#toString()
 	 */
 	@Override
 	public String print() {
 		StringBuilder s = new StringBuilder();
 		s.append("(");
 		s.append(term1.print());
-		s.append("+");
+		s.append("-");
 		s.append(term2.print());
 		s.append(")");
 		return s.toString();
@@ -98,10 +100,10 @@ public class AMSum extends AMExpression {
 	
 	@Override
 	public boolean equals(Object expr) {
-		if (!(expr instanceof AMSum))
+		if (!(expr instanceof Difference))
 			return false;
-		AMSum sum = (AMSum)expr;
-		return (term1.equals(sum.getTerm1()) && term2.equals(sum.getTerm2()));
+		Difference diff = (Difference)expr;
+		return (term1.equals(diff.getTerm1()) && term2.equals(diff.getTerm2()));
 	}
 	
 	
@@ -117,29 +119,29 @@ public class AMSum extends AMExpression {
 	
 	@Override
 	public AMExpression uniformize() {
-		return new AMSum(term1.uniformize(), term2.uniformize());
+		return new Difference(term1.uniformize(), term2.uniformize());
 	}
 	
 	@Override
 	public AMExpression simplifyInOneStep() {
 		AMExpression t1 = term1.simplifyInOneStep();
 		AMExpression t2 = term2.simplifyInOneStep();
-		if (t1.isZero())
-			return t2; // 0+a -> a
 		if (t2.isZero())
-			return t1; // a+0 -> a
-		if (t2 instanceof AMAdditiveInverse)
-			return new AMDifference(t1, ((AMAdditiveInverse)t2).getExpr()); // a+(-b) -> a-b
-		if (t1 instanceof AMAdditiveInverse)
-			return new AMDifference(t2, ((AMAdditiveInverse)t1).getExpr()); // (-a)+b -> b-a
-		if (t1 instanceof AMNumber && t2 instanceof AMNumber)
-				return new AMNumber(((AMNumber)t1).value() + ((AMNumber)t2).value()); // n+n' -> n+n'
-		return new AMSum(t1, t2);
+			return t1; // a-0 -> a
+		if (t1.isZero())
+			return new AdditiveInverse(t2); // 0-a -> -a
+		if (t1 instanceof BasicNumber && t2 instanceof BasicNumber)
+			return new BasicNumber(((BasicNumber)t1).value() - ((BasicNumber)t2).value()); // n-n' -> n-n'
+		if (t1.equals(t2))
+			return new BasicNumber(0); // a-a -> 0
+		if (t2 instanceof AdditiveInverse)
+			return new Sum(t1, ((AdditiveInverse) t2).expr); // a--b -> a+b
+		return new Difference(t1, t2);
 	}
 	
 	@Override
 	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
-		return new AMSum(term1.eliminate(pt, prover), term2.eliminate(pt, prover));
+		return new Difference(term1.eliminate(pt, prover), term2.eliminate(pt, prover));
 	}
 	
 	@Override
@@ -147,49 +149,42 @@ public class AMSum extends AMExpression {
 		AMExpression expr1 = term1.reduceToSingleFraction();
 		AMExpression expr2 = term2.reduceToSingleFraction();
 		
-		if (expr1 instanceof AMFraction) {
-			AMExpression num1 = ((AMFraction)expr1).getNumerator();
-			AMExpression den1 = ((AMFraction)expr1).getDenominator();
+		if (expr1 instanceof Fraction) {
+			AMExpression num1 = ((Fraction)expr1).getNumerator();
+			AMExpression den1 = ((Fraction)expr1).getDenominator();
 			
-			if (expr2 instanceof AMFraction) {
-				AMExpression num2 = ((AMFraction)expr2).getNumerator();
-				AMExpression den2 = ((AMFraction)expr2).getDenominator();
+			if (expr2 instanceof Fraction) {
+				AMExpression num2 = ((Fraction)expr2).getNumerator();
+				AMExpression den2 = ((Fraction)expr2).getDenominator();
 				if (den1.equals(den2)) {
-					return new AMFraction(new AMSum(num1, num2), den1);
+					return new Fraction(new Difference(num1, num2), den1);
 				}
-				AMExpression numerator = new AMSum(new AMProduct(num1, den2), new AMProduct(num2, den1));
-				AMExpression denominator = new AMProduct(den1, den2);
-				return new AMFraction(numerator, denominator);
+				AMExpression numerator = new Difference(new Product(num1, den2), new Product(num2, den1));
+				AMExpression denominator = new Product(den1, den2);
+				return new Fraction(numerator, denominator);
 			}
 			
-			return new AMFraction(new AMSum(num1, new AMProduct(expr2, den1)), den1);
+			return new Fraction(new Difference(num1, new Product(expr2, den1)), den1);
 		}
 		
-		if (expr2 instanceof AMFraction) {
-			AMExpression num2 = ((AMFraction)expr2).getNumerator();
-			AMExpression den2 = ((AMFraction)expr2).getDenominator();
-			return new AMFraction(new AMSum(new AMProduct(expr1, den2), num2), den2);
+		if (expr2 instanceof Fraction) {
+			AMExpression num2 = ((Fraction)expr2).getNumerator();
+			AMExpression den2 = ((Fraction)expr2).getDenominator();
+			return new Fraction(new Difference(new Product(expr1, den2), num2), den2);
 		}
 		
-		return new AMSum(expr1, expr2);
+		return new Difference(expr1, expr2);
 	}
-	
 	@Override
 	public AMExpression reduceToRightAssociativeFormInOneStep() {
 		AMExpression firstTerm = term1.reduceToRightAssociativeFormInOneStep();
-		//AMExpression c = term2.reduceToRightAssociativeFormInOneStep();
-		AMExpression c = term2;
-		if (firstTerm instanceof AMSum) {
-			AMExpression a = ((AMSum) firstTerm).getTerm1();
-			AMExpression b = ((AMSum) firstTerm).getTerm2();
-			return new AMSum (a, new AMSum(b, c));
-		}
-		return new AMSum(firstTerm, c.reduceToRightAssociativeFormInOneStep());
+		AMExpression secondTerm = term2.reduceToRightAssociativeFormInOneStep();
+		return new Sum(firstTerm, new Product(new BasicNumber(-1), secondTerm));
 	}
 	
 	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
-		return new AMSum(term1.toIndependantVariables(prover), term2.toIndependantVariables(prover));
+		return new Difference(term1.toIndependantVariables(prover), term2.toIndependantVariables(prover));
 	}
 	
 	@Override

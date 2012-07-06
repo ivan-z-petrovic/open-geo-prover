@@ -9,13 +9,12 @@ import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.pp.tp.auxiliary.AMAreaOfTriangle;
-import com.ogprover.pp.tp.auxiliary.AMDifference;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMProduct;
-import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.Product;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
 import com.ogprover.pp.tp.geoconstruction.Circle;
 import com.ogprover.pp.tp.geoconstruction.CircumscribedCircle;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
@@ -283,13 +282,13 @@ public class ConcyclicPoints extends PositionThmStatement {
 			Point c = (Point)pointList.get(i-1);
 			Point d = (Point)pointList.get(i);
 			
-			AMExpression scad = new AMAreaOfTriangle(c,a,d);
-			AMExpression scbd = new AMAreaOfTriangle(c,b,d);
-			AMExpression pcad = new AMPythagorasDifference(c,a,d);
-			AMExpression pcbd = new AMPythagorasDifference(c,b,d);
-			AMExpression product1 = new AMProduct(scad, pcbd);
-			AMExpression product2 = new AMProduct(scbd, pcad);
-			AMExpression difference = new AMDifference(product1, product2);
+			AMExpression scad = new AreaOfTriangle(c,a,d);
+			AMExpression scbd = new AreaOfTriangle(c,b,d);
+			AMExpression pcad = new PythagorasDifference(c,a,d);
+			AMExpression pcbd = new PythagorasDifference(c,b,d);
+			AMExpression product1 = new Product(scad, pcbd);
+			AMExpression product2 = new Product(scbd, pcad);
+			AMExpression difference = new Difference(product1, product2);
 			
 			statements.add(difference);
 		}

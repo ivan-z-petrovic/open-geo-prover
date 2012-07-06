@@ -8,9 +8,8 @@ import java.util.Vector;
 
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMNumber;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.BasicNumber;
 
 
 /**
@@ -100,7 +99,7 @@ public class True extends ElementaryThmStatement {
 	public AreaMethodTheoremStatement getAreaMethodStatement() {
 		// Same method as in getAlgebraicForm()
 		Vector<AMExpression> statements = new Vector<AMExpression>();
-		statements.add(new AMNumber(0));
+		statements.add(new BasicNumber(0));
 		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

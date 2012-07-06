@@ -10,7 +10,6 @@ import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.logger.ILogger;

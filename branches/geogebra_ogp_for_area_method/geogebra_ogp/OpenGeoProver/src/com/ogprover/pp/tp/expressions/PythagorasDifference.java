@@ -1,10 +1,11 @@
 /* 
  * DISCLAIMER PLACEHOLDER 
  */
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.expressions;
 
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.AMFootPoint;
 import com.ogprover.pp.tp.geoconstruction.AMIntersectionPoint;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
@@ -25,7 +26,7 @@ import com.ogprover.thmprover.AreaMethodProver;
  * @version 1.00
  * @author Damien Desfontaines
  */
-public class AMPythagorasDifference extends AMExpression {
+public class PythagorasDifference extends AMExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -62,7 +63,7 @@ public class AMPythagorasDifference extends AMExpression {
 	}
 	
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#getPoints()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#getPoints()
 	 */
 	public HashSet<Point> getPoints() {
 		HashSet<Point> points = new HashSet<Point>();
@@ -85,7 +86,7 @@ public class AMPythagorasDifference extends AMExpression {
 	 * @param b		Point
 	 * @param c		Point
 	 */
-	public AMPythagorasDifference(Point a, Point b, Point c) {
+	public PythagorasDifference(Point a, Point b, Point c) {
 		this.a = a;
 		this.b = b;
 		this.c = c;
@@ -98,7 +99,7 @@ public class AMPythagorasDifference extends AMExpression {
 	 * ======================================================================
 	 */
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#toString()
 	 */
 	@Override
 	public String print() {
@@ -112,9 +113,9 @@ public class AMPythagorasDifference extends AMExpression {
 	
 	@Override
 	public boolean equals(Object expr) {
-		if (!(expr instanceof AMPythagorasDifference))
+		if (!(expr instanceof PythagorasDifference))
 			return false;
-		AMPythagorasDifference diff = (AMPythagorasDifference)expr;
+		PythagorasDifference diff = (PythagorasDifference)expr;
 		return (a.equals(diff.getA()) && b.equals(diff.getB()) && c.equals(diff.getC()));
 	}
 	
@@ -135,10 +136,10 @@ public class AMPythagorasDifference extends AMExpression {
 	@Override
 	public AMExpression uniformize() {
 		if (c.compare(b) && b.compare(a)) {
-			return new AMPythagorasDifference(c, b, a);
+			return new PythagorasDifference(c, b, a);
 		}
 		if (c.equals(a) && b.compare(a)) {
-			return new AMPythagorasDifference(b, a, b);
+			return new PythagorasDifference(b, a, b);
 		}
 		return this;
 	}
@@ -146,7 +147,7 @@ public class AMPythagorasDifference extends AMExpression {
 	@Override
 	public AMExpression simplifyInOneStep() {
 		if (a.equals(b) || b.equals(c))
-			return new AMNumber(0);
+			return new BasicNumber(0);
 		return this;
 	}
 	
@@ -182,17 +183,17 @@ public class AMPythagorasDifference extends AMExpression {
 				Point p = ((AMIntersectionPoint)pt).getP();
 				Point q = ((AMIntersectionPoint)pt).getQ();
 				
-				AMExpression supq = new AMPythagorasDifference(u, p, q);
-				AMExpression gv = new AMPythagorasDifference(aa, bb, v);
-				AMExpression term1 = new AMProduct(supq, gv);
-				AMExpression svpq = new AMPythagorasDifference(v, p, q);
-				AMExpression gu = new AMPythagorasDifference(aa, bb, u);
-				AMExpression term2 = new AMProduct(svpq, gu);
-				AMExpression numerator = new AMDifference(term1, term2);
-				AMExpression supv = new AMPythagorasDifference(u, p, v);
-				AMExpression spvq = new AMPythagorasDifference(p, v, q);
-				AMExpression denominator = new AMSum(supv, spvq);
-				return new AMFraction(numerator, denominator);
+				AMExpression supq = new PythagorasDifference(u, p, q);
+				AMExpression gv = new PythagorasDifference(aa, bb, v);
+				AMExpression term1 = new Product(supq, gv);
+				AMExpression svpq = new PythagorasDifference(v, p, q);
+				AMExpression gu = new PythagorasDifference(aa, bb, u);
+				AMExpression term2 = new Product(svpq, gu);
+				AMExpression numerator = new Difference(term1, term2);
+				AMExpression supv = new PythagorasDifference(u, p, v);
+				AMExpression spvq = new PythagorasDifference(p, v, q);
+				AMExpression denominator = new Sum(supv, spvq);
+				return new Fraction(numerator, denominator);
 			}
 			
 			if (pt instanceof AMFootPoint) {
@@ -200,15 +201,15 @@ public class AMPythagorasDifference extends AMExpression {
 				Point u = ((AMFootPoint)pt).getU();
 				Point v = ((AMFootPoint)pt).getV();
 				
-				AMExpression ppuv = new AMPythagorasDifference(p, u, v);
-				AMExpression gv = new AMPythagorasDifference(aa, bb, v);
-				AMExpression term1 = new AMProduct(ppuv, gv);
-				AMExpression ppvu = new AMPythagorasDifference(p, v, u);
-				AMExpression gu = new AMPythagorasDifference(aa, bb, u);
-				AMExpression term2 = new AMProduct(ppvu, gu);
-				AMExpression numerator = new AMSum(term1, term2);
-				AMExpression denominator = new AMPythagorasDifference(u, v, u);
-				return new AMFraction(numerator, denominator);
+				AMExpression ppuv = new PythagorasDifference(p, u, v);
+				AMExpression gv = new PythagorasDifference(aa, bb, v);
+				AMExpression term1 = new Product(ppuv, gv);
+				AMExpression ppvu = new PythagorasDifference(p, v, u);
+				AMExpression gu = new PythagorasDifference(aa, bb, u);
+				AMExpression term2 = new Product(ppvu, gu);
+				AMExpression numerator = new Sum(term1, term2);
+				AMExpression denominator = new PythagorasDifference(u, v, u);
+				return new Fraction(numerator, denominator);
 			}
 			
 			if (pt instanceof PRatioPoint) {
@@ -217,12 +218,12 @@ public class AMPythagorasDifference extends AMExpression {
 				Point v = ((PRatioPoint)pt).getV();
 				AMExpression r = ((PRatioPoint)pt).getR();
 				
-				AMExpression gw = new AMPythagorasDifference(aa, bb, w);
-				AMExpression gu = new AMPythagorasDifference(aa, bb, u);
-				AMExpression gv = new AMPythagorasDifference(aa, bb, v);
-				AMExpression difference = new AMDifference(gv, gu);
-				AMExpression product = new AMProduct(r, difference);
-				return new AMSum(gw,product);
+				AMExpression gw = new PythagorasDifference(aa, bb, w);
+				AMExpression gu = new PythagorasDifference(aa, bb, u);
+				AMExpression gv = new PythagorasDifference(aa, bb, v);
+				AMExpression difference = new Difference(gv, gu);
+				AMExpression product = new Product(r, difference);
+				return new Sum(gw,product);
 			}
 			
 			if (pt instanceof TRatioPoint) {
@@ -230,13 +231,13 @@ public class AMPythagorasDifference extends AMExpression {
 				Point q = ((TRatioPoint)pt).getV();
 				AMExpression r = ((TRatioPoint)pt).getR();
 				
-				AMExpression pabp = new AMPythagorasDifference(aa, bb, p);
-				AMExpression spaq = new AMPythagorasDifference(p, aa, q);
-				AMExpression saqb = new AMPythagorasDifference(aa, q, bb);
-				AMExpression spaqb = new AMSum(spaq, saqb);
-				AMExpression coeff = new AMProduct(r, new AMNumber(4));
-				AMExpression product = new AMProduct(coeff, spaqb);
-				return new AMDifference(pabp, product);
+				AMExpression pabp = new PythagorasDifference(aa, bb, p);
+				AMExpression spaq = new PythagorasDifference(p, aa, q);
+				AMExpression saqb = new PythagorasDifference(aa, q, bb);
+				AMExpression spaqb = new Sum(spaq, saqb);
+				AMExpression coeff = new Product(r, new BasicNumber(4));
+				AMExpression product = new Product(coeff, spaqb);
+				return new Difference(pabp, product);
 			}
 		} else {
 			if (pt instanceof AMIntersectionPoint) {
@@ -245,20 +246,20 @@ public class AMPythagorasDifference extends AMExpression {
 				Point p = ((AMIntersectionPoint)pt).getP();
 				Point q = ((AMIntersectionPoint)pt).getQ();
 				
-				AMExpression spuv = new AMPythagorasDifference(p, u, v);
-				AMExpression spuq = new AMPythagorasDifference(p, u, q);
-				AMExpression suqv = new AMPythagorasDifference(u, q, v);
-				AMExpression spuqv = new AMSum(spuq, suqv);
-				AMExpression paqb = new AMPythagorasDifference(aa, q, bb);
-				AMExpression sqvu = new AMPythagorasDifference(q, v, u);
-				AMExpression papb = new AMPythagorasDifference(aa, p, bb);
-				AMExpression ppqp = new AMPythagorasDifference(p, q, p);
-				AMExpression frac1 = new AMFraction(spuv, spuqv);
-				AMExpression frac2 = new AMFraction(sqvu, spuqv);
-				AMExpression term1 = new AMProduct(frac1, paqb);
-				AMExpression term2 = new AMProduct(frac2, papb);
-				AMExpression term3 = new AMProduct(new AMProduct(frac1, frac2), ppqp);
-				return new AMDifference(new AMSum(term1, term2), term3);
+				AMExpression spuv = new PythagorasDifference(p, u, v);
+				AMExpression spuq = new PythagorasDifference(p, u, q);
+				AMExpression suqv = new PythagorasDifference(u, q, v);
+				AMExpression spuqv = new Sum(spuq, suqv);
+				AMExpression paqb = new PythagorasDifference(aa, q, bb);
+				AMExpression sqvu = new PythagorasDifference(q, v, u);
+				AMExpression papb = new PythagorasDifference(aa, p, bb);
+				AMExpression ppqp = new PythagorasDifference(p, q, p);
+				AMExpression frac1 = new Fraction(spuv, spuqv);
+				AMExpression frac2 = new Fraction(sqvu, spuqv);
+				AMExpression term1 = new Product(frac1, paqb);
+				AMExpression term2 = new Product(frac2, papb);
+				AMExpression term3 = new Product(new Product(frac1, frac2), ppqp);
+				return new Difference(new Sum(term1, term2), term3);
 				
 			}
 			
@@ -267,15 +268,15 @@ public class AMPythagorasDifference extends AMExpression {
 				Point u = ((AMFootPoint)pt).getU();
 				Point v = ((AMFootPoint)pt).getV();
 				
-				AMExpression ppuv = new AMPythagorasDifference(p, u, v);
-				AMExpression puvu = new AMPythagorasDifference(u, v, u);
-				AMExpression ppvu = new AMPythagorasDifference(p, v, u);
-				AMExpression pavb = new AMPythagorasDifference(aa, v, bb);
-				AMExpression paub = new AMPythagorasDifference(aa, u, bb);
-				AMExpression term1 = new AMProduct(new AMFraction(ppuv, puvu), pavb);
-				AMExpression term2 = new AMProduct(new AMFraction(ppvu, puvu), paub);
-				AMExpression term3 = new AMFraction(new AMProduct(ppuv, ppvu), puvu);
-				return new AMSum(term1, new AMDifference(term2, term3));
+				AMExpression ppuv = new PythagorasDifference(p, u, v);
+				AMExpression puvu = new PythagorasDifference(u, v, u);
+				AMExpression ppvu = new PythagorasDifference(p, v, u);
+				AMExpression pavb = new PythagorasDifference(aa, v, bb);
+				AMExpression paub = new PythagorasDifference(aa, u, bb);
+				AMExpression term1 = new Product(new Fraction(ppuv, puvu), pavb);
+				AMExpression term2 = new Product(new Fraction(ppvu, puvu), paub);
+				AMExpression term3 = new Fraction(new Product(ppuv, ppvu), puvu);
+				return new Sum(term1, new Difference(term2, term3));
 			}
 			
 			if (pt instanceof PRatioPoint) {
@@ -284,16 +285,16 @@ public class AMPythagorasDifference extends AMExpression {
 				Point v = ((PRatioPoint)pt).getV();
 				AMExpression r = ((PRatioPoint)pt).getR();
 				
-				AMExpression pawb = new AMPythagorasDifference(aa, w, bb);
-				AMExpression pavb = new AMPythagorasDifference(aa, v, bb);
-				AMExpression paub = new AMPythagorasDifference(aa, u, bb);
-				AMExpression pwuv = new AMPythagorasDifference(w, u, v);
-				AMExpression puvu = new AMPythagorasDifference(u, v, u);
-				AMExpression bloc1 = new AMSum(new AMDifference(pavb, paub), new AMProduct(new AMNumber(2), pwuv));
-				AMExpression term1 = new AMProduct(r, bloc1);
-				AMExpression coeff = new AMProduct(r, new AMDifference(new AMNumber(1), r));
-				AMExpression term2 = new AMProduct(coeff, puvu);
-				return new AMSum(pawb, new AMDifference(term1, term2));
+				AMExpression pawb = new PythagorasDifference(aa, w, bb);
+				AMExpression pavb = new PythagorasDifference(aa, v, bb);
+				AMExpression paub = new PythagorasDifference(aa, u, bb);
+				AMExpression pwuv = new PythagorasDifference(w, u, v);
+				AMExpression puvu = new PythagorasDifference(u, v, u);
+				AMExpression bloc1 = new Sum(new Difference(pavb, paub), new Product(new BasicNumber(2), pwuv));
+				AMExpression term1 = new Product(r, bloc1);
+				AMExpression coeff = new Product(r, new Difference(new BasicNumber(1), r));
+				AMExpression term2 = new Product(coeff, puvu);
+				return new Sum(pawb, new Difference(term1, term2));
 			}
 			
 			if (pt instanceof TRatioPoint) {
@@ -301,13 +302,13 @@ public class AMPythagorasDifference extends AMExpression {
 				Point q = ((TRatioPoint)pt).getV();
 				AMExpression r = ((TRatioPoint)pt).getR();
 				
-				AMExpression papb = new AMPythagorasDifference(aa, p, bb);
-				AMExpression ppqp = new AMPythagorasDifference(p, q, p);
-				AMExpression sapq = new AMAreaOfTriangle(aa, p, q);
-				AMExpression sbpq = new AMAreaOfTriangle(bb, p, q);
-				AMExpression term1 = new AMProduct(new AMProduct(r, r), ppqp);
-				AMExpression term2 = new AMProduct(new AMProduct(new AMNumber(4), r), new AMSum(sapq, sbpq));
-				return new AMSum(papb, new AMDifference(term1, term2));
+				AMExpression papb = new PythagorasDifference(aa, p, bb);
+				AMExpression ppqp = new PythagorasDifference(p, q, p);
+				AMExpression sapq = new AreaOfTriangle(aa, p, q);
+				AMExpression sbpq = new AreaOfTriangle(bb, p, q);
+				AMExpression term1 = new Product(new Product(r, r), ppqp);
+				AMExpression term2 = new Product(new Product(new BasicNumber(4), r), new Sum(sapq, sbpq));
+				return new Sum(papb, new Difference(term1, term2));
 			}
 		}
 		
@@ -333,19 +334,19 @@ public class AMPythagorasDifference extends AMExpression {
 	
 	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
-		AMExpression term1 = new AMProduct(getY(a), getY(c));
-		AMExpression term2 = new AMProduct(new AMNumber(-1), new AMProduct(getY(a), getY(b)));
-		AMExpression term3 = new AMProduct(getY(b), getY(b));
-		AMExpression term4 = new AMProduct(new AMNumber(-1), new AMProduct(getY(b), getY(c)));
-		AMExpression term5 = new AMProduct(new AMNumber(-1), new AMProduct(getX(a), getX(b)));
-		AMExpression term6 = new AMProduct(getX(a), getX(c));
-		AMExpression term7 = new AMProduct(getX(b), getX(b));
-		AMExpression term8 = new AMProduct(new AMNumber(-1), new AMProduct(getX(b), getX(c)));
-		AMExpression firstPart = new AMSum(term1, new AMSum(term2, new AMSum(term3, term4)));
-		AMExpression secondPart = new AMSum(term5, new AMSum(term6, new AMSum(term7, term8)));
-		AMExpression numerator = new AMSum(firstPart, secondPart);
-		AMExpression denominator = new AMProduct(souv, souv);
-		return new AMProduct(new AMNumber(4), new AMFraction(numerator, denominator));
+		AMExpression term1 = new Product(getY(a), getY(c));
+		AMExpression term2 = new Product(new BasicNumber(-1), new Product(getY(a), getY(b)));
+		AMExpression term3 = new Product(getY(b), getY(b));
+		AMExpression term4 = new Product(new BasicNumber(-1), new Product(getY(b), getY(c)));
+		AMExpression term5 = new Product(new BasicNumber(-1), new Product(getX(a), getX(b)));
+		AMExpression term6 = new Product(getX(a), getX(c));
+		AMExpression term7 = new Product(getX(b), getX(b));
+		AMExpression term8 = new Product(new BasicNumber(-1), new Product(getX(b), getX(c)));
+		AMExpression firstPart = new Sum(term1, new Sum(term2, new Sum(term3, term4)));
+		AMExpression secondPart = new Sum(term5, new Sum(term6, new Sum(term7, term8)));
+		AMExpression numerator = new Sum(firstPart, secondPart);
+		AMExpression denominator = new Product(souv, souv);
+		return new Product(new BasicNumber(4), new Fraction(numerator, denominator));
 	}
 	
 	@Override

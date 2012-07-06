@@ -1,10 +1,11 @@
 /* 
  * DISCLAIMER PLACEHOLDER 
  */
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.expressions;
 
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
 
@@ -17,7 +18,7 @@ import com.ogprover.thmprover.AreaMethodProver;
  * @version 1.00
  * @author Damien Desfontaines
  */
-public class AMFraction extends AMExpression {
+public class Fraction extends AMExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -57,7 +58,7 @@ public class AMFraction extends AMExpression {
 	}
 	
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#getPoints()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#getPoints()
 	 */
 	public HashSet<Point> getPoints() {
 		HashSet<Point> points = new HashSet<Point>();
@@ -78,7 +79,7 @@ public class AMFraction extends AMExpression {
 	 * @param numerator 	Expression
 	 * @param denominator	Expression
 	 */
-	public AMFraction(AMExpression numerator, AMExpression denominator) {
+	public Fraction(AMExpression numerator, AMExpression denominator) {
 		this.numerator = numerator;
 		this.denominator = denominator;
 	}
@@ -89,9 +90,9 @@ public class AMFraction extends AMExpression {
 	 * @param numerator 	Expression
 	 * @param denominator	Expression
 	 */
-	public AMFraction(int numerator, int denominator) {
-		this.numerator = new AMNumber(numerator);
-		this.denominator = new AMNumber(denominator);
+	public Fraction(int numerator, int denominator) {
+		this.numerator = new BasicNumber(numerator);
+		this.denominator = new BasicNumber(denominator);
 	}
 	
 	
@@ -101,7 +102,7 @@ public class AMFraction extends AMExpression {
 	 * ======================================================================
 	 */
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#toString()
 	 */
 	@Override
 	public String print() {
@@ -116,9 +117,9 @@ public class AMFraction extends AMExpression {
 	
 	@Override
 	public boolean equals(Object expr) {
-		if (!(expr instanceof AMFraction))
+		if (!(expr instanceof Fraction))
 			return false;
-		AMFraction frac = (AMFraction)expr;
+		Fraction frac = (Fraction)expr;
 		return (numerator.equals(frac.getNumerator()) && denominator.equals(frac.getDenominator()));
 	}
 	
@@ -134,7 +135,7 @@ public class AMFraction extends AMExpression {
 	
 	@Override
 	public AMExpression uniformize() {
-		return new AMFraction(numerator.uniformize(), denominator.uniformize());
+		return new Fraction(numerator.uniformize(), denominator.uniformize());
 	}
 	
 	@Override
@@ -142,24 +143,24 @@ public class AMFraction extends AMExpression {
 		AMExpression n = numerator.simplifyInOneStep();
 		AMExpression d = denominator.simplifyInOneStep();
 		if (n.isZero())
-			return new AMNumber(0); // 0/a -> 0
+			return new BasicNumber(0); // 0/a -> 0
 		if (d.isZero()) {
 			System.out.println("Division by zero in expression : " + this.print());
 			return null;
 		}
 		if (n.equals(d))
-			return new AMNumber(1); // a/a -> 0
-		if (d.equals(new AMNumber(1)))
+			return new BasicNumber(1); // a/a -> 0
+		if (d.equals(new BasicNumber(1)))
 			return n; // a/1 -> a
-		if (n instanceof AMAdditiveInverse) {
-			if (d instanceof AMAdditiveInverse)
-				return new AMFraction(((AMAdditiveInverse)n).getExpr(), ((AMAdditiveInverse)d).getExpr()); // (-a)/(-b) -> a/b
-			return new AMAdditiveInverse(new AMFraction(((AMAdditiveInverse)n).getExpr(), d)); // (-a)/b -> -(a/b)
+		if (n instanceof AdditiveInverse) {
+			if (d instanceof AdditiveInverse)
+				return new Fraction(((AdditiveInverse)n).getExpr(), ((AdditiveInverse)d).getExpr()); // (-a)/(-b) -> a/b
+			return new AdditiveInverse(new Fraction(((AdditiveInverse)n).getExpr(), d)); // (-a)/b -> -(a/b)
 		}
-		if (d instanceof AMAdditiveInverse)
-			return new AMAdditiveInverse(new AMFraction(n, ((AMAdditiveInverse)d).getExpr())); // a/(-b) -> -(a/b)
-		if (n instanceof AMProduct) {
-			AMProduct product = (AMProduct)n;
+		if (d instanceof AdditiveInverse)
+			return new AdditiveInverse(new Fraction(n, ((AdditiveInverse)d).getExpr())); // a/(-b) -> -(a/b)
+		if (n instanceof Product) {
+			Product product = (Product)n;
 			AMExpression factor1 = product.getFactor1().simplifyInOneStep();
 			AMExpression factor2 = product.getFactor2().simplifyInOneStep();
 			if (factor1.equals(d))
@@ -167,12 +168,12 @@ public class AMFraction extends AMExpression {
 			if (factor2.equals(d))
 				return factor1; // (b*a)/a -> b
 		}
-		return new AMFraction(n, d);
+		return new Fraction(n, d);
 	}
 	
 	@Override
 	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
-		return new AMFraction(numerator.eliminate(pt, prover), denominator.eliminate(pt, prover));
+		return new Fraction(numerator.eliminate(pt, prover), denominator.eliminate(pt, prover));
 	}
 	
 	@Override
@@ -180,29 +181,29 @@ public class AMFraction extends AMExpression {
 		AMExpression expr1 = numerator.reduceToSingleFraction();
 		AMExpression expr2 = denominator.reduceToSingleFraction();
 		
-		if (expr1 instanceof AMFraction) {
-			AMExpression num1 = ((AMFraction)expr1).getNumerator();
-			AMExpression den1 = ((AMFraction)expr1).getDenominator();
+		if (expr1 instanceof Fraction) {
+			AMExpression num1 = ((Fraction)expr1).getNumerator();
+			AMExpression den1 = ((Fraction)expr1).getDenominator();
 			
-			if (expr2 instanceof AMFraction) {
-				AMExpression num2 = ((AMFraction)expr2).getNumerator();
-				AMExpression den2 = ((AMFraction)expr2).getDenominator();
+			if (expr2 instanceof Fraction) {
+				AMExpression num2 = ((Fraction)expr2).getNumerator();
+				AMExpression den2 = ((Fraction)expr2).getDenominator();
 				if (den1.equals(den2)) {
-					return new AMFraction(num1,num2);
+					return new Fraction(num1,num2);
 				}
-				return new AMFraction(new AMProduct(num1, num2), new AMProduct(den1, den2));
+				return new Fraction(new Product(num1, num2), new Product(den1, den2));
 			}
 			
-			return new AMFraction(num1, new AMProduct(den1, expr2));
+			return new Fraction(num1, new Product(den1, expr2));
 		}
 		
-		if (expr2 instanceof AMFraction) {
-			AMExpression num2 = ((AMFraction)expr2).getNumerator();
-			AMExpression den2 = ((AMFraction)expr2).getDenominator();
-			return new AMFraction(new AMProduct(expr1, den2), num2);
+		if (expr2 instanceof Fraction) {
+			AMExpression num2 = ((Fraction)expr2).getNumerator();
+			AMExpression den2 = ((Fraction)expr2).getDenominator();
+			return new Fraction(new Product(expr1, den2), num2);
 		}
 		
-		return new AMFraction(expr1, expr2);
+		return new Fraction(expr1, expr2);
 	}
 	
 	@Override
@@ -212,7 +213,7 @@ public class AMFraction extends AMExpression {
 	}
 	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
-		return new AMFraction(numerator.toIndependantVariables(prover), denominator.toIndependantVariables(prover));
+		return new Fraction(numerator.toIndependantVariables(prover), denominator.toIndependantVariables(prover));
 	}
 	
 	@Override

@@ -213,6 +213,7 @@ public class GeoGebraOGPInterface implements OGPAPI {
 	/**
 	 * @see com.ogprover.api.OGPAPI#prove(com.ogprover.pp.OGPInputProverProtocol)
 	 */
+	@SuppressWarnings("unused")
 	public OGPOutputProverProtocol prove(OGPInputProverProtocol proverInput) {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		OGPParameters parameters = OpenGeoProver.settings.getParameters();

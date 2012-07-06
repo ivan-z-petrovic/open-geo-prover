@@ -1,10 +1,11 @@
 /* 
  * DISCLAIMER PLACEHOLDER 
  */
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.expressions;
 
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
 
@@ -18,7 +19,7 @@ import com.ogprover.thmprover.AreaMethodProver;
  * @version 1.00
  * @author Damien Desfontaines
  */
-public class AMNumber extends AMExpression {
+public class BasicNumber extends AMExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -49,7 +50,7 @@ public class AMNumber extends AMExpression {
 	}
 	
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#getPoints()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#getPoints()
 	 */
 	public HashSet<Point> getPoints() {
 		return new HashSet<Point>();
@@ -66,7 +67,7 @@ public class AMNumber extends AMExpression {
 	 * 
 	 * @param n		Number
 	 */
-	public AMNumber(int n) {
+	public BasicNumber(int n) {
 		this.n = n;
 	}
 
@@ -83,9 +84,9 @@ public class AMNumber extends AMExpression {
 	
 	@Override
 	public boolean equals(Object expr) {
-		if (!(expr instanceof AMNumber))
+		if (!(expr instanceof BasicNumber))
 			return false;
-		AMNumber number = (AMNumber)expr;
+		BasicNumber number = (BasicNumber)expr;
 		return (n == number.value());
 	}
 

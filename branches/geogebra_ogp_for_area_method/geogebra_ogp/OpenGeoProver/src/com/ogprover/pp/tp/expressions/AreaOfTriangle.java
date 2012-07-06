@@ -1,10 +1,11 @@
 /* 
  * DISCLAIMER PLACEHOLDER 
  */
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.expressions;
 
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.AMFootPoint;
 import com.ogprover.pp.tp.geoconstruction.AMIntersectionPoint;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
@@ -22,7 +23,7 @@ import com.ogprover.thmprover.AreaMethodProver;
  * @version 1.00
  * @author Damien Desfontaines
  */
-public class AMAreaOfTriangle extends AMExpression {
+public class AreaOfTriangle extends AMExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -59,7 +60,7 @@ public class AMAreaOfTriangle extends AMExpression {
 	}
 	
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#getPoints()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#getPoints()
 	 */
 	public HashSet<Point> getPoints() {
 		HashSet<Point> points = new HashSet<Point>();
@@ -82,7 +83,7 @@ public class AMAreaOfTriangle extends AMExpression {
 	 * @param b		Point
 	 * @param c		Point
 	 */
-	public AMAreaOfTriangle(Point a, Point b, Point c) {
+	public AreaOfTriangle(Point a, Point b, Point c) {
 		this.a = a;
 		this.b = b;
 		this.c = c;
@@ -95,7 +96,7 @@ public class AMAreaOfTriangle extends AMExpression {
 	 * ======================================================================
 	 */
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#toString()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#toString()
 	 */
 	@Override
 	public String print() {
@@ -109,9 +110,9 @@ public class AMAreaOfTriangle extends AMExpression {
 	
 	@Override
 	public boolean equals(Object expr) {
-		if (!(expr instanceof AMAreaOfTriangle))
+		if (!(expr instanceof AreaOfTriangle))
 			return false;
-		AMAreaOfTriangle area = (AMAreaOfTriangle)expr;
+		AreaOfTriangle area = (AreaOfTriangle)expr;
 		return (a.equals(area.getA()) && b.equals(area.getB()) && c.equals(area.getC()));
 	}
 	
@@ -135,24 +136,24 @@ public class AMAreaOfTriangle extends AMExpression {
 			if (b.compare(c)) {
 				return this;
 			}
-			return new AMAdditiveInverse(new AMAreaOfTriangle(a, c, b));
+			return new AdditiveInverse(new AreaOfTriangle(a, c, b));
 		}
 		if (b.compare(a) && b.compare(c)) {
 			if (a.compare(c)) {
-				return new AMAdditiveInverse(new AMAreaOfTriangle(b, a, c));
+				return new AdditiveInverse(new AreaOfTriangle(b, a, c));
 			}
-			return new AMAreaOfTriangle(b, c, a);
+			return new AreaOfTriangle(b, c, a);
 		}
 		if (a.compare(b)) {
-			return new AMAreaOfTriangle(c, a, b);
+			return new AreaOfTriangle(c, a, b);
 		}
-		return new AMAdditiveInverse(new AMAreaOfTriangle(c, b, a));
+		return new AdditiveInverse(new AreaOfTriangle(c, b, a));
 	}
 	
 	@Override
 	public AMExpression simplifyInOneStep() {
 		if (a.equals(b) || b.equals(c) || c.equals(a))
-			return new AMNumber(0); // S_ABA -> 0, S_AAB -> 0, S_BAA -> 0
+			return new BasicNumber(0); // S_ABA -> 0, S_AAB -> 0, S_BAA -> 0
 		return this;
 	}
 	
@@ -185,17 +186,17 @@ public class AMAreaOfTriangle extends AMExpression {
 			Point p = ((AMIntersectionPoint)pt).getP();
 			Point q = ((AMIntersectionPoint)pt).getQ();
 			
-			AMExpression supq = new AMAreaOfTriangle(u, p, q);
-			AMExpression gv = new AMAreaOfTriangle(aa, bb, v);
-			AMExpression term1 = new AMProduct(supq, gv);
-			AMExpression svpq = new AMAreaOfTriangle(v, p, q);
-			AMExpression gu = new AMAreaOfTriangle(aa, bb, u);
-			AMExpression term2 = new AMProduct(svpq, gu);
-			AMExpression numerator = new AMDifference(term1, term2);
-			AMExpression supv = new AMAreaOfTriangle(u, p, v);
-			AMExpression spvq = new AMAreaOfTriangle(p, v, q);
-			AMExpression denominator = new AMSum(supv, spvq);
-			return new AMFraction(numerator, denominator);
+			AMExpression supq = new AreaOfTriangle(u, p, q);
+			AMExpression gv = new AreaOfTriangle(aa, bb, v);
+			AMExpression term1 = new Product(supq, gv);
+			AMExpression svpq = new AreaOfTriangle(v, p, q);
+			AMExpression gu = new AreaOfTriangle(aa, bb, u);
+			AMExpression term2 = new Product(svpq, gu);
+			AMExpression numerator = new Difference(term1, term2);
+			AMExpression supv = new AreaOfTriangle(u, p, v);
+			AMExpression spvq = new AreaOfTriangle(p, v, q);
+			AMExpression denominator = new Sum(supv, spvq);
+			return new Fraction(numerator, denominator);
 		}
 		
 		if (pt instanceof AMFootPoint) {
@@ -203,15 +204,15 @@ public class AMAreaOfTriangle extends AMExpression {
 			Point u = ((AMFootPoint)pt).getU();
 			Point v = ((AMFootPoint)pt).getV();
 			
-			AMExpression ppuv = new AMPythagorasDifference(p, u, v);
-			AMExpression gv = new AMAreaOfTriangle(aa, bb, v);
-			AMExpression term1 = new AMProduct(ppuv, gv);
-			AMExpression ppvu = new AMPythagorasDifference(p, v, u);
-			AMExpression gu = new AMAreaOfTriangle(aa, bb, u);
-			AMExpression term2 = new AMProduct(ppvu, gu);
-			AMExpression numerator = new AMSum(term1, term2);
-			AMExpression denominator = new AMPythagorasDifference(u, v, u);
-			return new AMFraction(numerator, denominator);
+			AMExpression ppuv = new PythagorasDifference(p, u, v);
+			AMExpression gv = new AreaOfTriangle(aa, bb, v);
+			AMExpression term1 = new Product(ppuv, gv);
+			AMExpression ppvu = new PythagorasDifference(p, v, u);
+			AMExpression gu = new AreaOfTriangle(aa, bb, u);
+			AMExpression term2 = new Product(ppvu, gu);
+			AMExpression numerator = new Sum(term1, term2);
+			AMExpression denominator = new PythagorasDifference(u, v, u);
+			return new Fraction(numerator, denominator);
 		}
 		
 		if (pt instanceof PRatioPoint) {
@@ -220,12 +221,12 @@ public class AMAreaOfTriangle extends AMExpression {
 			Point v = ((PRatioPoint)pt).getV();
 			AMExpression r = ((PRatioPoint)pt).getR();
 			
-			AMExpression gw = new AMAreaOfTriangle(aa, bb, w);
-			AMExpression gu = new AMAreaOfTriangle(aa, bb, u);
-			AMExpression gv = new AMAreaOfTriangle(aa, bb, v);
-			AMExpression difference = new AMDifference(gv, gu);
-			AMExpression product = new AMProduct(r, difference);
-			return new AMSum(gw,product);
+			AMExpression gw = new AreaOfTriangle(aa, bb, w);
+			AMExpression gu = new AreaOfTriangle(aa, bb, u);
+			AMExpression gv = new AreaOfTriangle(aa, bb, v);
+			AMExpression difference = new Difference(gv, gu);
+			AMExpression product = new Product(r, difference);
+			return new Sum(gw,product);
 		}
 		
 		if (pt instanceof TRatioPoint) {
@@ -233,13 +234,13 @@ public class AMAreaOfTriangle extends AMExpression {
 			Point q = ((TRatioPoint)pt).getV();
 			AMExpression r = ((TRatioPoint)pt).getR();
 			
-			AMExpression sabp = new AMAreaOfTriangle(aa, bb, p);
-			AMExpression ppab = new AMPythagorasDifference(p, aa, bb);
-			AMExpression pqab = new AMPythagorasDifference(q, aa, bb);
-			AMExpression ppaqb = new AMDifference(ppab, pqab);
-			AMExpression coeff = new AMFraction(r, new AMNumber(4));
-			AMExpression product = new AMProduct(coeff, ppaqb);
-			return new AMDifference(sabp, product);
+			AMExpression sabp = new AreaOfTriangle(aa, bb, p);
+			AMExpression ppab = new PythagorasDifference(p, aa, bb);
+			AMExpression pqab = new PythagorasDifference(q, aa, bb);
+			AMExpression ppaqb = new Difference(ppab, pqab);
+			AMExpression coeff = new Fraction(r, new BasicNumber(4));
+			AMExpression product = new Product(coeff, ppaqb);
+			return new Difference(sabp, product);
 		}
 		
 		// Theoretically, pt cannot be a free point
@@ -264,11 +265,11 @@ public class AMAreaOfTriangle extends AMExpression {
 	
 	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
-		AMExpression firstTerm = new AMProduct(new AMDifference(getY(b), getY(c)), getX(a));
-		AMExpression secondTerm = new AMProduct(new AMDifference(getY(c), getY(a)), getX(b));
-		AMExpression thirdTerm = new AMProduct(new AMDifference(getY(a), getY(b)), getX(c));
-		AMExpression numerator = new AMSum(firstTerm, new AMSum(secondTerm, thirdTerm));
-		return new AMFraction(numerator, souv);
+		AMExpression firstTerm = new Product(new Difference(getY(b), getY(c)), getX(a));
+		AMExpression secondTerm = new Product(new Difference(getY(c), getY(a)), getX(b));
+		AMExpression thirdTerm = new Product(new Difference(getY(a), getY(b)), getX(c));
+		AMExpression numerator = new Sum(firstTerm, new Sum(secondTerm, thirdTerm));
+		return new Fraction(numerator, souv);
 	}
 	
 	@Override

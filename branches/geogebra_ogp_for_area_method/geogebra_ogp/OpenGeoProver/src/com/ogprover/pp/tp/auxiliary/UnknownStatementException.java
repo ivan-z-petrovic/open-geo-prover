@@ -14,7 +14,9 @@ package com.ogprover.pp.tp.auxiliary;
  */
 public class UnknownStatementException extends Exception
 {
-     public UnknownStatementException(String s)
+	private static final long serialVersionUID = -5054776550450263992L;
+
+	public UnknownStatementException(String s)
      {
           super(s);
      }

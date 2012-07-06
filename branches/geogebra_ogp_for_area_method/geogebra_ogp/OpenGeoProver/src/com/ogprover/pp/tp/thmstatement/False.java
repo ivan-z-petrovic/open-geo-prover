@@ -10,9 +10,8 @@ import com.ogprover.polynomials.UFraction;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMNumber;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.BasicNumber;
 
 
 /**
@@ -104,7 +103,7 @@ public class False extends ElementaryThmStatement {
 	public AreaMethodTheoremStatement getAreaMethodStatement() {
 		// Same method as in getAlgebraicForm()
 		Vector<AMExpression> statements = new Vector<AMExpression>();
-		statements.add(new AMNumber(1));
+		statements.add(new BasicNumber(1));
 		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

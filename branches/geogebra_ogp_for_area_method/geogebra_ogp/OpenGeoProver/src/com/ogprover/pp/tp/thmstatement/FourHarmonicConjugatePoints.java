@@ -17,11 +17,10 @@ import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.AMAreaOfTriangle;
-import com.ogprover.pp.tp.auxiliary.AMDifference;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMRatio;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.RatioOfCollinearSegments;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
 
@@ -361,12 +360,12 @@ public class FourHarmonicConjugatePoints extends PositionThmStatement {
 		Point c = (Point)this.geoObjects.get(2);
 		Point d = (Point)this.geoObjects.get(3);
 		
-		AMExpression areaOfABC = new AMAreaOfTriangle(a, b, c);
-		AMExpression areaOfABD = new AMAreaOfTriangle(a, b, d);
+		AMExpression areaOfABC = new AreaOfTriangle(a, b, c);
+		AMExpression areaOfABD = new AreaOfTriangle(a, b, d);
 		
-		AMExpression firstRatio = new AMRatio(a,c,c,b);
-		AMExpression secondRatio = new AMRatio(d,a,d,b);
-		AMDifference difference = new AMDifference(firstRatio, secondRatio);
+		AMExpression firstRatio = new RatioOfCollinearSegments(a,c,c,b);
+		AMExpression secondRatio = new RatioOfCollinearSegments(d,a,d,b);
+		Difference difference = new Difference(firstRatio, secondRatio);
 		
 		Vector<AMExpression> statements = new Vector<AMExpression>();
 		statements.add(areaOfABC);

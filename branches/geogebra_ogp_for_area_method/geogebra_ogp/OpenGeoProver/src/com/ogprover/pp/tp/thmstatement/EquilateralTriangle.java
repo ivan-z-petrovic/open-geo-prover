@@ -14,11 +14,10 @@ import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.SymbolicTerm;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.AMDifference;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.GeneralizedAngleTangent;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
 
@@ -221,12 +220,12 @@ public class EquilateralTriangle extends DimensionThmStatement {
 		Point b = (Point)this.geoObjects.get(1);
 		Point c = (Point)this.geoObjects.get(2);
 		
-		AMExpression ab = new AMPythagorasDifference(a, b, a);
-		AMExpression bc = new AMPythagorasDifference(c, b, c);
-		AMExpression ac = new AMPythagorasDifference(a, c, a);
+		AMExpression ab = new PythagorasDifference(a, b, a);
+		AMExpression bc = new PythagorasDifference(c, b, c);
+		AMExpression ac = new PythagorasDifference(a, c, a);
 		
-		AMExpression firstDifference = new AMDifference(ab, bc);
-		AMExpression secondDifference = new AMDifference(ab, ac);
+		AMExpression firstDifference = new Difference(ab, bc);
+		AMExpression secondDifference = new Difference(ab, ac);
 		
 		Vector<AMExpression> statements = new Vector<AMExpression>();
 		statements.add(firstDifference);

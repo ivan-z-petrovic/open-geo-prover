@@ -1,10 +1,11 @@
 /* 
  * DISCLAIMER PLACEHOLDER 
  */
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.expressions;
 
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
 
@@ -17,7 +18,7 @@ import com.ogprover.thmprover.AreaMethodProver;
  * @version 1.00
  * @author Damien Desfontaines
  */
-public class AMAdditiveInverse extends AMExpression {
+public class AdditiveInverse extends AMExpression {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -48,7 +49,7 @@ public class AMAdditiveInverse extends AMExpression {
 	}
 
 	/**
-	 * @see com.ogprover.pp.tp.auxiliary.AMExpression#getPoints()
+	 * @see com.ogprover.pp.tp.expressions.AMExpression#getPoints()
 	 */
 	public HashSet<Point> getPoints() {
 		return expr.getPoints();
@@ -65,7 +66,7 @@ public class AMAdditiveInverse extends AMExpression {
 	 * 
 	 * @param expr  	Expression
 	 */
-	public AMAdditiveInverse(AMExpression expr) {
+	public AdditiveInverse(AMExpression expr) {
 		this.expr = expr;
 	}
 
@@ -82,9 +83,9 @@ public class AMAdditiveInverse extends AMExpression {
 
 	@Override
 	public boolean equals(Object expr) {
-		if (!(expr instanceof AMAdditiveInverse))
+		if (!(expr instanceof AdditiveInverse))
 			return false;
-		AMAdditiveInverse inv = (AMAdditiveInverse)expr;
+		AdditiveInverse inv = (AdditiveInverse)expr;
 		return this.getExpr().equals(inv.getExpr());
 	}
 	
@@ -101,43 +102,43 @@ public class AMAdditiveInverse extends AMExpression {
 	
 	@Override
 	public AMExpression uniformize() {
-		return new AMAdditiveInverse(expr.uniformize());
+		return new AdditiveInverse(expr.uniformize());
 	}
 	
 	@Override
 	public AMExpression simplifyInOneStep() {
 		AMExpression e = expr.simplifyInOneStep();
-		if (e instanceof AMAdditiveInverse)
-			return ((AMAdditiveInverse)e).getExpr(); // --a -> a
+		if (e instanceof AdditiveInverse)
+			return ((AdditiveInverse)e).getExpr(); // --a -> a
 		if (e.isZero())
-			return new AMNumber(0); // -0 -> 0
-		return new AMAdditiveInverse(e);
+			return new BasicNumber(0); // -0 -> 0
+		return new AdditiveInverse(e);
 	}
 	
 	@Override
 	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
-		return new AMAdditiveInverse(expr.eliminate(pt, prover));
+		return new AdditiveInverse(expr.eliminate(pt, prover));
 	}
 
 	@Override
 	public AMExpression reduceToSingleFraction() {
 		AMExpression term = expr.reduceToSingleFraction();
-		if (term instanceof AMFraction) {
-			AMExpression numerator = ((AMFraction)term).getNumerator();
-			AMExpression denominator = ((AMFraction)term).getDenominator();
-			return new AMFraction(new AMAdditiveInverse(numerator), denominator);
+		if (term instanceof Fraction) {
+			AMExpression numerator = ((Fraction)term).getNumerator();
+			AMExpression denominator = ((Fraction)term).getDenominator();
+			return new Fraction(new AdditiveInverse(numerator), denominator);
 		}
-		return new AMAdditiveInverse(term);
+		return new AdditiveInverse(term);
 	}
 
 	@Override
 	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		return new AMProduct(new AMNumber(-1), expr);
+		return new Product(new BasicNumber(-1), expr);
 	}
 
 	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
-		return new AMAdditiveInverse(expr.toIndependantVariables(prover));
+		return new AdditiveInverse(expr.toIndependantVariables(prover));
 	}
 
 	@Override

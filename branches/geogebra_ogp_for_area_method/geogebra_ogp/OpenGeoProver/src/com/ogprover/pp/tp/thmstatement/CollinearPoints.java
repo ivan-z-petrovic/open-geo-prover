@@ -10,10 +10,9 @@ import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.pp.tp.auxiliary.AMAreaOfTriangle;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.AMExpression;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Line;
 import com.ogprover.pp.tp.geoconstruction.LineThroughTwoPoints;
@@ -275,7 +274,7 @@ public class CollinearPoints extends PositionThmStatement {
 		List<GeoConstruction> otherPoints = this.geoObjects.subList(2,this.geoObjects.size());
 		for (GeoConstruction geoCons : otherPoints) {
 			Point pt = (Point)geoCons;
-			AMExpression expr = new AMAreaOfTriangle(pt1, pt2, pt);
+			AMExpression expr = new AreaOfTriangle(pt1, pt2, pt);
 			statements.add(expr);
 		}
 		

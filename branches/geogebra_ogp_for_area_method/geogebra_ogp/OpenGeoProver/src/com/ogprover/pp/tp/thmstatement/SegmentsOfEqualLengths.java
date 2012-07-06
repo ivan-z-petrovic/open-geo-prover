@@ -11,10 +11,9 @@ import java.util.Vector;
 import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.AMDifference;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoobject.Segment;
@@ -170,9 +169,9 @@ public class SegmentsOfEqualLengths extends DimensionThmStatement {
 		Point c = (Point)this.geoObjects.get(2);
 		Point d = (Point)this.geoObjects.get(3);
 		
-		AMExpression squareOfAB = new AMPythagorasDifference(a, b, a);
-		AMExpression squareOfCD = new AMPythagorasDifference(c, d, c);
-		AMExpression difference = new AMDifference(squareOfAB, squareOfCD);
+		AMExpression squareOfAB = new PythagorasDifference(a, b, a);
+		AMExpression squareOfCD = new PythagorasDifference(c, d, c);
+		AMExpression difference = new Difference(squareOfAB, squareOfCD);
 		
 		Vector<AMExpression> statements = new Vector<AMExpression>();
 		statements.add(difference);

@@ -1,7 +1,7 @@
 /* 
  * DISCLAIMER PLACEHOLDER 
  */
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.expressions;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
+import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
@@ -52,7 +53,7 @@ public abstract class AMExpression {
 	/**
 	 * Area of the triangle formed by iO, iU and iV
 	 */
-	public static AMExpression souv = new AMAreaOfTriangle(iO, iU, iV);
+	public static AMExpression souv = new AreaOfTriangle(iO, iU, iV);
 	
 	
 	/*
@@ -140,8 +141,8 @@ public abstract class AMExpression {
 	 * @return true iff this expression is equal to (new AMNumber(0))
 	 */
 	public boolean isZero() {
-		if (this instanceof AMNumber) {
-			if (((AMNumber)this).value() == 0) {
+		if (this instanceof BasicNumber) {
+			if (((BasicNumber)this).value() == 0) {
 				return true;
 			}
 		}
@@ -179,21 +180,21 @@ public abstract class AMExpression {
 	 * /!\ The expression has to be a product, in right associative form, with (or without) a single constant on the left.
 	 */
 	public List<AMExpression> productToList() {
-		if (this instanceof AMPythagorasDifference || this instanceof AMAreaOfTriangle) {
+		if (this instanceof PythagorasDifference || this instanceof AreaOfTriangle) {
 			List<AMExpression> list = new Vector<AMExpression>(); 
 			list.add(this);
 			return list;
 		}
 		
-		if (this instanceof AMNumber) {
+		if (this instanceof BasicNumber) {
 			return new Vector<AMExpression>();
 		}
 		
-		if (this instanceof AMProduct) {
-			AMExpression leftFactor = ((AMProduct)this).getFactor1();
-			AMExpression rightFactor = ((AMProduct)this).getFactor2();
+		if (this instanceof Product) {
+			AMExpression leftFactor = ((Product)this).getFactor1();
+			AMExpression rightFactor = ((Product)this).getFactor2();
 			List<AMExpression> list = rightFactor.productToList();
-			if (leftFactor instanceof AMPythagorasDifference || leftFactor instanceof AMAreaOfTriangle)
+			if (leftFactor instanceof PythagorasDifference || leftFactor instanceof AreaOfTriangle)
 				list.add(leftFactor);
 			return list;
 		}
@@ -231,36 +232,36 @@ public abstract class AMExpression {
 	 */
 	public AMExpression addProductToSum(AMExpression expr) {
 		//System.out.println("  " + this.print() + ".addProductToSum(" + expr.print() + ")");
-		if(this instanceof AMSum) {
+		if(this instanceof Sum) {
 			//System.out.println("    case 1 : this[" + this.print() + "] instanceof AMSum");
-			AMExpression leftTerm = ((AMSum)this).getTerm1();
-			AMExpression restOfSum = ((AMSum)this).getTerm2();
+			AMExpression leftTerm = ((Sum)this).getTerm1();
+			AMExpression restOfSum = ((Sum)this).getTerm2();
 			if (leftTerm.isSameProduct(expr)) {
-				int constantOfLeftTerm = ((AMNumber)((AMProduct)leftTerm).getFactor1()).value();
-				int constantOfExpr =  ((AMNumber)((AMProduct)expr).getFactor1()).value();
+				int constantOfLeftTerm = ((BasicNumber)((Product)leftTerm).getFactor1()).value();
+				int constantOfExpr =  ((BasicNumber)((Product)expr).getFactor1()).value();
 				int sum = constantOfExpr + constantOfLeftTerm;
-				AMExpression restOfProduct = ((AMProduct)leftTerm).getFactor2();
-				return new AMSum(new AMProduct(new AMNumber(sum), restOfProduct), restOfSum);
+				AMExpression restOfProduct = ((Product)leftTerm).getFactor2();
+				return new Sum(new Product(new BasicNumber(sum), restOfProduct), restOfSum);
 			}
-			return new AMSum(leftTerm, restOfSum.addProductToSum(expr));
+			return new Sum(leftTerm, restOfSum.addProductToSum(expr));
 		}
 		if (this.isSameProduct(expr)) {
-			int constantOfThis = ((AMNumber)((AMProduct)this).getFactor1()).value();
-			int constantOfExpr =  ((AMNumber)((AMProduct)expr).getFactor1()).value();
+			int constantOfThis = ((BasicNumber)((Product)this).getFactor1()).value();
+			int constantOfExpr =  ((BasicNumber)((Product)expr).getFactor1()).value();
 			int sum = constantOfExpr + constantOfThis;
-			AMExpression restOfProduct = ((AMProduct)this).getFactor2();
-			return new AMProduct(new AMNumber(sum), restOfProduct);
+			AMExpression restOfProduct = ((Product)this).getFactor2();
+			return new Product(new BasicNumber(sum), restOfProduct);
 		}
-		return new AMSum(this, expr);
+		return new Sum(this, expr);
 	}
 	
 	/**
 	 * If this is a sum of products, groups the terms which are equal up to a constant multiplicative factor.
 	 */
 	public AMExpression groupSumOfProducts() {
-		if (this instanceof AMSum) {
-			AMExpression leftTerm = ((AMSum)this).getTerm1();
-			AMExpression groupedRest = ((AMSum)this).getTerm2().groupSumOfProducts();
+		if (this instanceof Sum) {
+			AMExpression leftTerm = ((Sum)this).getTerm1();
+			AMExpression groupedRest = ((Sum)this).getTerm2().groupSumOfProducts();
 			return groupedRest.addProductToSum(leftTerm);
 		}
 		return this;
@@ -271,7 +272,7 @@ public abstract class AMExpression {
 	 * It corresponds to the quantity X_P described in the Julien Narboux' paper.
 	 */
 	protected static AMExpression getX(Point p) {
-		return new AMAreaOfTriangle(iO, iU, p);
+		return new AreaOfTriangle(iO, iU, p);
 	}
 	
 	/**
@@ -279,6 +280,6 @@ public abstract class AMExpression {
 	 * It corresponds to the quantity Y_P described in the Julien Narboux' paper.
 	 */
 	protected static AMExpression getY(Point p) {
-		return new AMAreaOfTriangle(iO, iV, p);
+		return new AreaOfTriangle(iO, iV, p);
 	}
 }

@@ -12,10 +12,9 @@ import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.AMDifference;
-import com.ogprover.pp.tp.auxiliary.AMExpression;
-import com.ogprover.pp.tp.auxiliary.AMPythagorasDifference;
-import com.ogprover.pp.tp.auxiliary.AreaMethodTheoremStatement;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoobject.Segment;
@@ -270,15 +269,15 @@ public class CongruentTriangles extends DimensionThmStatement {
 		Point e = (Point)this.geoObjects.get(4);
 		Point f = (Point)this.geoObjects.get(5);
 		
-		AMExpression squareOfAB = new AMPythagorasDifference(a, b, a);
-		AMExpression squareOfBC = new AMPythagorasDifference(c, b, c);
-		AMExpression squareOfAC = new AMPythagorasDifference(a, c, a);
-		AMExpression squareOfDE = new AMPythagorasDifference(d, e, d);
-		AMExpression squareOfEF = new AMPythagorasDifference(f, e, f);
-		AMExpression squareOfDF = new AMPythagorasDifference(d, f, d);
-		AMExpression difference1 = new AMDifference(squareOfAB, squareOfDE);
-		AMExpression difference2 = new AMDifference(squareOfBC, squareOfEF);
-		AMExpression difference3 = new AMDifference(squareOfAC, squareOfDF);
+		AMExpression squareOfAB = new PythagorasDifference(a, b, a);
+		AMExpression squareOfBC = new PythagorasDifference(c, b, c);
+		AMExpression squareOfAC = new PythagorasDifference(a, c, a);
+		AMExpression squareOfDE = new PythagorasDifference(d, e, d);
+		AMExpression squareOfEF = new PythagorasDifference(f, e, f);
+		AMExpression squareOfDF = new PythagorasDifference(d, f, d);
+		AMExpression difference1 = new Difference(squareOfAB, squareOfDE);
+		AMExpression difference2 = new Difference(squareOfBC, squareOfEF);
+		AMExpression difference3 = new Difference(squareOfAC, squareOfDF);
 		
 		Vector<AMExpression> statements = new Vector<AMExpression>();
 		statements.add(difference1);
