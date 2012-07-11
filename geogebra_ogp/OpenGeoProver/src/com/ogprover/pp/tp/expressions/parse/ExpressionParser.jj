@@ -22,7 +22,7 @@ public class ExpressionParser {  public static AMExpression convert(String arg)
 TOKEN : /* RESERVED WORDS */
 {  < SEGMENT : "Segment" >
 | < AREA : "Area" >
-| < SQUARE : "²" | "^2" >
+| < SQUARE : "²" | "^2" | "^(2)" >
 }TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >}TOKEN : /* NUMBERS */{  < NUMBER : (< DIGIT >)+ >| < #DIGIT: [                                    // unicode digits
     "\u0030"-"\u0039", // Roman
     "\u0660"-"\u0669", // Arabic-Indic
@@ -140,7 +140,15 @@ AMExpression primary() :
   < LEFTPAR > expr = expression() < RIGHTPAR >
   { return expr; }
 |
+  LOOKAHEAD(42)
   expr = ratioOfSegments()
+  { return expr; }
+|
+  expr = areaOfTriangle()
+  { return expr; }
+|
+  LOOKAHEAD(42)
+  expr = squareOfSegment()
   { return expr; }
 }
 
