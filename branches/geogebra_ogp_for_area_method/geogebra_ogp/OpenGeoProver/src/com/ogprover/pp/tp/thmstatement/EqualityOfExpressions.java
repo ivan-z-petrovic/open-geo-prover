@@ -48,8 +48,8 @@ public class EqualityOfExpressions extends ElementaryThmStatement {
 	/**
 	 * Constructor method.
 	 * 
-	 * @param A	First point
-	 * @param B	Second point
+	 * @param expr1 	First expression
+	 * @param expr2		Second expression
 	 */
 	public EqualityOfExpressions(AMExpression expr1, AMExpression expr2) {
 		this.expr1 = expr1;
