@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import com.ogprover.geogebra.command.statement.BooleanCmd;
 import com.ogprover.main.OpenGeoProver;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.parse.ExpressionParser;
 import com.ogprover.pp.tp.geoconstruction.*;
 import com.ogprover.pp.tp.geoobject.*;
 import com.ogprover.pp.tp.thmstatement.*;
@@ -222,6 +224,11 @@ public class GGStatConverterForAreaMethod extends GeoGebraStatementConverter {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		ArrayList<String> statementArgs = this.ggStatCmd.getInputArgs();
 		
+		logger.info("Converting equal statement. Arguments :");
+		for (String arg : statementArgs) {
+			logger.info("  " + arg);
+		}
+		
 		// This statement requires two input points or segments or angles.
 		if (statementArgs.size() != 2) {
 			logger.error("Failed to convert statement - incorrect number of arguments");
@@ -240,8 +247,11 @@ public class GGStatConverterForAreaMethod extends GeoGebraStatementConverter {
 			}
 			
 			if (gobj1 == null || gobj2 == null) {
-				logger.error("Failed to convert statement - missing input argument");
-				return null;
+				logger.error("A part of the equality is not the label of a known construction " +
+						"- trying to parse it as an expression");
+				AMExpression expr1 = ExpressionParser.convert(statementArgs.get(0));
+				AMExpression expr2 = ExpressionParser.convert(statementArgs.get(1));
+				return new EqualityOfExpressions(expr1, expr2);
 			}
 			
 			if (gobj1 instanceof Point) {
