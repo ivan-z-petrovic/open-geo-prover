@@ -183,8 +183,6 @@ public class RatioOfCollinearSegments extends AMExpression {
 			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, d, c))).eliminate(pt, prover); // ya/yd -> ay/dy
 		if (a.equals(pt))
 			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, c, d))).eliminate(pt, prover); // ya/cd -> -ay/cd
-		if (d.equals(pt))
-			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(c, d, a, b))).eliminate(pt, prover); // ab/cy -> 1/(cy/ab)
 		if (c.equals(pt))
 			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(c, d, b, a))).eliminate(pt, prover); // ab/yd -> 1/(yd/ba)
 		/*
@@ -320,6 +318,10 @@ public class RatioOfCollinearSegments extends AMExpression {
 				// If the prover crashed
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
 			}
+			
+		if (d.equals(pt))
+			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(c, d, a, b))).eliminate(pt, prover); // ab/cy -> 1/(cy/ab)
+		
 		} // Wow, this is the least fun code I've ever written - I am sorry you have to read it
 		if (b.equals(pt)) {
 			if (pt instanceof AMIntersectionPoint) {
