@@ -46,27 +46,27 @@ As you can see, a lot of conversion work is done here, because the area method h
 
 You have probably noticed that it can lead to the creation of many intermediary points. Currently we give them names of the form iP1, iP2, iP3, etc, but it can change very easily by modifying the nextAvailableName() method. Work could (and should) be done to limit the number of this intermediary points : in our previous example, if the user had already created the midpoint between A and B, the first intermediary point should be replaced by the new one. Currently, this is not done, but it would improve the efficientness of the algorithm.
 
-== Conversion from the GeoGebra statements to the area method representation ==
+== Conversion from the !GeoGebra statements to the area method representation ==
 
-The statements must be converted too. OGP has a long list of classes, each one representing a different statement (they are in the com.ogprover.pp.tp.thmstatement package). The translation from GeoGebra command to this representation is pretty simple, and can be found in the GGStatConverterForAreaMethod class, which is very similar to the GGStatConverterForAlgebraicProvers (all being in com.ogp.api.converter). The main difference is on the convertEqual() command : the area method can deal with any expression equality, so here is a parsing step to create the EqualityOfExpressions instance.
+The statements must be converted too. OGP has a long list of classes, each one representing a different statement (they are in the com.ogprover.pp.tp.thmstatement package). The translation from !GeoGebra command to this representation is pretty simple, and can be found in the !GGStatConverterForAreaMethod class, which is very similar to the !GGStatConverterForAlgebraicProvers (all being in com.ogp.api.converter). The main difference is on the convertEqual() command : the area method can deal with any expression equality, so here is a parsing step to create the !EqualityOfExpressions instance.
 
-Then, for the area method, a second conversion step is performed : one have to translate the statement in the form of an (or several) equality(ies) between rational expressions in geometrical quantities. These conversions are implemented in the getAreaMethodStatement() method, in each com.ogprover.pp.tp.thmstatement class. Sometimes it is pretty simple, for example three points are collinear iff the area of the corresponding triangle is zero. Sometimes it is much more complicated, see for example the getAreaMethodStatement() method of the ConcurrentLines.java class.
+Then, for the area method, a second conversion step is performed : one have to translate the statement in the form of an (or several) equality(ies) between rational expressions in geometrical quantities. These conversions are implemented in the getAreaMethodStatement() method, in each com.ogprover.pp.tp.thmstatement class. Sometimes it is pretty simple, for example three points are collinear iff the area of the corresponding triangle is zero. Sometimes it is much more complicated, see for example the getAreaMethodStatement() method of the !ConcurrentLines.java class.
 
-This last conversion step returns an instance of an AreaMethodStatement.java class, and this class contain a Vector<AMExpression> field. The statement is true iff all the AMExpressions of the vector are equal to zero.
+This last conversion step returns an instance of an !AreaMethodStatement.java class, and this class contain a Vector`<AMExpression`> field. The statement is true iff all the !AMExpressions of the vector are equal to zero.
 
 == Implementation of the area method expressions ==
 
-Reading the Julien Narboux' paper, you have probably understood that the area method manipulated rational expressions in geometrical quantities. These expressions are implemented in the com.ogprover.pp.tp.expressions class. The base abstract class is AMExpression.java, and then, it has a tree structure. 
+Reading the Julien Narboux' paper, you have probably understood that the area method manipulated rational expressions in geometrical quantities. These expressions are implemented in the com.ogprover.pp.tp.expressions class. The base abstract class is !AMExpression.java, and then, it has a tree structure. 
 
 The internal nodes of the trees are : 
  * Sum.java (class for representing the sum between two expressions)
  * Difference.java (same thing for difference)
  * Product.java (you got the idea)
  * Fraction.java
- * and AdditiveInverse.java.
+ * and !AdditiveInverse.java.
 The external nodes are :
- * AreaOfTriangle (represents what is called S,,ABC,, in the Narboux' paper)
- * PythagorasDifference (represents P,,ABC,,)
+ * !AreaOfTriangle (represents what is called S,,ABC,, in the Narboux' paper)
+ * !PythagorasDifference (represents P,,ABC,,)
  * Ratio (represents the ratio of two collinear segments)
  * Number (represents simple integers)
 
