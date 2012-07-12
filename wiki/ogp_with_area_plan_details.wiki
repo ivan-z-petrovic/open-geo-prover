@@ -2,7 +2,7 @@
 
 =Quick description of the area method's general idea=
 
-The area method is another geometric theorem proving method, which is being implemented in OpenGeoProver this summer (2012) during the Google Summer of Code program by Damien Desfontaines (ddfontaines - at - gmail - dot - com).
+The area method is another geometric theorem proving method, which is being implemented in !OpenGeoProver this summer (2012) during the Google Summer of Code program by Damien Desfontaines (ddfontaines - at - gmail - dot - com).
 
 Compared to Wu's method or the Gröbner basis method, it is a little less powerful: it can not deal with conics, for example. On the other hand, it has one big advantage - being not an algebraic method, it can produce human-readable proofs. This proofs are generally not the easiest, and they contain sometimes long lines of calculus, but they always remain close to the geometric construction.
 
@@ -29,18 +29,18 @@ That's for the general idea. All the details can be found here : [http://hal.inr
 
 == Internal representation of the geometric constructions ==
 
-The area method only deal with points. So, among the many different construction classes for lines and circles implemented in OpenGeoProver, I only use LineThroughTwoPoints and CircleWithCenterAndPoint. 
+The area method only deal with points. So, among the many different construction classes for lines and circles implemented in !OpenGeoProver, I only use !LineThroughTwoPoints and !CircleWithCenterAndPoint. 
 
-The points can be constructed only in five different ways, as described above. The five corresponding classes are PRatioPoint, TRatioPoint, AMFootPoint, AMIntersectionPoint and FreePoint. They all inherit from the Point abstract class, itself inheriting from the GeoConstruction abstract class (all these classes are a part of the com.ogprover.pp.tp.geoconstruction package).
+The points can be constructed only in five different ways, as described above. The five corresponding classes are !PRatioPoint, !TRatioPoint, !AMFootPoint, !AMIntersectionPoint and !FreePoint. They all inherit from the Point abstract class, itself inheriting from the !GeoConstruction abstract class (all these classes are a part of the com.ogprover.pp.tp.geoconstruction package).
 
-All the constructions of the figure are stored in the "Vector<GeoConstruction> constructions" field of AreaMethodProver.java class (package com.ogprover.thmprover), in the same order as they were actually constructed.
+All the constructions of the figure are stored in the "Vector`<GeoConstruction`> constructions" field of !AreaMethodProver.java class (package com.ogprover.thmprover), in the same order as they were actually constructed.
 
-== Conversion from the GeoGebra constructions to the OGP intern representation ==
+== Conversion from the !GeoGebra constructions to the OGP intern representation ==
 
-The conversion methods for constructions can all be found in the GGConsConverterForAreaMethod.java class (package com.ogp.api.converter). All methods of this class (except the nextAvailableName() in the end) take the input arguments of each GeoGebra command, and add in the theorem protocol the corresponding GeoConstructions.
+The conversion methods for constructions can all be found in the !GGConsConverterForAreaMethod.java class (package com.ogp.api.converter). All methods of this class (except the nextAvailableName() in the end) take the input arguments of each !GeoGebra command, and add in the theorem protocol the corresponding !GeoConstructions.
 
 As you can see, a lot of conversion work is done here, because the area method has only five different ways to add new constructions to a figure. If we take, for example, the convertLineBisector method, we have to construct the bisector between two points A and B using only the features of the area method. This is done this way :
- * First, we take the midpoint between the two points, or in other terms, the point M such as AB/AM = 2. We can do this using the PRatio construction : M = Pratio(A,A,B,1/2).
+ * First, we take the midpoint between the two points, or in other terms, the point M such as AB/AM = 2. We can do this using the PRatio construction : M = PRatio(A,A,B,1/2).
  * Then, to draw the perpendicular line, we need a second point (because our lines have to be instances of LineThroughTwoPoints). We can construction this second point using the TRatio construction, with any coefficient.
  * Lastly, we can return the line between the two intermediary points just created.
 
