@@ -27,7 +27,7 @@ That's for the general idea. All the details can be found here : [http://hal.inr
 
 = Actual implementation of the area method =
 
-== Internal representation of the geometric constructions ==
+=== Internal representation of the geometric constructions ===
 
 The area method only deal with points. So, among the many different construction classes for lines and circles implemented in !OpenGeoProver, I only use !LineThroughTwoPoints and !CircleWithCenterAndPoint. 
 
@@ -35,7 +35,7 @@ The points can be constructed only in five different ways, as described above. T
 
 All the constructions of the figure are stored in the "Vector`<GeoConstruction`> constructions" field of !AreaMethodProver.java class (package com.ogprover.thmprover), in the same order as they were actually constructed.
 
-== Conversion from the !GeoGebra constructions to the OGP intern representation ==
+=== Conversion from the !GeoGebra constructions to the OGP intern representation ===
 
 The conversion methods for constructions can all be found in the !GGConsConverterForAreaMethod.java class (package com.ogp.api.converter). All methods of this class (except the nextAvailableName() in the end) take the input arguments of each !GeoGebra command, and add in the theorem protocol the corresponding !GeoConstructions.
 
@@ -46,7 +46,7 @@ As you can see, a lot of conversion work is done here, because the area method h
 
 You have probably noticed that it can lead to the creation of many intermediary points. Currently we give them names of the form iP1, iP2, iP3, etc, but it can change very easily by modifying the nextAvailableName() method. Work could (and should) be done to limit the number of this intermediary points : in our previous example, if the user had already created the midpoint between A and B, the first intermediary point should be replaced by the new one. Currently, this is not done, but it would improve the efficientness of the algorithm.
 
-== Conversion from the !GeoGebra statements to the area method representation ==
+=== Conversion from the !GeoGebra statements to the area method representation ===
 
 The statements must be converted too. OGP has a long list of classes, each one representing a different statement (they are in the com.ogprover.pp.tp.thmstatement package). The translation from !GeoGebra command to this representation is pretty simple, and can be found in the !GGStatConverterForAreaMethod class, which is very similar to the !GGStatConverterForAlgebraicProvers (all being in com.ogp.api.converter). The main difference is on the convertEqual() command : the area method can deal with any expression equality, so here is a parsing step to create the !EqualityOfExpressions instance.
 
@@ -54,7 +54,7 @@ Then, for the area method, a second conversion step is performed : one have to t
 
 This last conversion step returns an instance of an !AreaMethodStatement.java class, and this class contain a Vector`<AMExpression`> field. The statement is true iff all the !AMExpressions of the vector are equal to zero.
 
-== Implementation of the area method expressions ==
+=== Implementation of the area method expressions ===
 
 Reading the Julien Narboux' paper, you have probably understood that the area method manipulated rational expressions in geometrical quantities. These expressions are implemented in the com.ogprover.pp.tp.expressions class. The base abstract class is !AMExpression.java, and then, it has a tree structure. 
 
@@ -73,3 +73,29 @@ The external nodes are :
 By modifying the Number class, we could in the future deal with a larger base field than the rational numbers.
 
 Several methods have been written to manipulate this formal expressions :
+
+==== Uniformization ====
+
+The uniformisation process is described in the 2.5.2 section of the Narboux' paper. Its goal is to uniformize the geometric quantities, for being able to simplify more things. For example, for any points A, B and C, S,,ABC,, - S,,BCA = 0. But the simplification process will not be able to find out that S,,ABC,, = S,,BCA, so the uniformization process will transform the second term into S,,ABC,, , to make this simplification possible.
+
+The order used on points is the alphabetical order : S,,ACB,, will be transformed to -S,,ABC,, , for example.
+
+==== Simplification ====
+
+The simplification step is very important. The more an expression is simplified, the faster the future computations steps will be.
+
+Currently, the simplifications implemented are exactly those explained in the Narboux' paper, in the section 2.5.3. In the code, they are implemented in the simplifyInOneStep() method. Then, to fully simplify an expression, we apply several times simplifyInOneStep() on the expression, until simplifyInOneStep() no longer changes anything.
+
+==== Elimination of a point ====
+
+All the area method is based on the elimination of all construction points in a formula. The eliminate() method eliminates a given point from every geometric quantity in a formula, replacing it with the corresponding expression. All the eliminations lemmas are described in the 2.4.1 section of Narboux' paper.
+
+The eliminate() method takes as an argument a point, but also a link to the current prover - this is because in certain cases, a auxiliary proof is needed to determine whether three points are collinear or not. You can see in particular the lemmas 2.9 to 2.12 in the Narboux' paper, which are implemented in the Ratio.java#eliminate() method. 
+
+==== Reducing to a single fraction ====
+
+The reduceToSingleFraction() method explains pretty weel what it does : it transforms a/b + c/d into (ac+bd)/bd, etc. This is useful to transform an equality of the form expr=0, where expr contains +, -, * and /, into an equality of the form expr'=0, where expr' contains +, - and *. In more mathematical terms, it transforms an equation in a field into an equation in a ring.
+
+There is no loss of information during this process : all the denominator generated are non-zero if the non-degeneracy-conditions of the figure, generated during the conversion process, are verified.
+
+==== Reduct to right associative form ====
