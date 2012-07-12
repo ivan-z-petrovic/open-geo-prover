@@ -1,11 +1,10 @@
 #summary This page is start for all the details about Implementation of Area Method.
 
-=Implementation of Area Method in OGP=
+=Quick description of the area method's general idea=
 
-The area method is another geometric theorem proving method, which will be implemented in !OpenGeoProver this summer (2012) during the Google Summer of Code program.
+The area method is another geometric theorem proving method, which is being implemented in OpenGeoProver this summer (2012) during the Google Summer of Code program by Damien Desfontaines (ddfontaines - at - gmail - dot - com).
 
-Compared to Wu's method or the Gröbner basis method, it is a little less
-powerful: it can not deal with conics, for example. On the other hand, it has one big advantage - being not an algebraic method, it produces human-readable proofs. This proofs are generally not the easiest, and they contain sometimes long lines of calculus, but they always remain close to the geometric construction.
+Compared to Wu's method or the Gröbner basis method, it is a little less powerful: it can not deal with conics, for example. On the other hand, it has one big advantage - being not an algebraic method, it can produce human-readable proofs. This proofs are generally not the easiest, and they contain sometimes long lines of calculus, but they always remain close to the geometric construction.
 
 The method is based on several observations : 
 
@@ -22,3 +21,55 @@ The method is based on several observations :
  # This primitives can easily be translated into equalities between the geometric quantities exposed above.
 
 So, the principle is simple: the algorithms process all the construction steps in reverse order, and in the formula it tries to show, every occurrence of intermediate points is replaced with previous points, thanks to "elimination lemmas" (allowing to do that for all types of quantities, and for all primitives). Finally, all we have to prove is the equality between two rational expressions, which can be made very easily.
+
+That's for the general idea. All the details can be found here : [http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf] . All my implementation follows the ideas and the results presented in this paper, so if you want to fully understand my code, this is a good idea to read it first.
+
+
+= Actual implementation of the area method =
+
+== Internal representation of the geometric constructions ==
+
+The area method only deal with points. So, among the many different construction classes for lines and circles implemented in OpenGeoProver, I only use LineThroughTwoPoints and CircleWithCenterAndPoint. 
+
+The points can be constructed only in five different ways, as described above. The five corresponding classes are PRatioPoint, TRatioPoint, AMFootPoint, AMIntersectionPoint and FreePoint. They all inherit from the Point abstract class, itself inheriting from the GeoConstruction abstract class (all these classes are a part of the com.ogprover.pp.tp.geoconstruction package).
+
+All the constructions of the figure are stored in the "Vector<GeoConstruction> constructions" field of AreaMethodProver.java class (package com.ogprover.thmprover), in the same order as they were actually constructed.
+
+== Conversion from the GeoGebra constructions to the OGP intern representation ==
+
+The conversion methods for constructions can all be found in the GGConsConverterForAreaMethod.java class (package com.ogp.api.converter). All methods of this class (except the nextAvailableName() in the end) take the input arguments of each GeoGebra command, and add in the theorem protocol the corresponding GeoConstructions.
+
+As you can see, a lot of conversion work is done here, because the area method has only five different ways to add new constructions to a figure. If we take, for example, the convertLineBisector method, we have to construct the bisector between two points A and B using only the features of the area method. This is done this way :
+ * First, we take the midpoint between the two points, or in other terms, the point M such as AB/AM = 2. We can do this using the PRatio construction : M = Pratio(A,A,B,1/2).
+ * Then, to draw the perpendicular line, we need a second point (because our lines have to be instances of LineThroughTwoPoints). We can construction this second point using the TRatio construction, with any coefficient.
+ * Lastly, we can return the line between the two intermediary points just created.
+
+You have probably noticed that it can lead to the creation of many intermediary points. Currently we give them names of the form iP1, iP2, iP3, etc, but it can change very easily by modifying the nextAvailableName() method. Work could (and should) be done to limit the number of this intermediary points : in our previous example, if the user had already created the midpoint between A and B, the first intermediary point should be replaced by the new one. Currently, this is not done, but it would improve the efficientness of the algorithm.
+
+== Conversion from the GeoGebra statements to the area method representation ==
+
+The statements must be converted too. OGP has a long list of classes, each one representing a different statement (they are in the com.ogprover.pp.tp.thmstatement package). The translation from GeoGebra command to this representation is pretty simple, and can be found in the GGStatConverterForAreaMethod class, which is very similar to the GGStatConverterForAlgebraicProvers (all being in com.ogp.api.converter). The main difference is on the convertEqual() command : the area method can deal with any expression equality, so here is a parsing step to create the EqualityOfExpressions instance.
+
+Then, for the area method, a second conversion step is performed : one have to translate the statement in the form of an (or several) equality(ies) between rational expressions in geometrical quantities. These conversions are implemented in the getAreaMethodStatement() method, in each com.ogprover.pp.tp.thmstatement class. Sometimes it is pretty simple, for example three points are collinear iff the area of the corresponding triangle is zero. Sometimes it is much more complicated, see for example the getAreaMethodStatement() method of the ConcurrentLines.java class.
+
+This last conversion step returns an instance of an AreaMethodStatement.java class, and this class contain a Vector<AMExpression> field. The statement is true iff all the AMExpressions of the vector are equal to zero.
+
+== Implementation of the area method expressions ==
+
+Reading the Julien Narboux' paper, you have probably understood that the area method manipulated rational expressions in geometrical quantities. These expressions are implemented in the com.ogprover.pp.tp.expressions class. The base abstract class is AMExpression.java, and then, it has a tree structure. 
+
+The internal nodes of the trees are : 
+ * Sum.java (class for representing the sum between two expressions)
+ * Difference.java (same thing for difference)
+ * Product.java (you got the idea)
+ * Fraction.java
+ * and AdditiveInverse.java.
+The external nodes are :
+ * AreaOfTriangle (represents what is called S,,ABC,, in the Narboux' paper)
+ * PythagorasDifference (represents P,,ABC,,)
+ * Ratio (represents the ratio of two collinear segments)
+ * Number (represents simple integers)
+
+By modifying the Number class, we could in the future deal with a larger base field than the rational numbers.
+
+Several methods have been written to manipulate this formal expressions :
