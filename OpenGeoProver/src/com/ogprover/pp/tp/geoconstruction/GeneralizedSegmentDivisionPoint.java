@@ -357,21 +357,6 @@ public class GeneralizedSegmentDivisionPoint extends SelfConditionalPoint {
 	}
 	
 	/**
-	 * Method that transforms the construction of this point into algebraic form
-	 * 
-	 * @see com.ogprover.pp.tp.geoconstruction.Point#transformToAlgebraicForm()
-	 */
-	@Override
-	public int transformToAlgebraicForm() {
-		Map<String, Point> pointsMap = new HashMap<String, Point>();
-		pointsMap.put(M0Label, this);
-		pointsMap.put(ALabel, this.segment.getFirstEndPoint());
-		pointsMap.put(BLabel, this.segment.getSecondEndPoint());
-		
-		return this.transformToAlgebraicForm(pointsMap);
-	}
-
-	/**
 	 * @see com.ogprover.pp.tp.geoconstruction.GeoConstruction#getConstructionDesc()
 	 */
 	@Override
@@ -427,6 +412,18 @@ public class GeneralizedSegmentDivisionPoint extends SelfConditionalPoint {
 		for (String label : labels.keySet())
 			inputLabels[ii++] = label;
 		return inputLabels;
+	}
+
+	/**
+	 * @see com.ogprover.pp.tp.geoconstruction.SelfConditionalPoint#getPointsForInstantiation()
+	 */
+	@Override
+	public Map<String, Point> getPointsForInstantiation() {
+		Map<String, Point> pointsMap = new HashMap<String, Point>();
+		pointsMap.put(M0Label, this);
+		pointsMap.put(ALabel, this.segment.getFirstEndPoint());
+		pointsMap.put(BLabel, this.segment.getSecondEndPoint());
+		return pointsMap;
 	}
 }
 
