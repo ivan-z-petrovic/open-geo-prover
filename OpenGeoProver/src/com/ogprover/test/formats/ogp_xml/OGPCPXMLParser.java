@@ -110,11 +110,12 @@ public class OGPCPXMLParser {
 		// statements' converters - END
 		// other classes' converters - BEGIN
 		xstream.registerConverter(new AngleConverter());
+		xstream.registerConverter(new PointListConverter());
 		xstream.registerConverter(new ProductOfTwoSegmentsConverter());
 		xstream.registerConverter(new RatioOfTwoCollinearSegmentsConverter());
 		xstream.registerConverter(new RatioProductConverter());
 		xstream.registerConverter(new SegmentConverter());
-		// other classes' converters - BEGIN
+		// other classes' converters - END
 	}
 	
 	private String getAbsoluteFileName(String fileName) {

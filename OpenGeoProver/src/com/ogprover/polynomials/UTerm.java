@@ -4,6 +4,7 @@
 
 package com.ogprover.polynomials;
 
+import java.util.Map;
 import java.util.Vector;
 import com.ogprover.main.OGPConstants;
 import com.ogprover.utilities.OGPUtilities;
@@ -403,5 +404,30 @@ public class UTerm extends Term {
 			return "..."; // term is too long for output
 		
 		return stringTerm;
+	}
+	
+	/**
+	 * Method for instantiating variables of this term by their double values.
+	 * 
+	 * @param varValuesMap	Map with variables' double values
+	 * @return				UTerm object where all variables that appear in passed in map have been replaced
+	 * 						by their double values.
+	 */
+	public UTerm instantiateVariablesWithValues(Map<UXVariable, Double> varValuesMap) {
+		if (this.isZero())
+			return this;
+		
+		UTerm resUTerm = new UTerm(this.coeff);
+		for (Power pow : this.powers) {
+			Double varVal = varValuesMap.get(pow.getVariable());
+			if (varVal == null)
+				resUTerm.addPower(pow);
+			else {
+				if (varVal == 0.0)
+					return new UTerm(0.0); // zero term
+				resUTerm.mul(Math.pow(varVal.doubleValue(), pow.getExponent()));
+			}
+		}
+		return resUTerm;
 	}
 }

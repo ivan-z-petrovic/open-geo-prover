@@ -44,6 +44,15 @@ public class OGPTP {
 	 * </b></i>
 	 */
 	public static final String VERSION_NUM = "1.00"; // this should match the version number from class comment
+	
+	/**
+	 * Integer constants which determine the moment of instantiation of points' coordinates
+	 * with double values. They are used in RC-constructibility problems. The moment is expressed
+	 * with respect to the triangulation of polynomial system.
+	 */
+	public static final int INSTANTIATION_MOMENT_BEFORE = 0;
+	public static final int INSTANTIATION_MOMENT_AFTER = 1;
+	
 	/**
 	 * Name of geometry theorem
 	 */
@@ -62,6 +71,22 @@ public class OGPTP {
 	 * construction steps of this Construction Protocol 
 	 */
 	private ThmStatement theoremStatement = null;
+	/**
+	 * List of free (given) points. 
+	 * It is used in RC-constructibility problems.
+	 */
+	private PointList rcConsFreePoints = null;
+	/**
+	 * List of points to be constructed (whose constructibility is examined). 
+	 * It is used in RC-constructibility problems.
+	 */
+	private PointList rcConsPointsToConstruct = null;
+	/**
+	 * Moment of instantiation of point coordinates with double values, expressed
+	 * with respect to the moment of calling triangulation. Used in RC-constructibility
+	 * problems.
+	 */
+	private int rcConsMomentOfInstantiationOfPointCoordinates = OGPTP.INSTANTIATION_MOMENT_AFTER;
 	/**
 	 * List of NDG conditions associated with algebraic prover for this theorem.
 	 */
@@ -179,6 +204,48 @@ public class OGPTP {
 	}
 	
 	/**
+	 * @param rcConsFreePoints the rcConsFreePoints to set
+	 */
+	public void setRcConsFreePoints(PointList rcConsFreePoints) {
+		this.rcConsFreePoints = rcConsFreePoints;
+	}
+
+	/**
+	 * @return the rcConsFreePoints
+	 */
+	public PointList getRcConsFreePoints() {
+		return rcConsFreePoints;
+	}
+
+	/**
+	 * @param rcConsPointsToConstruct the rcConsPointsToConstruct to set
+	 */
+	public void setRcConsPointsToConstruct(PointList rcConsPointsToConstruct) {
+		this.rcConsPointsToConstruct = rcConsPointsToConstruct;
+	}
+
+	/**
+	 * @return the rcConsPointsToConstruct
+	 */
+	public PointList getRcConsPointsToConstruct() {
+		return rcConsPointsToConstruct;
+	}
+
+	/**
+	 * @param rcConsMomentOfInstantiationOfPointCoordinates the rcConsMomentOfInstantiationOfPointCoordinates to set
+	 */
+	public void setRcConsMomentOfInstantiationOfPointCoordinates(int rcConsMomentOfInstantiationOfPointCoordinates) {
+		this.rcConsMomentOfInstantiationOfPointCoordinates = rcConsMomentOfInstantiationOfPointCoordinates;
+	}
+
+	/**
+	 * @return the rcConsMomentOfInstantiationOfPointCoordinates
+	 */
+	public int getRcConsMomentOfInstantiationOfPointCoordinates() {
+		return rcConsMomentOfInstantiationOfPointCoordinates;
+	}
+
+	/**
 	 * @param ndgConditions the ndgConditions to set
 	 */
 	public void setNdgConditions(Vector<NDGCondition> ndgConditions) {
@@ -290,6 +357,10 @@ public class OGPTP {
 		this.constructionSteps = new Vector<GeoConstruction>();
 		this.constructionMap = new HashMap<String, GeoConstruction>();
 		this.theoremStatement = null;
+		if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
+			this.rcConsFreePoints = new PointList();
+			this.rcConsPointsToConstruct = new PointList();
+		}
 	}
 	
 	
@@ -306,6 +377,10 @@ public class OGPTP {
 		this.constructionSteps = new Vector<GeoConstruction>();
 		this.constructionMap = new HashMap<String, GeoConstruction>();
 		this.theoremStatement = null;
+		if (this.rcConsFreePoints != null)
+			this.rcConsFreePoints.clear();
+		if (this.rcConsPointsToConstruct != null)
+			this.rcConsPointsToConstruct.clear();
 		this.theoremName = null;
 		this.ndgConditions = null;
 		this.algebraicGeoTheorem = new GeoTheorem();
@@ -533,17 +608,34 @@ public class OGPTP {
 			output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
 			output.closeSubSection();
 			
-			output.openSubSection("Theorem statement: ", false);
-			output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
-			output.writeEnumItem(this.theoremStatement.getStatementDesc());
-			output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
-			output.closeSubSection();
+			if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_THM_PROVING) {
+				output.openSubSection("Theorem statement: ", false);
+				output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+				output.writeEnumItem(this.theoremStatement.getStatementDesc());
+				output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+				output.closeSubSection();
+			}
+			else if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
+				output.openSubSection("Free points: ", false);
+				output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+				for (Point pt : this.rcConsFreePoints.getPoints())
+					output.writeEnumItem(pt.getGeoObjectLabel());
+				output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+				output.closeSubSection();
+				
+				output.openSubSection("Points to be constructed: ", false);
+				output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+				for (Point pt : this.rcConsPointsToConstruct.getPoints())
+					output.writeEnumItem(pt.getGeoObjectLabel());
+				output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+				output.closeSubSection();
+			}
 			
 			output.openEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
 			
 			// Empty Construction Protocol is valid so don't check number of constructions
 			// Check if statement is set
-			if (this.theoremStatement == null) {
+			if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_THM_PROVING && this.theoremStatement == null) {
 				output.openItemWithDesc("Error: ");
 				output.closeItemWithDesc("There is no theorem statement");
 				valid = false;
@@ -587,17 +679,72 @@ public class OGPTP {
 				}
 			}
 			
-			if (this.theoremStatement.isValid() == false) {
-				output.openItemWithDesc("Error: ");
-				output.closeItemWithDesc("Theorem statement is not valid");
-				valid = false;
-			}
+			if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_THM_PROVING) {
+				if (this.theoremStatement.isValid() == false) {
+					output.openItemWithDesc("Error: ");
+					output.closeItemWithDesc("Theorem statement is not valid");
+					valid = false;
+				}
 			
-			output.openItemWithDesc("Validation result: ");
-			if (valid)
-				output.closeItemWithDesc("Theorem protocol is valid.");
-			else
-				output.closeItemWithDesc("Theorem protocol is not valid - cannot proceed.");
+				output.openItemWithDesc("Validation result: ");
+				if (valid)
+					output.closeItemWithDesc("Theorem protocol is valid.");
+				else
+					output.closeItemWithDesc("Theorem protocol is not valid - cannot proceed.");
+			}
+			else if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
+				Vector<Point> tempPointList = new Vector<Point>();
+				for (Point pt: this.rcConsFreePoints.getPoints()) {
+					if (tempPointList.indexOf(pt) != -1) {
+						output.openItemWithDesc("Error: ");
+						output.closeItemWithDesc("List of free points is not valid - point " + pt.getGeoObjectLabel() + " appears twice in list of free points");
+						valid = false;
+						break;
+					}
+					
+					if (this.constructionMap.get(pt.getGeoObjectLabel()) == null) {
+							output.openItemWithDesc("Error: ");
+							output.closeItemWithDesc("List of free points is not valid - point " + pt.getGeoObjectLabel() + " is not in construction steps");
+							valid = false;
+							break;
+					}
+					
+					if (this.rcConsPointsToConstruct.getPoints().indexOf(pt) != -1) {
+						output.openItemWithDesc("Error: ");
+						output.closeItemWithDesc("List of free points is not valid - same point " + pt.getGeoObjectLabel() + " is used as free point and point for construction");
+						valid = false;
+						break;
+					}
+					
+					tempPointList.add(pt);
+				}
+				if (valid) {
+					tempPointList.clear();
+					for (Point pt: this.rcConsPointsToConstruct.getPoints()) {
+						if (tempPointList.indexOf(pt) != -1) {
+							output.openItemWithDesc("Error: ");
+							output.closeItemWithDesc("List of points for construction is not valid - point " + pt.getGeoObjectLabel() + " appears twice in list of free points");
+							valid = false;
+							break;
+						}
+						
+						if (this.constructionMap.get(pt.getGeoObjectLabel()) == null) {
+							output.openItemWithDesc("Error: ");
+							output.closeItemWithDesc("List of points for construction is not valid - point " + pt.getGeoObjectLabel() + " is not in construction steps");
+							valid = false;
+							break;
+						}
+						
+						tempPointList.add(pt);
+					}
+				}
+				
+				output.openItemWithDesc("Validation result: ");
+				if (valid)
+					output.closeItemWithDesc("Construction protocol is valid.");
+				else
+					output.closeItemWithDesc("Construction protocol is not valid - cannot proceed.");
+			}
 			
 			output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
 			output.closeSection();
@@ -687,6 +834,13 @@ public class OGPTP {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
+		if (OpenGeoProver.settings.getOgpMode() != OGPConstants.OGP_MODE_THM_PROVING) {
+			logger.error("Trying to convert theorem to algebraic form when problem is not theorem proving.");
+			return OGPConstants.ERR_CODE_GENERAL;
+		}
+		
+		
+		
 		// First of all, set the number of zero coordinates used for instantiation of points
 		this.setNumberOfZeroCoordinates();
 		
@@ -757,22 +911,40 @@ public class OGPTP {
 	public void simplify() {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
-		if (this.theoremStatement == null || this.constructionMap == null)
+		if ((OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_THM_PROVING && this.theoremStatement == null) || this.constructionMap == null)
 			return;
 		
 		Map<String, String> usedLabelsMap = new HashMap<String, String>();
 		Vector<String> usedLabelsList = new Vector<String>();
 		
-		// labels from statement
-		String[] statementInputLabels = this.theoremStatement.getInputLabels();
-		if (statementInputLabels == null) {
-			logger.warn("Statement doesn't have input arguments");
-			return;
+		if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_THM_PROVING) {
+			// labels from statement
+			String[] statementInputLabels = this.theoremStatement.getInputLabels();
+			if (statementInputLabels == null) {
+				logger.warn("Statement doesn't have input arguments");
+				return;
+			}
+			for (String label : statementInputLabels) {
+				if (usedLabelsMap.get(label) == null) {
+					usedLabelsMap.put(label, label);
+					usedLabelsList.add(label);
+				}
+			}
 		}
-		for (String label : statementInputLabels) {
-			if (usedLabelsMap.get(label) == null) {
-				usedLabelsMap.put(label, label);
-				usedLabelsList.add(label);
+		else if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
+			for (Point pt : this.rcConsFreePoints.getPoints()) {
+				String label = pt.getGeoObjectLabel();
+				if (usedLabelsMap.get(label) == null) {
+					usedLabelsMap.put(label, label);
+					usedLabelsList.add(label);
+				}
+			}
+			for (Point pt : this.rcConsPointsToConstruct.getPoints()) {
+				String label = pt.getGeoObjectLabel();
+				if (usedLabelsMap.get(label) == null) {
+					usedLabelsMap.put(label, label);
+					usedLabelsList.add(label);
+				}
 			}
 		}
 		
@@ -795,6 +967,12 @@ public class OGPTP {
 			GeoConstruction gc = this.constructionSteps.get(ii);
 			if (usedLabelsMap.get(gc.getGeoObjectLabel()) == null) {
 				this.removeGeoConstruction(gc);
+				
+				if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
+					if (this.rcConsFreePoints.getPoints().contains(gc))
+						this.rcConsFreePoints.getPoints().remove(gc);
+				}
+				
 				ii--;
 			}
 		}
@@ -803,15 +981,16 @@ public class OGPTP {
 	/**
 	 * Method that assigns two UX variables to specified constructed point
 	 * 
-	 * @param P			The point that new variables will be assigned to its 
-	 * 					symbolic x and y coordinates
-	 * @param pointType	Type of instantiation: whether this point will be instantiated
-	 * 					as free point (both coordinates will be u-variables) or as
-	 * 					dependent point (both coordinates will be x-variables) or as
-	 * 					half dependent point (only one coordinate is u-variable and
-	 * 					another is x-variable); this value is one of POINT_TYPE_xxx values 
+	 * @param P						The point that new variables will be assigned to its 
+	 * 								symbolic x and y coordinates
+	 * @param pointType				Type of instantiation: whether this point will be instantiated
+	 * 								as free point (both coordinates will be u-variables) or as
+	 * 								dependent point (both coordinates will be x-variables) or as
+	 * 								half dependent point (only one coordinate is u-variable and
+	 * 								another is x-variable); this value is one of POINT_TYPE_xxx values 
+	 * @param bUseZeroCoordinates	Flag which tell whether to use zero coordinates for points instantiation or not
 	 */
-	public void instantiatePoint(Point P, int pointType) {
+	public void instantiatePoint(Point P, int pointType, boolean bUseZeroCoordinates) {
 		if (P == null)
 			return;
 		
@@ -820,7 +999,7 @@ public class OGPTP {
 		
 		switch (pointType) {
 		case Point.POINT_TYPE_FREE:
-			if (!this.hasFreeParametricSet && this.numZeroIndices > 0) {
+			if (bUseZeroCoordinates && !this.hasFreeParametricSet && this.numZeroIndices > 0) {
 				xVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
 				this.numZeroIndices--;
 			}
@@ -829,7 +1008,7 @@ public class OGPTP {
 				this.uIndex++;
 			}
 			
-			if (!this.hasFreeParametricSet && this.numZeroIndices > 0) {
+			if (bUseZeroCoordinates && !this.hasFreeParametricSet && this.numZeroIndices > 0) {
 				yVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
 				this.numZeroIndices--;
 			}
@@ -846,7 +1025,7 @@ public class OGPTP {
 				ParametricSet set = (ParametricSet) ((RandomPointFromParametricSet)P).getBaseSetOfPoints();
 				Point firstPointFromParamSet = set.getPoints().get(0);
 				
-				if ((set instanceof FreeParametricSet) && ((FreeParametricSet)set).isContainsOrigin() && P.equals(firstPointFromParamSet) && this.numZeroIndices > 1) {
+				if (bUseZeroCoordinates && (set instanceof FreeParametricSet) && ((FreeParametricSet)set).isContainsOrigin() && P.equals(firstPointFromParamSet) && this.numZeroIndices > 1) {
 					// instantiate as origin
 					xVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
 					yVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
@@ -856,7 +1035,8 @@ public class OGPTP {
 			}
 			
 			if (!instantiatedAsOrigin) {
-				if ((!this.hasFreeParametricSet || (P instanceof RandomPointFromParametricSet)) &&
+				if (bUseZeroCoordinates && 
+					(!this.hasFreeParametricSet || (P instanceof RandomPointFromParametricSet)) &&
 					this.numZeroIndices > 0) {
 					xVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
 					this.numZeroIndices--;
@@ -878,7 +1058,7 @@ public class OGPTP {
 				ParametricSet set = (ParametricSet) ((RandomPointFromParametricSet)P).getBaseSetOfPoints();
 				Point firstPointFromParamSet = set.getPoints().get(0);
 				
-				if ((set instanceof FreeParametricSet) && ((FreeParametricSet)set).isContainsOrigin() && P.equals(firstPointFromParamSet) && this.numZeroIndices > 1) {
+				if (bUseZeroCoordinates && (set instanceof FreeParametricSet) && ((FreeParametricSet)set).isContainsOrigin() && P.equals(firstPointFromParamSet) && this.numZeroIndices > 1) {
 					// instantiate as origin
 					xVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
 					yVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
@@ -891,7 +1071,8 @@ public class OGPTP {
 				xVar = new UXVariable(Variable.VAR_TYPE_UX_X, this.xIndex);
 				this.xIndex++;
 			
-				if ((!this.hasFreeParametricSet || (P instanceof RandomPointFromParametricSet)) &&
+				if (bUseZeroCoordinates && 
+					(!this.hasFreeParametricSet || (P instanceof RandomPointFromParametricSet)) &&
 					this.numZeroIndices > 0) {
 					yVar = new UXVariable(Variable.VAR_TYPE_UX_U, 0);
 					this.numZeroIndices--;
@@ -922,6 +1103,18 @@ public class OGPTP {
 			P.setPointState(Point.POINT_STATE_INSTANTIATED);
 		else
 			P.setPointState(Point.POINT_STATE_REINSTANTIATED);
+	}
+	
+	/**
+	 * 
+	 * Method that assigns two UX variables to specified constructed point
+	 * @param P				The point to be instantiated
+	 * @param pointType		The type of instantiation
+	 * 
+	 * @see com.ogprover.pp.tp.OGPTP#instantiatePoint(Point, int, boolean)
+	 */
+	public void instantiatePoint(Point P, int pointType) {
+		this.instantiatePoint(P, pointType, true);
 	}
 	
 	/**
@@ -1251,5 +1444,767 @@ public class OGPTP {
 		}
 		
 		return resultMap;
+	}
+	
+	/*
+	 * Methods used in solving RC-Constructibility problems.
+	 */
+	/**
+	 * Method which transforms input RC-constructibility problem
+	 * to polynomial form and performs triangulation of polynomial system.
+	 * 
+	 * @return	Execution code (SUCCESS or Error code)
+	 */
+	public int transformRcConsProblemToPolynomialForm() {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		boolean writeToReport = OpenGeoProver.settings.getParameters().createReport();
+		OGPOutput output = OpenGeoProver.settings.getOutput();
+		
+		if (OpenGeoProver.settings.getOgpMode() != OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
+			logger.error("Cannot call transformation of RC-constructibility problem to polynomial form with inappropriate OGP execution mode.");
+			return OGPConstants.ERR_CODE_GENERAL;
+		}
+		
+		/*
+		 * Check input elements
+		 */
+		if (this.constructionSteps == null || this.constructionSteps.size() == 0) {
+			logger.error("Missing construction steps");
+			return OGPConstants.ERR_CODE_NULL;
+		}
+		if (this.rcConsFreePoints == null || this.rcConsFreePoints.getPoints().size() == 0) {
+			logger.error("Missing list of free points");
+			return OGPConstants.ERR_CODE_NULL;
+		}
+		if (this.rcConsPointsToConstruct == null || this.rcConsPointsToConstruct.getPoints().size() == 0) {
+			logger.error("Missing list of points for construction");
+			return OGPConstants.ERR_CODE_NULL;
+		}
+		
+		/*
+		 * Simplify and validate construction protocol
+		 */
+		this.simplify();
+		if (!this.isValid()) {
+			logger.error("Constructibility problem is not valid");
+			return OGPConstants.ERR_CODE_GENERAL;
+		}
+		
+		/*
+		 * Instantiate all points by symbolic variables
+		 */
+		int[] numXCoordinates = { 0 };
+		if (this.instantiatePointsForRcConsProblem(numXCoordinates) != OGPConstants.RET_CODE_SUCCESS) {
+			logger.error("Failed to instantiate points.");
+			return OGPConstants.ERR_CODE_GENERAL;
+		}
+		Map<UXVariable, Double> varValuesMap = this.rcConsFreePoints.getMapWithVariableInstances(); // map with variables' double values
+		
+		/*
+		 * Transform geometry conditions for points to polynomial form
+		 */
+		int[] numPolyConstraints = { 0 };
+		if (this.transformGeometryConditionsForRcConsProblem(numPolyConstraints) != OGPConstants.RET_CODE_SUCCESS) {
+			logger.error("Failed to transform geometry conditions.");
+			return OGPConstants.ERR_CODE_GENERAL;
+		}
+		
+		/*
+		 * Instantiate polynomial system by replacing symbolic variables of free points by their constant double values.
+		 */
+		if (varValuesMap != null && varValuesMap.size() > 0 && this.rcConsMomentOfInstantiationOfPointCoordinates == OGPTP.INSTANTIATION_MOMENT_BEFORE) {
+			this.algebraicGeoTheorem.setHypotheses(this.algebraicGeoTheorem.getHypotheses().instantiateVariablesWithValues(varValuesMap));
+			if (writeToReport) {
+				try {
+					output.openSection("Instantiation of polynomial system");
+					output.openSubSection("Instances for points' coordinates", true);
+					output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+					for (Point pt : this.rcConsFreePoints.getPoints()) {
+						String ptLabel = pt.getGeoObjectLabel();
+						Double xVal = this.rcConsFreePoints.getXCoordinateValue(ptLabel);
+						Double yVal = this.rcConsFreePoints.getYCoordinateValue(ptLabel);
+						if (xVal != null || yVal != null) {
+							StringBuilder sb = new StringBuilder();
+							sb.append(ptLabel);
+							sb.append(": ");
+							if (xVal != null) {
+								sb.append("x = ");
+								sb.append(xVal);
+							}
+							if (yVal != null) {
+								if (xVal != null)
+									sb.append(", ");
+								sb.append("y = ");
+								sb.append(yVal);
+							}
+							output.writeEnumItem(sb.toString());
+						}
+						else {
+							output.openItem();
+							output.writePointCoordinatesAssignment(pt);
+							output.closeItem();
+						}
+					}
+					output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+					output.closeSubSection();
+					output.openSubSection("Instantiated polynomial system", true);
+					output.writePolySystem(this.algebraicGeoTheorem.getHypotheses());
+					output.closeSubSection();
+					output.closeSection();
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return OGPConstants.ERR_CODE_GENERAL;
+				}
+			}
+		}
+		
+		/*
+		 * Triangulate polynomial system for hypotheses
+		 */
+		if (writeToReport) {
+			try {
+				output.openSection("Triangulation of polynomial system");
+			} catch (IOException e) {
+				logger.error("Failed to write to output file(s).");
+				output.close();
+				return OGPConstants.ERR_CODE_GENERAL;
+			}
+		}
+		
+		String message = null;
+		boolean bError = false;
+		if (numXCoordinates[0] > numPolyConstraints[0]) {
+			message = "System is underconstarined - cannot proceed";
+			bError = true;
+		}
+		else if (numXCoordinates[0] < numPolyConstraints[0]) {
+			message = "System is overconstarined - cannot proceed";
+			bError = true;
+		}
+		if (bError) {
+			if (writeToReport) {
+				try {
+					output.writePlainText(message);
+					output.closeSection();
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return OGPConstants.ERR_CODE_GENERAL;
+				}
+			}
+			
+			logger.error(message);
+			return OGPConstants.ERR_CODE_GENERAL;
+		}
+		
+		int retCode = this.algebraicGeoTheorem.getHypotheses().triangulate();
+		
+		if (retCode != OGPConstants.RET_CODE_SUCCESS) {
+			message = "Failed to triangulate system of polynomials";
+			logger.error(message);
+			
+			if (writeToReport) {
+				try {
+					output.writePlainText(message);
+					output.closeSection();
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return OGPConstants.ERR_CODE_GENERAL;
+				}
+			}
+			
+			return retCode;
+		}
+		
+		if (writeToReport) {
+			try {
+				output.openSubSection("List of leading monic terms from triangular polynomial system", false);
+				int ii = 0;
+				for (XPolynomial xpoly : this.algebraicGeoTheorem.getHypotheses().getPolynomials()) {
+					XTerm xt = (XTerm)xpoly.getLeadingTerm();
+					XTerm monicTerm = (XTerm)xt.clone();
+					monicTerm.setUCoeff(new UFraction(1));
+					XPolynomial monicXPoly = new XPolynomial();
+					monicXPoly.addTerm(monicTerm);
+					output.writePolynomial(ii, monicXPoly);
+					ii++;
+				}
+				output.closeSubSection();
+				output.closeSection();
+			} catch (IOException e) {
+				logger.error("Failed to write to output file(s).");
+				output.close();
+				return OGPConstants.ERR_CODE_GENERAL;
+			}
+		}
+		
+		/*
+		 * Instantiate triangular polynomial system by replacing symbolic variables of free points by their constant double values.
+		 */
+		if (varValuesMap != null && varValuesMap.size() > 0 && this.rcConsMomentOfInstantiationOfPointCoordinates == OGPTP.INSTANTIATION_MOMENT_AFTER) {
+			XPolySystem xpSys = this.algebraicGeoTheorem.getHypotheses().instantiateVariablesWithValues(varValuesMap);
+			if (writeToReport) {
+				try {
+					output.openSection("Instantiation of triangular polynomial system");
+					output.openSubSection("Instances for points' coordinates", true);
+					output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+					for (Point pt : this.rcConsFreePoints.getPoints()) {
+						String ptLabel = pt.getGeoObjectLabel();
+						Double xVal = this.rcConsFreePoints.getXCoordinateValue(ptLabel);
+						Double yVal = this.rcConsFreePoints.getYCoordinateValue(ptLabel);
+						if (xVal != null || yVal != null) {
+							StringBuilder sb = new StringBuilder();
+							sb.append(ptLabel);
+							sb.append(": ");
+							if (xVal != null) {
+								sb.append("x = ");
+								sb.append(xVal);
+							}
+							if (yVal != null) {
+								if (xVal != null)
+									sb.append(", ");
+								sb.append("y = ");
+								sb.append(yVal);
+							}
+							output.writeEnumItem(sb.toString());
+						}
+						else {
+							output.openItem();
+							output.writePointCoordinatesAssignment(pt);
+							output.closeItem();
+						}
+					}
+					output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+					output.closeSubSection();
+					output.openSubSection("Instantiated triangular polynomial system", true);
+					output.writePolySystem(xpSys);
+					output.closeSubSection();
+					output.closeSection();
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return OGPConstants.ERR_CODE_GENERAL;
+				}
+			}
+		}
+		
+		return OGPConstants.RET_CODE_SUCCESS;
+	}
+	
+	/**
+	 * Method for instantiation of points for RC-constructibility problem with symbolic coordinates.
+	 * 
+	 * @param numXCoordinates		Return argument - number of assigned x-coordinates (since it is return argument, it is specified as array)
+	 * @return						Execution code
+	 */
+	private int instantiatePointsForRcConsProblem(int[] numXCoordinates) {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		boolean writeToReport = OpenGeoProver.settings.getParameters().createReport();
+		OGPOutput output = OpenGeoProver.settings.getOutput();
+		
+		numXCoordinates[0] = 0;
+		if (writeToReport) {
+			try {
+				output.openSection("Instantiation of points with symbolic variables");
+				output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+			} catch (IOException e) {
+				logger.error("Failed to write to output file(s).");
+				output.close();
+				return OGPConstants.ERR_CODE_GENERAL;
+			}
+		}
+		// Firstly instantiate points for construction - all as dependent points
+		for (Point pt : this.rcConsPointsToConstruct.getPoints()) {
+			this.instantiatePoint(pt, Point.POINT_TYPE_DEPENDENT, false);
+			numXCoordinates[0] += 2;
+			if (writeToReport) {
+				try {
+					output.openItem();
+					output.writePointCoordinatesAssignment(pt);
+					output.closeItem();
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return OGPConstants.ERR_CODE_GENERAL;
+				}
+			}
+		}
+		// Then instantiate free points
+		for (Point pt : this.rcConsFreePoints.getPoints()) {
+			// Check redundancy and locus dependency
+			boolean bLocusDependent = false;
+			SetOfPoints locus = null;
+			Vector<String> ptLabelList = new Vector<String>();
+			ptLabelList.add(pt.getGeoObjectLabel());
+			Vector<String> tempList = ptLabelList;
+			Vector<String> nextPtLabelList = null;
+			
+			while ((nextPtLabelList = this.getNextPointLabelsList(tempList)) != null) {
+				boolean bFoundNonFreePt = false;
+				for (String ptLabel : nextPtLabelList) {
+					Point nextPt = (Point)this.constructionMap.get(ptLabel); // safe cast
+					if (this.rcConsFreePoints.getPoints().indexOf(nextPt) == -1) {
+						bFoundNonFreePt = true;
+						break;
+					}
+				}
+				if (!bFoundNonFreePt) {
+					String message = null;
+					boolean bError = false;
+					if ((pt instanceof SelfConditionalPoint) || (pt instanceof IntersectionPoint)) {
+						message = "Point " + pt.getGeoObjectLabel() + " is redundant - can't proceed."; // The point pt is redundant i.e. all points used to construct point pt are already free points
+						logger.error(message);
+						bError = true;
+					}
+					else if (pt instanceof RandomPointFromSetOfPoints) {
+						message = "Point " + pt.getGeoObjectLabel() + " is locus dependent.";
+						locus = ((RandomPointFromSetOfPoints)pt).getBaseSetOfPoints();
+					}
+					if (writeToReport) {
+						try {
+							output.writeEnumItem(message);
+						} catch (IOException e) {
+							logger.error("Failed to write to output file(s).");
+							output.close();
+							return OGPConstants.ERR_CODE_GENERAL;
+						}
+					}
+					
+					if (bError)
+						return OGPConstants.ERR_CODE_GENERAL;
+					
+					bLocusDependent = true;
+					break;
+				}
+				tempList = nextPtLabelList;
+			}
+			
+			// Check locus dependency
+			if (!bLocusDependent) {
+				if (pt instanceof IntersectionPoint) {
+					IntersectionPoint intPt = (IntersectionPoint)pt;
+					
+					// Check first set of points
+					ptLabelList = new Vector<String>();
+					SetOfPoints set1 = intPt.getFirstPointSet();
+					ptLabelList.add(((GeoConstruction)set1).getGeoObjectLabel()); // safe cast
+					tempList = ptLabelList;
+					nextPtLabelList = null;
+					
+					while ((nextPtLabelList = this.getNextPointLabelsList(tempList)) != null) {
+						boolean bFoundNonFreePt = false;
+						for (String ptLabel : nextPtLabelList) {
+							Point nextPt = (Point)this.constructionMap.get(ptLabel); // safe cast
+							if (this.rcConsFreePoints.getPoints().indexOf(nextPt) == -1) {
+								bFoundNonFreePt = true;
+								break;
+							}
+						}
+						if (!bFoundNonFreePt) {
+							String message = "Point " + pt.getGeoObjectLabel() + " is locus dependent.";
+							locus = set1;
+							if (writeToReport) {
+								try {
+									output.writeEnumItem(message);
+								} catch (IOException e) {
+									logger.error("Failed to write to output file(s).");
+									output.close();
+									return OGPConstants.ERR_CODE_GENERAL;
+								}
+							}
+							bLocusDependent = true;
+							break;
+						}
+						tempList = nextPtLabelList;
+					}
+					
+					if (!bLocusDependent) {
+						// Check second set of points
+						ptLabelList = new Vector<String>();
+						SetOfPoints set2 = intPt.getSecondPointSet();
+						ptLabelList.add(((GeoConstruction)set2).getGeoObjectLabel()); // safe cast
+						tempList = ptLabelList;
+						nextPtLabelList = null;
+						
+						while ((nextPtLabelList = this.getNextPointLabelsList(tempList)) != null) {
+							boolean bFoundNonFreePt = false;
+							for (String ptLabel : nextPtLabelList) {
+								Point nextPt = (Point)this.constructionMap.get(ptLabel); // safe cast
+								if (this.rcConsFreePoints.getPoints().indexOf(nextPt) == -1) {
+									bFoundNonFreePt = true;
+									break;
+								}
+							}
+							if (!bFoundNonFreePt) {
+								String message = "Point " + pt.getGeoObjectLabel() + " is locus dependent on points: ";
+								boolean bFirst = true;
+								for (String ptLabel : nextPtLabelList) {
+									if (!bFirst)
+										message += ", ";
+									else
+										bFirst = false;
+									message += ptLabel;
+								}
+								locus = set2;
+								if (writeToReport) {
+									try {
+										output.writeEnumItem(message);
+									} catch (IOException e) {
+										logger.error("Failed to write to output file(s).");
+										output.close();
+										return OGPConstants.ERR_CODE_GENERAL;
+									}
+								}
+								bLocusDependent = true;
+								break;
+							}
+							tempList = nextPtLabelList;
+						}
+					}
+				}
+			}
+			
+			// Instantiate free point
+			this.instantiatePoint(pt, Point.POINT_TYPE_FREE, false);
+			if (writeToReport) {
+				try {
+					output.openItem();
+					output.writePointCoordinatesAssignment(pt);
+					output.closeItem();
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return OGPConstants.ERR_CODE_GENERAL;
+				}
+			}
+			if (bLocusDependent) {
+				XPolynomial xpoly = locus.instantiateConditionFromBasicElements(pt);
+				if (writeToReport) {
+					try {
+						output.writeEnumItem("Locus dependency in polynomial form: ");
+						output.writePolynomial(xpoly);
+					} catch (IOException e) {
+						logger.error("Failed to write to output file(s).");
+						output.close();
+						return OGPConstants.ERR_CODE_GENERAL;
+					}
+				}
+			}
+		}
+		// Other constructed points
+		for (GeoConstruction gc : this.constructionSteps) {
+			if (gc instanceof Point) {
+				Point pt = (Point)gc; // safe cast
+				if (pt.getPointState() == Point.POINT_STATE_INITIALIZED) { // instantiate only not instantiated points
+					if (pt instanceof RandomPointFromSetOfPoints) {
+						RandomPointFromSetOfPoints rpt = (RandomPointFromSetOfPoints)pt;
+						SetOfPoints set = rpt.getBaseSetOfPoints();
+						this.instantiatePoint(rpt, Point.POINT_TYPE_X_INDEPENDENT);
+						XPolynomial xpoly = set.instantiateConditionFromBasicElements(rpt);
+						if (xpoly == null || xpoly.getTerms().size() == 0 || xpoly.getLeadingTerm().getPowers().size() == 0) { // zero or u-polynomial
+							// Re-instantiate point
+							this.decrementUIndex();
+							this.decrementXIndex();
+							this.instantiatePoint(rpt, Point.POINT_TYPE_Y_INDEPENDENT);
+						}
+						numXCoordinates[0]++;
+					}
+					else {
+						this.instantiatePoint(pt, Point.POINT_TYPE_DEPENDENT, false);
+						numXCoordinates[0] += 2;
+					}
+					
+					if (writeToReport) {
+						try {
+							output.openItem();
+							output.writePointCoordinatesAssignment(pt);
+							output.closeItem();
+						} catch (IOException e) {
+							logger.error("Failed to write to output file(s).");
+							output.close();
+							return OGPConstants.ERR_CODE_GENERAL;
+						}
+					}
+				}
+			}
+		}
+		if (writeToReport) {
+			try {
+				output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+				output.closeSection();
+			} catch (IOException e) {
+				logger.error("Failed to write to output file(s).");
+				output.close();
+				return OGPConstants.ERR_CODE_GENERAL;
+			}
+		}
+		
+		return OGPConstants.RET_CODE_SUCCESS;
+	}
+	
+	/**
+	 * Method for transformation of geometry conditions for RC-constructibility problem 
+	 * to polynomial form.
+	 * 
+	 * @param numPolyConstraints	Return argument - number of instantiated polynomial constraints (since it is return argument, it is specified as array)
+	 * @return						Execution code
+	 */
+	private int transformGeometryConditionsForRcConsProblem(int[] numPolyConstraints) {
+		ILogger logger = OpenGeoProver.settings.getLogger();
+		boolean writeToReport = OpenGeoProver.settings.getParameters().createReport();
+		OGPOutput output = OpenGeoProver.settings.getOutput();
+		
+		numPolyConstraints[0] = 0;
+		if (writeToReport) {
+			try {
+				output.openSection("Transformation of geometry conditions for points to polynomial form");
+			} catch (IOException e) {
+				logger.error("Failed to write to output file(s).");
+				output.close();
+				return OGPConstants.ERR_CODE_GENERAL;
+			}
+		}
+		int istep = 1;
+		for (GeoConstruction gc : this.constructionSteps) {
+			if (!(gc instanceof Point))
+				continue;
+			
+			Point pt = (Point)gc; // safe cast
+			
+			if (writeToReport) {
+				try {
+					output.openSubSection("Transformation, step " + istep, true);
+					output.openEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
+					output.openItemWithDesc("Point to transform:");
+					output.closeItemWithDesc(pt.getGeoObjectLabel());
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return OGPConstants.ERR_CODE_GENERAL;
+				}
+			}
+			
+			if (pt instanceof FreePoint) {
+				if (writeToReport) {
+					try {
+						output.openItemWithDesc("Polynomial condition(s):");
+						output.closeItemWithDesc("N/A - free point");
+					} catch (IOException e) {
+						logger.error("Failed to write to output file(s).");
+						output.close();
+						return OGPConstants.ERR_CODE_GENERAL;
+					}
+				}
+			}
+			else if (pt instanceof SelfConditionalPoint) {
+				SelfConditionalPoint spt = (SelfConditionalPoint)pt; // safe cast
+				Map<String, Point> pointMap = spt.getPointsForInstantiation();
+				XPolynomial xp1 = spt.instantiateXCondition(pointMap);
+				XPolynomial xp2 = spt.instantiateYCondition(pointMap);
+				boolean added1 = false;
+				boolean added2 = false;
+				if (xp1 != null && xp1.getTerms().size() > 0 && (xp1.getTerms().size() > 1 || xp1.getLeadingTerm().getPowers().size() > 0)) { // not u-polynomial
+					this.algebraicGeoTheorem.getHypotheses().addXPoly(xp1);
+					added1 = true;
+					numPolyConstraints[0]++;
+				}
+				if (xp2!= null && xp2.getTerms().size() > 0 && (xp2.getTerms().size() > 1 || xp2.getLeadingTerm().getPowers().size() > 0)) { // not u-polynomial
+					this.algebraicGeoTheorem.getHypotheses().addXPoly(xp2);
+					added2 = true;
+					numPolyConstraints[0]++;
+				}
+				
+				if ((added1 || added2) && writeToReport) {
+					try {
+						output.openItemWithDesc("Polynomial condition(s):");
+						output.closeItemWithDesc((added1 && added2) ? "Two polynomials" : "One polynomial");
+						output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+						if (added1) {
+							output.openItem();
+							output.writePolynomial(xp1);
+							output.closeItem();
+						}
+						if (added2) {
+							output.openItem();
+							output.writePolynomial(xp2);
+							output.closeItem();
+						}
+						output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+					} catch (IOException e) {
+						logger.error("Failed to write to output file(s).");
+						output.close();
+						return OGPConstants.ERR_CODE_GENERAL;
+					}
+				}
+			}
+			else if (pt instanceof RandomPointFromSetOfPoints) {
+				// Skip instantiating condition for free point or point from construction list
+				RandomPointFromSetOfPoints rpt = (RandomPointFromSetOfPoints)pt;
+				SetOfPoints set = rpt.getBaseSetOfPoints();
+				XPolynomial xpoly = set.instantiateConditionFromBasicElements(rpt);
+				if (xpoly != null && xpoly.getTerms().size() > 0 && (xpoly.getTerms().size() > 1 || xpoly.getLeadingTerm().getPowers().size() > 0)) { // not u-polynomial
+					this.algebraicGeoTheorem.getHypotheses().addXPoly(xpoly);
+					numPolyConstraints[0]++;
+					
+					if (writeToReport) {
+						try {
+							output.openItemWithDesc("Polynomial condition(s):");
+							output.closeItemWithDesc("One polynomial");
+							output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+							output.openItem();
+							output.writePolynomial(xpoly);
+							output.closeItem();
+							output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+						} catch (IOException e) {
+							logger.error("Failed to write to output file(s).");
+							output.close();
+							return OGPConstants.ERR_CODE_GENERAL;
+						}
+					}
+				}
+			}
+			else if (pt instanceof IntersectionPoint) {
+				IntersectionPoint ipt = (IntersectionPoint)pt;
+				SetOfPoints set1 = ipt.getFirstPointSet();
+				SetOfPoints set2 = ipt.getSecondPointSet();
+				XPolynomial xp1 = set1.instantiateConditionFromBasicElements(ipt);
+				XPolynomial xp2 = set2.instantiateConditionFromBasicElements(ipt);
+				boolean added1 = false;
+				boolean added2 = false;
+				if (xp1 != null && xp1.getTerms().size() > 0 && (xp1.getTerms().size() > 1 || xp1.getLeadingTerm().getPowers().size() > 0)) { // not u-polynomial
+					this.algebraicGeoTheorem.getHypotheses().addXPoly(xp1);
+					added1 = true;
+					numPolyConstraints[0]++;
+				}
+				if (xp2!= null && xp2.getTerms().size() > 0 && (xp2.getTerms().size() > 1 || xp2.getLeadingTerm().getPowers().size() > 0)) { // not u-polynomial
+					this.algebraicGeoTheorem.getHypotheses().addXPoly(xp2);
+					added2 = true;
+					numPolyConstraints[0]++;
+				}
+				
+				if ((added1 || added2) && writeToReport) {
+					try {
+						output.openItemWithDesc("Polynomial condition(s):");
+						output.closeItemWithDesc((added1 && added2) ? "Two polynomials" : "One polynomial");
+						output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+						if (added1) {
+							output.openItem();
+							output.writePolynomial(xp1);
+							output.closeItem();
+						}
+						if (added2) {
+							output.openItem();
+							output.writePolynomial(xp2);
+							output.closeItem();
+						}
+						output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+					} catch (IOException e) {
+						logger.error("Failed to write to output file(s).");
+						output.close();
+						return OGPConstants.ERR_CODE_GENERAL;
+					}
+				}
+			}
+			else {
+				logger.error("Unknown point class");
+				if (writeToReport) {
+					try {
+						output.openItemWithDesc("Polynomial condition(s):");
+						output.closeItemWithDesc("Failed to calculate polynomials");
+					} catch (IOException e) {
+						logger.error("Failed to write to output file(s).");
+						output.close();
+						return OGPConstants.ERR_CODE_GENERAL;
+					}
+				}
+				return OGPConstants.ERR_CODE_GENERAL;
+			}
+			
+			if (writeToReport) {
+				try {
+					output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
+					output.closeSubSection();
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return OGPConstants.ERR_CODE_GENERAL;
+				}
+			}
+			
+			istep++;
+		}
+		
+		if (writeToReport) {
+			try {
+				output.closeSection();
+			} catch (IOException e) {
+				logger.error("Failed to write to output file(s).");
+				output.close();
+				return OGPConstants.ERR_CODE_GENERAL;
+			}
+		}
+		
+		return OGPConstants.RET_CODE_SUCCESS;
+	}
+	
+	/**
+	 * Local method which is used to give a next list of labels of points that
+	 * are used to construct objects whose labels are in passed in list.
+	 * 
+	 * @param labelList		Initial list of labels of geometry objects.
+	 * @return				List of points that are used to construct initial list 
+	 * 						of objects or null in case when such list doesn't exist.
+	 */
+	private Vector<String> getNextPointLabelsList(Vector<String> labelList) {
+		Vector<String> resultList = labelList;
+		Map<String, String> labelMap = new HashMap<String, String>();
+		boolean bRepeat = true;
+		boolean bChanged = false;
+		
+		while (bRepeat) {
+			boolean bChanged2 = false;
+			labelMap.clear();
+			for (String label : resultList) {
+				if (labelMap.get(label) == null)
+					labelMap.put(label, label);
+			}
+			
+			for (String label : resultList) {
+				GeoConstruction gc = this.constructionMap.get(label);
+				String[] inputLabels = gc.getInputLabels();
+				if (inputLabels != null) {
+					labelMap.remove(label);
+					for (String inputLabel : inputLabels) {
+						if (labelMap.get(inputLabel) == null)
+							labelMap.put(inputLabel, inputLabel);
+					}
+					bChanged2 = true;
+					bChanged = true;
+				}
+			
+				if (bChanged2)
+					break;
+			}
+			
+			if (!bChanged2) {
+				if (!bChanged)
+					return null; // can't obtain next point label list
+				break;
+			}
+			
+			resultList = new Vector<String>();
+			resultList.addAll(labelMap.values());
+			bRepeat = false;
+			for (String label : resultList) {
+				if (!(this.constructionMap.get(label) instanceof Point)) {
+					bRepeat = true;
+					break;
+				}
+			}
+		}
+		
+		return resultList;
 	}
 }

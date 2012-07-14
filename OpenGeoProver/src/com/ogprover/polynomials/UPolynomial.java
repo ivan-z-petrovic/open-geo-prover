@@ -7,6 +7,7 @@ package com.ogprover.polynomials;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeMap;
 
 import com.ogprover.main.OGPConstants;
@@ -273,6 +274,25 @@ public class UPolynomial extends Polynomial {
 		if (stringPoly.length() > OGPConstants.MAX_OUTPUT_POLY_CHARS_NUM)
 			return "...";
 		return stringPoly;
+	}
+	
+	/**
+	 * Method for instantiating variables of this polynomial by their double values.
+	 * 
+	 * @param varValuesMap	Map with variables' double values
+	 * @return				UPolynomial object where all variables that appear in passed in map have been replaced
+	 * 						by their double values.
+	 */
+	public UPolynomial instantiateVariablesWithValues(Map<UXVariable, Double> varValuesMap) {
+		if (this.isZero())
+			return this;
+		
+		UPolynomial resUPoly = new UPolynomial();
+		for (Term term : this.getTermsAsDescList()) {
+			resUPoly.addTerm(((UTerm)term).instantiateVariablesWithValues(varValuesMap));
+		}
+		
+		return resUPoly;
 	}
 	
 }

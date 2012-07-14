@@ -38,9 +38,16 @@ public class OGPParameters {
 	
 	// list of parameters' names
 	// usage of parameters/options:
-	// 		OGP -I theorem01[.gcl/xml] -i G -O theorem01_output -o A -p W -c 2 -l B [-v] -t 10000 -s 2000
+	// 		OGP [-M ogpMode]-I theorem01[.gcl/xml] -i G -O theorem01_output -o A -p W -c 2 -l B [-v] -t 10000 -s 2000
 	// there is default value for each parameter; they are defined in OGPConstants.java class as
 	// DEF_VAL_PARAM_xxx values.
+	/**
+	 * <i><b>
+	 * Optional parameter for execution mode of OGP application. Value "T" is for theorem proving (the default),
+	 * and "C" is for RC-constructibility. 
+	 * </b></i>
+	 */
+	public static final String PARAM_OGP_MODE = "M";
 	/**
 	 * <i><b>
 	 * Parameter for name of input file (with construction and statement to prove, described 
@@ -138,7 +145,8 @@ public class OGPParameters {
 	 * 					when parameter name was incorrect
 	 */
 	public String put(String key, String value) {
-		if (key.equals(OGPParameters.PARAM_INPUT_FILE) ||
+		if (key.equals(OGPParameters.PARAM_OGP_MODE) ||
+			key.equals(OGPParameters.PARAM_INPUT_FILE) ||
 			key.equals(OGPParameters.PARAM_INPUT_FORMAT) ||
 			key.equals(OGPParameters.PARAM_OUTPUT_FILE) ||
 			key.equals(OGPParameters.PARAM_OUTPUT_FORMAT) ||
@@ -155,6 +163,20 @@ public class OGPParameters {
 	}
 	
 	// Specific put methods
+	/**
+	 * Method to put execution mode
+	 * 
+	 * @param ogpMode	Execution mode of OGP application.
+	 * @return			Value of <b>OGPParameters.put(String key, String value)</b> method
+	 */
+	public String putOGPMode(int ogpMode) {
+		if (ogpMode == OGPConstants.OGP_MODE_THM_PROVING)
+			return this.put(OGPParameters.PARAM_INPUT_FILE, "T");
+		if (ogpMode == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY)
+			return this.put(OGPParameters.PARAM_INPUT_FILE, "C");
+		return null;
+	}
+	
 	/**
 	 * Method to put input file name
 	 * 
@@ -310,7 +332,8 @@ public class OGPParameters {
 	 * @return			Value assigned to passed in key or null in case of error.
 	 */
 	public String get(String key) {
-		if (key.equals(OGPParameters.PARAM_INPUT_FILE) ||
+		if (key.equals(OGPParameters.PARAM_OGP_MODE) ||
+			key.equals(OGPParameters.PARAM_INPUT_FILE) ||
 			key.equals(OGPParameters.PARAM_INPUT_FORMAT) ||
 			key.equals(OGPParameters.PARAM_OUTPUT_FILE) ||
 			key.equals(OGPParameters.PARAM_OUTPUT_FORMAT) ||
@@ -327,6 +350,22 @@ public class OGPParameters {
 	}
 	
 	// Specific get methods
+	/**
+	 * @return	Constant representing execution mode
+	 */
+	public int getOGPMode() {
+		String value = this.get(OGPParameters.PARAM_OGP_MODE);
+		
+		if (value.equals("T"))
+			return OGPConstants.OGP_MODE_THM_PROVING;
+		if (value.equals("C"))
+			return OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY;
+		
+		OpenGeoProver.settings.getLogger().error("Bad value assigned to parameter");
+		
+		return OGPConstants.ERR_CODE_GENERAL;
+	}
+	
 	/**
 	 * @return	Input file name
 	 */
@@ -483,6 +522,7 @@ public class OGPParameters {
 	 * Method for initialization of parameters with their default values
 	 */
 	private void init() {
+		this.params.put(OGPParameters.PARAM_OGP_MODE, OGPConstants.DEF_VAL_PARAM_OGP_MODE);
 		this.params.put(OGPParameters.PARAM_INPUT_FILE, OGPConstants.DEF_VAL_PARAM_INPUT_FILE);
 		this.params.put(OGPParameters.PARAM_INPUT_FORMAT, OGPConstants.DEF_VAL_PARAM_INPUT_FORMAT);
 		this.params.put(OGPParameters.PARAM_OUTPUT_FILE, OGPConstants.DEF_VAL_PARAM_OUTPUT_FILE);
@@ -509,6 +549,7 @@ public class OGPParameters {
 	public static void printHelp() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Correct command line should include following options/parameters: ");
+		sb.append("\n\n-M\texecution mode (optional - can be \"T\" for theorem proving (default) or \"C\" for Rc-constructibility);");
 		sb.append("\n\n-I\tname of input file (format can be gclc or xml file);\n\t name is not required - if not set, theorems from internal memory will be used");
 		sb.append("\n\n-i\tformat of input file - can be \"G\" for gclc file, \"O\" for OGP xml file or \n\t\"A\" for xml file with theorem in algebraic form; default is \"");
 		sb.append(OGPConstants.DEF_VAL_PARAM_INPUT_FORMAT);
@@ -569,8 +610,34 @@ public class OGPParameters {
 				if (paramValue != null && paramValue.charAt(0) == '-') // not value, but next parameter
 					paramValue = null;
 				
+				// execution mode
+				if (paramName.equals(OGPParameters.PARAM_OGP_MODE)) {
+					// this parameter must be the first if it occurs
+					if (ii > 0) {
+						logger.error("Execution mode parameter found at inappropriate position - it must be the first parameter.");
+						retCode = OGPConstants.ERR_CODE_GENERAL;
+						ii++;
+					}
+					else if (paramValue == null) {
+						logger.error("Missing execution mode parameter value - ignoring this parameter.");
+						retCode = OGPConstants.ERR_CODE_GENERAL;
+						ii++;
+					}
+					else {
+						if (!paramValue.equals("T") && !paramValue.equals("C")) {
+							logger.error("Bad execution mode parameter value provided - ignoring this parameter.");
+							retCode = OGPConstants.ERR_CODE_GENERAL;
+						}
+						else {
+							parameters.put(OGPParameters.PARAM_OGP_MODE, paramValue);
+							OpenGeoProver.settings.setOgpMode(parameters.getOGPMode());
+						}
+						ii += 2;
+					}
+				}
+				
 				// input file name
-				if (paramName.equals(OGPParameters.PARAM_INPUT_FILE)) {
+				else if (paramName.equals(OGPParameters.PARAM_INPUT_FILE)) {
 					if (paramValue == null) {
 						logger.error("Missing input file name - ignoring this parameter.");
 						retCode = OGPConstants.ERR_CODE_GENERAL;
@@ -701,7 +768,12 @@ public class OGPParameters {
 				
 				// prover
 				else if (paramName.equals(OGPParameters.PARAM_PROVER)) {
-					if (paramValue == null) {
+					if (OpenGeoProver.settings.getOgpMode() != OGPConstants.OGP_MODE_THM_PROVING) {
+						logger.error("Inappropriate parameter - current execution mode doesn't support it.");
+						retCode = OGPConstants.ERR_CODE_GENERAL;
+						ii++;
+					}
+					else if (paramValue == null) {
 						logger.error("Missing prover type - Wu's method is default.");
 						retCode = OGPConstants.ERR_CODE_GENERAL;
 						ii++;

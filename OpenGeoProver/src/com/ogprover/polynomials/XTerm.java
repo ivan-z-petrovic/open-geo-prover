@@ -4,6 +4,7 @@
 
 package com.ogprover.polynomials;
 
+import java.util.Map;
 import java.util.Vector;
 
 import com.ogprover.main.OGPConstants;
@@ -463,5 +464,36 @@ public class XTerm extends Term {
 			return "...";
 		sb.append(stringPowers);
 		return sb.toString();
+	}
+	
+	/**
+	 * Method for instantiating variables of this term by their double values.
+	 * 
+	 * @param varValuesMap	Map with variables' double values
+	 * @return				XTerm object where all variables that appear in passed in map have been replaced
+	 * 						by their double values.
+	 */
+	public XTerm instantiateVariablesWithValues(Map<UXVariable, Double> varValuesMap) {
+		if (this.isZero())
+			return this;
+		
+		UFraction resXTCoeff = this.uCoeff.instantiateVariablesWithValues(varValuesMap);
+		if (resXTCoeff == null) {
+			OpenGeoProver.settings.getLogger().error("Failed to instantiate coefficient");
+			return null;
+		}
+		
+		XTerm resXTerm = new XTerm(resXTCoeff);
+		for (Power pow : this.powers) {
+			Double varVal = varValuesMap.get(pow.getVariable());
+			if (varVal == null)
+				resXTerm.addPower(pow);
+			else {
+				if (varVal == 0.0)
+					return new XTerm(0.0); // zero term
+				resXTerm.mul(Math.pow(varVal.doubleValue(), pow.getExponent()));
+			}
+		}
+		return resXTerm;
 	}
 }

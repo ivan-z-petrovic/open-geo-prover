@@ -6,8 +6,10 @@ package com.ogprover.polynomials;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.ogprover.main.OGPConstants;
+import com.ogprover.main.OpenGeoProver;
 
 /**
  * <dl>
@@ -581,5 +583,27 @@ public class UFraction implements Cloneable, RationalAlgebraicExpression {
 		}
 		
 		return sb.toString();
+	}
+	
+	/**
+	 * Method for instantiating variables of this fraction by their double values.
+	 * 
+	 * @param varValuesMap	Map with variables' double values
+	 * @return				UFraction object where all variables that appear in passed in map have been replaced
+	 * 						by their double values.
+	 */
+	public UFraction instantiateVariablesWithValues(Map<UXVariable, Double> varValuesMap) {
+		if (this.isZero())
+			return this;
+		
+		UPolynomial resUFNum = this.numerator.instantiateVariablesWithValues(varValuesMap);
+		UPolynomial resUFDen = this.denominator.instantiateVariablesWithValues(varValuesMap);
+		if (resUFDen.isZero()) {
+			OpenGeoProver.settings.getLogger().error("Failed instantiation of fraction - denominator is zero");
+			return null;
+		}
+		if (resUFNum.isZero())
+			return new UFraction(resUFNum);
+		return new UFraction(resUFNum, resUFDen);
 	}
 }

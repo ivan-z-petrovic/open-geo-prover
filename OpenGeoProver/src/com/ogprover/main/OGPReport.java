@@ -102,14 +102,22 @@ public class OGPReport {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
-		if (parameters.createReport()) {	
-			String title = "OpenGeoProver Output for conjecture ``" + this.thmProtocol.getTheoremName() + "'' ";
+		if (parameters.createReport()) {
+			String title = null;
 			String author = null;
 			
-			if (parameters.getProver() == TheoremProver.TP_TYPE_WU)
-				author = "Wu's method used";
-			else if (parameters.getProver() == TheoremProver.TP_TYPE_GROEBNER)
-				author = "Groebner basis method used";
+			if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_THM_PROVING) {
+				title = "OpenGeoProver Output for conjecture ``" + this.thmProtocol.getTheoremName() + "'' ";
+			
+				if (parameters.getProver() == TheoremProver.TP_TYPE_WU)
+					author = "Wu's method used";
+				else if (parameters.getProver() == TheoremProver.TP_TYPE_GROEBNER)
+					author = "Groebner basis method used";
+			}
+			else if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
+				title = "OpenGeoProver Output for RC-Constructibility problem ``" + this.thmProtocol.getTheoremName() + "'' ";
+				author = "Used algebraic method (with triangulation)";
+			}
 			
 			try {
 				output.openDocument(null, title, author);

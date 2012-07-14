@@ -4,8 +4,10 @@
 
 package com.ogprover.test.formats.ogp_xml;
 
+import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.PointList;
 import com.ogprover.pp.tp.geoconstruction.*;
 import com.ogprover.pp.tp.thmstatement.*;
 import com.thoughtworks.xstream.converters.Converter;
@@ -30,6 +32,9 @@ public class OGPCPXMLConverter implements Converter {
 		return clazz.equals(OGPTP.class);
 	}
 
+	/**
+	 * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object, com.thoughtworks.xstream.io.HierarchicalStreamWriter, com.thoughtworks.xstream.converters.MarshallingContext)
+	 */
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
 		OGPTP consProtocol = (OGPTP)obj;
@@ -119,65 +124,81 @@ public class OGPCPXMLConverter implements Converter {
 			writer.endNode();
 		}
 		writer.endNode();
-		writer.startNode("statement");
-		ThmStatement statement = consProtocol.getTheoremStatement();
-		if (statement instanceof AlgebraicSumOfThreeAngles)
-			writer.startNode("algsumangles");
-		else if (statement instanceof AlgebraicSumOfThreeSegments)
-			writer.startNode("algsumsegs");
-		else if (statement instanceof AngleEqualToSpecialConstantAngle)
-			writer.startNode("angeqspecconsang");
-		else if (statement instanceof CollinearPoints)
-			writer.startNode("collinearpts");
-		else if (statement instanceof ConcurrentCircles)
-			writer.startNode("concurrentcircles");
-		else if (statement instanceof ConcurrentLines)
-			writer.startNode("concurrentlines");
-		else if (statement instanceof ConcyclicPoints)
-			writer.startNode("concyclicpts");
-		else if (statement instanceof CongruentTriangles)
-			writer.startNode("congrtriangles");
-		else if (statement instanceof EqualAngles)
-			writer.startNode("eqangles");
-		else if (statement instanceof EqualityOfRatioProducts)
-			writer.startNode("eqratioprods");
-		else if (statement instanceof EqualityOfTwoRatios)
-			writer.startNode("eqratios");
-		else if (statement instanceof EquilateralTriangle)
-			writer.startNode("eqtriangle");
-		else if (statement instanceof FourHarmonicConjugatePoints)
-			writer.startNode("harmonicconj");
-		else if (statement instanceof IdenticalPoints)
-			writer.startNode("identicpts");
-		else if (statement instanceof LinearCombinationOfDoubleSignedPolygonAreas)
-			writer.startNode("polyareas");
-		else if (statement instanceof LinearCombinationOfOrientedSegments)
-			writer.startNode("segmentscomb");
-		else if (statement instanceof LinearCombinationOfSquaresOfSegments)
-			writer.startNode("sqsegmentscomb");
-		else if (statement instanceof PointOnSetOfPoints)
-			writer.startNode("pointonset");
-		else if (statement instanceof RatioOfOrientedSegments)
-			writer.startNode("ratioorisegs");
-		else if (statement instanceof RatioOfTwoSegments)
-			writer.startNode("segratio");
-		else if (statement instanceof SegmentsOfEqualLengths)
-			writer.startNode("eqsegs");
-		else if (statement instanceof SimilarTriangles)
-			writer.startNode("simrtriangles");
-		else if (statement instanceof TouchingCircles)
-			writer.startNode("touchcircles");
-		else if (statement instanceof TwoInversePoints)
-			writer.startNode("inversepts");
-		else if (statement instanceof TwoParallelLines)
-			writer.startNode("parallellines");
-		else if (statement instanceof TwoPerpendicularLines)
-			writer.startNode("perplines");
-		ctx.convertAnother(statement);
-		writer.endNode();
-		writer.endNode();
+		
+		if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_THM_PROVING) {
+			writer.startNode("statement");
+			ThmStatement statement = consProtocol.getTheoremStatement();
+			if (statement instanceof AlgebraicSumOfThreeAngles)
+				writer.startNode("algsumangles");
+			else if (statement instanceof AlgebraicSumOfThreeSegments)
+				writer.startNode("algsumsegs");
+			else if (statement instanceof AngleEqualToSpecialConstantAngle)
+				writer.startNode("angeqspecconsang");
+			else if (statement instanceof CollinearPoints)
+				writer.startNode("collinearpts");
+			else if (statement instanceof ConcurrentCircles)
+				writer.startNode("concurrentcircles");
+			else if (statement instanceof ConcurrentLines)
+				writer.startNode("concurrentlines");
+			else if (statement instanceof ConcyclicPoints)
+				writer.startNode("concyclicpts");
+			else if (statement instanceof CongruentTriangles)
+				writer.startNode("congrtriangles");
+			else if (statement instanceof EqualAngles)
+				writer.startNode("eqangles");
+			else if (statement instanceof EqualityOfRatioProducts)
+				writer.startNode("eqratioprods");
+			else if (statement instanceof EqualityOfTwoRatios)
+				writer.startNode("eqratios");
+			else if (statement instanceof EquilateralTriangle)
+				writer.startNode("eqtriangle");
+			else if (statement instanceof FourHarmonicConjugatePoints)
+				writer.startNode("harmonicconj");
+			else if (statement instanceof IdenticalPoints)
+				writer.startNode("identicpts");
+			else if (statement instanceof LinearCombinationOfDoubleSignedPolygonAreas)
+				writer.startNode("polyareas");
+			else if (statement instanceof LinearCombinationOfOrientedSegments)
+				writer.startNode("segmentscomb");
+			else if (statement instanceof LinearCombinationOfSquaresOfSegments)
+				writer.startNode("sqsegmentscomb");
+			else if (statement instanceof PointOnSetOfPoints)
+				writer.startNode("pointonset");
+			else if (statement instanceof RatioOfOrientedSegments)
+				writer.startNode("ratioorisegs");
+			else if (statement instanceof RatioOfTwoSegments)
+				writer.startNode("segratio");
+			else if (statement instanceof SegmentsOfEqualLengths)
+				writer.startNode("eqsegs");
+			else if (statement instanceof SimilarTriangles)
+				writer.startNode("simrtriangles");
+			else if (statement instanceof TouchingCircles)
+				writer.startNode("touchcircles");
+			else if (statement instanceof TwoInversePoints)
+				writer.startNode("inversepts");
+			else if (statement instanceof TwoParallelLines)
+				writer.startNode("parallellines");
+			else if (statement instanceof TwoPerpendicularLines)
+				writer.startNode("perplines");
+			ctx.convertAnother(statement);
+			writer.endNode();
+			writer.endNode();
+		}
+		else if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
+			writer.startNode("freepts");
+			writer.addAttribute("insMoment", (consProtocol.getRcConsMomentOfInstantiationOfPointCoordinates() == OGPTP.INSTANTIATION_MOMENT_AFTER) ? "after" : "before");
+			ctx.convertAnother(consProtocol.getRcConsFreePoints());
+			writer.endNode();
+			
+			writer.startNode("conspts");
+			ctx.convertAnother(consProtocol.getRcConsPointsToConstruct());
+			writer.endNode();
+		}
 	}
 
+	/**
+	 * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.HierarchicalStreamReader, com.thoughtworks.xstream.converters.UnmarshallingContext)
+	 */
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPTP consProtocol = new OGPTP();
@@ -273,63 +294,90 @@ public class OGPCPXMLConverter implements Converter {
 		}
 		reader.moveUp();
 		reader.moveDown();
-		if ("statement".equals(reader.getNodeName())) {
-			reader.moveDown();
-			String nodeName = reader.getNodeName();
+		if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_THM_PROVING) {
+			if ("statement".equals(reader.getNodeName())) {
+				reader.moveDown();
+				String nodeName = reader.getNodeName();
 			
-			if ("algsumangles".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, AlgebraicSumOfThreeAngles.class));
-			else if ("algsumsegs".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, AlgebraicSumOfThreeSegments.class));
-			else if ("angeqspecconsang".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, AngleEqualToSpecialConstantAngle.class));
-			else if ("collinearpts".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, CollinearPoints.class));
-			else if ("concurrentcircles".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, ConcurrentCircles.class));
-			else if ("concurrentlines".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, ConcurrentLines.class));
-			else if ("concyclicpts".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, ConcyclicPoints.class));
-			else if ("congrtriangles".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, CongruentTriangles.class));
-			else if ("eqangles".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EqualAngles.class));
-			else if ("eqratioprods".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EqualityOfRatioProducts.class));
-			else if ("eqratios".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EqualityOfTwoRatios.class));
-			else if ("eqtriangle".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EquilateralTriangle.class));
-			else if ("harmonicconj".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, FourHarmonicConjugatePoints.class));
-			else if ("identicpts".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, IdenticalPoints.class));
-			else if ("polyareas".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, LinearCombinationOfDoubleSignedPolygonAreas.class));
-			else if ("segmentscomb".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, LinearCombinationOfOrientedSegments.class));
-			else if ("sqsegmentscomb".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, LinearCombinationOfSquaresOfSegments.class));
-			else if ("pointonset".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, PointOnSetOfPoints.class));
-			else if ("ratioorisegs".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, RatioOfOrientedSegments.class));
-			else if ("segratio".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, RatioOfTwoSegments.class));
-			else if ("eqsegs".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, SegmentsOfEqualLengths.class));
-			else if ("simrtriangles".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, SimilarTriangles.class));
-			else if ("touchcircles".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, TouchingCircles.class));
-			else if ("inversepts".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, TwoInversePoints.class));
-			else if ("parallellines".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, TwoParallelLines.class));
-			else if ("perplines".equals(nodeName))
-				consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, TwoPerpendicularLines.class));
+				if ("algsumangles".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, AlgebraicSumOfThreeAngles.class));
+				else if ("algsumsegs".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, AlgebraicSumOfThreeSegments.class));
+				else if ("angeqspecconsang".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, AngleEqualToSpecialConstantAngle.class));
+				else if ("collinearpts".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, CollinearPoints.class));
+				else if ("concurrentcircles".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, ConcurrentCircles.class));
+				else if ("concurrentlines".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, ConcurrentLines.class));
+				else if ("concyclicpts".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, ConcyclicPoints.class));
+				else if ("congrtriangles".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, CongruentTriangles.class));
+				else if ("eqangles".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EqualAngles.class));
+				else if ("eqratioprods".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EqualityOfRatioProducts.class));
+				else if ("eqratios".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EqualityOfTwoRatios.class));
+				else if ("eqtriangle".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, EquilateralTriangle.class));
+				else if ("harmonicconj".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, FourHarmonicConjugatePoints.class));
+				else if ("identicpts".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, IdenticalPoints.class));
+				else if ("polyareas".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, LinearCombinationOfDoubleSignedPolygonAreas.class));
+				else if ("segmentscomb".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, LinearCombinationOfOrientedSegments.class));
+				else if ("sqsegmentscomb".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, LinearCombinationOfSquaresOfSegments.class));
+				else if ("pointonset".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, PointOnSetOfPoints.class));
+				else if ("ratioorisegs".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, RatioOfOrientedSegments.class));
+				else if ("segratio".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, RatioOfTwoSegments.class));
+				else if ("eqsegs".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, SegmentsOfEqualLengths.class));
+				else if ("simrtriangles".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, SimilarTriangles.class));
+				else if ("touchcircles".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, TouchingCircles.class));
+				else if ("inversepts".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, TwoInversePoints.class));
+				else if ("parallellines".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, TwoParallelLines.class));
+				else if ("perplines".equals(nodeName))
+					consProtocol.addThmStatement((ThmStatement)ctx.convertAnother(null, TwoPerpendicularLines.class));
+				reader.moveUp();
+			}
+		}
+		else if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
+			if ("freepts".equals(reader.getNodeName())) {
+				String insMoment = reader.getAttribute("insMoment");
+				if (insMoment != null) {
+					if (insMoment.equalsIgnoreCase("before"))
+						consProtocol.setRcConsMomentOfInstantiationOfPointCoordinates(OGPTP.INSTANTIATION_MOMENT_BEFORE);
+					else if (insMoment.equalsIgnoreCase("after"))
+						consProtocol.setRcConsMomentOfInstantiationOfPointCoordinates(OGPTP.INSTANTIATION_MOMENT_AFTER);
+					else
+						return null; // incorrect argument value
+				}
+				PointList ptList = (PointList)ctx.convertAnother(null, PointList.class);
+				if (ptList == null)
+					return null;
+				consProtocol.setRcConsFreePoints(ptList);
+			}
 			reader.moveUp();
+			reader.moveDown();
+			if ("conspts".equals(reader.getNodeName())) {
+				PointList ptList = (PointList)ctx.convertAnother(null, PointList.class);
+				if (ptList == null)
+					return null;
+				consProtocol.setRcConsPointsToConstruct(ptList);
+			}
 		}
 		reader.moveUp();
 		

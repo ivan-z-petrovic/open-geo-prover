@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Wernick 124 (Ha, Hb, Hc --| A)">
+	<!-- Wernick 124 B                                                                                -->
+	<!-- Let ABC be a triangle and Ha, Hb and Hc are respectively foot points of vertices A, B and C  -->
+	<!-- on opposite edges. Consider RC-constructibility of vertex A from given points Ha, Hb and Hc. -->
+	<constructions>
+		<pfree label="A"/>
+		<pfree label="B"/>
+		<pfree label="C"/>
+		<ltwopts label="a" point1="B" point2="C" />
+		<ltwopts label="b" point1="C" point2="A" />
+		<ltwopts label="c" point1="A" point2="B" />
+		<lperp label="ha" point="A" baseline="a" />
+		<lperp label="hb" point="B" baseline="b" />
+		<pintersect label="Ha" set1="a" set2="ha" />
+		<pintersect label="Hb" set1="b" set2="hb" />
+		<pintersect label="H" set1="ha" set2="hb" />
+		<ltwopts label="hc" point1="C" point2="H" />
+		<pintersect label="Hc" set1="c" set2="hc" />
+	</constructions>
+	<freepts>
+		<point label="Ha" />
+		<point label="Hb" />
+		<point label="Hc" />
+	</freepts>
+	<conspts>
+		<point label="A" />
+	</conspts>
+</geothm>

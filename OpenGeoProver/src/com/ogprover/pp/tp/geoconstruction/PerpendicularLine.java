@@ -503,8 +503,37 @@ public class PerpendicularLine extends Line {
 		inputLabels.add(this.baseLine.getGeoObjectLabel());
 		// Add points from base line too since they are important for this construction
 		// (they are implicit input arguments) - there can be some new random points added.
+		// But do not add points that depend on this perpendicular line.
 		for (Point pt : this.baseLine.getPoints()) {
-			if (!pt.equals(firstPt))
+			String[] ptInputLabels = pt.getInputLabels();
+			Vector<String> ptInputLabelsV = new Vector<String>();
+			if (ptInputLabels != null) {
+				for (String label : ptInputLabels) {
+					if (ptInputLabelsV.indexOf(label) == -1)
+						ptInputLabelsV.add(label);
+				}
+			}
+			boolean bDependent = false;
+			while (ptInputLabelsV != null && ptInputLabelsV.size() > 0) {
+				if (ptInputLabelsV.indexOf(this.getGeoObjectLabel()) != -1) {
+					bDependent = true;
+					break;
+				}
+				
+				Vector<String> tempV = new Vector<String>();
+				for (String label : ptInputLabelsV) {
+					String[] inLabels = this.consProtocol.getConstructionMap().get(label).getInputLabels();
+					if (inLabels != null) {
+						for (String label2 : inLabels) {
+							if (tempV.indexOf(label2) == -1)
+								tempV.add(label2);
+						}
+					}
+				}
+				
+				ptInputLabelsV = tempV;
+			}
+			if (!bDependent && !pt.equals(firstPt))
 				inputLabels.add(pt.getGeoObjectLabel());
 		}
 		return inputLabels.toArray(strArr);

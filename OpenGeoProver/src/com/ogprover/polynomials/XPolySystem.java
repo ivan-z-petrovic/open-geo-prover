@@ -7,6 +7,7 @@ package com.ogprover.polynomials;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Map;
 import java.util.Vector;
 
 import com.ogprover.main.OGPConstants;
@@ -341,7 +342,7 @@ public class XPolySystem {
 		Vector<XPolynomial> triangularSystem = new Vector<XPolynomial>(); // final triangular system of polynomials
 		Vector<XPolynomial> freeSystem = null;   // system that contains polynomials free of certain variable;
 											     // it is also updated in each loop step
-		Vector<XPolynomial> notFreeSystem = null; // system of polynomials to be freed from certain variable;
+		Vector<XPolynomial> nonFreeSystem = null; // system of polynomials to be freed from certain variable;
 												  // it is also updated in each loop step
 		Vector<XPolynomial> auxSystem = this.polynomials;  // auxiliary system used in each loop step for polynomials
 		                                                   // that have to be processed; initially auxiliary system that 
@@ -385,7 +386,7 @@ public class XPolySystem {
 			// one will be polynomials free of variable x[ii] and another consists
 			// of polynomials that contain x[ii]
 			freeSystem = new Vector<XPolynomial>();
-			notFreeSystem = new Vector<XPolynomial>();
+			nonFreeSystem = new Vector<XPolynomial>();
 			originalIndexes = new Vector<Integer>();
 			tempSystemChanged = true;
 			
@@ -404,7 +405,16 @@ public class XPolySystem {
 					XTerm currTerm = (XTerm)termList.get(counter);
 					
 					if (currTerm == null) {
-						logger.error("Found null term");
+						String errMsg = "Found null term";
+						logger.error(errMsg);
+						try {
+							output.openItemWithDesc("Error:");
+							output.closeItemWithDesc(errMsg);
+						} catch (IOException e) {
+							logger.error("Failed to write to output file(s).");
+							output.close();
+							return OGPConstants.ERR_CODE_GENERAL;
+						}
 						return OGPConstants.ERR_CODE_NULL;
 					}
 					varExp = currTerm.getVariableExponent(ii);
@@ -422,7 +432,7 @@ public class XPolySystem {
 				
 				// decide where to store polynomial
 				if (found) {
-					notFreeSystem.add((XPolynomial)currXPoly.clone());
+					nonFreeSystem.add((XPolynomial)currXPoly.clone());
 					originalIndexes.add(new Integer(jj));
 				}
 				else
@@ -430,8 +440,17 @@ public class XPolySystem {
 			}
 			
 			// if no polynomial found with variable x[ii] that is error
-			if (notFreeSystem.size() == 0) {
-				logger.error("Variable with index " + ii + " not found in polynomial system.");
+			if (nonFreeSystem.size() == 0) {
+				String errMsg = "Variable with index " + ii + " not found in polynomial system.";
+				logger.error(errMsg);
+				try {
+					output.openItemWithDesc("Error:");
+					output.closeItemWithDesc(errMsg);
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return OGPConstants.ERR_CODE_GENERAL;
+				}
 				return OGPConstants.ERR_CODE_GENERAL;
 			}
 			
@@ -445,7 +464,7 @@ public class XPolySystem {
 				sb.append("The number of polynomials with this variable, with indexes from 1 to ");
 				sb.append(isize - istep + 1);
 				sb.append(", is ");
-				sb.append(notFreeSystem.size());
+				sb.append(nonFreeSystem.size());
 				sb.append(".\n\n");
 				output.closeItemWithDesc(sb.toString());
 			} catch (IOException e) {
@@ -455,8 +474,8 @@ public class XPolySystem {
 			}
 			
 			// if there is only one polynomial with variable x[ii], choose it for triangular system
-			if (notFreeSystem.size() == 1) {
-				triangularSystem.add(0, notFreeSystem.get(0)); // always add to beginning
+			if (nonFreeSystem.size() == 1) {
+				triangularSystem.add(0, nonFreeSystem.get(0)); // always add to beginning
 				this.variableList.add(0, new Integer(ii));
 				auxSystem = freeSystem;
 				tempSystemChanged = false;
@@ -478,14 +497,23 @@ public class XPolySystem {
 				boolean end = false;
 				
 				do { // remove x[ii] variable from notFreeSystem of polynomials
-					// find two polynomials with smallest exponent of variable x[ii]
+					 // find two polynomials with smallest exponent of variable x[ii]
 					int first = 0, second = 1;
-					int exp1 = notFreeSystem.get(first).getLeadingExp(ii), 
-						exp2 = notFreeSystem.get(second).getLeadingExp(ii);
+					int exp1 = nonFreeSystem.get(first).getLeadingExp(ii), 
+						exp2 = nonFreeSystem.get(second).getLeadingExp(ii);
 					int min1, min2, count1 = 1, count2 = 1;
 					
 					if (exp1 == 0 || exp2 == 0) {
-						logger.error("Variable not found when expected to be found.");
+						String errMsg = "Variable not found when expected to be found.";
+						logger.error(errMsg);
+						try {
+							output.openItemWithDesc("Error:");
+							output.closeItemWithDesc(errMsg);
+						} catch (IOException e) {
+							logger.error("Failed to write to output file(s).");
+							output.close();
+							return OGPConstants.ERR_CODE_GENERAL;
+						}
 						return OGPConstants.ERR_CODE_GENERAL;
 					}
 					// first is for smallest exponent
@@ -500,11 +528,20 @@ public class XPolySystem {
 						min2 = exp1;
 					}
 					
-					for (int ll = 2, mm = notFreeSystem.size(); ll < mm; ll++) {
-						int currExp = notFreeSystem.get(ll).getLeadingExp(ii);
+					for (int ll = 2, mm = nonFreeSystem.size(); ll < mm; ll++) {
+						int currExp = nonFreeSystem.get(ll).getLeadingExp(ii);
 						
 						if (currExp == 0) {
-							logger.error("Variable not found when expected to be found.");
+							String errMsg = "Variable not found when expected to be found.";
+							logger.error(errMsg);
+							try {
+								output.openItemWithDesc("Error:");
+								output.closeItemWithDesc(errMsg);
+							} catch (IOException e) {
+								logger.error("Failed to write to output file(s).");
+								output.close();
+								return OGPConstants.ERR_CODE_GENERAL;
+							}
 							return OGPConstants.ERR_CODE_GENERAL;
 						} 
 						if (currExp < min1) {
@@ -569,12 +606,12 @@ public class XPolySystem {
 							return OGPConstants.ERR_CODE_GENERAL;
 						}
 						
-						XPolynomial currPoly = notFreeSystem.get(first);
+						XPolynomial currPoly = nonFreeSystem.get(first);
 						triangularSystem.add(0, currPoly); // always add to beginning
 						this.variableList.add(0, new Integer(ii));
-						notFreeSystem.remove(first);
-						for (int ll = 0, mm = notFreeSystem.size(); ll < mm; ll++) {
-							XPolynomial tempXP = notFreeSystem.get(ll).pseudoReminder(currPoly, ii);
+						nonFreeSystem.remove(first);
+						for (int ll = 0, mm = nonFreeSystem.size(); ll < mm; ll++) {
+							XPolynomial tempXP = nonFreeSystem.get(ll).pseudoReminder(currPoly, ii);
 							
 							if (tempXP == null)
 								return OpenGeoProver.settings.getRetCodeOfPseudoDivision();
@@ -582,14 +619,32 @@ public class XPolySystem {
 							int numOfTerms = tempXP.getTerms().size();
 							
 							if (numOfTerms > OpenGeoProver.settings.getParameters().getSpaceLimit()) {
-								logger.error("Polynomial exceeds maximal allowed number of terms.");
+								String errMsg = "Polynomial exceeds maximal allowed number of terms.";
+								logger.error(errMsg);
+								try {
+									output.openItemWithDesc("Error:");
+									output.closeItemWithDesc(errMsg);
+								} catch (IOException e) {
+									logger.error("Failed to write to output file(s).");
+									output.close();
+									return OGPConstants.ERR_CODE_GENERAL;
+								}
 								return OGPConstants.ERR_CODE_SPACE;
 							}
 							if (numOfTerms > OpenGeoProver.settings.getMaxNumOfTerms()) {
 								OpenGeoProver.settings.setMaxNumOfTerms(numOfTerms);
 							}
 							if (OpenGeoProver.settings.getTimer().isTimeIsUp()) {
-								logger.error("Prover execution time has been expired.");
+								String errMsg = "Prover execution time has been expired.";
+								logger.error(errMsg);
+								try {
+									output.openItemWithDesc("Error:");
+									output.closeItemWithDesc(errMsg);
+								} catch (IOException e) {
+									logger.error("Failed to write to output file(s).");
+									output.close();
+									return OGPConstants.ERR_CODE_GENERAL;
+								}
 								return OGPConstants.ERR_CODE_TIME;
 							}
 							freeSystem.add(tempXP);
@@ -599,8 +654,8 @@ public class XPolySystem {
 					}
 					else {
 						// reduce two chosen polynomials
-						XPolynomial r2 = notFreeSystem.get(second);
-						XPolynomial r1 = notFreeSystem.get(first);
+						XPolynomial r2 = nonFreeSystem.get(second);
+						XPolynomial r1 = nonFreeSystem.get(first);
 						int leadExp = 0;
 						
 						try {
@@ -609,11 +664,11 @@ public class XPolySystem {
 							sb.append("Reducing polynomial <ind_text><label>p</label><ind>");
 							sb.append(second + 1);
 							sb.append("</ind></ind_text> (of degree ");
-							sb.append(count2);
+							sb.append(min2);
 							sb.append(") with <ind_text><label>p</label><ind>");
 							sb.append(first + 1);
 							sb.append("</ind></ind_text> (of degree ");
-							sb.append(count1);
+							sb.append(min1);
 							sb.append(").\n\n");
 							output.closeItemWithDesc(sb.toString());
 						} catch (IOException e) {
@@ -631,14 +686,32 @@ public class XPolySystem {
 							int numOfTerms = temp.getTerms().size();
 							
 							if (numOfTerms > OpenGeoProver.settings.getParameters().getSpaceLimit()) {
-								logger.error("Polynomial exceeds maximal allowed number of terms.");
+								String errMsg = "Polynomial exceeds maximal allowed number of terms.";
+								logger.error(errMsg);
+								try {
+									output.openItemWithDesc("Error:");
+									output.closeItemWithDesc(errMsg);
+								} catch (IOException e) {
+									logger.error("Failed to write to output file(s).");
+									output.close();
+									return OGPConstants.ERR_CODE_GENERAL;
+								}
 								return OGPConstants.ERR_CODE_SPACE;
 							}
 							if (numOfTerms > OpenGeoProver.settings.getMaxNumOfTerms()) {
 								OpenGeoProver.settings.setMaxNumOfTerms(numOfTerms);
 							}
 							if (OpenGeoProver.settings.getTimer().isTimeIsUp()) {
-								logger.error("Prover execution time has been expired.");
+								String errMsg = "Prover execution time has been expired.";
+								logger.error(errMsg);
+								try {
+									output.openItemWithDesc("Error:");
+									output.closeItemWithDesc(errMsg);
+								} catch (IOException e) {
+									logger.error("Failed to write to output file(s).");
+									output.close();
+									return OGPConstants.ERR_CODE_GENERAL;
+								}
 								return OGPConstants.ERR_CODE_TIME;
 							}
 							
@@ -646,7 +719,16 @@ public class XPolySystem {
 							r1 = temp;
 							
 							if (r1.isZero()) { // two chosen polynomials have common factor - this is treated as error
-								logger.error("Two polynomials have common factor.");
+								String errMsg = "Two polynomials have common factor.";
+								logger.error(errMsg);
+								try {
+									output.openItemWithDesc("Error:");
+									output.closeItemWithDesc(errMsg);
+								} catch (IOException e) {
+									logger.error("Failed to write to output file(s).");
+									output.close();
+									return OGPConstants.ERR_CODE_GENERAL;
+								}
 								return OGPConstants.ERR_CODE_GENERAL;
 							}
 							
@@ -657,14 +739,14 @@ public class XPolySystem {
 						// notFreeSystem(first) contains r1
 						
 						//update references in notFreeSystem
-						notFreeSystem.set(first, r1);
-						notFreeSystem.set(second, r2);
+						nonFreeSystem.set(first, r1);
+						nonFreeSystem.set(second, r2);
 						
 						// if r1 doesn't contain variable x[ii], add it to free polynomials
 						if (leadExp == 0) {
 							freeSystem.add(r1);
-							notFreeSystem.remove(first);
-							if (notFreeSystem.size() == 1) { // only one polynomial has left
+							nonFreeSystem.remove(first);
+							if (nonFreeSystem.size() == 1) { // only one polynomial has left
 								// add it into triangular system
 								triangularSystem.add(0, r2); // always add to beginning
 								this.variableList.add(0, new Integer(ii));
@@ -677,9 +759,9 @@ public class XPolySystem {
 							// add it into triangular system, and divide all other polynomials
 							triangularSystem.add(0, r1); // always add to beginning
 							this.variableList.add(0, new Integer(ii));
-							notFreeSystem.remove(first);
-							for (int ll = 0, mm = notFreeSystem.size(); ll < mm; ll++) {
-								XPolynomial tempXP = notFreeSystem.get(ll).pseudoReminder(r1, ii);
+							nonFreeSystem.remove(first);
+							for (int ll = 0, mm = nonFreeSystem.size(); ll < mm; ll++) {
+								XPolynomial tempXP = nonFreeSystem.get(ll).pseudoReminder(r1, ii);
 								
 								if (tempXP == null)
 									return OpenGeoProver.settings.getRetCodeOfPseudoDivision();
@@ -687,14 +769,32 @@ public class XPolySystem {
 								int numOfTerms = tempXP.getTerms().size();
 								
 								if (numOfTerms > OpenGeoProver.settings.getParameters().getSpaceLimit()) {
-									logger.error("Polynomial exceeds maximal allowed number of terms.");
+									String errMsg = "Polynomial exceeds maximal allowed number of terms.";
+									logger.error(errMsg);
+									try {
+										output.openItemWithDesc("Error:");
+										output.closeItemWithDesc(errMsg);
+									} catch (IOException e) {
+										logger.error("Failed to write to output file(s).");
+										output.close();
+										return OGPConstants.ERR_CODE_GENERAL;
+									}
 									return OGPConstants.ERR_CODE_SPACE;
 								}
 								if (numOfTerms > OpenGeoProver.settings.getMaxNumOfTerms()) {
 									OpenGeoProver.settings.setMaxNumOfTerms(numOfTerms);
 								}
 								if (OpenGeoProver.settings.getTimer().isTimeIsUp()) {
-									logger.error("Prover execution time has been expired.");
+									String errMsg = "Prover execution time has been expired.";
+									logger.error(errMsg);
+									try {
+										output.openItemWithDesc("Error:");
+										output.closeItemWithDesc(errMsg);
+									} catch (IOException e) {
+										logger.error("Failed to write to output file(s).");
+										output.close();
+										return OGPConstants.ERR_CODE_GENERAL;
+									}
 									return OGPConstants.ERR_CODE_TIME;
 								}
 								freeSystem.add(tempXP);
@@ -764,5 +864,23 @@ public class XPolySystem {
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Method for instantiating variables of this polynomial system by their double values.
+	 * 
+	 * @param varValuesMap	Map with variables' double values
+	 * @return				XPolySystem object where all variables that appear in passed in map have been replaced
+	 * 						by their double values.
+	 */
+	public XPolySystem instantiateVariablesWithValues(Map<UXVariable, Double> varValuesMap) {
+		XPolySystem resXPSys = new XPolySystem();
+		for (int ii = 0, jj = this.polynomials.size(); ii < jj; ii++) {
+			XPolynomial xp = this.polynomials.get(ii).instantiateVariablesWithValues(varValuesMap);
+			if (xp == null)
+				return null;
+			resXPSys.addXPoly(xp);
+		}
+		return resXPSys;
 	}
 }
