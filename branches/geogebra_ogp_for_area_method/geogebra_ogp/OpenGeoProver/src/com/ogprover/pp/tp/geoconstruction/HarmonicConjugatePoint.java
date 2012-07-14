@@ -502,22 +502,6 @@ public class HarmonicConjugatePoint extends SelfConditionalPoint {
 	}
 	
 	/**
-	 * Method that transforms the construction of this point into algebraic form
-	 * 
-	 * @see com.ogprover.pp.tp.geoconstruction.Point#transformToAlgebraicForm()
-	 */
-	@Override
-	public int transformToAlgebraicForm() {
-		Map<String, Point> pointsMap = new HashMap<String, Point>();
-		pointsMap.put(M0Label, this);
-		pointsMap.put(ALabel, this.pointA);
-		pointsMap.put(BLabel, this.pointB);
-		pointsMap.put(CLabel, this.pointC);
-		
-		return this.transformToAlgebraicForm(pointsMap);
-	}
-
-	/**
 	 * @see com.ogprover.pp.tp.geoconstruction.GeoConstruction#getConstructionDesc()
 	 */
 	@Override
@@ -544,6 +528,19 @@ public class HarmonicConjugatePoint extends SelfConditionalPoint {
 		inputLabels[1] = this.pointB.getGeoObjectLabel();
 		inputLabels[2] = this.pointC.getGeoObjectLabel();
 		return inputLabels;
+	}
+
+	/**
+	 * @see com.ogprover.pp.tp.geoconstruction.SelfConditionalPoint#getPointsForInstantiation()
+	 */
+	@Override
+	public Map<String, Point> getPointsForInstantiation() {
+		Map<String, Point> pointsMap = new HashMap<String, Point>();
+		pointsMap.put(M0Label, this);
+		pointsMap.put(ALabel, this.pointA);
+		pointsMap.put(BLabel, this.pointB);
+		pointsMap.put(CLabel, this.pointC);
+		return pointsMap;
 	}
 
 }
