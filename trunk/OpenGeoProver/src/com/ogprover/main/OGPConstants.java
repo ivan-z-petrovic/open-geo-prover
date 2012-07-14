@@ -30,6 +30,11 @@ public class OGPConstants {
 	
 	
 	
+	// constants for OGP mode
+	public static final int OGP_MODE_THM_PROVING = 0; // mode for proving geometry theorems (the default mode)
+	public static final int OGP_MODE_RC_CONSTRUCTIBILITY = 1; // mode for examination of RC-constructibility
+	// TODO - place new modes here ...
+	
 	// constants for work with real constants
 	/**
 	 * <i><b>Number of significant decimal places</b></i>
@@ -82,6 +87,10 @@ public class OGPConstants {
 	
 	
 	// constants for default parameter values
+	/**
+	 * <i><b>Default parameter value for execution mode</b></i>
+	 */
+	public static final String DEF_VAL_PARAM_OGP_MODE = "T";
 	/**
 	 * <i><b>Default parameter value for input file name</b></i>
 	 */

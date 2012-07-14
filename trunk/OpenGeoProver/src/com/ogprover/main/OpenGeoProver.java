@@ -71,6 +71,7 @@ public class OpenGeoProver {
 		OGPOutput output = OpenGeoProver.settings.getOutput();
 		FileLogger logger = (FileLogger) OpenGeoProver.settings.getLogger();
 		Stopwatch stopwatch = OpenGeoProver.settings.getStopwacth();
+		OGPTimer timer = OpenGeoProver.settings.getTimer();
 		
 		// prover's introduction message
 		StringBuilder sb = new StringBuilder();
@@ -89,7 +90,7 @@ public class OpenGeoProver {
 		 */
 		if (args.length == 1 && (args[0].equals("-h") || args[0].equals("--help"))) {
 			OGPParameters.printHelp();
-			OpenGeoProver.settings.getTimer().cancel(); // cancel default timer task
+			timer.cancel(); // cancel default timer task
 			return;
 		}
 		
@@ -205,84 +206,158 @@ public class OpenGeoProver {
 			// TODO
 		}
 		
+		if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_THM_PROVING) {
+			/*
+			 *  STEP 3 - Invoking prover
+			 */
+			if (parameters.getInputFormat().equals("O")) {
+				/*
+				 * Validation of CP
+				 */
+				if (!consProtocol.isValid()) {
+					output.close();
+					return;
+				}
+			
+				/*
+				 * Transformation to Algebraic form
+				 */
+				OpenGeoProver.settings.getStopwacth().startMeasureTime();
+				try {
+					output.openSection("Transformation of Construction Protocol to algebraic form");
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return;
+				}
+			
+				retCode = consProtocol.convertToAlgebraicForm();
+				theorem = consProtocol.getAlgebraicGeoTheorem();
+			
+				if (retCode != OGPConstants.RET_CODE_SUCCESS) {
+					output.close();
+					return;
+				}
+			
+				OpenGeoProver.settings.getStopwacth().endMeasureTime();
+				try {
+					output.openSubSection("Time spent for transformation of Construction Protocol to algebraic form", false);
+					output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+					output.openItem();
+					output.writePlainText(OGPUtilities.roundUpToPrecision(stopwatch.getTimeIntSec()) + " seconds");
+					output.closeItem();
+					output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
+					output.closeSubSection();
+					output.closeSection();
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+					return;
+				}
+			}
 		
-		/*
-		 *  STEP 3 - Invoking prover
-		 */
-		if (parameters.getInputFormat().equals("O")) {
+			logger.info("Invoking prover method...");
+			int proverType = parameters.getProver();
+			AlgebraicMethodProver proverMethod = null;
+			
+			if (proverType == TheoremProver.TP_TYPE_WU) { // Wu's method
+				proverMethod = new WuMethodProver(theorem);
+				timer.setTimer(parameters.getTimeLimit()); // setting timer
+				stopwatch.startMeasureTime();
+				retCode = proverMethod.prove();
+				stopwatch.endMeasureTime();
+			}
+			else if (proverType == TheoremProver.TP_TYPE_GROEBNER) { // Groebner basis method
+				// TODO
+			}
+			else {
+				System.out.println("Invalid prover type.");
+				return;
+			}
+			timer.cancel(); // canceling timer
+		
+		
 			/*
-			 * Validation of CP
+			 *  STEP 4 - Presenting results to standard output and in report file(s)
 			 */
-			if (!consProtocol.isValid()) {
-				output.close();
-				return;
-			}
-			
-			/*
-			 * Transformation to Algebraic form
-			 */
-			OpenGeoProver.settings.getStopwacth().startMeasureTime();
-			try {
-				output.openSection("Transformation of Construction Protocol to algebraic form");
-			} catch (IOException e) {
-				logger.error("Failed to write to output file(s).");
-				output.close();
-				return;
-			}
-			
-			retCode = consProtocol.convertToAlgebraicForm();
-			theorem = consProtocol.getAlgebraicGeoTheorem();
-			
-			if (retCode != OGPConstants.RET_CODE_SUCCESS) {
-				output.close();
-				return;
-			}
-			
-			OpenGeoProver.settings.getStopwacth().endMeasureTime();
-			try {
-				output.openSubSection("Time spent for transformation of Construction Protocol to algebraic form", false);
-				output.openEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
-				output.openItem();
-				output.writePlainText(OGPUtilities.roundUpToPrecision(stopwatch.getTimeIntSec()) + " seconds");
-				output.closeItem();
-				output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_ITEMIZE);
-				output.closeSubSection();
-				output.closeSection();
-			} catch (IOException e) {
-				logger.error("Failed to write to output file(s).");
-				output.close();
-				return;
-			}
+			logger.info("Prover results:\n");
+			if (report != null)
+				report.printProverResults(retCode);
 		}
-		
-		logger.info("Invoking prover method...");
-		int proverType = parameters.getProver();
-		AlgebraicMethodProver proverMethod = null;
-		
-		OGPTimer timer = OpenGeoProver.settings.getTimer();
-		if (proverType == TheoremProver.TP_TYPE_WU) { // Wu's method
-			proverMethod = new WuMethodProver(theorem);
-			
-			timer.setTimer(parameters.getTimeLimit()); // setting timer
+		else if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
+			timer.setTimer(parameters.getTimeLimit());
 			stopwatch.startMeasureTime();
-			retCode = proverMethod.prove();
+			int result = consProtocol.transformRcConsProblemToPolynomialForm();
 			stopwatch.endMeasureTime();
+			timer.cancel();  // cancel timer task
+			
+			if (parameters.createReport()) {
+				try {
+					output.openSection("Result of transformation of RC-constructibility problem to polynomial form");
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+				}
+			}
+			
+			sb = new StringBuilder();
+			sb.append("Time spent in execution is ");
+			sb.append(OGPUtilities.roundUpToPrecision(stopwatch.getTimeIntSec()));
+			sb.append(" seconds.");
+			String timeReportSec = sb.toString();
+			sb = new StringBuilder();
+			sb.append("The biggest polynomial obtained during application execution contains ");
+			sb.append(OpenGeoProver.settings.getMaxNumOfTerms());
+			sb.append(" terms.");
+			String spaceReport = sb.toString();
+			
+			String message;
+			if (result == OGPConstants.RET_CODE_SUCCESS) {
+				message = "Successful completion.";
+				logger.info(message);
+			}
+			else if (result == OGPConstants.ERR_CODE_TIME) {
+				sb = new StringBuilder();
+				sb.append("Transformation failed since time limit of ");
+				sb.append(parameters.getTimeLimit());
+				sb.append(" milliseconds has been reached - time spent is ");
+				sb.append(stopwatch.getTimeIntMillisec());
+				sb.append(" milliseconds.");
+				message = sb.toString();
+				logger.error(message);
+			}
+			else if (result == OGPConstants.ERR_CODE_SPACE) {
+				sb = new StringBuilder();
+				sb.append("Transformation failed since space limit of ");
+				sb.append(parameters.getSpaceLimit());
+				sb.append(" polynomial terms has been reached - the biggest polynomial obtained during execution contains ");
+				sb.append(OpenGeoProver.settings.getMaxNumOfTerms());
+				sb.append(" terms.");
+				message = sb.toString();
+				logger.error(message);
+			}
+			else {
+				message = "Failed to transform the RC-constructibility problem to polynomial form - find more details in log file.";
+				logger.error(message);
+			}
+			System.out.println(message);
+			if (parameters.createReport()) {
+				try {
+					output.openEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
+					output.openItemWithDesc("Success Message:");
+					output.closeItemWithDesc(message);
+					output.openItemWithDesc("Space Complexity:");
+					output.closeItemWithDesc(spaceReport);
+					output.openItemWithDesc("Time Complexity:");
+					output.closeItemWithDesc(timeReportSec);
+					output.closeEnum(SpecialFileFormatting.ENUM_COMMAND_DESCRIPTION);
+					output.closeSection();
+					output.closeDocument();
+				} catch (IOException e) {
+					logger.error("Failed to write to output file(s).");
+					output.close();
+				}
+			}
 		}
-		else if (proverType == TheoremProver.TP_TYPE_GROEBNER) { // Groebner basis method
-			// TODO
-		}
-		else {
-			System.out.println("Invalid prover type.");
-			return;
-		}
-		timer.cancel(); // canceling timer
-		
-		
-		/*
-		 *  STEP 4 - Presenting results to standard output and in report file(s)
-		 */
-		logger.info("Prover results:\n");
-		if (report != null)
-			report.printProverResults(retCode);
 	}
 }

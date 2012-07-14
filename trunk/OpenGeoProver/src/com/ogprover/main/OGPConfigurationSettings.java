@@ -71,6 +71,11 @@ public class OGPConfigurationSettings {
 	 * Maximal number of terms in polynomials obtained during execution of prover
 	 */
 	private int maxNumOfTerms = 0;
+	/**
+	 * Execution mode for OGP application (one of OGPConstants.OGP_MODE_xxx constants).
+	 * The default value is mode for theorem proving.
+	 */
+	private int ogpMode = OGPConstants.OGP_MODE_THM_PROVING;
 	// ==================== Log file ====================
 	/**
 	 * Name of log file
@@ -211,6 +216,20 @@ public class OGPConfigurationSettings {
 	 */
 	public int getMaxNumOfTerms() {
 		return maxNumOfTerms;
+	}
+
+	/**
+	 * @param ogpMode the ogpMode to set
+	 */
+	public void setOgpMode(int ogpMode) {
+		this.ogpMode = ogpMode;
+	}
+
+	/**
+	 * @return the ogpMode
+	 */
+	public int getOgpMode() {
+		return ogpMode;
 	}
 
 	/**

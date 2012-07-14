@@ -61,6 +61,12 @@ public abstract class SelfConditionalPoint extends Point {
 	 * @return The condition
 	 */
 	public abstract SymbolicPolynomial getYCondition();
+	/**
+	 * Method which returns map of points used to instantiate conditions.
+	 * 		
+	 * @return	Map of points.
+	 */
+	public abstract Map<String, Point> getPointsForInstantiation();
 	
 	
 	
@@ -97,6 +103,16 @@ public abstract class SelfConditionalPoint extends Point {
 	 */
 	public XPolynomial instantiateYCondition(Map<String, Point> pointsMap) {
 		return OGPTP.instantiateCondition(this.getYCondition(), pointsMap);
+	}
+	
+	/**
+	 * Method that transforms the construction of this point into algebraic form
+	 * 
+	 * @see com.ogprover.pp.tp.geoconstruction.Point#transformToAlgebraicForm()
+	 */
+	@Override
+	public int transformToAlgebraicForm() {
+		return this.transformToAlgebraicForm(this.getPointsForInstantiation());
 	}
 	
 	/**

@@ -827,4 +827,23 @@ public class XPolynomial extends Polynomial {
 		
 		return posPolyResidum.equals(conditionPoly);
 	}
+	
+	/**
+	 * Method for instantiating variables of this polynomial by their double values.
+	 * 
+	 * @param varValuesMap	Map with variables' double values
+	 * @return				XPolynomial object where all variables that appear in passed in map have been replaced
+	 * 						by their double values.
+	 */
+	public XPolynomial instantiateVariablesWithValues(Map<UXVariable, Double> varValuesMap) {
+		if (this.isZero())
+			return this;
+		
+		XPolynomial resXPoly = new XPolynomial();
+		for (Term term : this.getTermsAsDescList()) {
+			resXPoly.addTerm(((XTerm)term).instantiateVariablesWithValues(varValuesMap));
+		}
+		
+		return resXPoly;
+	}
 }
