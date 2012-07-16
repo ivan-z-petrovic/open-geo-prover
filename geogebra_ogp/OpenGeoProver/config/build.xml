@@ -53,7 +53,7 @@
 	<target name="compile-grammar">
 		<javacc
 		   target="${geogebra.parser.path}/ExpressionParser.jj"
-		   javacchome="${javacc.home}"
+		   javacchome="${3rd_party_libs.path}"
 		   static="false"
 		/>
 	</target>
