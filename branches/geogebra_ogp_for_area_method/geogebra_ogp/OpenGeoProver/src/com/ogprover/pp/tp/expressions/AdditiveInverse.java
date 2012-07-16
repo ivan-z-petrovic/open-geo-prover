@@ -145,4 +145,9 @@ public class AdditiveInverse extends AMExpression {
 	public int size() {
 		return 1 + expr.size();
 	}
+
+	@Override
+	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
+		return new AdditiveInverse(expr.simplifyCollinearPoints(knownCollinearPoints));
+	}
 }

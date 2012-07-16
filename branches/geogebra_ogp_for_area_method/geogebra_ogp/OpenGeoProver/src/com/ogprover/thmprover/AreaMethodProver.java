@@ -5,6 +5,7 @@
 package com.ogprover.thmprover;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
@@ -14,8 +15,11 @@ import com.ogprover.pp.tp.expressions.AMExpression;
 import com.ogprover.pp.tp.expressions.Fraction;
 import com.ogprover.pp.tp.expressions.BasicNumber;
 import com.ogprover.pp.tp.expressions.Product;
+import com.ogprover.pp.tp.geoconstruction.AMFootPoint;
+import com.ogprover.pp.tp.geoconstruction.AMIntersectionPoint;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
+import com.ogprover.pp.tp.geoconstruction.PRatioPoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.ndgcondition.SimpleNDGCondition;
 import com.ogprover.pp.tp.thmstatement.AreaMethodTheoremStatement;
@@ -39,8 +43,13 @@ public class AreaMethodProver implements TheoremProver {
 	/**
 	 * Known results.
 	 */
-	public static HashMap<AreaMethodTheoremStatement, Boolean> alreadyProvedStatements;
+	private static HashMap<AreaMethodTheoremStatement, Boolean> alreadyProvedStatements;
 	
+	/**
+	 * Triples of known collinear points.
+	 */
+	private static HashSet<HashSet<Point>> knownCollinearPoints;
+	 
 	/**
 	 * Statement to be proved
 	 */
@@ -65,6 +74,7 @@ public class AreaMethodProver implements TheoremProver {
 	 * NDGs conditions of the theorem
 	 */
 	protected Vector<SimpleNDGCondition> ndgConditions;
+	
 	
 	static {
 		alreadyProvedStatements = new HashMap<AreaMethodTheoremStatement, Boolean>();
@@ -162,6 +172,8 @@ public class AreaMethodProver implements TheoremProver {
 		
 		debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
 		
+		computeCollinearPoints();
+		
 		for (AMExpression expr : statement.getStatements()) {
 			debug("We must prove that : " + expr.print() + " = 0");
 			steps.add(expr);
@@ -178,12 +190,14 @@ public class AreaMethodProver implements TheoremProver {
 					// TODO implement this
 				//	return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
 				//}
+				debug("Removing the areas which trivially equal zero of : ", current);
+				current = current.simplifyCollinearPoints(knownCollinearPoints);
 				debug("Uniformization of : ", current);
 				current = current.uniformize();
 				debug("Simplification of : ", current);
 				current = current.simplify();
 				String label = constructions.get(nextPointToEliminate).getGeoObjectLabel();
-				debug("Removing of the point " + label + " of the formula : ", current);
+				debug("Removing the point " + label + " of the formula : ", current);
 				try {
 					current = current.eliminate((Point)constructions.get(nextPointToEliminate), this); //safe cast
 				} catch (UnknownStatementException e) {
@@ -193,6 +207,8 @@ public class AreaMethodProver implements TheoremProver {
 				}
 				nextPointToEliminate--;
 				computeNextPointToEliminate();
+				debug("Removing the areas which trivially equal zero of : ", current);
+				current = current.simplifyCollinearPoints(knownCollinearPoints);
 				debug("Second uniformization of : ", current);
 				current = current.uniformize();
 				debug("Second simplification of : ", current);
@@ -281,5 +297,58 @@ public class AreaMethodProver implements TheoremProver {
 	private static void debug(String str)  {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		logger.debug(str);
+	}
+	
+	private void computeCollinearPoints() {
+		if (knownCollinearPoints != null)
+			return;
+		
+		knownCollinearPoints = new HashSet<HashSet<Point>>();
+		
+		int numberOfConstructions = constructions.size();
+		for (int i = 0 ; i < numberOfConstructions ; i++) {
+			for (int j = 0 ; j < numberOfConstructions ; j++) {
+				for (int k = 0 ; k < numberOfConstructions ; k++) {
+					if (constructions.get(k) instanceof Point && !(constructions.get(k) instanceof FreePoint) ) {
+						Point current = (Point)constructions.get(k);
+						if (current instanceof AMIntersectionPoint) {
+							HashSet<Point> set = new HashSet<Point>();
+							set.add(((AMIntersectionPoint) current).getU());
+							set.add(((AMIntersectionPoint) current).getV());
+							set.add(current);
+							knownCollinearPoints.add(set);
+							set = new HashSet<Point>();
+							set.add(((AMIntersectionPoint) current).getP());
+							set.add(((AMIntersectionPoint) current).getQ());
+							set.add(current);
+							knownCollinearPoints.add(set);
+						} else if (current instanceof AMFootPoint) {
+							HashSet<Point> set = new HashSet<Point>();
+							set.add(((AMFootPoint) current).getU());
+							set.add(((AMFootPoint) current).getV());
+							set.add(current);
+							knownCollinearPoints.add(set);
+						} else if (current instanceof PRatioPoint) {
+							Point w = ((PRatioPoint) current).getW();
+							Point u = ((PRatioPoint) current).getU();
+							Point v = ((PRatioPoint) current).getV();
+							HashSet<Point> wuv = new HashSet<Point>();
+							wuv.add(w); wuv.add(u); wuv.add(v);
+							if (w.equals(u) || w.equals(v) || knownCollinearPoints.contains(wuv)) {
+								HashSet<Point> set = new HashSet<Point>();
+								set.add(u); set.add(v); set.add(current);
+								knownCollinearPoints.add(set);
+								set = new HashSet<Point>();
+								set.add(u); set.add(w); set.add(current);
+								knownCollinearPoints.add(set);
+								set = new HashSet<Point>();
+								set.add(v); set.add(w); set.add(current);
+								knownCollinearPoints.add(set);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

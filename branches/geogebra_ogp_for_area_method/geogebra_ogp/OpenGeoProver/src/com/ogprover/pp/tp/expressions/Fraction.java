@@ -220,4 +220,10 @@ public class Fraction extends AMExpression {
 	public int size() {
 		return 1 + numerator.size() + denominator.size();
 	}
+	
+	@Override
+	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
+		return new Fraction(numerator.simplifyCollinearPoints(knownCollinearPoints),
+							denominator.simplifyCollinearPoints(knownCollinearPoints));
+	}
 }

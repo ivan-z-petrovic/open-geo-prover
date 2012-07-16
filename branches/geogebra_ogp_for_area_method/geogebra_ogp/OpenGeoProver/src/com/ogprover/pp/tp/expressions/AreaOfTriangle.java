@@ -276,4 +276,15 @@ public class AreaOfTriangle extends AMExpression {
 	public int size() {
 		return 1;
 	}
+	
+	@Override
+	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
+		HashSet<Point> set = new HashSet<Point>();
+		set.add(a);
+		set.add(b);
+		set.add(c);
+		if (knownCollinearPoints.contains(set))
+			return new BasicNumber(0);
+		return this;
+	}
 }

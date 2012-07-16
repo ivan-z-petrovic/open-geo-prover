@@ -353,4 +353,9 @@ public class PythagorasDifference extends AMExpression {
 	public int size() {
 		return 1;
 	}
+	
+	@Override
+	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
+		return this;
+	}
 }

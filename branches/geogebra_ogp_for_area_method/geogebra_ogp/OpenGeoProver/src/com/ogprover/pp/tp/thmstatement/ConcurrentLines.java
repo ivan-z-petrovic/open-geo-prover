@@ -335,35 +335,20 @@ public class ConcurrentLines extends PositionThmStatement {
 			Point f = ((Line)lines.get(i)).getPoints().get(1);
 			/*
 			 * Let I be the intersection point between the lines (ab) and (cd).
-			 * Let J be the intersection point between the lines (ab) and (ef).
-			 * The three lines are concurrent iff I = J, so iff P_IJI = 0.
+			 * The three lines are concurrent iff I, e and f are collinear, so
+			 *   iff S_efI = 0.
 			 * Considering we cannot add new points to the construction at this step
-			 *   of the algorithm, we eliminate the points J and I by hand. It gives
-			 *   us a complicated formula, which can be checked.
-			 * We have simplified the final formula by P_ABA. 
+			 *   of the algorithm, we eliminate the point I by hand. It gives us the
+			 *   formula (S_ACD*S_EFB - S_BCD*S_EFA)/S_ABCD = 0, and we can simplify
+			 *   by S_ABCD.
 			 */
-			AMExpression saef = new AreaOfTriangle(a, e, f);
-			AMExpression sbfe = new AreaOfTriangle(b, f, e);
-			AMExpression saeb = new AreaOfTriangle(a, e, b);
-			AMExpression sabf = new AreaOfTriangle(a, b, f);
-			AMExpression f1 = new Fraction(saef, new Sum(saeb, sabf));
-			AMExpression f2 = new Fraction(sbfe, new Sum(saeb, sabf));
-			
 			AMExpression sacd = new AreaOfTriangle(a, c, d);
-			AMExpression sbdc = new AreaOfTriangle(b, d, c);
-			AMExpression sacb = new AreaOfTriangle(a, c, b);
-			AMExpression sabd = new AreaOfTriangle(a, b, d);
-			AMExpression g1 = new Fraction(sacd, new Sum(sacb, sabd));
-			AMExpression g2 = new Fraction(sbdc, new Sum(sacb, sabd));
-			
-			AMExpression pibi = new Difference(g2, new Product(g1, g2));
-			AMExpression piai = new Difference(g1, new Product(g1, g2));
-			
-			AMExpression term1 = new Product(f1, pibi);
-			AMExpression term2 = new Product(f2, piai);
-			AMExpression term3 = new Product(f1, f2);
-			
-			statements.add(new Difference(new Sum(term1, term2), term3));
+			AMExpression sefb = new AreaOfTriangle(e, f, b);
+			AMExpression term1 = new Product(sacd, sefb);
+			AMExpression sbcd = new AreaOfTriangle(b, c, d);
+			AMExpression sefa = new AreaOfTriangle(e, f, a);
+			AMExpression term2 = new Product(sbcd, sefa);
+			statements.add(new Difference(term1, term2));
 		}
 		
 	return new AreaMethodTheoremStatement(getStatementDesc(), statements);
