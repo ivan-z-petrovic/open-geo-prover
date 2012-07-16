@@ -35,6 +35,7 @@ public class AMFootPoint extends Point {
 	
 	/**
 	 * Points used to construct this point
+	 * The point is the foot of the point p on the line (uv).
 	 */
 	protected Point p,u,v;
 

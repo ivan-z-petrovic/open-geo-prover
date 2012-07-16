@@ -191,4 +191,10 @@ public class Difference extends AMExpression {
 	public int size() {
 		return 1 + term1.size() + term2.size();
 	}
+	
+	@Override
+	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
+		return new Difference(term1.simplifyCollinearPoints(knownCollinearPoints),
+								term2.simplifyCollinearPoints(knownCollinearPoints));
+	}
 }

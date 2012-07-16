@@ -254,4 +254,10 @@ public class Product extends AMExpression {
 	public int size() {
 		return 1 + factor1.size() + factor2.size();
 	}
+	
+	@Override
+	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
+		return new Product(factor1.simplifyCollinearPoints(knownCollinearPoints),
+							factor2.simplifyCollinearPoints(knownCollinearPoints));
+	}
 }

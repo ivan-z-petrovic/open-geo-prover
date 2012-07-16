@@ -41,6 +41,7 @@ public class AMIntersectionPoint extends IntersectionPoint {
 	
 	/**
 	 * Points used to construct this point
+	 * The point is the intersection point between the lines (uv) and (pq).
 	 */
 	protected Point u,v,p,q;
 
