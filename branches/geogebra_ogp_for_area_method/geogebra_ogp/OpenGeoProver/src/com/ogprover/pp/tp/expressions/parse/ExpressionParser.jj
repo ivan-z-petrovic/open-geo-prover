@@ -91,7 +91,13 @@ AMExpression start() :
 {
   AMExpression expr;
 }
-{  expr = expression()
+{
+  (	LOOKAHEAD(4217)
+	expr = expression()
+  | 
+	LOOKAHEAD(4217)
+    expr = simpleSegment()
+  )
   { return expr; }}
 
 AMExpression expression() :
@@ -207,6 +213,23 @@ AMExpression squareOfSegment() :
   s2 = < LABEL >
   ( < RIGHTBRACKET > | < RIGHTPAR > )
   < SQUARE >
+  {
+    pt1 = new FreePoint(s1.image);
+    pt2 = new FreePoint(s2.image);
+    return new Fraction(new PythagorasDifference(pt1, pt2, pt1), new BasicNumber (2));
+  }}
+
+// This returns THE SQUARE of the segment.
+// It is only used to compare two segments.
+AMExpression simpleSegment() :
+{  Token s1, s2;
+  Point pt1, pt2;
+}
+{  < SEGMENT >
+  ( < LEFTBRACKET > | < LEFTPAR > )  s1 = < LABEL >
+  < COMMA >
+  s2 = < LABEL >
+  ( < RIGHTBRACKET > | < RIGHTPAR > )
   {
     pt1 = new FreePoint(s1.image);
     pt2 = new FreePoint(s2.image);
