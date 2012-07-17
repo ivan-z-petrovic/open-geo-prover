@@ -696,6 +696,7 @@ public class OGPDocHandler implements DocHandler {
 		
 				// === Argument list ===
 				String args = statementText.substring(lbracIdx + 1, rbracIdx);
+				OpenGeoProver.settings.getLogger().debug("Args before parsing : " + args);
 				int openBrackets = 0;
 				int beginningOfArgument = 0;
 				for (int i = 0, s = args.length() ; i < s ; i++) {

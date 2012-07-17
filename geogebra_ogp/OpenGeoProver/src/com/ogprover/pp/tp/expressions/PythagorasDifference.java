@@ -134,7 +134,7 @@ public class PythagorasDifference extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression uniformize() {
+	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
 		if (c.compare(b) && b.compare(a)) {
 			return new PythagorasDifference(c, b, a);
 		}
@@ -352,10 +352,5 @@ public class PythagorasDifference extends AMExpression {
 	@Override
 	public int size() {
 		return 1;
-	}
-	
-	@Override
-	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
-		return this;
 	}
 }

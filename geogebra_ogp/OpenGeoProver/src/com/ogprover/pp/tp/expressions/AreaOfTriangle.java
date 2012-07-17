@@ -5,6 +5,7 @@ package com.ogprover.pp.tp.expressions;
 
 import java.util.HashSet;
 
+import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.AMFootPoint;
 import com.ogprover.pp.tp.geoconstruction.AMIntersectionPoint;
@@ -131,7 +132,17 @@ public class AreaOfTriangle extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression uniformize() {
+	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
+		if (AreaMethodProver.optimizeAreaOfCollinearPoints) {
+			HashSet<Point> set = new HashSet<Point>();
+			set.add(a);
+			set.add(b);
+			set.add(c);
+			if (knownCollinearPoints.contains(set)) {
+				OpenGeoProver.settings.getLogger().debug("Koukou : " + this.print());
+				return new BasicNumber(0);
+			}
+		}
 		if (a.compare(b) && a.compare(c)) {
 			if (b.compare(c)) {
 				return this;
@@ -275,16 +286,5 @@ public class AreaOfTriangle extends AMExpression {
 	@Override
 	public int size() {
 		return 1;
-	}
-	
-	@Override
-	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
-		HashSet<Point> set = new HashSet<Point>();
-		set.add(a);
-		set.add(b);
-		set.add(c);
-		if (knownCollinearPoints.contains(set))
-			return new BasicNumber(0);
-		return this;
 	}
 }

@@ -144,7 +144,7 @@ public class RatioOfCollinearSegments extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression uniformize() {
+	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
 		if (a.compare(b)) {
 			if (c.compare(d)) {
 				return this;
@@ -508,10 +508,5 @@ public class RatioOfCollinearSegments extends AMExpression {
 	@Override
 	public int size() {
 		return 1;
-	}
-	
-	@Override
-	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
-		return this;
 	}
 }

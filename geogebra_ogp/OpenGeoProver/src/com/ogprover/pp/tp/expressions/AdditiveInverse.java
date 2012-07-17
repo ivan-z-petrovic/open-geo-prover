@@ -101,8 +101,8 @@ public class AdditiveInverse extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression uniformize() {
-		return new AdditiveInverse(expr.uniformize());
+	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
+		return new AdditiveInverse(expr.uniformize(knownCollinearPoints));
 	}
 	
 	@Override
@@ -144,10 +144,5 @@ public class AdditiveInverse extends AMExpression {
 	@Override
 	public int size() {
 		return 1 + expr.size();
-	}
-
-	@Override
-	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
-		return new AdditiveInverse(expr.simplifyCollinearPoints(knownCollinearPoints));
 	}
 }
