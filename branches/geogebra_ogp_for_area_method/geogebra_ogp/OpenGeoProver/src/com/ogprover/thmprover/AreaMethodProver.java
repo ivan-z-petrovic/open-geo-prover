@@ -49,6 +49,12 @@ public class AreaMethodProver implements TheoremProver {
 	 * Triples of known collinear points.
 	 */
 	private static HashSet<HashSet<Point>> knownCollinearPoints;
+	
+	/**
+	 * Whether of not we have to compute and eliminate the areas of three collinear points
+	 * (this is an optimization - by default, it is set to false).
+	 */
+	public static boolean optimizeAreaOfCollinearPoints = false;
 	 
 	/**
 	 * Statement to be proved
@@ -172,7 +178,8 @@ public class AreaMethodProver implements TheoremProver {
 		
 		debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
 		
-		computeCollinearPoints();
+		if (optimizeAreaOfCollinearPoints)
+			computeCollinearPoints();
 		
 		for (AMExpression expr : statement.getStatements()) {
 			debug("We must prove that : " + expr.print() + " = 0");
@@ -180,20 +187,8 @@ public class AreaMethodProver implements TheoremProver {
 			AMExpression current = expr;
 			computeNextPointToEliminate();
 			while (nextPointToEliminate >=0  && !current.isZero()) {
-				//if (current.containsOnlyFreePoints()) {
-					//
-					// The current expression, after uniformization and simplification, is non-zero 
-					// but contains only free points : it is maybe false, but it can also be an 
-					// expression such as S_ABC = S_ABD + S_ADC + S_DBC (which is always true). In this
-					// case, we have to transform it with the area coordinates. 
-					//
-					// TODO implement this
-				//	return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
-				//}
-				debug("Removing the areas which trivially equal zero of : ", current);
-				current = current.simplifyCollinearPoints(knownCollinearPoints);
 				debug("Uniformization of : ", current);
-				current = current.uniformize();
+				current = current.uniformize(knownCollinearPoints);
 				debug("Simplification of : ", current);
 				current = current.simplify();
 				String label = constructions.get(nextPointToEliminate).getGeoObjectLabel();
@@ -207,10 +202,8 @@ public class AreaMethodProver implements TheoremProver {
 				}
 				nextPointToEliminate--;
 				computeNextPointToEliminate();
-				debug("Removing the areas which trivially equal zero of : ", current);
-				current = current.simplifyCollinearPoints(knownCollinearPoints);
 				debug("Second uniformization of : ", current);
-				current = current.uniformize();
+				current = current.uniformize(knownCollinearPoints);
 				debug("Second simplification of : ", current);
 				current = current.simplify();
 				debug("Reducing into a single fraction of : ", current);
@@ -248,7 +241,7 @@ public class AreaMethodProver implements TheoremProver {
 					return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
 				}
 				debug("Uniformization of : ", current);
-				current = current.uniformize();
+				current = current.uniformize(knownCollinearPoints);
 				debug("Simplification of : ", current);
 				current = current.simplify();
 				debug("Reducing into a single fraction of : ", current);
@@ -299,6 +292,9 @@ public class AreaMethodProver implements TheoremProver {
 		logger.debug(str);
 	}
 	
+	/**
+	 * Fills the knownCollinearPoints set.
+	 */
 	private void computeCollinearPoints() {
 		if (knownCollinearPoints != null)
 			return;
@@ -312,22 +308,16 @@ public class AreaMethodProver implements TheoremProver {
 					if (constructions.get(k) instanceof Point && !(constructions.get(k) instanceof FreePoint) ) {
 						Point current = (Point)constructions.get(k);
 						if (current instanceof AMIntersectionPoint) {
-							HashSet<Point> set = new HashSet<Point>();
-							set.add(((AMIntersectionPoint) current).getU());
-							set.add(((AMIntersectionPoint) current).getV());
-							set.add(current);
-							knownCollinearPoints.add(set);
-							set = new HashSet<Point>();
-							set.add(((AMIntersectionPoint) current).getP());
-							set.add(((AMIntersectionPoint) current).getQ());
-							set.add(current);
-							knownCollinearPoints.add(set);
+							Point u = ((AMIntersectionPoint) current).getU();
+							Point v = ((AMIntersectionPoint) current).getV();
+							addCollinearPoints(u, v, current);
+							Point p = ((AMIntersectionPoint) current).getP();
+							Point q = ((AMIntersectionPoint) current).getQ();
+							addCollinearPoints(p, q, current);
 						} else if (current instanceof AMFootPoint) {
-							HashSet<Point> set = new HashSet<Point>();
-							set.add(((AMFootPoint) current).getU());
-							set.add(((AMFootPoint) current).getV());
-							set.add(current);
-							knownCollinearPoints.add(set);
+							Point u = ((AMFootPoint) current).getU();
+							Point v = ((AMFootPoint) current).getV();
+							addCollinearPoints(u, v, current);
 						} else if (current instanceof PRatioPoint) {
 							Point w = ((PRatioPoint) current).getW();
 							Point u = ((PRatioPoint) current).getU();
@@ -335,20 +325,46 @@ public class AreaMethodProver implements TheoremProver {
 							HashSet<Point> wuv = new HashSet<Point>();
 							wuv.add(w); wuv.add(u); wuv.add(v);
 							if (w.equals(u) || w.equals(v) || knownCollinearPoints.contains(wuv)) {
-								HashSet<Point> set = new HashSet<Point>();
-								set.add(u); set.add(v); set.add(current);
-								knownCollinearPoints.add(set);
-								set = new HashSet<Point>();
-								set.add(u); set.add(w); set.add(current);
-								knownCollinearPoints.add(set);
-								set = new HashSet<Point>();
-								set.add(v); set.add(w); set.add(current);
-								knownCollinearPoints.add(set);
+								addCollinearPoints(u, v, current);
+								addCollinearPoints(u, w, current);
+								addCollinearPoints(v, w, current);
 							}
 						}
 					}
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Adds a triple of points to the knownCollinearPoints set.
+	 * @param a,b	The two first points of the triple 
+	 * @param c 	The last point of the triple, which we are currently studying.
+	 */
+	void addCollinearPoints(Point a, Point b, Point c) {
+		HashSet<Point> set = new HashSet<Point>();
+		set.add(a);
+		set.add(b);
+		set.add(c);
+		Vector<HashSet<Point>> toAdd = new Vector<HashSet<Point>>();
+		toAdd.add(set);
+		for (HashSet<Point> s : knownCollinearPoints) {
+			@SuppressWarnings("unchecked") // TODO change this into something less ugly
+			HashSet<Point> points = (HashSet<Point>) s.clone();
+			if (points.remove(a) && points.remove(b)) { // true iff a and b were in the set
+				/*
+				 * If (a,b,c) are collinear and (a,b,d) are known to be collinear, we must add
+				 * (a,c,d) and (b,c,d) into the set of known-to-be-collinear triples.
+				 */
+				Point d = (Point)points.toArray()[0];
+				HashSet<Point> newSet = new HashSet<Point>();
+				newSet.add(a); newSet.add(c); newSet.add(d);
+				toAdd.add(newSet);
+				newSet = new HashSet<Point>();
+				newSet.add(b); newSet.add(c); newSet.add(d);
+				toAdd.add(newSet);
+			}
+		}
+		knownCollinearPoints.addAll(toAdd);
 	}
 }

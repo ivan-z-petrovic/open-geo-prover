@@ -82,9 +82,13 @@ public abstract class AMExpression {
 	public abstract int size();
 	
 	/**
+	 * Uniformization method : S_ACB becomes -S_ABC, for example.
+	 * If AreaMethodProver.optimizeAreaOfCollinearPoints is set to true, eliminates
+	 * the areas of collinear points too.
+	 * @param knownCollinearPoints TODO
 	 * @return the expression uniformized
 	 */
-	public abstract AMExpression uniformize();
+	public abstract AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints);
 	
 	/**
 	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf for the list of all possible simplifications
@@ -123,13 +127,6 @@ public abstract class AMExpression {
 	 * @throws UnknownStatementException 
 	 */
 	public abstract AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException;
-	
-	/**
-	 * @param knownCollinearPoints	a set of the known triplets of collinear points
-	 * @return the expression in which all terms of the form S_ABC, where
-	 * 			A, B and C are trivially collinear, are replaced by zero. 
-	 */
-	public abstract AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints);
 	
 	/*
 	 * ======================================================================

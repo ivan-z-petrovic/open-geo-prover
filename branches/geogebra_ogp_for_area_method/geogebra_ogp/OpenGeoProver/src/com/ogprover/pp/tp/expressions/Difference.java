@@ -118,8 +118,8 @@ public class Difference extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression uniformize() {
-		return new Difference(term1.uniformize(), term2.uniformize());
+	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
+		return new Difference(term1.uniformize(knownCollinearPoints), term2.uniformize(knownCollinearPoints));
 	}
 	
 	@Override
@@ -190,11 +190,5 @@ public class Difference extends AMExpression {
 	@Override
 	public int size() {
 		return 1 + term1.size() + term2.size();
-	}
-	
-	@Override
-	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
-		return new Difference(term1.simplifyCollinearPoints(knownCollinearPoints),
-								term2.simplifyCollinearPoints(knownCollinearPoints));
 	}
 }

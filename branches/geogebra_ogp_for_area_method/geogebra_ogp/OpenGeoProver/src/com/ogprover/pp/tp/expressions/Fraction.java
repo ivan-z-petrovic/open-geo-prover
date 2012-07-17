@@ -134,8 +134,8 @@ public class Fraction extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression uniformize() {
-		return new Fraction(numerator.uniformize(), denominator.uniformize());
+	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
+		return new Fraction(numerator.uniformize(knownCollinearPoints), denominator.uniformize(knownCollinearPoints));
 	}
 	
 	@Override
@@ -219,11 +219,5 @@ public class Fraction extends AMExpression {
 	@Override
 	public int size() {
 		return 1 + numerator.size() + denominator.size();
-	}
-	
-	@Override
-	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
-		return new Fraction(numerator.simplifyCollinearPoints(knownCollinearPoints),
-							denominator.simplifyCollinearPoints(knownCollinearPoints));
 	}
 }

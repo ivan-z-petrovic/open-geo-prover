@@ -119,8 +119,8 @@ public class Product extends AMExpression {
 	
 	
 	@Override
-	public AMExpression uniformize() {
-		return new Product(factor1.uniformize(), factor2.uniformize());
+	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
+		return new Product(factor1.uniformize(knownCollinearPoints), factor2.uniformize(knownCollinearPoints));
 	}
 	
 	@Override
@@ -253,11 +253,5 @@ public class Product extends AMExpression {
 	@Override
 	public int size() {
 		return 1 + factor1.size() + factor2.size();
-	}
-	
-	@Override
-	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
-		return new Product(factor1.simplifyCollinearPoints(knownCollinearPoints),
-							factor2.simplifyCollinearPoints(knownCollinearPoints));
 	}
 }

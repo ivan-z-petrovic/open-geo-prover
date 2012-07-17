@@ -102,7 +102,7 @@ public class BasicNumber extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression uniformize() {
+	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
 		return this;
 	}
 	
@@ -134,10 +134,5 @@ public class BasicNumber extends AMExpression {
 	@Override
 	public int size() {
 		return 1;
-	}
-
-	@Override
-	public AMExpression simplifyCollinearPoints(HashSet<HashSet<Point>> knownCollinearPoints) {
-		return this;
 	}
 }
