@@ -4,6 +4,8 @@
 
 package com.ogprover.pp.tp.geoconstruction;
 
+import java.util.HashMap;
+
 import com.ogprover.main.OGPConstants;
 import com.ogprover.polynomials.UXVariable;
 import com.ogprover.pp.tp.expressions.AMExpression;
@@ -189,4 +191,17 @@ public class PRatioPoint extends Point {
 		return inputLabels;
 	}
 
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		Point w2 = w;
+		Point u2 = u;
+		Point v2 = v;
+		if (replacementMap.containsKey(w))
+			w2 = replacementMap.get(w);
+		if (replacementMap.containsKey(u))
+			u2 = replacementMap.get(u);
+		if (replacementMap.containsKey(v))
+			v2 = replacementMap.get(v);
+		return new PRatioPoint(geoObjectLabel, w2, u2, v2, r);
+	}
 }

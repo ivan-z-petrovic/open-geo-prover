@@ -3,6 +3,7 @@
  */
 package com.ogprover.pp.tp.expressions;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
@@ -219,5 +220,10 @@ public class Fraction extends AMExpression {
 	@Override
 	public int size() {
 		return 1 + numerator.size() + denominator.size();
+	}
+	
+	@Override
+	public AMExpression replace(HashMap<Point, Point> replacementMap) {
+		return new Fraction(numerator.replace(replacementMap), denominator.replace(replacementMap));
 	}
 }

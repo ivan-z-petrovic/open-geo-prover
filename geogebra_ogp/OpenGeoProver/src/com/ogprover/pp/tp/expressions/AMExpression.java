@@ -4,6 +4,7 @@
 package com.ogprover.pp.tp.expressions;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
@@ -127,6 +128,12 @@ public abstract class AMExpression {
 	 * @throws UnknownStatementException 
 	 */
 	public abstract AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException;
+	
+	/**
+	 * Replaces every occurence from a point by another point.
+	 * @param replacementMap	Replacement map
+	 */
+	public abstract AMExpression replace(HashMap<Point, Point> replacementMap);
 	
 	/*
 	 * ======================================================================

@@ -5,6 +5,7 @@
 package com.ogprover.pp.tp.geoconstruction;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
@@ -211,5 +212,22 @@ public class AMIntersectionPoint extends IntersectionPoint {
 		inputLabels[2] = ((GeoConstruction)this.p).getGeoObjectLabel();
 		inputLabels[3] = ((GeoConstruction)this.q).getGeoObjectLabel();
 		return inputLabels;
+	}
+
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		Point p2 = p;
+		Point q2 = q;
+		Point u2 = u;
+		Point v2 = v;
+		if (replacementMap.containsKey(p))
+			p2 = replacementMap.get(p);
+		if (replacementMap.containsKey(q))
+			q2 = replacementMap.get(q);
+		if (replacementMap.containsKey(u))
+			u2 = replacementMap.get(u);
+		if (replacementMap.containsKey(v))
+			v2 = replacementMap.get(v);
+		return new AMIntersectionPoint(geoObjectLabel, p2, q2, u2, v2);
 	}
 }

@@ -3,6 +3,7 @@
  */
 package com.ogprover.pp.tp.expressions;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
@@ -190,5 +191,10 @@ public class Difference extends AMExpression {
 	@Override
 	public int size() {
 		return 1 + term1.size() + term2.size();
+	}
+	
+	@Override
+	public AMExpression replace(HashMap<Point, Point> replacementMap) {
+		return new Difference(term1.replace(replacementMap), term2.replace(replacementMap));
 	}
 }

@@ -5,6 +5,7 @@
 package com.ogprover.pp.tp.geoconstruction;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
@@ -519,5 +520,12 @@ public class IntersectionPoint extends Point {
 		return inputLabels;
 	}
 
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		if (this instanceof AMIntersectionPoint)
+			return ((AMIntersectionPoint)this).replace(replacementMap);
+		OpenGeoProver.settings.getLogger().error("This method should not be called on this class.");
+		return null;
+	}
 }
 

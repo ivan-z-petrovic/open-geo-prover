@@ -3,6 +3,7 @@
  */
 package com.ogprover.pp.tp.expressions;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
@@ -144,5 +145,10 @@ public class AdditiveInverse extends AMExpression {
 	@Override
 	public int size() {
 		return 1 + expr.size();
+	}
+	
+	@Override
+	public AMExpression replace(HashMap<Point, Point> replacementMap) {
+		return new AdditiveInverse(expr.replace(replacementMap));
 	}
 }

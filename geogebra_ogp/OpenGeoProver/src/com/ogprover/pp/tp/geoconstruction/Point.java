@@ -194,6 +194,11 @@ public abstract class Point extends GeoConstruction implements Cloneable {
      * @see java.lang.Object#clone()
      */
     public abstract Point clone();
+    
+    /**
+     * Method to replace the points used in a construction by another equivalent.
+     */
+    public abstract Point replace(HashMap<Point, Point> replacementMap);
 	
 	
 	

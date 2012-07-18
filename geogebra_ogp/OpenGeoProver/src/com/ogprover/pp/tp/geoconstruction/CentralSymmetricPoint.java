@@ -345,5 +345,10 @@ public class CentralSymmetricPoint extends SelfConditionalPoint {
 		return pointsMap;
 	}
 
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		OpenGeoProver.settings.getLogger().error("This method should not be called on this class.");
+		return null;
+	}
 }
 
