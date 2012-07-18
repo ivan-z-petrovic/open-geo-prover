@@ -346,5 +346,11 @@ public class SegmentDivisionPoint extends SelfConditionalPoint {
 		pointsMap.put(BLabel, this.segment.getSecondEndPoint());
 		return pointsMap;
 	}
+
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		OpenGeoProver.settings.getLogger().error("This method should not be called on this class.");
+		return null;
+	}
 }
 

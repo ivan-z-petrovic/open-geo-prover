@@ -3,6 +3,7 @@
  */
 package com.ogprover.pp.tp.expressions;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.ogprover.main.OpenGeoProver;
@@ -286,5 +287,16 @@ public class AreaOfTriangle extends AMExpression {
 	@Override
 	public int size() {
 		return 1;
+	}
+	
+	@Override
+	public AMExpression replace(HashMap<Point, Point> replacementMap) {
+		if (replacementMap.containsKey(a))
+			return new AreaOfTriangle(replacementMap.get(a), b, c).replace(replacementMap);
+		if (replacementMap.containsKey(b))
+			return new AreaOfTriangle(a, replacementMap.get(b), c).replace(replacementMap);
+		if (replacementMap.containsKey(c))
+			return new AreaOfTriangle(a, b, replacementMap.get(c)).replace(replacementMap);
+		return this;
 	}
 }

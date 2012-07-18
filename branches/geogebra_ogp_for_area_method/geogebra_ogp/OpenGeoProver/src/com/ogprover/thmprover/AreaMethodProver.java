@@ -23,6 +23,7 @@ import com.ogprover.pp.tp.geoconstruction.PRatioPoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.ndgcondition.SimpleNDGCondition;
 import com.ogprover.pp.tp.thmstatement.AreaMethodTheoremStatement;
+import com.ogprover.pp.tp.thmstatement.IdenticalPoints;
 import com.ogprover.utilities.logger.ILogger;
 
 /**
@@ -41,9 +42,19 @@ public class AreaMethodProver implements TheoremProver {
 	 * ======================================================================
 	 */
 	/**
+	 * Equals true iff this is the first time that the prover is launched.
+	 */
+	private static boolean firstLaunch = true;
+	
+	/**
 	 * Known results.
 	 */
 	private static HashMap<AreaMethodTheoremStatement, Boolean> alreadyProvedStatements;
+	
+	/**
+	 * Replacement map for couples of same points
+	 */
+	private static HashMap<Point, Point> replacementMap;
 	
 	/**
 	 * Triples of known collinear points.
@@ -55,7 +66,17 @@ public class AreaMethodProver implements TheoremProver {
 	 * (this is an optimization - by default, it is set to false).
 	 */
 	public static boolean optimizeAreaOfCollinearPoints = false;
-	 
+	
+	/**
+	 * Whether or not we have to search for couples of points which actually are the same
+	 */
+	public static boolean optimizeCouplesOfPoints = false;
+	
+	/**
+	 * Whether or not we have to do the "transform to independant variables" step
+	 */
+	protected boolean transformToIndependantVariables = true;
+	
 	/**
 	 * Statement to be proved
 	 */
@@ -84,6 +105,7 @@ public class AreaMethodProver implements TheoremProver {
 	
 	static {
 		alreadyProvedStatements = new HashMap<AreaMethodTheoremStatement, Boolean>();
+		replacementMap = new HashMap<Point, Point>();
 	}
 	
 	/*
@@ -101,6 +123,10 @@ public class AreaMethodProver implements TheoremProver {
 	
 	public Vector<SimpleNDGCondition> getNDGConditions() {
 		return ndgConditions;
+	}
+	
+	public void setTransformToIndependantVariables(boolean b) {
+		this.transformToIndependantVariables = b;
 	}
 	
 	
@@ -147,6 +173,14 @@ public class AreaMethodProver implements TheoremProver {
 	public int prove() {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
+		if (firstLaunch) {
+			firstLaunch = false;
+			if (optimizeCouplesOfPoints)
+				computeCoupleOfPoints();
+			if (optimizeAreaOfCollinearPoints)
+				computeCollinearPoints();
+		}
+		
 		if (alreadyProvedStatements.containsKey(statement)) {
 			debug("Statement to prove : " + statement.getName());
 			if (alreadyProvedStatements.get(statement).booleanValue()) {
@@ -178,13 +212,14 @@ public class AreaMethodProver implements TheoremProver {
 		
 		debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
 		
-		if (optimizeAreaOfCollinearPoints)
-			computeCollinearPoints();
-		
 		for (AMExpression expr : statement.getStatements()) {
 			debug("We must prove that : " + expr.print() + " = 0");
 			steps.add(expr);
 			AMExpression current = expr;
+			if (optimizeCouplesOfPoints) {
+				debug("After couples of point deletion : ", expr);
+				current = current.replace(replacementMap);
+			}
 			computeNextPointToEliminate();
 			while (nextPointToEliminate >=0  && !current.isZero()) {
 				debug("Uniformization of : ", current);
@@ -231,6 +266,10 @@ public class AreaMethodProver implements TheoremProver {
 			debug("Simplification of : ", current);
 			current = current.simplify();
 			if (!(current.isZero())) {
+				if (!transformToIndependantVariables) {
+					debug("The expression is non-null and transformToIndependantVariable is false : aborting.");
+					return THEO_PROVE_RET_CODE_UNKNOWN;
+				}
 				debug("Transformation to a formula with only independant variables of : ", current);
 				try {
 					current = current.toIndependantVariables(this);
@@ -338,10 +377,11 @@ public class AreaMethodProver implements TheoremProver {
 	
 	/**
 	 * Adds a triple of points to the knownCollinearPoints set.
-	 * @param a,b	The two first points of the triple 
-	 * @param c 	The last point of the triple, which we are currently studying.
+	 * @param a	    The first point of the triple 
+	 * @param b	    The second point of the triple 
+	 * @param c 	The last point of the triple, which we are currently adding.
 	 */
-	void addCollinearPoints(Point a, Point b, Point c) {
+	private void addCollinearPoints(Point a, Point b, Point c) {
 		HashSet<Point> set = new HashSet<Point>();
 		set.add(a);
 		set.add(b);
@@ -366,5 +406,42 @@ public class AreaMethodProver implements TheoremProver {
 			}
 		}
 		knownCollinearPoints.addAll(toAdd);
+	}
+	
+	/**
+	 * For each couple of construction points, verify if the two points are the same.
+	 * If so, replaces one of the two points by the other in the expression, and in the
+	 *     constructions vector.
+	 */
+	private void computeCoupleOfPoints() {
+		int size = constructions.size();
+		for (int i = 0 ; i < size ; i++) {
+			for (int j = 0 ; j < i ; j++) {
+				GeoConstruction cons1 = constructions.get(i);
+				GeoConstruction cons2 = constructions.get(j);
+				if (cons1 instanceof Point && !(cons1 instanceof FreePoint)
+					&& cons2 instanceof Point && !(cons2 instanceof FreePoint)) {
+					Point pt1 = (Point) cons1;
+					Point pt2 = (Point) cons2;
+					AreaMethodTheoremStatement stat = (new IdenticalPoints(pt1, pt2)).getAreaMethodStatement();
+					AreaMethodProver prover = new AreaMethodProver(stat, constructions, ndgConditions);
+					prover.setTransformToIndependantVariables(false);
+					debug("=========== Calling a prover for a sub theorem ============");
+					if (prover.prove() == THEO_PROVE_RET_CODE_TRUE) { // If pt1 and pt2 are geometrically the same point
+						debug("---> Couple of geometrically identical points found : " + pt1.getGeoObjectLabel() + " and " + pt2.getGeoObjectLabel() + " !");
+						replacementMap.put(pt2, pt1);
+						for (int k = j+1 ; k < j ; k++) {
+							GeoConstruction pt = constructions.get(k);
+							if (pt instanceof Point) {
+								Point newPt = ((Point) pt).replace(replacementMap);
+								constructions.set(k, newPt);
+								replacementMap.put((Point) pt, newPt);
+							}
+						}
+					}
+					debug("=========== The sub-theorem prover just returned ============");
+				}
+			}
+		}
 	}
 }

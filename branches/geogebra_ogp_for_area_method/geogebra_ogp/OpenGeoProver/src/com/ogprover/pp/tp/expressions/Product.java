@@ -3,6 +3,7 @@
  */
 package com.ogprover.pp.tp.expressions;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
@@ -253,5 +254,10 @@ public class Product extends AMExpression {
 	@Override
 	public int size() {
 		return 1 + factor1.size() + factor2.size();
+	}
+	
+	@Override
+	public AMExpression replace(HashMap<Point, Point> replacementMap) {
+		return new Product(factor1.replace(replacementMap), factor2.replace(replacementMap));
 	}
 }

@@ -4,6 +4,7 @@
 package com.ogprover.pp.tp.expressions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.ogprover.main.OpenGeoProver;
@@ -508,5 +509,18 @@ public class RatioOfCollinearSegments extends AMExpression {
 	@Override
 	public int size() {
 		return 1;
+	}
+	
+	@Override
+	public AMExpression replace(HashMap<Point, Point> replacementMap) {
+		if (replacementMap.containsKey(a))
+			return new RatioOfCollinearSegments(replacementMap.get(a), b, c, d).replace(replacementMap);
+		if (replacementMap.containsKey(b))
+			return new RatioOfCollinearSegments(a, replacementMap.get(b), c, d).replace(replacementMap);
+		if (replacementMap.containsKey(c))
+			return new RatioOfCollinearSegments(a, b, replacementMap.get(c), d).replace(replacementMap);
+		if (replacementMap.containsKey(d))
+			return new RatioOfCollinearSegments(a, b, c, replacementMap.get(d)).replace(replacementMap);
+		return this;
 	}
 }

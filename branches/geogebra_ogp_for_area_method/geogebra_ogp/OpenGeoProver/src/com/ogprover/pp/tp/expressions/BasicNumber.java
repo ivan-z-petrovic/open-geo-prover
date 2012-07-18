@@ -3,6 +3,7 @@
  */
 package com.ogprover.pp.tp.expressions;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
@@ -134,5 +135,10 @@ public class BasicNumber extends AMExpression {
 	@Override
 	public int size() {
 		return 1;
+	}
+	
+	@Override
+	public AMExpression replace(HashMap<Point, Point> replacementMap) {
+		return this;
 	}
 }
