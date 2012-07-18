@@ -126,6 +126,9 @@ AMExpression term() :
     p = primary()
     { expr = new Product(expr, p); }
   |
+    p = notNumberPrimary()
+    { expr = new Product(expr, p); }
+  |
   	< DIVIDE >
     p = primary()
   	{ expr = new Fraction(expr, p); }
@@ -144,6 +147,25 @@ AMExpression primary() :
   { return new AdditiveInverse(expr); }
 | 
   < LEFTPAR > expr = expression() < RIGHTPAR >
+  { return expr; }
+|
+  LOOKAHEAD(42)
+  expr = ratioOfSegments()
+  { return expr; }
+|
+  expr = areaOfTriangle()
+  { return expr; }
+|
+  LOOKAHEAD(42)
+  expr = squareOfSegment()
+  { return expr; }
+}
+
+AMExpression notNumberPrimary() :
+{
+  Token t;  AMExpression expr;
+}
+{  < LEFTPAR > expr = expression() < RIGHTPAR >
   { return expr; }
 |
   LOOKAHEAD(42)
