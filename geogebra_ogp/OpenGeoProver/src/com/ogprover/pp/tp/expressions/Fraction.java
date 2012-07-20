@@ -226,4 +226,9 @@ public class Fraction extends AMExpression {
 	public AMExpression replace(HashMap<Point, Point> replacementMap) {
 		return new Fraction(numerator.replace(replacementMap), denominator.replace(replacementMap));
 	}
+	@Override
+	public SumOfProducts toSumOfProducts() {
+		System.out.println("Calling toSumOfProducts() on an expression which contains fractions : " + this.print());
+		return null;
+	}
 }

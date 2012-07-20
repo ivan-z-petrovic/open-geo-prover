@@ -268,7 +268,9 @@ public class AreaMethodProver implements TheoremProver {
 			if (!(current.isZero())) {
 				if (!transformToIndependantVariables) {
 					debug("The expression is non-null and transformToIndependantVariable is false : aborting.");
-					return THEO_PROVE_RET_CODE_UNKNOWN;
+					if (current.size() > 20)
+						return THEO_PROVE_RET_CODE_UNKNOWN;
+					debug("Oh, well, actually, this expression is small, let's try to extend it anyway.");
 				}
 				debug("Transformation to a formula with only independant variables of : ", current);
 				try {
@@ -291,11 +293,15 @@ public class AreaMethodProver implements TheoremProver {
 				}
 				debug("Simplification of : ", current);
 				current = current.simplify();
+				/*
 				debug("Reducing into a right associative form of : ", current);
 				current = (new Product(new BasicNumber(1), current)).reduceToRightAssociativeForm();
 				debug("Grouping of : ", current);
 				current = current.groupSumOfProducts();
-				debug("Simplification of : ", current);;
+				*/
+				debug("Transforming into a sum of products of geometrical quantities of : ", current);
+				current = current.toSumOfProducts();
+				debug("Very last simplification of : ", current);
 				current = current.simplify();
 				debug("Result : ", current);
 				if (current.isZero())

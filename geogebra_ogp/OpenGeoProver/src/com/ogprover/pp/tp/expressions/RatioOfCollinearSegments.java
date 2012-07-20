@@ -31,7 +31,7 @@ import com.ogprover.thmprover.TheoremProver;
  * @version 1.00
  * @author Damien Desfontaines
  */
-public class RatioOfCollinearSegments extends AMExpression {
+public class RatioOfCollinearSegments extends GeometricQuantity {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -146,6 +146,12 @@ public class RatioOfCollinearSegments extends AMExpression {
 	
 	@Override
 	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
+		if (a.equals(b))
+			return new BasicNumber(0); // AA/CD -> 0
+		if (a.equals(c) && b.equals(d))
+			return new BasicNumber(1);
+		if (a.equals(d) && b.equals(c))
+			return new BasicNumber(-1);
 		if (a.compare(b)) {
 			if (c.compare(d)) {
 				return this;
@@ -160,12 +166,7 @@ public class RatioOfCollinearSegments extends AMExpression {
 	
 	@Override
 	public AMExpression simplifyInOneStep() {
-		if (a.equals(b))
-			return new BasicNumber(0); // AA/CD -> 0
-		if (a.equals(c) && b.equals(d))
-			return new BasicNumber(1);
-		if (a.equals(d) && b.equals(c))
-			return new BasicNumber(-1);
+		// We assume that the verifications that the expression is non-zero have already been done.
 		return this;
 	}
 	
@@ -522,5 +523,10 @@ public class RatioOfCollinearSegments extends AMExpression {
 		if (replacementMap.containsKey(d))
 			return new RatioOfCollinearSegments(a, b, c, replacementMap.get(d)).replace(replacementMap);
 		return this;
+	}
+	
+	@Override
+	public SumOfProducts toSumOfProducts() {
+		return new SumOfProducts(new BigProduct(this));
 	}
 }

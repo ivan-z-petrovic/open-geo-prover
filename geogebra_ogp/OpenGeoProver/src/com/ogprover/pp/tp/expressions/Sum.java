@@ -203,4 +203,9 @@ public class Sum extends AMExpression {
 	public AMExpression replace(HashMap<Point, Point> replacementMap) {
 		return new Sum(term1.replace(replacementMap), term2.replace(replacementMap));
 	}
+	
+	@Override
+	public SumOfProducts toSumOfProducts() {
+		return new SumOfProducts(term1.toSumOfProducts().getTerms(), term2.toSumOfProducts().getTerms());
+	}
 }

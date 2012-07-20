@@ -197,4 +197,9 @@ public class Difference extends AMExpression {
 	public AMExpression replace(HashMap<Point, Point> replacementMap) {
 		return new Difference(term1.replace(replacementMap), term2.replace(replacementMap));
 	}
+	
+	@Override
+	public SumOfProducts toSumOfProducts() {
+		return (new Sum(term1, new Product(new BasicNumber(-1), term2))).toSumOfProducts();
+	}
 }

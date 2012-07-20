@@ -135,6 +135,11 @@ public abstract class AMExpression {
 	 */
 	public abstract AMExpression replace(HashMap<Point, Point> replacementMap);
 	
+	/**
+	 * Transforms an expression without fraction into a sum of products of geometric quantities
+	 */
+	public abstract SumOfProducts toSumOfProducts();
+	
 	/*
 	 * ======================================================================
 	 * ======================= COMMON OBJECT METHODS ========================
@@ -152,11 +157,12 @@ public abstract class AMExpression {
 	 * @return true iff this expression is equal to (new AMNumber(0))
 	 */
 	public boolean isZero() {
-		if (this instanceof BasicNumber) {
-			if (((BasicNumber)this).value() == 0) {
+		if (this instanceof BasicNumber)
+			if (((BasicNumber)this).value() == 0)
 				return true;
-			}
-		}
+		if (this instanceof SumOfProducts)
+			if (((SumOfProducts)this).getTerms().isEmpty())
+				return true;
 		return false;
 	}
 	

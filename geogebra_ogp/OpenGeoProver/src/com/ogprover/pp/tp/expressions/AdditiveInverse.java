@@ -151,4 +151,9 @@ public class AdditiveInverse extends AMExpression {
 	public AMExpression replace(HashMap<Point, Point> replacementMap) {
 		return new AdditiveInverse(expr.replace(replacementMap));
 	}
+
+	@Override
+	public SumOfProducts toSumOfProducts() {
+		return (new Product(new BasicNumber(-1), expr)).toSumOfProducts();
+	}
 }

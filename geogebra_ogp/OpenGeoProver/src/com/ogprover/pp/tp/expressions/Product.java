@@ -260,4 +260,17 @@ public class Product extends AMExpression {
 	public AMExpression replace(HashMap<Point, Point> replacementMap) {
 		return new Product(factor1.replace(replacementMap), factor2.replace(replacementMap));
 	}
+	
+	@Override
+	public SumOfProducts toSumOfProducts() {
+		SumOfProducts sum1 = factor1.toSumOfProducts();
+		SumOfProducts sum2 = factor2.toSumOfProducts();
+		SumOfProducts sumToReturn = new SumOfProducts();
+		HashSet<BigProduct> factors1 = sum1.getTerms();
+		HashSet<BigProduct> factors2 = sum2.getTerms();
+		for (BigProduct product1 : factors1)
+			for (BigProduct product2 : factors2)
+				sumToReturn.addTerm(new BigProduct(product1, product2));
+		return sumToReturn;
+	}
 }
