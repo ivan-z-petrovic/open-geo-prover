@@ -141,4 +141,9 @@ public class BasicNumber extends AMExpression {
 	public AMExpression replace(HashMap<Point, Point> replacementMap) {
 		return this;
 	}
+
+	@Override
+	public SumOfProducts toSumOfProducts() {
+		return new SumOfProducts(new BigProduct(this));
+	}
 }

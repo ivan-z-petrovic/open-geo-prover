@@ -25,7 +25,7 @@ import com.ogprover.thmprover.AreaMethodProver;
  * @version 1.00
  * @author Damien Desfontaines
  */
-public class AreaOfTriangle extends AMExpression {
+public class AreaOfTriangle extends GeometricQuantity {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -134,6 +134,8 @@ public class AreaOfTriangle extends AMExpression {
 	
 	@Override
 	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
+		if (a.equals(b) || b.equals(c) || c.equals(a))
+			return new BasicNumber(0); // S_ABA -> 0, S_AAB -> 0, S_BAA -> 0
 		if (AreaMethodProver.optimizeAreaOfCollinearPoints) {
 			HashSet<Point> set = new HashSet<Point>();
 			set.add(a);
@@ -164,8 +166,7 @@ public class AreaOfTriangle extends AMExpression {
 	
 	@Override
 	public AMExpression simplifyInOneStep() {
-		if (a.equals(b) || b.equals(c) || c.equals(a))
-			return new BasicNumber(0); // S_ABA -> 0, S_AAB -> 0, S_BAA -> 0
+		// We assume that the verifications that the expression is non-zero have already been done.
 		return this;
 	}
 	
@@ -298,5 +299,10 @@ public class AreaOfTriangle extends AMExpression {
 		if (replacementMap.containsKey(c))
 			return new AreaOfTriangle(a, b, replacementMap.get(c)).replace(replacementMap);
 		return this;
+	}
+	
+	@Override
+	public SumOfProducts toSumOfProducts() {
+		return new SumOfProducts(new BigProduct(this));
 	}
 }

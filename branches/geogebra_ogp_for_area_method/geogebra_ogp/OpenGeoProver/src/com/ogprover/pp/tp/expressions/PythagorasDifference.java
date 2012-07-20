@@ -27,7 +27,7 @@ import com.ogprover.thmprover.AreaMethodProver;
  * @version 1.00
  * @author Damien Desfontaines
  */
-public class PythagorasDifference extends AMExpression {
+public class PythagorasDifference extends GeometricQuantity {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -136,6 +136,8 @@ public class PythagorasDifference extends AMExpression {
 	
 	@Override
 	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
+		if (a.equals(b) || b.equals(c))
+			return new BasicNumber(0);
 		if (c.compare(b) && b.compare(a)) {
 			return new PythagorasDifference(c, b, a);
 		}
@@ -147,8 +149,7 @@ public class PythagorasDifference extends AMExpression {
 	
 	@Override
 	public AMExpression simplifyInOneStep() {
-		if (a.equals(b) || b.equals(c))
-			return new BasicNumber(0);
+		// We assume that the verifications that the expression is non-zero have already been done.
 		return this;
 	}
 	
@@ -364,5 +365,10 @@ public class PythagorasDifference extends AMExpression {
 		if (replacementMap.containsKey(c))
 			return new PythagorasDifference(a, b, replacementMap.get(c)).replace(replacementMap);
 		return this;
+	}
+	
+	@Override
+	public SumOfProducts toSumOfProducts() {
+		return new SumOfProducts(new BigProduct(this));
 	}
 }
