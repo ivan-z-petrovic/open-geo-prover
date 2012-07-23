@@ -115,7 +115,8 @@ public class AreaOfTriangle extends GeometricQuantity {
 		if (!(expr instanceof AreaOfTriangle))
 			return false;
 		AreaOfTriangle area = (AreaOfTriangle)expr;
-		return (a.equals(area.getA()) && b.equals(area.getB()) && c.equals(area.getC()));
+		//return (a.equals(area.getA()) && b.equals(area.getB()) && c.equals(area.getC()));
+		return this.print().equals(area.print());
 	}
 	
 	

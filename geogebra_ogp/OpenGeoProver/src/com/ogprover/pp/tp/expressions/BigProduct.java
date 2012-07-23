@@ -102,6 +102,7 @@ public class BigProduct extends AMExpression {
 	 * @param factor	New factor to multiply to the product
 	 */
 	public BigProduct(BigProduct product, GeometricQuantity factor) {
+		coeff = product.getCoeff();
 		factors = new HashMap<GeometricQuantity, Integer>(product.getFactors());
 		if (factors.containsKey(factor))
 			factors.put(factor, new Integer(factors.get(factor).intValue() + 1));
@@ -116,6 +117,7 @@ public class BigProduct extends AMExpression {
 	 * @param exponent	Exponent of the new factor
 	 */
 	public BigProduct(BigProduct product, GeometricQuantity factor, int exponent) {
+		coeff = product.getCoeff();
 		factors = new HashMap<GeometricQuantity, Integer>(product.getFactors());
 		if (factors.containsKey(factor))
 			factors.put(factor, new Integer(factors.get(factor).intValue() + exponent));
@@ -149,14 +151,17 @@ public class BigProduct extends AMExpression {
 	public BigProduct(BigProduct product1, BigProduct product2) {
 		coeff = (BasicNumber) (new Product(product1.getCoeff(), product2.getCoeff())).simplify();
 		factors = new HashMap<GeometricQuantity, Integer>(product1.getFactors());
-		Set<Entry<GeometricQuantity, Integer>> entries = factors.entrySet();
+		Set<Entry<GeometricQuantity, Integer>> entries = product2.getFactors().entrySet();
 		for (Entry<GeometricQuantity, Integer> e : entries) {
 			GeometricQuantity factor = e.getKey();
 			int exponent = e.getValue().intValue();
-			if (factors.containsKey(factor))
-				factors.put(factor, new Integer(factors.get(factor).intValue() + exponent));
-			else
+			if (factors.containsKey(factor)) {
+				int previousExponent = factors.get(factor).intValue();
+				factors.put(factor, new Integer(previousExponent + exponent));
+			}
+			else {
 				factors.put(factor, new Integer(exponent));
+			}
 		}
 	}
 
@@ -174,7 +179,7 @@ public class BigProduct extends AMExpression {
 		for (Entry<GeometricQuantity, Integer> e : entries) {
 			s.append("×" + e.getKey().print());
 			int value = e.getValue().intValue();
-			if (value == 1)
+			if (value != 1)
 				s.append("^" + value);
 		}
 		s.append(")");
@@ -225,7 +230,7 @@ public class BigProduct extends AMExpression {
 		HashMap<GeometricQuantity, Integer> newMap = new HashMap<GeometricQuantity, Integer>();
 		for (Entry<GeometricQuantity, Integer> e : entries) 
 			newMap.put((GeometricQuantity) e.getKey().uniformize(knownCollinearPoints), e.getValue());
-		return new BigProduct(newMap);
+		return new BigProduct(new BigProduct(newMap), coeff);
 	}
 
 	@Override
@@ -255,8 +260,15 @@ public class BigProduct extends AMExpression {
 	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover)
 			throws UnknownStatementException {
-		OpenGeoProver.settings.getLogger().error("Method toIndependantVariables should not be called on big product instances.");
-		return null;
+		AMExpression product = coeff;
+		Set<Entry<GeometricQuantity, Integer>> entries = factors.entrySet();
+		for (Entry<GeometricQuantity, Integer> e : entries) {
+			int power = e.getValue().intValue();
+			GeometricQuantity factor = e.getKey();
+			for (int i = 0 ; i < power ; i++)
+				product = new Product(factor.toIndependantVariables(prover), product);
+		}
+		return product;
 	}
 
 	@Override
@@ -265,7 +277,7 @@ public class BigProduct extends AMExpression {
 		HashMap<GeometricQuantity, Integer> newMap = new HashMap<GeometricQuantity, Integer>();
 		for (Entry<GeometricQuantity, Integer> e : entries) 
 			newMap.put((GeometricQuantity) e.getKey().replace(replacementMap), e.getValue());
-		return new BigProduct(newMap);
+		return new BigProduct(new BigProduct(newMap), coeff);
 	}
 	
 	/**
@@ -273,7 +285,42 @@ public class BigProduct extends AMExpression {
 	 * @param product		A product of geometric quantities
 	 */
 	public boolean hasSameFactors(BigProduct product) {
-		return this.getFactors().equals(product.getFactors());
+		/*
+		 *  Note to the people who will maybe read this code : Here, I want to compare
+		 *  two HashMaps. The original code was :
+		 *  
+		 *  return this.getFactors().equals(product.getFactors());
+		 *  
+		 *  But it seems that equals() method does not work, and I am totally unable to 
+		 *  figure out why. I have tried several things, verified ten times that the 
+		 *  equals() method was overriden for GeometricQuantity, but the only workaround 
+		 *  which seems to work is to put everything in Sets and compare elements one by
+		 *  one. If, instead of comparing them one by one, I do simply :
+		 *  
+		 *  if (!entries2.contains(e))
+		 *  	return false;
+		 *  
+		 *  for example, it does not work. I do not know why.
+		 */
+		Set<Entry<GeometricQuantity, Integer>> entries1 = product.getFactors().entrySet();
+		Set<Entry<GeometricQuantity, Integer>> entries2 = factors.entrySet();
+		for (Entry<GeometricQuantity, Integer> e : entries1) {
+			boolean found = false;
+			for (Entry<GeometricQuantity, Integer> e2 : entries2)
+				if (e2.equals(e))
+					found = true;
+			if (!found)
+				return false;
+		}
+		for (Entry<GeometricQuantity, Integer> e2 : entries2) {
+			boolean found = false;
+			for (Entry<GeometricQuantity, Integer> e : entries1)
+				if (e.equals(e2))
+					found = true;
+			if (!found)
+				return false;
+		}
+		return true;
 	}
 
 	@Override
