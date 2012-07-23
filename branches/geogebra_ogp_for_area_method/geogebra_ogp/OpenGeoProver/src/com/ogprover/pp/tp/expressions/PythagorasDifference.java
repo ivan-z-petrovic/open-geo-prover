@@ -138,7 +138,7 @@ public class PythagorasDifference extends GeometricQuantity {
 	public AMExpression uniformize(HashSet<HashSet<Point>> knownCollinearPoints) {
 		if (a.equals(b) || b.equals(c))
 			return new BasicNumber(0);
-		if (c.compare(b) && b.compare(a)) {
+		if (c.compare(a)) {
 			return new PythagorasDifference(c, b, a);
 		}
 		if (c.equals(a) && b.compare(a)) {

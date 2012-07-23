@@ -11,10 +11,7 @@ import java.util.Vector;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
-import com.ogprover.pp.tp.expressions.AMExpression;
-import com.ogprover.pp.tp.expressions.Fraction;
-import com.ogprover.pp.tp.expressions.BasicNumber;
-import com.ogprover.pp.tp.expressions.Product;
+import com.ogprover.pp.tp.expressions.*;
 import com.ogprover.pp.tp.geoconstruction.AMFootPoint;
 import com.ogprover.pp.tp.geoconstruction.AMIntersectionPoint;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
@@ -60,6 +57,11 @@ public class AreaMethodProver implements TheoremProver {
 	 * Triples of known collinear points.
 	 */
 	private static HashSet<HashSet<Point>> knownCollinearPoints;
+	
+	/**
+	 * Whether or not we have to print debug messages.
+	 */
+	public static boolean debugMode = false;
 	
 	/**
 	 * Whether of not we have to compute and eliminate the areas of three collinear points
@@ -212,6 +214,8 @@ public class AreaMethodProver implements TheoremProver {
 		
 		debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
 		
+		grosDebug();
+		
 		for (AMExpression expr : statement.getStatements()) {
 			debug("We must prove that : " + expr.print() + " = 0");
 			steps.add(expr);
@@ -259,10 +263,14 @@ public class AreaMethodProver implements TheoremProver {
 			}
 			debug("Last simplification of : ", current);
 			current = current.simplify();
+			debug("Transforming into a sum of products of geometrical quantities of : ", current);
+			current = current.toSumOfProducts();
+			/*
 			debug("Reducing into a right associative form of : ", current);
 			current = (new Product(new BasicNumber(1), current)).reduceToRightAssociativeForm();
 			debug("Grouping of : ", current);
 			current = current.groupSumOfProducts();
+			*/
 			debug("Simplification of : ", current);
 			current = current.simplify();
 			if (!(current.isZero())) {
@@ -301,6 +309,8 @@ public class AreaMethodProver implements TheoremProver {
 				*/
 				debug("Transforming into a sum of products of geometrical quantities of : ", current);
 				current = current.toSumOfProducts();
+				debug("Uniformization of : ", current);
+				current = current.uniformize(knownCollinearPoints);
 				debug("Very last simplification of : ", current);
 				current = current.simplify();
 				debug("Result : ", current);
@@ -321,20 +331,24 @@ public class AreaMethodProver implements TheoremProver {
 			nextPointToEliminate--;
 	}
 	
-	private static void debug(String str, AMExpression expr) {
-		ILogger logger = OpenGeoProver.settings.getLogger();
-		int size = expr.size();
-		int MAX_SIZE = 200;
-		if (size >= MAX_SIZE)
-			logger.debug(str + "Too large to be printed");
-		else
-			logger.debug(str + expr.print());
-		logger.debug("  (Size = " + Integer.toString(size) + ")");
+	public static void debug(String str, AMExpression expr) {
+		if (debugMode) {
+			ILogger logger = OpenGeoProver.settings.getLogger();
+			int size = expr.size();
+			int MAX_SIZE = 200;
+			if (size >= MAX_SIZE)
+				logger.debug(str + "Too large to be printed");
+			else
+				logger.debug(str + expr.print());
+			logger.debug("  (Size = " + Integer.toString(size) + ")");
+		}
 	}
 	
-	private static void debug(String str)  {
-		ILogger logger = OpenGeoProver.settings.getLogger();
-		logger.debug(str);
+	public static void debug(String str)  {
+		if (debugMode) {
+			ILogger logger = OpenGeoProver.settings.getLogger();
+			logger.debug(str);
+		}
 	}
 	
 	/**
@@ -449,5 +463,51 @@ public class AreaMethodProver implements TheoremProver {
 				}
 			}
 		}
+	}
+	
+	private void grosDebug() {
+		debug("===============DEBUG=================");
+		Point a = new FreePoint("a");
+		Point b = new FreePoint("b");
+		Point c = new FreePoint("c");
+		AMExpression pabc = new PythagorasDifference(a, b, c);
+		AMExpression pacb = new PythagorasDifference(a, c, b);
+		AMExpression pbac = new PythagorasDifference(b, a, c);
+		AMExpression pbca = new PythagorasDifference(b, c, a);
+		AMExpression pcab = new PythagorasDifference(c, a, b);
+		AMExpression pcba = new PythagorasDifference(c, b, a);
+		//AMExpression two = new BasicNumber(2);
+		//AMExpression product = new Product(sabc, two);
+		
+		AMExpression expr = pabc;
+		debug("pabc : ", expr);
+		AMExpression uniformized = expr.uniformize(knownCollinearPoints);
+		debug("uniformized : ", uniformized);
+		
+		expr = pacb;
+		debug("pacb : ", expr);
+		uniformized = expr.uniformize(knownCollinearPoints);
+		debug("uniformized : ", uniformized);
+		
+		expr = pbac;
+		debug("pbac : ", expr);
+		uniformized = expr.uniformize(knownCollinearPoints);
+		debug("uniformized : ", uniformized);
+		
+		expr = pbca;
+		debug("pbca : ", expr);
+		uniformized = expr.uniformize(knownCollinearPoints);
+		debug("uniformized : ", uniformized);
+		
+		expr = pcab;
+		debug("pcab : ", expr);
+		uniformized = expr.uniformize(knownCollinearPoints);
+		debug("uniformized : ", uniformized);
+		
+		expr = pcba;
+		debug("pcba : ", expr);
+		uniformized = expr.uniformize(knownCollinearPoints);
+		debug("uniformized : ", uniformized);
+		debug("=====================================");
 	}
 }

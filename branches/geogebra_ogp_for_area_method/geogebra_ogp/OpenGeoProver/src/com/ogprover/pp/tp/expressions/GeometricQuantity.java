@@ -61,6 +61,10 @@ public abstract class GeometricQuantity extends AMExpression {
 	public abstract AMExpression replace(HashMap<Point, Point> replacementMap);
 
 	@Override
-	public abstract boolean equals(Object expr);
-
+	public boolean equals(Object expr) {
+		if (!(expr instanceof GeometricQuantity))
+			return false;
+		GeometricQuantity q = (GeometricQuantity)expr;
+		return this.print().equals(q.print());
+	}
 }

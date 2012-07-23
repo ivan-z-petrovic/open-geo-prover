@@ -172,11 +172,12 @@ public class SumOfProducts extends AMExpression {
 		HashSet<BigProduct> newTerms = new HashSet<BigProduct>();
 		for (BigProduct p : terms)
 			newTerms.add((BigProduct) p.uniformize(knownCollinearPoints));
-		return new SumOfProducts(terms);
+		return new SumOfProducts(newTerms);
 	}
 
 	@Override
 	public AMExpression simplifyInOneStep() {
+		// We remove all the zeros
 		HashSet<BigProduct> newTerms = new HashSet<BigProduct>(terms);
 		for (Iterator<BigProduct> i = terms.iterator() ; i.hasNext() ; ) {
 			BigProduct next = i.next();
@@ -206,8 +207,10 @@ public class SumOfProducts extends AMExpression {
 	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover)
 			throws UnknownStatementException {
-		OpenGeoProver.settings.getLogger().error("Method toIndependantVariables should not be called on sum of product instances.");
-		return null;
+		AMExpression sum = new BasicNumber(0);
+		for (BigProduct p : terms)
+			sum = new Sum(p.toIndependantVariables(prover),sum);
+		return sum;
 	}
 
 	@Override
@@ -226,18 +229,18 @@ public class SumOfProducts extends AMExpression {
 			if (p.hasSameFactors(product)) {
 				productFound = true;
 				BigProduct newProduct = new BigProduct(product.getFactors());
-				newProduct.setCoeff((BasicNumber)(new Product(p.getCoeff(), product.getCoeff())).simplify());
+				newProduct.setCoeff((BasicNumber)(new Sum(p.getCoeff(), product.getCoeff())).simplify());
 				newSet.add(newProduct);
 			} else {
 				newSet.add(p);
 			}
 		}
-		if (!productFound)
+		if (!productFound) {
 			newSet.add(product);
+		}
 		this.terms = newSet;
 	}
 
-	
 	@Override
 	public SumOfProducts toSumOfProducts() {
 		return this;
