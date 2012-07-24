@@ -186,7 +186,7 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 		if (a.equals(pt))
 			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, c, d))).eliminate(pt, prover); // ya/cd -> -ay/cd
 		if (c.equals(pt))
-			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(c, d, b, a))).eliminate(pt, prover); // ab/yd -> 1/(yd/ba)
+			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(d, c, b, a))).eliminate(pt, prover); // ab/yd -> 1/(dy/ba)
 		/*
 		 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf for an explanation of the formulas above
 		 */
@@ -320,11 +320,9 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 				// If the prover crashed
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
 			}
-			
+		} // Wow, this is the least fun code I've ever written - I am sorry you have to read it
 		if (d.equals(pt))
 			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(c, d, a, b))).eliminate(pt, prover); // ab/cy -> 1/(cy/ab)
-		
-		} // Wow, this is the least fun code I've ever written - I am sorry you have to read it
 		if (b.equals(pt)) {
 			if (pt instanceof AMIntersectionPoint) {
 				Point u = ((AMIntersectionPoint)pt).getU();
@@ -450,7 +448,7 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 		}
 		
 		OpenGeoProver.settings.getLogger().error("Unexpected form of fraction : " + this.print() +
-				"where the point to eliminate is " + pt.getGeoObjectLabel());
+				" where the point to eliminate is " + pt.getGeoObjectLabel());
 		return null;
 	}
 	
