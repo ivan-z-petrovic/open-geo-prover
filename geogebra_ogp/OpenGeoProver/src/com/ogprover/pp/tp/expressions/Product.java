@@ -204,49 +204,6 @@ public class Product extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		AMExpression firstFactor = factor1.reduceToRightAssociativeFormInOneStep();
-		AMExpression secondFactor = factor2.reduceToRightAssociativeFormInOneStep();
-		if (secondFactor instanceof Sum) {
-			AMExpression firstTerm = ((Sum) secondFactor).getTerm1();
-			AMExpression secondTerm = ((Sum) secondFactor).getTerm2();
-			return new Sum(new Product(firstFactor, firstTerm), new Product(firstFactor, secondTerm));
-		}
-		if (firstFactor instanceof Sum) {
-			AMExpression firstTerm = ((Sum) firstFactor).getTerm1();
-			AMExpression secondTerm = ((Sum) firstFactor).getTerm2();
-			return new Sum(new Product(secondFactor, firstTerm), new Product(secondFactor, secondTerm));
-		}
-		if (firstFactor instanceof Product) {
-			AMExpression a = ((Product) firstFactor).getFactor1();
-			AMExpression b = ((Product) firstFactor).getFactor2();
-			return new Product(a, new Product(b, secondFactor));
-		}
-		if (firstFactor instanceof BasicNumber) {
-			if (secondFactor instanceof BasicNumber)
-				return new BasicNumber(((BasicNumber) firstFactor).value() * ((BasicNumber) secondFactor).value());
-			if (secondFactor instanceof Product) {
-				AMExpression a = ((Product) secondFactor).getFactor1();
-				AMExpression b = ((Product) secondFactor).getFactor2();
-				if (a instanceof BasicNumber) {
-					int product = ((BasicNumber) firstFactor).value() * ((BasicNumber) a).value();
-					return new Product(new BasicNumber(product), b);
-				}
-			}
-			
-		}
-		if (secondFactor instanceof BasicNumber)
-			return new Product(secondFactor, firstFactor);
-		if (secondFactor instanceof Product) {
-			AMExpression a = ((Product) secondFactor).getFactor1();
-			AMExpression b = ((Product) secondFactor).getFactor2();
-			if (a instanceof BasicNumber)
-				return new Product(a, new Product(firstFactor, b));
-		}
-		return new Product(firstFactor, secondFactor);
-	}
-	
-	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		return new Product(factor1.toIndependantVariables(prover), factor2.toIndependantVariables(prover));
 	}

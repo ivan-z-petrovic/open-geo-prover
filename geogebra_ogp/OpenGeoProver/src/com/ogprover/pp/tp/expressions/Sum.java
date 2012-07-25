@@ -177,19 +177,6 @@ public class Sum extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		AMExpression firstTerm = term1.reduceToRightAssociativeFormInOneStep();
-		//AMExpression c = term2.reduceToRightAssociativeFormInOneStep();
-		AMExpression c = term2;
-		if (firstTerm instanceof Sum) {
-			AMExpression a = ((Sum) firstTerm).getTerm1();
-			AMExpression b = ((Sum) firstTerm).getTerm2();
-			return new Sum (a, new Sum(b, c));
-		}
-		return new Sum(firstTerm, c.reduceToRightAssociativeFormInOneStep());
-	}
-	
-	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		return new Sum(term1.toIndependantVariables(prover), term2.toIndependantVariables(prover));
 	}

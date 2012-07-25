@@ -111,18 +111,6 @@ public abstract class AMExpression {
 	public abstract AMExpression reduceToSingleFraction();
 	
 	/**
-	 * An expression containing additions and products is said to be in a 
-	 * right associative form if it is of the form 
-	 * 		expr = (c1*x1*...*xn_1 + c2*y1*...*yn_2 + ... + cm*z1*...*zn_m)
-	 * where ci are constants, and xi, yi and zi are of type AMAreaOfTriangle, 
-	 * or AMPythagorasDifference, and where the big sum and all the products 
-	 * are in a right associative form.
-	 * @return the expression transformed into a right associative form.
-	 * /!\ This method is supposed to be called on an object without any fraction left.
-	 */
-	public abstract AMExpression reduceToRightAssociativeFormInOneStep();
-	
-	/**
 	 * @param prover 	the current prover
 	 * @return the expression in which all geometric quantities involved are independant.
 	 * @throws UnknownStatementException 
@@ -177,19 +165,6 @@ public abstract class AMExpression {
 			current = current.simplifyInOneStep();
 		}
 		return last;
-	}
-	
-	/**
-	 * @return the expression in right associative form
-	 */
-	public AMExpression reduceToRightAssociativeForm() {
-		AMExpression last = this; 
-		AMExpression current = last.reduceToRightAssociativeFormInOneStep();
-		while (!last.equals(current)) {
-			last = current;
-			current = current.reduceToRightAssociativeFormInOneStep();
-		}
-		return last;	
 	}
 	
 	/**
@@ -270,18 +245,6 @@ public abstract class AMExpression {
 			return new Product(new BasicNumber(sum), restOfProduct);
 		}
 		return new Sum(this, expr);
-	}
-	
-	/**
-	 * If this is a sum of products, groups the terms which are equal up to a constant multiplicative factor.
-	 */
-	public AMExpression groupSumOfProducts() {
-		if (this instanceof Sum) {
-			AMExpression leftTerm = ((Sum)this).getTerm1();
-			AMExpression groupedRest = ((Sum)this).getTerm2().groupSumOfProducts();
-			return groupedRest.addProductToSum(leftTerm);
-		}
-		return this;
 	}
 	
 	/**

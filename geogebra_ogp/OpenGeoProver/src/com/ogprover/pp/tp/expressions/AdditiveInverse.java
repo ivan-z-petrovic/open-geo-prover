@@ -133,11 +133,6 @@ public class AdditiveInverse extends AMExpression {
 	}
 
 	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		return new Product(new BasicNumber(-1), expr);
-	}
-
-	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		return new AdditiveInverse(expr.toIndependantVariables(prover));
 	}

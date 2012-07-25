@@ -253,11 +253,6 @@ public class BigProduct extends AMExpression {
 	}
 
 	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		return this;
-	}
-
-	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover)
 			throws UnknownStatementException {
 		AMExpression product = coeff;

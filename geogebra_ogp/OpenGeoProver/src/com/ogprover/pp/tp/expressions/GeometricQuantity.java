@@ -51,9 +51,6 @@ public abstract class GeometricQuantity extends AMExpression {
 	public abstract AMExpression reduceToSingleFraction();
 
 	@Override
-	public abstract AMExpression reduceToRightAssociativeFormInOneStep();
-
-	@Override
 	public abstract AMExpression toIndependantVariables(AreaMethodProver prover)
 			throws UnknownStatementException;
 

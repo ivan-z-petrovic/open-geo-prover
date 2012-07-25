@@ -330,11 +330,6 @@ public class PythagorasDifference extends GeometricQuantity {
 	}
 	
 	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		return this;
-	}
-	
-	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		AMExpression term1 = new Product(getY(a), getY(c));
 		AMExpression term2 = new Product(new BasicNumber(-1), new Product(getY(a), getY(b)));

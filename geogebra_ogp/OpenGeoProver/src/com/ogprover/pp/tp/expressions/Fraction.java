@@ -208,11 +208,6 @@ public class Fraction extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		System.out.println("Calling reductToRightAssociativeForm() on an expression which contains fractions : " + this.print());
-		return null;
-	}
-	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		return new Fraction(numerator.toIndependantVariables(prover), denominator.toIndependantVariables(prover));
 	}
