@@ -458,11 +458,6 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 	}
 	
 	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		return this;
-	}
-	
-	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		ArrayList<Point> points = new ArrayList<Point>();
 		points.add(a);

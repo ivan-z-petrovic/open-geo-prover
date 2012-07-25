@@ -123,11 +123,6 @@ public class BasicNumber extends AMExpression {
 	}
 
 	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		return this;
-	}
-
-	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		return this;
 	}

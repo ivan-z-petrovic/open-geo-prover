@@ -176,12 +176,6 @@ public class Difference extends AMExpression {
 		
 		return new Difference(expr1, expr2);
 	}
-	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		AMExpression firstTerm = term1.reduceToRightAssociativeFormInOneStep();
-		AMExpression secondTerm = term2.reduceToRightAssociativeFormInOneStep();
-		return new Sum(firstTerm, new Product(new BasicNumber(-1), secondTerm));
-	}
 	
 	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {

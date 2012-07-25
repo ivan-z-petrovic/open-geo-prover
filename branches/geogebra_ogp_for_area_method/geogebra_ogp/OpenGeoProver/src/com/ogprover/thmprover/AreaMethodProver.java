@@ -265,12 +265,6 @@ public class AreaMethodProver implements TheoremProver {
 			current = current.simplify();
 			debug("Transforming into a sum of products of geometrical quantities of : ", current);
 			current = current.toSumOfProducts();
-			/*
-			debug("Reducing into a right associative form of : ", current);
-			current = (new Product(new BasicNumber(1), current)).reduceToRightAssociativeForm();
-			debug("Grouping of : ", current);
-			current = current.groupSumOfProducts();
-			*/
 			debug("Simplification of : ", current);
 			current = current.simplify();
 			if (!(current.isZero())) {
@@ -301,12 +295,6 @@ public class AreaMethodProver implements TheoremProver {
 				}
 				debug("Simplification of : ", current);
 				current = current.simplify();
-				/*
-				debug("Reducing into a right associative form of : ", current);
-				current = (new Product(new BasicNumber(1), current)).reduceToRightAssociativeForm();
-				debug("Grouping of : ", current);
-				current = current.groupSumOfProducts();
-				*/
 				debug("Transforming into a sum of products of geometrical quantities of : ", current);
 				current = current.toSumOfProducts();
 				debug("Uniformization of : ", current);

@@ -200,11 +200,6 @@ public class SumOfProducts extends AMExpression {
 	}
 
 	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		return this;
-	}
-
-	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover)
 			throws UnknownStatementException {
 		AMExpression sum = new BasicNumber(0);

@@ -273,11 +273,6 @@ public class AreaOfTriangle extends GeometricQuantity {
 	}
 	
 	@Override
-	public AMExpression reduceToRightAssociativeFormInOneStep() {
-		return this;
-	}
-	
-	@Override
 	public AMExpression toIndependantVariables(AreaMethodProver prover) throws UnknownStatementException {
 		AMExpression firstTerm = new Product(new Difference(getY(b), getY(c)), getX(a));
 		AMExpression secondTerm = new Product(new Difference(getY(c), getY(a)), getX(b));
