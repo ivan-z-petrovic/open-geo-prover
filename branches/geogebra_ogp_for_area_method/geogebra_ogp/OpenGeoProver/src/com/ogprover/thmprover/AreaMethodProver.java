@@ -61,7 +61,7 @@ public class AreaMethodProver implements TheoremProver {
 	/**
 	 * Whether or not we have to print debug messages.
 	 */
-	public static boolean debugMode = false;
+	public static boolean debugMode = true;
 	
 	/**
 	 * Whether of not we have to compute and eliminate the areas of three collinear points
@@ -143,6 +143,7 @@ public class AreaMethodProver implements TheoremProver {
 	 * @param thmProtocol	The details of the construction, with the type OGPTP.
 	 */
 	public AreaMethodProver(OGPTP thmProtocol) {
+		debug("coucou");
 		this.steps = new Vector<AMExpression>();
 		this.statement = thmProtocol.getTheoremStatement().getAreaMethodStatement();
 		this.constructions = thmProtocol.getConstructionSteps();
@@ -213,8 +214,6 @@ public class AreaMethodProver implements TheoremProver {
 		}
 		
 		debug("Number of expressions in the statement : " + Integer.toString(statement.getStatements().size()));
-		
-		grosDebug();
 		
 		for (AMExpression expr : statement.getStatements()) {
 			debug("We must prove that : " + expr.print() + " = 0");
@@ -451,51 +450,5 @@ public class AreaMethodProver implements TheoremProver {
 				}
 			}
 		}
-	}
-	
-	private void grosDebug() {
-		debug("===============DEBUG=================");
-		Point a = new FreePoint("a");
-		Point b = new FreePoint("b");
-		Point c = new FreePoint("c");
-		AMExpression pabc = new PythagorasDifference(a, b, c);
-		AMExpression pacb = new PythagorasDifference(a, c, b);
-		AMExpression pbac = new PythagorasDifference(b, a, c);
-		AMExpression pbca = new PythagorasDifference(b, c, a);
-		AMExpression pcab = new PythagorasDifference(c, a, b);
-		AMExpression pcba = new PythagorasDifference(c, b, a);
-		//AMExpression two = new BasicNumber(2);
-		//AMExpression product = new Product(sabc, two);
-		
-		AMExpression expr = pabc;
-		debug("pabc : ", expr);
-		AMExpression uniformized = expr.uniformize(knownCollinearPoints);
-		debug("uniformized : ", uniformized);
-		
-		expr = pacb;
-		debug("pacb : ", expr);
-		uniformized = expr.uniformize(knownCollinearPoints);
-		debug("uniformized : ", uniformized);
-		
-		expr = pbac;
-		debug("pbac : ", expr);
-		uniformized = expr.uniformize(knownCollinearPoints);
-		debug("uniformized : ", uniformized);
-		
-		expr = pbca;
-		debug("pbca : ", expr);
-		uniformized = expr.uniformize(knownCollinearPoints);
-		debug("uniformized : ", uniformized);
-		
-		expr = pcab;
-		debug("pcab : ", expr);
-		uniformized = expr.uniformize(knownCollinearPoints);
-		debug("uniformized : ", uniformized);
-		
-		expr = pcba;
-		debug("pcba : ", expr);
-		uniformized = expr.uniformize(knownCollinearPoints);
-		debug("uniformized : ", uniformized);
-		debug("=====================================");
 	}
 }

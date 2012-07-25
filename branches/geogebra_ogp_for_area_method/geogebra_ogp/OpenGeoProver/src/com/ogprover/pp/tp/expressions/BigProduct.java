@@ -59,10 +59,6 @@ public class BigProduct extends AMExpression {
 		return coeff;
 	}
 	
-	public int getCoeffValue() {
-		return coeff.value();
-	}
-	
 	public HashMap<GeometricQuantity, Integer> getFactors() {
 		return factors;
 	}
@@ -235,7 +231,7 @@ public class BigProduct extends AMExpression {
 
 	@Override
 	public AMExpression simplifyInOneStep() {
-		if (coeff.value() == 0)
+		if (coeff.isZero())
 			return new BasicNumber(0);
 		return this;
 	}
