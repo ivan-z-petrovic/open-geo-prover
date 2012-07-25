@@ -189,6 +189,7 @@ AMExpression ratioOfSegments() :
   ( < LEFTBRACKET > | < LEFTPAR > )  s1 = < LABEL >
   < COMMA >
   s2 = < LABEL >
+  ( < COMMA > < LABEL >)?
   ( < RIGHTBRACKET > | < RIGHTPAR > )
   < DIVIDE >
   < SEGMENT >
@@ -196,6 +197,7 @@ AMExpression ratioOfSegments() :
   s3 = < LABEL >
   < COMMA >
   s4 = < LABEL >
+  ( < COMMA > < LABEL >)?
   ( < RIGHTBRACKET > | < RIGHTPAR > )
   {
     pt1 = new FreePoint(s1.image);
@@ -233,6 +235,7 @@ AMExpression squareOfSegment() :
   ( < LEFTBRACKET > | < LEFTPAR > )  s1 = < LABEL >
   < COMMA >
   s2 = < LABEL >
+  ( < COMMA > < LABEL >)?
   ( < RIGHTBRACKET > | < RIGHTPAR > )
   < SQUARE >
   {
@@ -251,6 +254,7 @@ AMExpression simpleSegment() :
   ( < LEFTBRACKET > | < LEFTPAR > )  s1 = < LABEL >
   < COMMA >
   s2 = < LABEL >
+  ( < COMMA > < LABEL >)?
   ( < RIGHTBRACKET > | < RIGHTPAR > )
   {
     pt1 = new FreePoint(s1.image);
