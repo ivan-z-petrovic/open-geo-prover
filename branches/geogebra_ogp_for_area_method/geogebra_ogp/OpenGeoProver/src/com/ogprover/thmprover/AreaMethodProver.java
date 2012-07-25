@@ -143,7 +143,6 @@ public class AreaMethodProver implements TheoremProver {
 	 * @param thmProtocol	The details of the construction, with the type OGPTP.
 	 */
 	public AreaMethodProver(OGPTP thmProtocol) {
-		debug("coucou");
 		this.steps = new Vector<AMExpression>();
 		this.statement = thmProtocol.getTheoremStatement().getAreaMethodStatement();
 		this.constructions = thmProtocol.getConstructionSteps();
