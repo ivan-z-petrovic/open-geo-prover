@@ -5,9 +5,7 @@ package com.ogprover.pp.tp.expressions;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 
-import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
@@ -177,21 +175,34 @@ public class SumOfProducts extends AMExpression {
 
 	@Override
 	public AMExpression simplifyInOneStep() {
+		AreaMethodProver.debug("---------------");
+		AreaMethodProver.debug("We simplify : ", this);
+		BasicNumber d = new BasicNumber(0);
+		for (BigProduct p : terms)
+			d = d.gcd(p.getCoeff());
+		AreaMethodProver.debug("The GCD is : ", d);
 		// We remove all the zeros
-		HashSet<BigProduct> newTerms = new HashSet<BigProduct>(terms);
-		for (Iterator<BigProduct> i = terms.iterator() ; i.hasNext() ; ) {
-			BigProduct next = i.next();
-			if (next.getCoeff().isZero())
-				newTerms.remove(next);
+		HashSet<BigProduct> newTerms = new HashSet<BigProduct>();
+		for (BigProduct p : terms) {
+			BasicNumber coeff = p.getCoeff();
+			if (!(coeff.isZero())) {
+				p.setCoeff(coeff.divide(d));
+				newTerms.add(p);
+			}
 		}
-		return new SumOfProducts(newTerms);
+		AMExpression r = new SumOfProducts(newTerms);
+		AreaMethodProver.debug("We got : ", r);
+		AreaMethodProver.debug("---------------");
+		return r;
 	}
 
 	@Override
 	public AMExpression eliminate(Point pt, AreaMethodProver prover)
 			throws UnknownStatementException {
-		OpenGeoProver.settings.getLogger().error("Method eliminate should not be called on sum of product instances.");
-		return null;
+		AMExpression sum = new BasicNumber(0);
+		for (BigProduct p : terms)
+			sum = new Sum(p.eliminate(pt, prover),sum);
+		return sum;
 	}
 
 	@Override

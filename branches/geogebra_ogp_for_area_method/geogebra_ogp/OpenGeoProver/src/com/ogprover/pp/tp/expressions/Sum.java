@@ -135,7 +135,7 @@ public class Sum extends AMExpression {
 		if (t1 instanceof AdditiveInverse)
 			return new Difference(t2, ((AdditiveInverse)t1).getExpr()); // (-a)+b -> b-a
 		if (t1 instanceof BasicNumber && t2 instanceof BasicNumber)
-				return new BasicNumber(((BasicNumber)t1).value() + ((BasicNumber)t2).value()); // n+n' -> n+n'
+			return ((BasicNumber)t1).add((BasicNumber) t2); // n+n' -> n+n'
 		return new Sum(t1, t2);
 	}
 	

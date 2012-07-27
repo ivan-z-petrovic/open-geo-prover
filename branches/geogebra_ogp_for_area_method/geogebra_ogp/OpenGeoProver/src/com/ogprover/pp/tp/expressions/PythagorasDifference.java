@@ -193,9 +193,9 @@ public class PythagorasDifference extends GeometricQuantity {
 				AMExpression term2 = new Product(svpq, gu);
 				AMExpression numerator = new Difference(term1, term2);
 				AMExpression supv = new AreaOfTriangle(u, p, v);
-				AMExpression spvq = new AreaOfTriangle(p, v, q);
-				AMExpression denominator = new Sum(supv, spvq);
-				return new Fraction(numerator, denominator);
+				AMExpression suvq = new AreaOfTriangle(u, v, q);
+				AMExpression supvq = new Sum(supv, suvq);
+				return new Fraction(numerator, supvq);
 			}
 			
 			if (pt instanceof AMFootPoint) {
@@ -225,7 +225,7 @@ public class PythagorasDifference extends GeometricQuantity {
 				AMExpression gv = new PythagorasDifference(aa, bb, v);
 				AMExpression difference = new Difference(gv, gu);
 				AMExpression product = new Product(r, difference);
-				return new Sum(gw,product);
+				return new Sum(gw, product);
 			}
 			
 			if (pt instanceof TRatioPoint) {
@@ -235,8 +235,8 @@ public class PythagorasDifference extends GeometricQuantity {
 				
 				AMExpression pabp = new PythagorasDifference(aa, bb, p);
 				AMExpression spaq = new AreaOfTriangle(p, aa, q);
-				AMExpression saqb = new AreaOfTriangle(aa, q, bb);
-				AMExpression spaqb = new Sum(spaq, saqb);
+				AMExpression spqb = new AreaOfTriangle(p, q, bb);
+				AMExpression spaqb = new Sum(spaq, spqb);
 				AMExpression coeff = new Product(r, new BasicNumber(4));
 				AMExpression product = new Product(coeff, spaqb);
 				return new Difference(pabp, product);
@@ -248,10 +248,11 @@ public class PythagorasDifference extends GeometricQuantity {
 				Point p = ((AMIntersectionPoint)pt).getP();
 				Point q = ((AMIntersectionPoint)pt).getQ();
 				
+				/*
 				AMExpression spuv = new AreaOfTriangle(p, u, v);
 				AMExpression spuq = new AreaOfTriangle(p, u, q);
-				AMExpression suqv = new AreaOfTriangle(u, q, v);
-				AMExpression spuqv = new Sum(spuq, suqv);
+				AMExpression spqv = new AreaOfTriangle(p, q, v);
+				AMExpression spuqv = new Sum(spuq, spqv);
 				AMExpression paqb = new PythagorasDifference(aa, q, bb);
 				AMExpression sqvu = new AreaOfTriangle(q, v, u);
 				AMExpression papb = new PythagorasDifference(aa, p, bb);
@@ -261,6 +262,21 @@ public class PythagorasDifference extends GeometricQuantity {
 				AMExpression term1 = new Product(frac1, paqb);
 				AMExpression term2 = new Product(frac2, papb);
 				AMExpression term3 = new Product(new Product(frac1, frac2), ppqp);
+				return new Difference(new Sum(term1, term2), term3);
+				*/
+				AMExpression supv = new AreaOfTriangle(u, p, v);
+				AMExpression suvq = new AreaOfTriangle(u, v, q);
+				AMExpression supvq = new Sum(supv, suvq);
+				AMExpression supq = new AreaOfTriangle(u, p, q);
+				AMExpression fraction1 = new Fraction(supq, supvq);
+				AMExpression svpq = new AreaOfTriangle(v, p, q);
+				AMExpression fraction2 = new Fraction(svpq, supvq);
+				AMExpression gv = new PythagorasDifference(a, v, b);
+				AMExpression term1 = new Product(fraction1, gv);
+				AMExpression gu = new PythagorasDifference(a, u, b);
+				AMExpression term2 = new Product(fraction2, gu);
+				AMExpression puvu = new PythagorasDifference(u, v, u);
+				AMExpression term3 = new Product(fraction1, new Product(fraction2, puvu));
 				return new Difference(new Sum(term1, term2), term3);
 			}
 			if (pt instanceof AMFootPoint) {

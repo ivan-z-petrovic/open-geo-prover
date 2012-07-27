@@ -130,23 +130,21 @@ public class Product extends AMExpression {
 		AMExpression f2 = factor2.simplifyInOneStep();
 		if (f1 instanceof BasicNumber) {
 			if (f2 instanceof BasicNumber)
-				return new BasicNumber(((BasicNumber)f1).value() * ((BasicNumber)f2).value()); // n.n' -> n*n'
-			int value = ((BasicNumber)f1).value();
-			if (value == 0)
+				return ((BasicNumber) f1).multiply((BasicNumber) f2); // n.n' -> n*n'
+			if (((BasicNumber) f1).isZero())
 				return new BasicNumber(0); // 0.a -> 0
-			if (value == 1)
+			if (((BasicNumber) f1).equals(new BasicNumber(1)))
 				return f2; // 1.a -> a
-			if (value < 0)
-				return new AdditiveInverse(new Product(new BasicNumber(-value), f2)); // (-n).a -> -(n.a)
+			if (((BasicNumber) f1).isNegative())
+				return new AdditiveInverse(new Product(((BasicNumber) f1).negate(), f2)); // (-n).a -> -(n.a)
 		}
 		if (f2 instanceof BasicNumber) {
-			int value = ((BasicNumber)f2).value();
-			if (value == 0)
+			if (((BasicNumber) f2).isZero())
 				return new BasicNumber(0); // a.0 -> 0
-			if (value == 1)
+			if (((BasicNumber) f2).equals(new BasicNumber(1)))
 				return f1; // a.1 -> a
-			if (value < 0)
-				return new AdditiveInverse(new Product(new BasicNumber(-value), f1)); // a.(-n) -> -(n.a)
+			if (((BasicNumber) f2).isNegative())
+				return new AdditiveInverse(new Product(((BasicNumber) f2).negate(), f1)); // a.(-n) -> -(n.a)
 		}
 		if (f1 instanceof AdditiveInverse) {
 			if (f2 instanceof AdditiveInverse)

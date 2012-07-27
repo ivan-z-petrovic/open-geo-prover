@@ -132,7 +132,7 @@ public class Difference extends AMExpression {
 		if (t1.isZero())
 			return new AdditiveInverse(t2); // 0-a -> -a
 		if (t1 instanceof BasicNumber && t2 instanceof BasicNumber)
-			return new BasicNumber(((BasicNumber)t1).value() - ((BasicNumber)t2).value()); // n-n' -> n-n'
+			return ((BasicNumber)t1).subtract((BasicNumber) t2); // n-n' -> n-n'
 		if (t1.equals(t2))
 			return new BasicNumber(0); // a-a -> 0
 		if (t2 instanceof AdditiveInverse)
