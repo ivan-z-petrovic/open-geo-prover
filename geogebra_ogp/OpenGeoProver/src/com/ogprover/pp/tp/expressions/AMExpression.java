@@ -146,7 +146,7 @@ public abstract class AMExpression {
 	 */
 	public boolean isZero() {
 		if (this instanceof BasicNumber)
-			if (((BasicNumber)this).value() == 0)
+			if (((BasicNumber)this).isZero())
 				return true;
 		if (this instanceof SumOfProducts)
 			if (((SumOfProducts)this).getTerms().isEmpty())
@@ -229,20 +229,20 @@ public abstract class AMExpression {
 			AMExpression leftTerm = ((Sum)this).getTerm1();
 			AMExpression restOfSum = ((Sum)this).getTerm2();
 			if (leftTerm.isSameProduct(expr)) {
-				int constantOfLeftTerm = ((BasicNumber)((Product)leftTerm).getFactor1()).value();
-				int constantOfExpr =  ((BasicNumber)((Product)expr).getFactor1()).value();
-				int sum = constantOfExpr + constantOfLeftTerm;
+				BasicNumber constantOfLeftTerm = (BasicNumber) ((Product)leftTerm).getFactor1();
+				BasicNumber constantOfExpr =  (BasicNumber) ((Product)expr).getFactor1();
+				BasicNumber sum = constantOfLeftTerm.add(constantOfExpr);
 				AMExpression restOfProduct = ((Product)leftTerm).getFactor2();
-				return new Sum(new Product(new BasicNumber(sum), restOfProduct), restOfSum);
+				return new Sum(new Product(sum, restOfProduct), restOfSum);
 			}
 			return new Sum(leftTerm, restOfSum.addProductToSum(expr));
 		}
 		if (this.isSameProduct(expr)) {
-			int constantOfThis = ((BasicNumber)((Product)this).getFactor1()).value();
-			int constantOfExpr =  ((BasicNumber)((Product)expr).getFactor1()).value();
-			int sum = constantOfExpr + constantOfThis;
+			BasicNumber constantOfThis = (BasicNumber) ((Product)this).getFactor1();
+			BasicNumber constantOfExpr =  (BasicNumber) ((Product)expr).getFactor1();
+			BasicNumber sum = constantOfThis.add(constantOfExpr);
 			AMExpression restOfProduct = ((Product)this).getFactor2();
-			return new Product(new BasicNumber(sum), restOfProduct);
+			return new Product(sum, restOfProduct);
 		}
 		return new Sum(this, expr);
 	}

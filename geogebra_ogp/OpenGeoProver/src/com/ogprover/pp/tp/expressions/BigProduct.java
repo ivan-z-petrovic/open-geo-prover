@@ -240,7 +240,15 @@ public class BigProduct extends AMExpression {
 	public AMExpression eliminate(Point pt, AreaMethodProver prover)
 			throws UnknownStatementException {
 		OpenGeoProver.settings.getLogger().error("Method eliminate should not be called on big product instances.");
-		return null;
+		AMExpression product = coeff;
+		Set<Entry<GeometricQuantity, Integer>> entries = factors.entrySet();
+		for (Entry<GeometricQuantity, Integer> e : entries) {
+			int power = e.getValue().intValue();
+			GeometricQuantity factor = e.getKey();
+			for (int i = 0 ; i < power ; i++)
+				product = new Product(factor.eliminate(pt, prover), product);
+		}
+		return product;
 	}
 
 	@Override

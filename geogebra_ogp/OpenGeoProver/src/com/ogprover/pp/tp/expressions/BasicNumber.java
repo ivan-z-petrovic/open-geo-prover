@@ -3,6 +3,7 @@
  */
 package com.ogprover.pp.tp.expressions;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -38,7 +39,7 @@ public class BasicNumber extends AMExpression {
 	/**
 	 * Value of the number.
 	 */
-	protected int n;
+	protected BigInteger n;
 
 	
 	/*
@@ -46,7 +47,7 @@ public class BasicNumber extends AMExpression {
 	 * ========================== GETTERS/SETTERS ===========================
 	 * ======================================================================
 	 */
-	public int value() {
+	public BigInteger value() {
 		return n;
 	}
 	
@@ -68,10 +69,13 @@ public class BasicNumber extends AMExpression {
 	 * 
 	 * @param n		Number
 	 */
-	public BasicNumber(int n) {
+	public BasicNumber(BigInteger n) {
 		this.n = n;
 	}
 
+	public BasicNumber(int n) {
+		this.n = new BigInteger(Integer.toString(n));
+	}
 	
 	/*
 	 * ======================================================================
@@ -80,7 +84,7 @@ public class BasicNumber extends AMExpression {
 	 */
 	@Override
 	public String print() {
-		return Integer.toString(n);
+		return n.toString();
 	}
 	
 	@Override
@@ -97,6 +101,39 @@ public class BasicNumber extends AMExpression {
 	 * ========================== SPECIFIC METHODS ==========================
 	 * ======================================================================
 	 */
+	public BasicNumber add(BasicNumber num) {
+		return new BasicNumber(n.add(num.value()));
+	}
+	
+	public BasicNumber subtract(BasicNumber num) {
+		return new BasicNumber(n.subtract(num.value()));
+	}
+	
+	public BasicNumber multiply(BasicNumber num) {
+		return new BasicNumber(n.multiply(num.value()));
+	}
+	
+	public BasicNumber divide(BasicNumber num) {
+		return new BasicNumber(n.divide(num.value()));
+	}
+	
+	public BasicNumber negate() {
+		return new BasicNumber(n.negate());
+	}
+	
+	public boolean isNegative() {
+		return n.compareTo(BigInteger.ZERO) < 0;
+	}
+	
+	public BasicNumber gcd(BasicNumber num) {
+		return new BasicNumber(n.gcd(num.value()));
+	}
+	
+	@Override
+	public boolean isZero() {
+		return n.equals(BigInteger.ZERO);
+	}
+	
 	@Override
 	public boolean containsOnlyFreePoints() {
 		return true;

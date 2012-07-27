@@ -208,9 +208,9 @@ public class AreaOfTriangle extends GeometricQuantity {
 			AMExpression term2 = new Product(svpq, gu);
 			AMExpression numerator = new Difference(term1, term2);
 			AMExpression supv = new AreaOfTriangle(u, p, v);
-			AMExpression spvq = new AreaOfTriangle(p, v, q);
-			AMExpression denominator = new Sum(supv, spvq);
-			return new Fraction(numerator, denominator);
+			AMExpression suvq = new AreaOfTriangle(u, v, q);
+			AMExpression supvq = new Sum(supv, suvq);
+			return new Fraction(numerator, supvq);
 		}
 		
 		if (pt instanceof AMFootPoint) {
@@ -240,7 +240,7 @@ public class AreaOfTriangle extends GeometricQuantity {
 			AMExpression gv = new AreaOfTriangle(aa, bb, v);
 			AMExpression difference = new Difference(gv, gu);
 			AMExpression product = new Product(r, difference);
-			return new Sum(gw,product);
+			return new Sum(gw, product);
 		}
 		
 		if (pt instanceof TRatioPoint) {

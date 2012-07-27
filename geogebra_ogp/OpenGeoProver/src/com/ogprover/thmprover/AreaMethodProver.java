@@ -249,10 +249,12 @@ public class AreaMethodProver implements TheoremProver {
 					debug("Removing of the denominator of : ", current);
 					current = ((Fraction) current).getNumerator();
 				}
-				debug("Last simplification of : ", current);
+				debug("Third simplification of : ", current);
 				current = current.simplify();
-				debug("Reducing into a right associative form of : ", current);
+				debug("Transforming into a sum of products of geometrical quantities of : ", current);
+				current = current.toSumOfProducts();
 			}
+			/*
 			debug("Reducing into a single fraction of : ", current);
 			current = current.reduceToSingleFraction();
 			if (current instanceof Fraction) {
@@ -263,6 +265,9 @@ public class AreaMethodProver implements TheoremProver {
 			current = current.simplify();
 			debug("Transforming into a sum of products of geometrical quantities of : ", current);
 			current = current.toSumOfProducts();
+			debug("Simplification of : ", current);
+			current = current.simplify();
+			*/
 			debug("Simplification of : ", current);
 			current = current.simplify();
 			if (!(current.isZero())) {
