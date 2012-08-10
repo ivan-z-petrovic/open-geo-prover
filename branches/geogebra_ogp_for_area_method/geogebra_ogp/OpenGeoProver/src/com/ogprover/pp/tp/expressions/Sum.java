@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.expressions;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
@@ -192,7 +193,11 @@ public class Sum extends AMExpression {
 	}
 	
 	@Override
-	public SumOfProducts toSumOfProducts() {
-		return new SumOfProducts(term1.toSumOfProducts().getTerms(), term2.toSumOfProducts().getTerms());
+	public AMExpression toSumOfProducts() {
+		return new SumOfProducts(((SumOfProducts) term1.toSumOfProducts()).getTerms(), ((SumOfProducts) term2.toSumOfProducts()).getTerms());
+	}
+	@Override
+	public double testValue(HashMap<String, FloatCoordinates> coords) {
+		return (term1.testValue(coords) + term2.testValue(coords));
 	}
 }

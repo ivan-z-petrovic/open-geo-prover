@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.expressions.*;
 import com.ogprover.pp.tp.geoconstruction.AMFootPoint;
@@ -18,6 +19,7 @@ import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.PRatioPoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.geoconstruction.TRatioPoint;
 import com.ogprover.pp.tp.ndgcondition.SimpleNDGCondition;
 import com.ogprover.pp.tp.thmstatement.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.thmstatement.IdenticalPoints;
@@ -80,6 +82,11 @@ public class AreaMethodProver implements TheoremProver {
 	protected boolean transformToIndependantVariables = true;
 	
 	/**
+	 * Arbitrary coordinates of each point, for fast verification and debugging
+	 */
+	protected static HashMap<String, FloatCoordinates> coords;
+	
+	/**
 	 * Statement to be proved
 	 */
 	protected AreaMethodTheoremStatement statement;
@@ -131,6 +138,13 @@ public class AreaMethodProver implements TheoremProver {
 		this.transformToIndependantVariables = b;
 	}
 	
+	public static void setDebugMode(boolean debugMode) {
+		AreaMethodProver.debugMode = debugMode;
+	}
+
+	public static void setOptimizeCouplesOfPoints(boolean optimizeCouplesOfPoints) {
+		AreaMethodProver.optimizeCouplesOfPoints = optimizeCouplesOfPoints;
+	}
 	
 	
 	/*
@@ -176,6 +190,7 @@ public class AreaMethodProver implements TheoremProver {
 		ILogger logger = OpenGeoProver.settings.getLogger();
 		
 		if (firstLaunch) {
+			grosDebug();
 			firstLaunch = false;
 			if (optimizeCouplesOfPoints)
 				computeCoupleOfPoints();
@@ -202,6 +217,17 @@ public class AreaMethodProver implements TheoremProver {
 		if (ndgConditions != null) {
 			for (SimpleNDGCondition ndgCons : ndgConditions) {
 				debug("  " + ndgCons.print());
+			}
+		}
+		
+		if (debugMode) {
+			debug("Generation of random coordinates for all points...");
+			initCoords();
+			for (GeoConstruction cons : constructions) {
+				if (cons instanceof Point) {
+					String label = cons.getGeoObjectLabel();
+					debug("Point " + label + " : (" + coords.get(label).x + ", " + coords.get(label).y + ")");
+				}
 			}
 		}
 		
@@ -254,7 +280,6 @@ public class AreaMethodProver implements TheoremProver {
 				debug("Transforming into a sum of products of geometrical quantities of : ", current);
 				current = current.toSumOfProducts();
 			}
-			/*
 			debug("Reducing into a single fraction of : ", current);
 			current = current.reduceToSingleFraction();
 			if (current instanceof Fraction) {
@@ -267,15 +292,10 @@ public class AreaMethodProver implements TheoremProver {
 			current = current.toSumOfProducts();
 			debug("Simplification of : ", current);
 			current = current.simplify();
-			*/
-			debug("Simplification of : ", current);
-			current = current.simplify();
 			if (!(current.isZero())) {
 				if (!transformToIndependantVariables) {
-					debug("The expression is non-null and transformToIndependantVariable is false : aborting.");
-					if (current.size() > 20)
-						return THEO_PROVE_RET_CODE_UNKNOWN;
-					debug("Oh, well, actually, this expression is small, let's try to extend it anyway.");
+					debug("The expression is non-null and transformToIndependantVariable is set to false : aborting.");
+					return THEO_PROVE_RET_CODE_UNKNOWN;
 				}
 				debug("Transformation to a formula with only independant variables of : ", current);
 				try {
@@ -332,6 +352,7 @@ public class AreaMethodProver implements TheoremProver {
 			else
 				logger.debug(str + expr.print());
 			logger.debug("  (Size = " + Integer.toString(size) + ")");
+			verify(expr);
 		}
 	}
 	
@@ -348,9 +369,7 @@ public class AreaMethodProver implements TheoremProver {
 	private void computeCollinearPoints() {
 		if (knownCollinearPoints != null)
 			return;
-		
 		knownCollinearPoints = new HashSet<HashSet<Point>>();
-		
 		int numberOfConstructions = constructions.size();
 		for (int i = 0 ; i < numberOfConstructions ; i++) {
 			for (int j = 0 ; j < numberOfConstructions ; j++) {
@@ -454,5 +473,166 @@ public class AreaMethodProver implements TheoremProver {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Initializes the coords HashMap.
+	 */
+	private void initCoords() { 
+		coords = new HashMap<String, FloatCoordinates>();
+		coords.put("iO", new FloatCoordinates(42, 17));
+		coords.put("iU", new FloatCoordinates(13, -66));
+		coords.put("iV", new FloatCoordinates(2, 34));
+		double norm = 10000000;
+		for (GeoConstruction cons : constructions) {
+			if (cons instanceof Point) {
+				if (cons instanceof FreePoint) {
+					// TODO put real randomness here
+					double x = (double) cons.hashCode() + 1;
+					double y = (double) coords.hashCode() + 3;
+					// TODO debug
+					boolean cp = false;
+					if (cons.getGeoObjectLabel().equals("a")) {
+						cp = true;
+						x = 0.1;
+						y = 0.1;
+					} else if (cons.getGeoObjectLabel().equals("b")) {
+						cp = true;
+						x = 10.1;
+						y = 10.1;
+					} else if (cons.getGeoObjectLabel().equals("c")) {
+						cp = true;
+						x = 0.1;
+						y = 20;
+					} else if (cons.getGeoObjectLabel().equals("d")) {
+						cp = true;
+						x = 15;
+						y = 5;
+					}
+					if (cp) {
+						x *= norm;
+						y *= norm;
+					}
+					coords.put(cons.getGeoObjectLabel(), new FloatCoordinates(x/norm, y/norm));
+				} else if (cons instanceof AMIntersectionPoint) {
+					AMIntersectionPoint pt = (AMIntersectionPoint) cons;
+					String p = pt.getP().getGeoObjectLabel();
+					String q = pt.getQ().getGeoObjectLabel();
+					String u = pt.getU().getGeoObjectLabel();
+					String v = pt.getV().getGeoObjectLabel();
+					double xp = coords.get(p).x;
+					double xq = coords.get(q).x;
+					double xu = coords.get(u).x;
+					double xv = coords.get(v).x;
+					double yp = coords.get(p).y;
+					double yq = coords.get(q).y;
+					double yu = coords.get(u).y;
+					double yv = coords.get(v).y;
+					double x = (yu - yp + xp*((yq-yp)/(xq-xp)) - xu*((yv-yu)/(xv-xu)))/((yq-yp)/(xq-xp) - (yv-yu)/(xv-xu));
+					double y = yp + (x-xp)*((yq-yp)/(xq-xp));
+					coords.put(cons.getGeoObjectLabel(), new FloatCoordinates(x, y));
+				} else if (cons instanceof AMFootPoint) {
+					AMFootPoint pt = (AMFootPoint) cons;
+					String p = pt.getP().getGeoObjectLabel();
+					String u = pt.getU().getGeoObjectLabel();
+					String v = pt.getV().getGeoObjectLabel();
+					double xp = coords.get(p).x;
+					double xu = coords.get(u).x;
+					double xv = coords.get(v).x;
+					double yp = coords.get(p).y;
+					double yu = coords.get(u).y;
+					double yv = coords.get(v).y;
+					double x = (xp*(xv-xu) + (yp - yu + xu*((yv-yu)/(xv-xu)))*(yv-yu))/(xv - xu + ((yv-yu)*(yv-yu)/(xv-xu)));
+					double y = yu + (x-xu)*((yv-yu)/(xv-xu));
+					coords.put(cons.getGeoObjectLabel(), new FloatCoordinates(x, y));
+				} else if (cons instanceof PRatioPoint) {
+					PRatioPoint pt = (PRatioPoint) cons;
+					String w = pt.getW().getGeoObjectLabel();
+					String u = pt.getU().getGeoObjectLabel();
+					String v = pt.getV().getGeoObjectLabel();
+					double r = pt.getR().testValue(coords);
+					double xw = coords.get(w).x;
+					double xu = coords.get(u).x;
+					double xv = coords.get(v).x;
+					double yw = coords.get(w).y;
+					double yu = coords.get(u).y;
+					double yv = coords.get(v).y;
+					double x = xw + r*(xv-xu);
+					double y = yw + r*(yv-yu);
+					coords.put(cons.getGeoObjectLabel(), new FloatCoordinates(x, y));
+				} else if (cons instanceof TRatioPoint) {
+					TRatioPoint pt = (TRatioPoint) cons;
+					String u = pt.getU().getGeoObjectLabel();
+					String v = pt.getV().getGeoObjectLabel();
+					double r = pt.getR().testValue(coords);
+					double xu = coords.get(u).x;
+					double xv = coords.get(v).x;
+					double yu = coords.get(u).y;
+					double yv = coords.get(v).y;
+					double x = xu - r*(yv-yu);
+					double y = yu + r*(xv-xu);
+					coords.put(cons.getGeoObjectLabel(), new FloatCoordinates(x, y));
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Verifies that a given formula is zero, by approximating its actual value.
+	 */
+	private static void verify(AMExpression expr) {
+		double margin = 1;
+		double value = expr.testValue(coords);
+		if (value < margin && value > -margin)
+			OpenGeoProver.settings.getLogger().debug(" (Verification OK : value = " + value + ")");
+		else
+			OpenGeoProver.settings.getLogger().debug(" (Verification failed : value = " + value + ")");
+	}
+	
+	/**
+	 * Debug
+	 * @throws UnknownStatementException 
+	 */
+	private void grosDebug() {
+		Vector<GeoConstruction> steps = new Vector<GeoConstruction>(this.constructions);
+		debug("===========================");
+		constructions = new Vector<GeoConstruction>();
+		Point a = new FreePoint("a"); // (0,0)
+		Point b = new FreePoint("b"); // (10,10)
+		Point m = new PRatioPoint("m", a, a, b, new Fraction(new BasicNumber(1), new BasicNumber(2))); // (5, 5)
+		constructions.add(a);
+		constructions.add(b);
+		constructions.add(m);
+		initCoords();
+		for (GeoConstruction cons : constructions) {
+			String label = cons.getGeoObjectLabel();
+			debug("Point " + label + " : (" + coords.get(label).x + ", " + coords.get(label).y + ")");
+		}
+		AMExpression segment = new PythagorasDifference(a, m, a);
+		debug("P_ama = " + segment.testValue(coords) + " // ", segment); // 25
+		debug("Elimination..."); // 25
+		try {
+			segment = segment.eliminate(m, this);
+			debug("P_ama = " + segment.testValue(coords) + " // ", segment); // 25
+		} catch (UnknownStatementException e) {}
+		debug("Simplification..."); // 25
+		segment = segment.simplify().uniformize(knownCollinearPoints);
+		debug("P_ama = " + segment.testValue(coords) + " // ", segment); // 25
+		segment = segment.reduceToSingleFraction();
+		debug("Reducing into single fraction..."); // 25
+		debug("P_ama = " + segment.testValue(coords) + " // ", segment); // 25
+		constructions = steps;
+		if (segment instanceof Fraction) {
+			debug("Removing of the denominator...");
+			segment = ((Fraction) segment).getNumerator();
+			debug("P_ama = " + segment.testValue(coords) + " // ", segment); // 25
+		}
+		debug("Simplification...");
+		segment = segment.simplify().uniformize(knownCollinearPoints);
+		debug("P_ama = " + segment.testValue(coords) + " // ", segment); // 25
+		debug("Transforming into a sum of products of geometrical quantities...");
+		segment = segment.toSumOfProducts();
+		debug("P_ama = " + segment.testValue(coords) + " // ", segment); // 25
+		debug("===========================");
 	}
 }

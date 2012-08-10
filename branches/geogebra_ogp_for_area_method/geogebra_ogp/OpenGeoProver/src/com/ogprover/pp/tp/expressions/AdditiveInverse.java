@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.expressions;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
@@ -148,7 +149,12 @@ public class AdditiveInverse extends AMExpression {
 	}
 
 	@Override
-	public SumOfProducts toSumOfProducts() {
+	public AMExpression toSumOfProducts() {
 		return (new Product(new BasicNumber(-1), expr)).toSumOfProducts();
+	}
+
+	@Override
+	public double testValue(HashMap<String, FloatCoordinates> coords) {
+		return (0 - expr.testValue(coords));
 	}
 }

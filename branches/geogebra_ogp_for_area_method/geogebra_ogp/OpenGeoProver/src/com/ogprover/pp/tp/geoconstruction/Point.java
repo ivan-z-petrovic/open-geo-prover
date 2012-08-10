@@ -20,7 +20,6 @@ import com.ogprover.polynomials.UXVariable;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
-import com.ogprover.pp.tp.expressions.RatioOfCollinearSegments;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.logger.ILogger;
@@ -166,11 +165,6 @@ public abstract class Point extends GeoConstruction implements Cloneable {
      * Current state of this point.
      */
     protected int pointState = Point.POINT_STATE_INITIALIZED;
-    /**
-     * Map which associate to a point the (absolue value of the) distance to it 
-     */
-    protected HashMap<String, RatioOfCollinearSegments> distances;
-    
     
     
 	/*
@@ -312,18 +306,6 @@ public abstract class Point extends GeoConstruction implements Cloneable {
 	 * ========================== SPECIFIC METHODS ==========================
 	 * ======================================================================
 	 */
-	/**
-	 * Method which add an entry in the distances HashMap.
-	 * 
-	 * @param label 		the name of the point
-	 * @param distance 		the distance to be added
-	 */
-	public void addDistance(String label, RatioOfCollinearSegments distance) {
-		if (this.distances == null) {
-			this.distances = new HashMap<String,RatioOfCollinearSegments>();
-		}
-		this.distances.put(label, distance);
-	}
 	/**
 	 * Method that renames coordinate of this point.
 	 * <p>
