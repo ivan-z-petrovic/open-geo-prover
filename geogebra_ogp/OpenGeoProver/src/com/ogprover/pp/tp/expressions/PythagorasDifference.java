@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.expressions;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.AMFootPoint;
 import com.ogprover.pp.tp.geoconstruction.AMIntersectionPoint;
@@ -375,7 +376,20 @@ public class PythagorasDifference extends GeometricQuantity {
 	}
 	
 	@Override
-	public SumOfProducts toSumOfProducts() {
+	public AMExpression toSumOfProducts() {
 		return new SumOfProducts(new BigProduct(this));
+	}
+	@Override
+	public double testValue(HashMap<String, FloatCoordinates> coords) {
+		FloatCoordinates coordsA = coords.get(a.getGeoObjectLabel());
+		FloatCoordinates coordsB = coords.get(b.getGeoObjectLabel());
+		FloatCoordinates coordsC = coords.get(c.getGeoObjectLabel());
+		double xa = coordsA.x;
+		double xb = coordsB.x;
+		double xc = coordsC.x;
+		double ya = coordsA.y;
+		double yb = coordsB.y;
+		double yc = coordsC.y;
+		return (xb-xa)*(xb-xa) + (yb-ya)*(yb-ya) + (xb-xc)*(xb-xc) + (yb-yc)*(yb-yc) - ((xa-xc)*(xa-xc) + (ya-yc)*(ya-yc));
 	}
 }

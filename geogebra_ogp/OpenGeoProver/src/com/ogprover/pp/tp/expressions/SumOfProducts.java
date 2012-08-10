@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.expressions;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
@@ -175,24 +176,20 @@ public class SumOfProducts extends AMExpression {
 
 	@Override
 	public AMExpression simplifyInOneStep() {
-		AreaMethodProver.debug("---------------");
-		AreaMethodProver.debug("We simplify : ", this);
 		BasicNumber d = new BasicNumber(0);
 		for (BigProduct p : terms)
 			d = d.gcd(p.getCoeff());
-		AreaMethodProver.debug("The GCD is : ", d);
 		// We remove all the zeros
 		HashSet<BigProduct> newTerms = new HashSet<BigProduct>();
 		for (BigProduct p : terms) {
 			BasicNumber coeff = p.getCoeff();
 			if (!(coeff.isZero())) {
 				p.setCoeff(coeff.divide(d));
+				//p.setCoeff(coeff);
 				newTerms.add(p);
 			}
 		}
 		AMExpression r = new SumOfProducts(newTerms);
-		AreaMethodProver.debug("We got : ", r);
-		AreaMethodProver.debug("---------------");
 		return r;
 	}
 
@@ -248,7 +245,16 @@ public class SumOfProducts extends AMExpression {
 	}
 
 	@Override
-	public SumOfProducts toSumOfProducts() {
+	public AMExpression toSumOfProducts() {
 		return this;
+	}
+
+	@Override
+	public double testValue(HashMap<String, FloatCoordinates> coords) {
+		double sum = 0;
+		for (BigProduct p : terms) {
+			sum += p.testValue(coords);
+		}
+		return sum;
 	}
 }

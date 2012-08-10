@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.ogprover.main.OpenGeoProver;
+import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
@@ -239,7 +240,6 @@ public class BigProduct extends AMExpression {
 	@Override
 	public AMExpression eliminate(Point pt, AreaMethodProver prover)
 			throws UnknownStatementException {
-		OpenGeoProver.settings.getLogger().error("Method eliminate should not be called on big product instances.");
 		AMExpression product = coeff;
 		Set<Entry<GeometricQuantity, Integer>> entries = factors.entrySet();
 		for (Entry<GeometricQuantity, Integer> e : entries) {
@@ -323,7 +323,20 @@ public class BigProduct extends AMExpression {
 	}
 
 	@Override
-	public SumOfProducts toSumOfProducts() {
+	public AMExpression toSumOfProducts() {
 		return new SumOfProducts(this);
+	}
+
+	@Override
+	public double testValue(HashMap<String, FloatCoordinates> coords) {
+		Set<Entry<GeometricQuantity, Integer>> entries = factors.entrySet();
+		double product = coeff.testValue(coords); 
+		for (Entry<GeometricQuantity, Integer> e : entries) {
+			int power = e.getValue().intValue();
+			GeometricQuantity factor = e.getKey();
+			for (int i = 0 ; i < power ; i++)
+				product *= factor.testValue(coords);
+		}
+		return product;
 	}
 }

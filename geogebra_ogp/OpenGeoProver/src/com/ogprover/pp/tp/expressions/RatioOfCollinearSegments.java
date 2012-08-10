@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.ogprover.main.OpenGeoProver;
+import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.AMFootPoint;
 import com.ogprover.pp.tp.geoconstruction.AMIntersectionPoint;
@@ -519,7 +520,19 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 	}
 	
 	@Override
-	public SumOfProducts toSumOfProducts() {
+	public AMExpression toSumOfProducts() {
 		return new SumOfProducts(new BigProduct(this));
+	}
+	@Override
+	public double testValue(HashMap<String, FloatCoordinates> coords) {
+		FloatCoordinates coordsA = coords.get(a.getGeoObjectLabel());
+		FloatCoordinates coordsB = coords.get(b.getGeoObjectLabel());
+		FloatCoordinates coordsC = coords.get(c.getGeoObjectLabel());
+		FloatCoordinates coordsD = coords.get(d.getGeoObjectLabel());
+		double xa = coordsA.x;
+		double xb = coordsB.x;
+		double xc = coordsC.x;
+		double xd = coordsD.x;
+		return (xb-xa)/(xd-xc);
 	}
 }

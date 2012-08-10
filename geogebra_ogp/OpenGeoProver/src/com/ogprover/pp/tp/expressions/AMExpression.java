@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
+import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.FreePoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
@@ -126,7 +127,13 @@ public abstract class AMExpression {
 	/**
 	 * Transforms an expression without fraction into a sum of products of geometric quantities
 	 */
-	public abstract SumOfProducts toSumOfProducts();
+	public abstract AMExpression toSumOfProducts();
+	
+	/**
+	 * Given a hashmap which associate to each point arbitrary coordinates, computes the corresponding
+	 * float value of the expression.
+	 */
+	public abstract double testValue(HashMap<String, FloatCoordinates> coords);
 	
 	/*
 	 * ======================================================================

@@ -6,6 +6,8 @@ package com.ogprover.pp.tp.expressions;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.ogprover.main.OpenGeoProver;
+import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
@@ -221,9 +223,16 @@ public class Fraction extends AMExpression {
 	public AMExpression replace(HashMap<Point, Point> replacementMap) {
 		return new Fraction(numerator.replace(replacementMap), denominator.replace(replacementMap));
 	}
+	
 	@Override
-	public SumOfProducts toSumOfProducts() {
-		System.out.println("Calling toSumOfProducts() on an expression which contains fractions : " + this.print());
+	public AMExpression toSumOfProducts() {
+		//return new Fraction(numerator.toSumOfProducts(), denominator);
+		OpenGeoProver.settings.getLogger().error("Calling toSumOfProduct on an instance of Fraction : " + this.print());
 		return null;
+	}
+	
+	@Override
+	public double testValue(HashMap<String, FloatCoordinates> coords) {
+		return (numerator.testValue(coords) / denominator.testValue(coords));
 	}
 }

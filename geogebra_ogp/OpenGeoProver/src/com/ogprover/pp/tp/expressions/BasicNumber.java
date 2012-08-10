@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.thmprover.AreaMethodProver;
@@ -175,7 +176,12 @@ public class BasicNumber extends AMExpression {
 	}
 
 	@Override
-	public SumOfProducts toSumOfProducts() {
+	public AMExpression toSumOfProducts() {
 		return new SumOfProducts(new BigProduct(this));
+	}
+
+	@Override
+	public double testValue(HashMap<String, FloatCoordinates> coords) {
+		return n.floatValue();
 	}
 }
