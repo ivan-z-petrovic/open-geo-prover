@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.expressions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
@@ -172,27 +173,28 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
+	public AMExpression eliminate(Point pt, Vector<Boolean> isLemmaUsed, AreaMethodProver prover) throws UnknownStatementException {
 		// We want to eliminate the point Y in the fraction ab/cd
 		if (!(a.equals(pt) || b.equals(pt) || c.equals(pt) || d.equals(pt)))
 			return this; // ab/cd -> ab/cd
 		if (a.equals(b))
 			return new BasicNumber(0); // aa/cd -> 0
 		if (b.equals(pt) && b.equals(c))
-			return (new AdditiveInverse(new RatioOfCollinearSegments(a, b, d, c))).eliminate(pt, prover); // ay/yd -> -ay/dy
+			return (new AdditiveInverse(new RatioOfCollinearSegments(a, b, d, c))).eliminate(pt, isLemmaUsed, prover); // ay/yd -> -ay/dy
 		if (a.equals(pt) && a.equals(d))
-			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, c, d))).eliminate(pt, prover); // ya/cy -> -ay/cy
+			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, c, d))).eliminate(pt, isLemmaUsed, prover); // ya/cy -> -ay/cy
 		if (a.equals(pt) && a.equals(c))
-			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, d, c))).eliminate(pt, prover); // ya/yd -> ay/dy
+			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, d, c))).eliminate(pt, isLemmaUsed, prover); // ya/yd -> ay/dy
 		if (a.equals(pt))
-			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, c, d))).eliminate(pt, prover); // ya/cd -> -ay/cd
+			return (new AdditiveInverse(new RatioOfCollinearSegments(b, a, c, d))).eliminate(pt, isLemmaUsed, prover); // ya/cd -> -ay/cd
 		if (c.equals(pt))
-			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(d, c, b, a))).eliminate(pt, prover); // ab/yd -> 1/(dy/ba)
+			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(d, c, b, a))).eliminate(pt, isLemmaUsed, prover); // ab/yd -> 1/(dy/ba)
 		/*
 		 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf for an explanation of the formulas above
 		 */
 		if (b.equals(pt) && b.equals(d)) {
 			if (pt instanceof AMIntersectionPoint) {
+				isLemmaUsed.set(1, true);
 				Point u = ((AMIntersectionPoint)pt).getU();
 				Point v = ((AMIntersectionPoint)pt).getV();
 				Point p = ((AMIntersectionPoint)pt).getP();
@@ -221,6 +223,7 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 			}
 			
 			if (pt instanceof AMFootPoint) {
+				isLemmaUsed.set(2, true);
 				Point p = ((AMFootPoint)pt).getP();
 				Point u = ((AMFootPoint)pt).getU();
 				Point v = ((AMFootPoint)pt).getV();
@@ -263,6 +266,7 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 			}
 			
 			if (pt instanceof PRatioPoint) {
+				isLemmaUsed.set(3, true);
 				Point r = ((PRatioPoint)pt).getW();
 				Point p = ((PRatioPoint)pt).getU();
 				Point q = ((PRatioPoint)pt).getV();
@@ -292,6 +296,7 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 				throw new UnknownStatementException("Elimination of the point " + pt.getGeoObjectLabel() + " in the ratio " + this.print());
 			}
 			if (pt instanceof TRatioPoint) {
+				isLemmaUsed.set(4, true);
 				Point p = ((TRatioPoint)pt).getU();
 				Point q = ((TRatioPoint)pt).getV();
 				AMExpression r = ((TRatioPoint)pt).getR();
@@ -323,9 +328,10 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 			}
 		} // Wow, this is the least fun code I've ever written - I am sorry you have to read it
 		if (d.equals(pt))
-			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(c, d, a, b))).eliminate(pt, prover); // ab/cy -> 1/(cy/ab)
+			return (new Fraction(new BasicNumber(1), new RatioOfCollinearSegments(c, d, a, b))).eliminate(pt, isLemmaUsed, prover); // ab/cy -> 1/(cy/ab)
 		if (b.equals(pt)) {
 			if (pt instanceof AMIntersectionPoint) {
+				isLemmaUsed.set(1, true);
 				Point u = ((AMIntersectionPoint)pt).getU();
 				Point v = ((AMIntersectionPoint)pt).getV();
 				Point p = ((AMIntersectionPoint)pt).getP();
@@ -356,6 +362,7 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 			}
 			
 			if (pt instanceof AMFootPoint) {
+				isLemmaUsed.set(2, true);
 				Point p = ((AMFootPoint)pt).getP();
 				Point u = ((AMFootPoint)pt).getU();
 				Point v = ((AMFootPoint)pt).getV();
@@ -385,6 +392,7 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 			}
 			
 			if (pt instanceof PRatioPoint) {
+				isLemmaUsed.set(3, true);
 				Point r = ((PRatioPoint)pt).getW();
 				Point p = ((PRatioPoint)pt).getU();
 				Point q = ((PRatioPoint)pt).getV();
@@ -415,6 +423,7 @@ public class RatioOfCollinearSegments extends GeometricQuantity {
 			}
 			
 			if (pt instanceof TRatioPoint) {
+				isLemmaUsed.set(4, true);
 				Point p = ((TRatioPoint)pt).getU();
 				Point q = ((TRatioPoint)pt).getV();
 				AMExpression r = ((TRatioPoint)pt).getR();

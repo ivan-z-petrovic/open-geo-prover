@@ -59,6 +59,6 @@ public class EliminationStep extends ProofStep {
 	public EliminationStep(AMExpression previousExpression, AMExpression nextExpression, Point eliminatedPoint) {
 		super(previousExpression, nextExpression);
 		this.eliminatedPoint = eliminatedPoint;
-		this.isLemmaUsed = new Vector<Boolean>(16);
+		this.isLemmaUsed = new Vector<Boolean>(17);
 	}
 }

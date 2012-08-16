@@ -5,6 +5,7 @@ package com.ogprover.pp.tp.expressions;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Vector;
 
 import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
@@ -158,7 +159,7 @@ public class PythagorasDifference extends GeometricQuantity {
 	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf "elimination lemmas"
 	 */
 	@Override
-	public AMExpression eliminate(Point pt, AreaMethodProver prover) {
+	public AMExpression eliminate(Point pt, Vector<Boolean> isLemmaUsed, AreaMethodProver prover) {
 		Point aa = null;
 		Point bb = null;
 		boolean islinear = true;
@@ -181,6 +182,7 @@ public class PythagorasDifference extends GeometricQuantity {
 		
 		if (islinear) {
 			if (pt instanceof AMIntersectionPoint) {
+				isLemmaUsed.set(14, true);
 				Point u = ((AMIntersectionPoint)pt).getU();
 				Point v = ((AMIntersectionPoint)pt).getV();
 				Point p = ((AMIntersectionPoint)pt).getP();
@@ -200,6 +202,7 @@ public class PythagorasDifference extends GeometricQuantity {
 			}
 			
 			if (pt instanceof AMFootPoint) {
+				isLemmaUsed.set(15, true);
 				Point p = ((AMFootPoint)pt).getP();
 				Point u = ((AMFootPoint)pt).getU();
 				Point v = ((AMFootPoint)pt).getV();
@@ -216,6 +219,7 @@ public class PythagorasDifference extends GeometricQuantity {
 			}
 			
 			if (pt instanceof PRatioPoint) {
+				isLemmaUsed.set(16, true);
 				Point w = ((PRatioPoint)pt).getW();
 				Point u = ((PRatioPoint)pt).getU();
 				Point v = ((PRatioPoint)pt).getV();
@@ -230,6 +234,7 @@ public class PythagorasDifference extends GeometricQuantity {
 			}
 			
 			if (pt instanceof TRatioPoint) {
+				isLemmaUsed.set(9, true);
 				Point p = ((TRatioPoint)pt).getU();
 				Point q = ((TRatioPoint)pt).getV();
 				AMExpression r = ((TRatioPoint)pt).getR();
@@ -244,6 +249,7 @@ public class PythagorasDifference extends GeometricQuantity {
 			}
 		} else {
 			if (pt instanceof AMIntersectionPoint) {
+				isLemmaUsed.set(10, true);
 				Point u = ((AMIntersectionPoint)pt).getU();
 				Point v = ((AMIntersectionPoint)pt).getV();
 				Point p = ((AMIntersectionPoint)pt).getP();
@@ -281,6 +287,7 @@ public class PythagorasDifference extends GeometricQuantity {
 				return new Difference(new Sum(term1, term2), term3);
 			}
 			if (pt instanceof AMFootPoint) {
+				isLemmaUsed.set(11, true);
 				Point p = ((AMFootPoint)pt).getP();
 				Point u = ((AMFootPoint)pt).getU();
 				Point v = ((AMFootPoint)pt).getV();
@@ -296,6 +303,7 @@ public class PythagorasDifference extends GeometricQuantity {
 				return new Sum(term1, new Difference(term2, term3));
 			}
 			if (pt instanceof PRatioPoint) {
+				isLemmaUsed.set(12, true);
 				Point w = ((PRatioPoint)pt).getW();
 				Point u = ((PRatioPoint)pt).getU();
 				Point v = ((PRatioPoint)pt).getV();
@@ -313,6 +321,7 @@ public class PythagorasDifference extends GeometricQuantity {
 				return new Sum(pawb, new Difference(term1, term2));
 			}
 			if (pt instanceof TRatioPoint) {
+				isLemmaUsed.set(13, true);
 				Point p = ((TRatioPoint)pt).getU();
 				Point q = ((TRatioPoint)pt).getV();
 				AMExpression r = ((TRatioPoint)pt).getR();

@@ -101,10 +101,11 @@ public abstract class AMExpression {
 	/**
 	 * @return the expression in which one point has been eliminated
 	 * @param pt		The point to eliminate
+	 * @param isLemmaUsed TODO
 	 * @param prover	The prover which called the function
 	 * @throws ExecutionException 
 	 */
-	public abstract AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException;
+	public abstract AMExpression eliminate(Point pt, Vector<Boolean> isLemmaUsed, AreaMethodProver prover) throws UnknownStatementException;
 	
 	/**
 	 * @return the expression in the form AMFraction(a,b), where a and b do not contain any AMFraction.
