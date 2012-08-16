@@ -5,6 +5,7 @@ package com.ogprover.pp.tp.expressions;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
@@ -175,8 +176,8 @@ public class Fraction extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
-		return new Fraction(numerator.eliminate(pt, prover), denominator.eliminate(pt, prover));
+	public AMExpression eliminate(Point pt, Vector<Boolean> isLemmaUsed, AreaMethodProver prover) throws UnknownStatementException {
+		return new Fraction(numerator.eliminate(pt, isLemmaUsed, prover), denominator.eliminate(pt, isLemmaUsed, prover));
 	}
 	
 	@Override

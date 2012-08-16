@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
@@ -238,7 +239,7 @@ public class BigProduct extends AMExpression {
 	}
 
 	@Override
-	public AMExpression eliminate(Point pt, AreaMethodProver prover)
+	public AMExpression eliminate(Point pt, Vector<Boolean> isLemmaUsed, AreaMethodProver prover)
 			throws UnknownStatementException {
 		AMExpression product = coeff;
 		Set<Entry<GeometricQuantity, Integer>> entries = factors.entrySet();
@@ -246,7 +247,7 @@ public class BigProduct extends AMExpression {
 			int power = e.getValue().intValue();
 			GeometricQuantity factor = e.getKey();
 			for (int i = 0 ; i < power ; i++)
-				product = new Product(factor.eliminate(pt, prover), product);
+				product = new Product(factor.eliminate(pt, isLemmaUsed, prover), product);
 		}
 		return product;
 	}

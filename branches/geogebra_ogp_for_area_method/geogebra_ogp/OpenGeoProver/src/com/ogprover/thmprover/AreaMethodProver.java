@@ -21,6 +21,13 @@ import com.ogprover.pp.tp.geoconstruction.PRatioPoint;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoconstruction.TRatioPoint;
 import com.ogprover.pp.tp.ndgcondition.SimpleNDGCondition;
+import com.ogprover.pp.tp.printing.EliminationStep;
+import com.ogprover.pp.tp.printing.ProofDescription;
+import com.ogprover.pp.tp.printing.ProofStep;
+import com.ogprover.pp.tp.printing.ReduceToSingleFractionStep;
+import com.ogprover.pp.tp.printing.SimplificationStep;
+import com.ogprover.pp.tp.printing.ToIndependantVariablesStep;
+import com.ogprover.pp.tp.printing.UniformizationStep;
 import com.ogprover.pp.tp.thmstatement.AreaMethodTheoremStatement;
 import com.ogprover.pp.tp.thmstatement.IdenticalPoints;
 import com.ogprover.utilities.logger.ILogger;
@@ -102,9 +109,9 @@ public class AreaMethodProver implements TheoremProver {
 	protected int nextPointToEliminate;
 	
 	/**
-	 * Steps of the computation (we store them for future printing)
+	 * Description of proof
 	 */
-	protected Vector<AMExpression> steps;
+	protected ProofDescription description;
 	
 	/**
 	 * NDGs conditions of the theorem
@@ -157,7 +164,6 @@ public class AreaMethodProver implements TheoremProver {
 	 * @param thmProtocol	The details of the construction, with the type OGPTP.
 	 */
 	public AreaMethodProver(OGPTP thmProtocol) {
-		this.steps = new Vector<AMExpression>();
 		this.statement = thmProtocol.getTheoremStatement().getAreaMethodStatement();
 		this.constructions = thmProtocol.getConstructionSteps();
 		this.nextPointToEliminate = constructions.size()-1;
@@ -172,7 +178,6 @@ public class AreaMethodProver implements TheoremProver {
 	 * @param ndgConditions		The NDGs-conditions
 	 */
 	public AreaMethodProver(AreaMethodTheoremStatement statement, Vector<GeoConstruction> constructions, Vector<SimpleNDGCondition> ndgConditions) {
-		this.steps = new Vector<AMExpression>();
 		this.statement = statement;
 		this.constructions = constructions;
 		this.nextPointToEliminate = constructions.size()-1;
@@ -188,9 +193,9 @@ public class AreaMethodProver implements TheoremProver {
 	 */
 	public int prove() {
 		ILogger logger = OpenGeoProver.settings.getLogger();
+		Vector<ProofStep> steps = new Vector<ProofStep>();
 		
 		if (firstLaunch) {
-			grosDebug();
 			firstLaunch = false;
 			if (optimizeCouplesOfPoints)
 				computeCoupleOfPoints();
@@ -242,88 +247,113 @@ public class AreaMethodProver implements TheoremProver {
 		
 		for (AMExpression expr : statement.getStatements()) {
 			debug("We must prove that : " + expr.print() + " = 0");
-			steps.add(expr);
 			AMExpression current = expr;
+			AMExpression next = null;
 			if (optimizeCouplesOfPoints) {
 				debug("After couples of point deletion : ", expr);
 				current = current.replace(replacementMap);
 			}
 			computeNextPointToEliminate();
 			while (nextPointToEliminate >=0  && !current.isZero()) {
-				debug("Uniformization of : ", current);
-				current = current.uniformize(knownCollinearPoints);
-				debug("Simplification of : ", current);
-				current = current.simplify();
-				String label = constructions.get(nextPointToEliminate).getGeoObjectLabel();
-				debug("Removing the point " + label + " of the formula : ", current);
+				
+				next = current.uniformize(knownCollinearPoints);
+				steps.add(new UniformizationStep(current, next));
+				current = next;
+				
+				next = current.simplify();
+				steps.add(new SimplificationStep(current, next));
+				current = next;
+				
+				Vector<Boolean> isLemmaUsed = new Vector<Boolean>(17);
+				for (int i = 0 ; i < 17 ; i++)
+					isLemmaUsed.set(i, false);
 				try {
-					current = current.eliminate((Point)constructions.get(nextPointToEliminate), this); //safe cast
+					next = current.eliminate((Point)constructions.get(nextPointToEliminate), isLemmaUsed, this); //safe cast
 				} catch (UnknownStatementException e) {
 					logger.error("The point elimination required a intermediary lemma to be proved, and the sub-process crashed.");
 					logger.error("It occured on : " + e.getMessage());
 					return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
 				}
+				steps.add(new EliminationStep(current, next, (Point)constructions.get(nextPointToEliminate)));
 				nextPointToEliminate--;
 				computeNextPointToEliminate();
-				debug("Second uniformization of : ", current);
-				current = current.uniformize(knownCollinearPoints);
-				debug("Second simplification of : ", current);
-				current = current.simplify();
-				debug("Reducing into a single fraction of : ", current);
-				current = current.reduceToSingleFraction();
-				if (current instanceof Fraction) {
-					debug("Removing of the denominator of : ", current);
-					current = ((Fraction) current).getNumerator();
-				}
-				debug("Third simplification of : ", current);
-				current = current.simplify();
-				debug("Transforming into a sum of products of geometrical quantities of : ", current);
-				current = current.toSumOfProducts();
+				current = next;
+				
+				next = current.uniformize(knownCollinearPoints);
+				next = next.simplify();
+				steps.add(new SimplificationStep(current, next));
+				current = next;
+				
+				next = current.reduceToSingleFraction();
+				if (next instanceof Fraction)
+					next = ((Fraction) next).getNumerator();
+				steps.add(new ReduceToSingleFractionStep(current, next));
+				current = next;
+				
+				next = current.simplify();
+				steps.add(new SimplificationStep(current, next));
+				current = next;
+				
+				next = current.toSumOfProducts();
 			}
-			debug("Reducing into a single fraction of : ", current);
-			current = current.reduceToSingleFraction();
-			if (current instanceof Fraction) {
-				debug("Removing of the denominator of : ", current);
-				current = ((Fraction) current).getNumerator();
-			}
-			debug("Last simplification of : ", current);
-			current = current.simplify();
-			debug("Transforming into a sum of products of geometrical quantities of : ", current);
-			current = current.toSumOfProducts();
-			debug("Simplification of : ", current);
-			current = current.simplify();
+			if (next == null)
+				next = current;
+			next = next.reduceToSingleFraction();
+			if (next instanceof Fraction)
+				next = ((Fraction) next).getNumerator();
+			steps.add(new ReduceToSingleFractionStep(current, next));
+			current = next;
+			
+			next = current.simplify();
+			next = next.toSumOfProducts();
+			next = next.simplify();
+			steps.add(new SimplificationStep(current, next));
+			current = next;
+			
 			if (!(current.isZero())) {
 				if (!transformToIndependantVariables) {
 					debug("The expression is non-null and transformToIndependantVariable is set to false : aborting.");
 					return THEO_PROVE_RET_CODE_UNKNOWN;
 				}
-				debug("Transformation to a formula with only independant variables of : ", current);
+				
 				try {
-					current = current.toIndependantVariables(this);
+					next = current.toIndependantVariables(this);
 				} catch (UnknownStatementException e) {
 					logger.error("The transformation to a formula with independant variables" +
 							" required a intermediary lemma to be proved, and the sub-process crashed.");
 					logger.error("It occured on : " + e.getMessage());
 					return TheoremProver.THEO_PROVE_RET_CODE_UNKNOWN;
 				}
-				debug("Uniformization of : ", current);
-				current = current.uniformize(knownCollinearPoints);
-				debug("Simplification of : ", current);
-				current = current.simplify();
-				debug("Reducing into a single fraction of : ", current);
-				current = current.reduceToSingleFraction();
-				if (current instanceof Fraction) {
-					debug("Removing of the denominator of : ", current);
-					current = ((Fraction) current).getNumerator();
-				}
-				debug("Simplification of : ", current);
-				current = current.simplify();
-				debug("Transforming into a sum of products of geometrical quantities of : ", current);
+				steps.add(new ToIndependantVariablesStep(current, next));
+				
+				next = current.uniformize(knownCollinearPoints);
+				steps.add(new UniformizationStep(current, next));
+				current = next;
+				
+				next = current.simplify();
+				steps.add(new SimplificationStep(current, next));
+				current = next;
+				
+				next = current.reduceToSingleFraction();
+				if (next instanceof Fraction)
+					next = ((Fraction) next).getNumerator();
+				steps.add(new ReduceToSingleFractionStep(current, next));
+				current = next;
+				
+				next = current.simplify();
 				current = current.toSumOfProducts();
-				debug("Uniformization of : ", current);
-				current = current.uniformize(knownCollinearPoints);
-				debug("Very last simplification of : ", current);
-				current = current.simplify();
+				steps.add(new SimplificationStep(current, next));
+				current = next;
+				
+				next = current.uniformize(knownCollinearPoints);
+				steps.add(new UniformizationStep(current, next));
+				current = next;
+				
+				next = current.simplify();
+				steps.add(new SimplificationStep(current, next));
+				current = next;
+				
+				description = new ProofDescription(steps, statement, ndgConditions);
 				debug("Result : ", current);
 				if (current.isZero())
 					debug("The formula equals zero : the statement is then proved");
@@ -491,6 +521,7 @@ public class AreaMethodProver implements TheoremProver {
 					double x = (double) cons.hashCode() + 1;
 					double y = (double) coords.hashCode() + 3;
 					// TODO debug
+					/*
 					boolean cp = false;
 					if (cons.getGeoObjectLabel().equals("a")) {
 						cp = true;
@@ -513,6 +544,7 @@ public class AreaMethodProver implements TheoremProver {
 						x *= norm;
 						y *= norm;
 					}
+					*/
 					coords.put(cons.getGeoObjectLabel(), new FloatCoordinates(x/norm, y/norm));
 				} else if (cons instanceof AMIntersectionPoint) {
 					AMIntersectionPoint pt = (AMIntersectionPoint) cons;
@@ -593,6 +625,7 @@ public class AreaMethodProver implements TheoremProver {
 	 * Debug
 	 * @throws UnknownStatementException 
 	 */
+	/*
 	private void grosDebug() {
 		Vector<GeoConstruction> steps = new Vector<GeoConstruction>(this.constructions);
 		debug("===========================");
@@ -612,7 +645,7 @@ public class AreaMethodProver implements TheoremProver {
 		debug("P_ama = " + segment.testValue(coords) + " // ", segment); // 25
 		debug("Elimination..."); // 25
 		try {
-			segment = segment.eliminate(m, this);
+			segment = segment.eliminate(m, isLemmaUsed, this);
 			debug("P_ama = " + segment.testValue(coords) + " // ", segment); // 25
 		} catch (UnknownStatementException e) {}
 		debug("Simplification..."); // 25
@@ -635,4 +668,5 @@ public class AreaMethodProver implements TheoremProver {
 		debug("P_ama = " + segment.testValue(coords) + " // ", segment); // 25
 		debug("===========================");
 	}
+	*/
 }

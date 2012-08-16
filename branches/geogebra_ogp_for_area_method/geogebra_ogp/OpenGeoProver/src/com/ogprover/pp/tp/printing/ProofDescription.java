@@ -18,6 +18,7 @@ import com.ogprover.pp.tp.thmstatement.AreaMethodTheoremStatement;
  * @author Damien Desfontaines
  */
 public class ProofDescription {
+
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -94,5 +95,17 @@ public class ProofDescription {
 
 	public Vector<ProofStep> getSteps() {
 		return steps;
+	}
+	
+	
+	/*
+	 * ======================================================================
+	 * ========================== CONSTRUCTORS ==============================
+	 * ======================================================================
+	 */
+	public ProofDescription(Vector<ProofStep> steps, AreaMethodTheoremStatement statement, Vector<SimpleNDGCondition> ndgConditions) {
+		this.steps = steps;
+		this.statement = statement;
+		this.ndgConditions = ndgConditions;
 	}
 }

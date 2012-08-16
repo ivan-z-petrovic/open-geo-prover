@@ -5,6 +5,7 @@ package com.ogprover.pp.tp.expressions;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Vector;
 
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
 import com.ogprover.pp.tp.geoconstruction.Point;
@@ -44,7 +45,7 @@ public abstract class GeometricQuantity extends AMExpression {
 	public abstract AMExpression simplifyInOneStep();
 
 	@Override
-	public abstract AMExpression eliminate(Point pt, AreaMethodProver prover)
+	public abstract AMExpression eliminate(Point pt, Vector<Boolean> isLemmaUsed, AreaMethodProver prover)
 			throws UnknownStatementException;
 
 	@Override

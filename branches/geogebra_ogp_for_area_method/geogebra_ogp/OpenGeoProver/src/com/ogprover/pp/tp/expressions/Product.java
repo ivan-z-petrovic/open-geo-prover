@@ -5,6 +5,7 @@ package com.ogprover.pp.tp.expressions;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Vector;
 
 import com.ogprover.pp.tp.auxiliary.FloatCoordinates;
 import com.ogprover.pp.tp.auxiliary.UnknownStatementException;
@@ -171,8 +172,8 @@ public class Product extends AMExpression {
 	}
 	
 	@Override
-	public AMExpression eliminate(Point pt, AreaMethodProver prover) throws UnknownStatementException {
-		return new Product(factor1.eliminate(pt, prover), factor2.eliminate(pt, prover));
+	public AMExpression eliminate(Point pt, Vector<Boolean> isLemmaUsed, AreaMethodProver prover) throws UnknownStatementException {
+		return new Product(factor1.eliminate(pt, isLemmaUsed, prover), factor2.eliminate(pt, isLemmaUsed, prover));
 	}
 	
 	@Override
