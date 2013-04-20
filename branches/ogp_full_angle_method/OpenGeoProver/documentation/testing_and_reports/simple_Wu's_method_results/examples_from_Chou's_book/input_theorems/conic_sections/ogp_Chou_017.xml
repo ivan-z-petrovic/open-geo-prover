@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 017 (Gauss conic)">
+	<!-- Example 17 from Chou's book (version with usage of Pascal's theorem) -->
+	<!-- For the 6 given points, their 6 Gauss points are on same conic.      -->
+	<constructions>
+		<pfree label="A0" />
+		<pfree label="A1" />
+		<pfree label="A2" />
+		<pfree label="A3" />
+		<pfree label="A4" />
+		<pfree label="A5" />
+		<ltwopts label="A0A1" point1="A0" point2="A1" />
+		<ltwopts label="A3A4" point1="A3" point2="A4" />
+		<pintersect label="X" set1="A0A1" set2="A3A4" />
+		<ltwopts label="A1A2" point1="A1" point2="A2" />
+		<ltwopts label="A4A5" point1="A4" point2="A5" />
+		<pintersect label="Y" set1="A1A2" set2="A4A5" />
+		<ltwopts label="A2A3" point1="A2" point2="A3" />
+		<ltwopts label="A5A0" point1="A5" point2="A0" />
+		<pintersect label="Z" set1="A2A3" set2="A5A0" />
+		<pintersect label="B1" set1="A2A3" set2="A0A1" />
+		<pintersect label="B2" set1="A4A5" set2="A0A1" />
+		<pintersect label="B3" set1="A1A2" set2="A5A0" />
+		<pintersect label="B4" set1="A3A4" set2="A5A0" />
+		<pmid label="M1" point1="A1" point2="A3" />
+		<pmid label="M2" point1="A2" point2="X" />
+		<pmid label="M3" point1="A1" point2="A5" />
+		<pmid label="M4" point1="A0" point2="Y" />
+		<pmid label="M5" point1="B1" point2="A4" />
+		<pmid label="M6" point1="B2" point2="A3" />
+		<pmid label="M7" point1="A2" point2="A5" />
+		<pmid label="M8" point1="Z" point2="Y" />
+		<pmid label="M9" point1="A0" point2="A4" />
+		<pmid label="N1" point1="A5" point2="X" />
+		<pmid label="N2" point1="A3" point2="B3" />
+		<pmid label="N3" point1="A2" point2="B4" />
+		<ltwopts label="M1M2" point1="M1" point2="M2" />
+		<ltwopts label="M3M4" point1="M3" point2="M4" />
+		<pintersect label="P" set1="M1M2" set2="M3M4" />
+		<ltwopts label="M5M6" point1="M5" point2="M6" />
+		<ltwopts label="M7M8" point1="M7" point2="M8" />
+		<pintersect label="Q" set1="M5M6" set2="M7M8" />
+		<ltwopts label="N2N3" point1="N2" point2="N3" />
+		<ltwopts label="M9N1" point1="M9" point2="N1" />
+		<pintersect label="R" set1="N2N3" set2="M9N1" />
+	</constructions>
+	<statement>
+		<collinearpts>
+			<point label="P" />
+			<point label="Q" />
+			<point label="R" />
+		</collinearpts>
+	</statement>
+</geothm>

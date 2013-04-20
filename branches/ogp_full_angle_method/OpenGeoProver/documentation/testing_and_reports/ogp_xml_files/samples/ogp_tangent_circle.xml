@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Tangent of circle">
+	<!-- Let k be some circle and P some point on it. Then tangent        -->
+	<!-- of that circle at point P is perpendicular to P's radius vector. -->
+	<constructions>
+		<pfree label="O" />
+		<pfree label="A" />
+		<ccenterpt label="k" center="O" point="A" />
+		<prandcircle label="P" circle="k" />
+		<ltwopts label="p" point1="O" point2="P" />
+		<lperp label="n" point="P" baseline="p" />
+		<ltangent label="t" basept="P" pointset="k" />
+		<prandline label="X" line="t" />
+	</constructions>
+	<statement>
+		<pointonset set="n" point="X" />
+	</statement>
+</geothm>

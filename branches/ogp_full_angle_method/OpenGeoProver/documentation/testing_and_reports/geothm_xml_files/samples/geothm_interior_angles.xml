@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Interior angles">
+	<xpolysys>
+		<xpoly>
+			<xterm>
+				<ufrac>
+					<upoly>
+						<uterm coeff="1">
+							<pow vtype="u" ind="2" exp="1"></pow>
+						</uterm>	
+					</upoly>
+				</ufrac>
+				<pow vtype="x" ind="2" exp="2"></pow>
+			</xterm>
+			<xterm>
+				<ufrac>
+					<upoly>
+						<uterm coeff="-1">
+							<pow vtype="u" ind="2" exp="1"></pow>
+							<pow vtype="u" ind="1" exp="1"></pow>
+						</uterm>
+					</upoly>
+				</ufrac>
+				<pow vtype="x" ind="2" exp="1"></pow>
+			</xterm>
+			<xterm>
+				<ufrac>	
+					<upoly>
+						<uterm coeff="1">
+							<pow vtype="u" ind="2" exp="1"></pow>
+						</uterm>	
+					</upoly>
+				</ufrac>
+				<pow vtype="x" ind="1" exp="2"></pow>
+			</xterm>
+			<xterm>
+				<ufrac>		
+					<upoly>
+						<uterm coeff="-1">
+							<pow vtype="u" ind="2" exp="2"></pow>
+						</uterm>	
+						<uterm coeff="-1">
+							<pow vtype="u" ind="3" exp="2"></pow>
+						</uterm>
+						<uterm coeff="1">
+							<pow vtype="u" ind="3" exp="1"></pow>
+							<pow vtype="u" ind="1" exp="1"></pow>
+						</uterm>
+					</upoly>				
+				</ufrac>
+				<pow vtype="x" ind="1" exp="1"></pow>
+			</xterm>
+		</xpoly>
+		<xpoly>
+			<xterm>
+				<ufrac>		
+					<upoly>
+						<uterm coeff="1">
+							<pow vtype="u" ind="1" exp="1"></pow>
+						</uterm>	
+						<uterm coeff="-2">
+							<pow vtype="u" ind="3" exp="1"></pow>
+						</uterm>
+					</upoly>				
+				</ufrac>
+				<pow vtype="x" ind="1" exp="1"></pow>
+			</xterm>
+			<xterm>
+				<ufrac>
+					<upoly>
+						<uterm coeff="2">
+							<pow vtype="u" ind="2" exp="1"></pow>
+						</uterm>	
+					</upoly>
+				</ufrac>
+				<pow vtype="x" ind="2" exp="1"></pow>
+			</xterm>
+			<xterm>
+				<ufrac>
+					<upoly>
+						<uterm coeff="-1">
+							<pow vtype="u" ind="1" exp="1"></pow>
+							<pow vtype="u" ind="2" exp="1"></pow>
+						</uterm>	
+					</upoly>
+				</ufrac>
+			</xterm>
+		</xpoly>
+	</xpolysys>
+	<xpoly>
+		<xterm>
+			<ufrac>
+				<upoly>
+					<uterm coeff="1">
+						<pow vtype="u" ind="2" exp="2"></pow>
+					</uterm>	
+				</upoly>
+			</ufrac>
+			<pow vtype="x" ind="2" exp="4"></pow>
+		</xterm>
+		<xterm>
+			<ufrac>
+				<upoly>
+					<uterm coeff="-2">
+						<pow vtype="u" ind="3" exp="1"></pow>
+						<pow vtype="u" ind="2" exp="2"></pow>
+					</uterm>
+				</upoly>
+			</ufrac>
+			<pow vtype="x" ind="2" exp="3"></pow>
+		</xterm>
+		<xterm>
+			<ufrac>	
+				<upoly>
+					<uterm coeff="2">
+						<pow vtype="u" ind="2" exp="2"></pow>
+					</uterm>	
+				</upoly>
+			</ufrac>
+			<pow vtype="x" ind="2" exp="2"></pow>
+			<pow vtype="x" ind="1" exp="2"></pow>
+		</xterm>
+		<xterm>
+			<ufrac>	
+				<upoly>
+					<uterm coeff="-2">
+						<pow vtype="u" ind="2" exp="3"></pow>
+					</uterm>	
+				</upoly>
+			</ufrac>
+			<pow vtype="x" ind="2" exp="2"></pow>
+			<pow vtype="x" ind="1" exp="1"></pow>
+		</xterm>
+		<xterm>
+			<ufrac>	
+				<upoly>
+					<uterm coeff="-1">
+						<pow vtype="u" ind="2" exp="2"></pow>
+						<pow vtype="u" ind="1" exp="2"></pow>
+					</uterm>	
+					<uterm coeff="2">
+						<pow vtype="u" ind="3" exp="1"></pow>
+						<pow vtype="u" ind="2" exp="2"></pow>
+						<pow vtype="u" ind="1" exp="1"></pow>
+					</uterm>
+				</upoly>
+			</ufrac>
+			<pow vtype="x" ind="2" exp="2"></pow>
+		</xterm>
+		<xterm>
+			<ufrac>	
+				<upoly>
+					<uterm coeff="-2">
+						<pow vtype="u" ind="3" exp="1"></pow>
+						<pow vtype="u" ind="2" exp="2"></pow>
+					</uterm>	
+				</upoly>
+			</ufrac>
+			<pow vtype="x" ind="2" exp="1"></pow>
+			<pow vtype="x" ind="1" exp="2"></pow>
+		</xterm>
+		<xterm>
+			<ufrac>	
+				<upoly>
+					<uterm coeff="2">
+						<pow vtype="u" ind="3" exp="1"></pow>
+						<pow vtype="u" ind="2" exp="3"></pow>
+					</uterm>	
+					<uterm coeff="2">
+						<pow vtype="u" ind="3" exp="1"></pow>
+						<pow vtype="u" ind="2" exp="1"></pow>
+						<pow vtype="u" ind="1" exp="2"></pow>
+					</uterm>
+					<uterm coeff="-4">
+						<pow vtype="u" ind="3" exp="2"></pow>
+						<pow vtype="u" ind="2" exp="1"></pow>
+						<pow vtype="u" ind="1" exp="1"></pow>
+					</uterm>
+					<uterm coeff="2">
+						<pow vtype="u" ind="3" exp="3"></pow>
+						<pow vtype="u" ind="2" exp="1"></pow>
+					</uterm>
+				</upoly>
+			</ufrac>
+			<pow vtype="x" ind="2" exp="1"></pow>
+			<pow vtype="x" ind="1" exp="1"></pow>
+		</xterm>
+		<xterm>
+			<ufrac>	
+				<upoly>
+					<uterm coeff="1">
+						<pow vtype="u" ind="2" exp="2"></pow>
+					</uterm>	
+				</upoly>
+			</ufrac>
+			<pow vtype="x" ind="1" exp="4"></pow>
+		</xterm>
+		<xterm>
+			<ufrac>	
+				<upoly>
+					<uterm coeff="-2">
+						<pow vtype="u" ind="2" exp="3"></pow>
+					</uterm>	
+				</upoly>
+			</ufrac>
+			<pow vtype="x" ind="1" exp="3"></pow>
+		</xterm>
+		<xterm>
+			<ufrac>	
+				<upoly>
+					<uterm coeff="1">
+						<pow vtype="u" ind="2" exp="4"></pow>
+					</uterm>	
+					<uterm coeff="-1">
+						<pow vtype="u" ind="3" exp="2"></pow>
+						<pow vtype="u" ind="1" exp="2"></pow>
+					</uterm>
+					<uterm coeff="2">
+						<pow vtype="u" ind="3" exp="3"></pow>
+						<pow vtype="u" ind="1" exp="1"></pow>
+					</uterm>
+					<uterm coeff="-1">
+						<pow vtype="u" ind="3" exp="4"></pow>
+					</uterm>
+				</upoly>
+			</ufrac>
+			<pow vtype="x" ind="1" exp="2"></pow>
+		</xterm>
+	</xpoly>
+</geothm>

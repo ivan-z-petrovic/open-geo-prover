@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 031">
+	<!-- Example 31 from Chou's book                                              -->
+	<!-- In any triangle following equality holds: OH^2 = 9R^2 - a^2 - b^2 - c^2. -->
+	<constructions>
+		<pfree label="O" />
+		<pfree label="A" />
+		<ccenterpt label="k" center="O" point="A" />
+		<prandcircle label="B" circle="k" />
+		<prandcircle label="C" circle="k" />
+		<ltwopts label="c" point1="A" point2="B" />
+		<lperp label="hc" point="C" baseline="c" />
+		<ltwopts label="b" point1="A" point2="C" />
+		<lperp label="hb" point="B" baseline="b" />
+		<pintersect label="H" set1="hb" set2="hc" />
+	</constructions>
+	<statement>
+		<sqsegmentscomb>
+			<segment point1="O" point2="H" />
+			<coeff value="1" />
+			<segment point1="O" point2="A" />
+			<coeff value="-9" />
+			<segment point1="B" point2="C" />
+			<coeff value="1" />
+			<segment point1="C" point2="A" />
+			<coeff value="1" />
+			<segment point1="A" point2="B" />
+			<coeff value="1" />
+		</sqsegmentscomb>
+	</statement>
+</geothm>

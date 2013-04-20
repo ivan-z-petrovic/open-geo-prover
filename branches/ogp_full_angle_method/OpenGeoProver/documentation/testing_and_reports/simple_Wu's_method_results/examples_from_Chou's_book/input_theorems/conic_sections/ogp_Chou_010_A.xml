@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 010">
+	<!-- Example 10 from Chou's book (version with conic of 5 points) -->
+	<constructions>
+		<psgenconic label="c" />
+		<prandgenconic label="A0" conic="c" />
+		<prandgenconic label="A1" conic="c" />
+		<prandgenconic label="A2" conic="c" />
+		<prandgenconic label="A3" conic="c" />
+		<prandgenconic label="A4" conic="c" />
+		<prandgenconic label="A5" conic="c" />
+		<ltwopts label="A0A1" point1="A0" point2="A1" />
+		<ltwopts label="A2A3" point1="A2" point2="A3" />
+		<pintersect label="A" set1="A0A1" set2="A2A3" />
+		<ltwopts label="A4A5" point1="A4" point2="A5" />
+		<pintersect label="B" set1="A0A1" set2="A4A5" />
+		<ltwopts label="A0A2" point1="A0" point2="A2" />
+		<ltwopts label="A1A3" point1="A1" point2="A3" />
+		<pintersect label="C" set1="A0A2" set2="A1A3" />
+		<ltwopts label="A0A3" point1="A0" point2="A3" />
+		<ltwopts label="A1A2" point1="A1" point2="A2" />
+		<pintersect label="D" set1="A0A3" set2="A1A2" />
+		<ltwopts label="A0A4" point1="A0" point2="A4" />
+		<ltwopts label="A1A5" point1="A1" point2="A5" />
+		<pintersect label="E" set1="A0A4" set2="A1A5" />
+		<ltwopts label="A0A5" point1="A0" point2="A5" />
+		<ltwopts label="A1A4" point1="A1" point2="A4" />
+		<pintersect label="F" set1="A0A5" set2="A1A4" />
+		<psconic5 label="c1" pointA="A" pointB="B" pointC="C" pointD="D" pointE="E" />
+	</constructions>
+	<statement>
+		<pointonset set="c1" point="F" />
+	</statement>
+</geothm>

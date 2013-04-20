@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 013 (Steiner's Theorem)">
+	<!-- Example 13 from Chou's book                                              -->
+	<!-- Let A, B, C, D, E and F be six points from random general conic section. -->
+	<!-- The three Pascal's lines [ABEDCF], [CDAFEB] and [EFCBAD] are concurrent. -->
+	<constructions>
+		<psgenconic label="c" />
+		<prandgenconic label="A" conic="c" />
+		<prandgenconic label="B" conic="c" />
+		<prandgenconic label="C" conic="c" />
+		<prandgenconic label="D" conic="c" />
+		<prandgenconic label="E" conic="c" />
+		<prandgenconic label="F" conic="c" />
+		<ltwopts label="AB" point1="A" point2="B" />
+		<ltwopts label="DC" point1="D" point2="C" />
+		<pintersect label="P1" set1="AB" set2="DC" />
+		<ltwopts label="BE" point1="B" point2="E" />
+		<ltwopts label="CF" point1="C" point2="F" />
+		<pintersect label="Q1" set1="BE" set2="CF" />
+		<ltwopts label="P1Q1" point1="P1" point2="Q1" />
+		<ltwopts label="FE" point1="F" point2="E" />
+		<pintersect label="P2" set1="DC" set2="FE" />
+		<ltwopts label="DA" point1="D" point2="A" />
+		<pintersect label="Q2" set1="DA" set2="BE" />
+		<ltwopts label="P2Q2" point1="P2" point2="Q2" />
+		<pintersect label="P3" set1="FE" set2="AB" />
+		<pintersect label="Q3" set1="CF" set2="DA" />
+		<ltwopts label="P3Q3" point1="P3" point2="Q3" />
+	</constructions>
+	<statement>
+		<concurrentlines>
+			<line label="P1Q1" />
+			<line label="P2Q2" />
+			<line label="P3Q3" />
+		</concurrentlines>
+	</statement>
+</geothm>

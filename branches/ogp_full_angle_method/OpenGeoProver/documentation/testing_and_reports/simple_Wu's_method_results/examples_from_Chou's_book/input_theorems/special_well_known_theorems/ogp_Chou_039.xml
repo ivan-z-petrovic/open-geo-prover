@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 039 (Morley's Theorem)">
+	<!-- Example 39 from Chou's book                                                -->
+	<!-- The points of intersection of the adjacent trisectors of the angles of any -->
+	<!-- triangle are the vertices of an equilateral triangle.                      -->
+	<constructions>
+		<pfree label="A" />
+		<pfree label="B" />
+		<pfree label="D" />
+		<ltwopts label="vA" point1="A" point2="D" />
+		<ltwopts label="uB" point1="B" point2="D" />
+		<ltangray label="AC" firstraypt="B" vertex="A" smallangfrp="B" smallangv="A" smallangsrp="D" />
+		<ltangray label="BC" firstraypt="A" vertex="B" smallangfrp="A" smallangv="B" smallangsrp="D" />
+		<pintersect label="C" set1="AC" set2="BC" />
+		<langray label="uA" firstraypt="D" vertex="A" congangfrp="B" congangv="A" congangsrp="D" />
+		<ang60deg label="alpha" />
+		<langrayto60deg label="vC" firstraypt="A" vertex="C" firstangfrp="B" firstangv="A" firstangsrp="D" secondangfrp="D" secondangv="B" secondangsrp="A" ang60deg="alpha" />
+		<pintersect label="F" set1="vC" set2="uA" />
+		<langray label="vB" firstraypt="D" vertex="B" congangfrp="A" congangv="B" congangsrp="D" />
+		<langray label="uC" firstraypt="B" vertex="C" congangfrp="F" congangv="C" congangsrp="A" />
+		<pintersect label="E" set1="vB" set2="uC" />
+	</constructions>
+	<statement>
+		<angeqspecconsang consAngle="alpha">
+			<angle firstraypt="D" vertex="E" secondraypt="F"/>
+		</angeqspecconsang>
+	</statement>
+</geothm>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Chou 196 (Nine points circle Theorem)">
+	<!-- Example 196 from Chou's book                                       -->
+	<!-- In a triangle, the midpoints of the sides, the feet of altitudes   -->
+	<!-- and the Euler points lie on the same circle. (The midpoints of the -->
+	<!-- segments joining the orthocenter of a triangle to its vertices are -->
+	<!-- called the Euler points of the triangle.)                          -->
+	<constructions>
+		<pfree label="A"/>
+		<pfree label="B"/>
+		<pfree label="C"/>
+		<ltwopts label="a" point1="B" point2="C" />
+		<ltwopts label="b" point1="C" point2="A" />
+		<ltwopts label="c" point1="A" point2="B" />
+		<pfoot label="D" origpt="A" baseline="a" />
+		<pfoot label="E" origpt="B" baseline="b" />
+		<pfoot label="F" origpt="C" baseline="c" />
+		<pmid label="C1" point1="A" point2="B" />
+		<ltwopts label="ha" point1="A" point2="D" />
+		<ltwopts label="hb" point1="B" point2="E" />
+		<pintersect label="H" set1="ha" set2="hb" />
+		<pmid label="A2" point1="A" point2="H" />
+	</constructions>
+	<statement>
+		<concyclicpts>
+			<point label="D" />
+			<point label="E" />
+			<point label="F" />
+			<point label="C1" />
+			<point label="A2" />
+		</concyclicpts>
+	</statement>
+</geothm>
