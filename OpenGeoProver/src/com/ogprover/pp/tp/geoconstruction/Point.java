@@ -7,6 +7,7 @@ package com.ogprover.pp.tp.geoconstruction;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
@@ -166,7 +167,6 @@ public abstract class Point extends GeoConstruction implements Cloneable {
     protected int pointState = Point.POINT_STATE_INITIALIZED;
     
     
-    
 	/*
      * ======================================================================
      * ========================= ABSTRACT METHODS ===========================
@@ -188,6 +188,11 @@ public abstract class Point extends GeoConstruction implements Cloneable {
      * @see java.lang.Object#clone()
      */
     public abstract Point clone();
+    
+    /**
+     * Method to replace the points used in a construction by another equivalent.
+     */
+    public abstract Point replace(HashMap<Point, Point> replacementMap);
 	
 	
 	
@@ -280,6 +285,7 @@ public abstract class Point extends GeoConstruction implements Cloneable {
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Point))
 			return false;
@@ -287,6 +293,12 @@ public abstract class Point extends GeoConstruction implements Cloneable {
 		return this.getGeoObjectLabel().equals(((Point)obj).getGeoObjectLabel());
 	}
 	
+	/**
+	 * Method compare - a total order on points, we do not care about its properties
+	 */
+	public boolean compare(Point pt) {
+		return (this.getGeoObjectLabel().compareTo(pt.getGeoObjectLabel())) < 0;
+	}
 	
 	
 	/*

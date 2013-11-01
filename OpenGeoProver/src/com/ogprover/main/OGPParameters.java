@@ -75,7 +75,7 @@ public class OGPParameters {
 	public static final String PARAM_OUTPUT_FORMAT = "o";
 	/**
 	 * <i><b>
-	 * Parameter for method for proving; default is "W" (Wu), and can also be "G" (Groebner)
+	 * Parameter for method for proving; default is "W" (Wu), and can also be "G" (Groebner) or "A" (Area method)
 	 * </b></i>
 	 */
 	public static final String PARAM_PROVER = "p";
@@ -210,6 +210,9 @@ public class OGPParameters {
 		case TheoremProver.TP_TYPE_GROEBNER:
 			retCode = this.put(OGPParameters.PARAM_PROVER, "G");
 			break;
+		case TheoremProver.TP_TYPE_AREA:
+			retCode = this.put(OGPParameters.PARAM_PROVER, "A");
+			break;
 		default: // Wu's prover is default
 			retCode = this.put(OGPParameters.PARAM_PROVER, "W");
 			break;
@@ -252,7 +255,7 @@ public class OGPParameters {
 		else if (logLevel.equals(GeoGebraLogger.DEBUG))
 			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "D");
 		else // default is basic level
-			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "B");
+			retCode = this.put(OGPParameters.PARAM_LOG_LEVEL, "D");
 		
 		return retCode;
 	}
@@ -364,6 +367,8 @@ public class OGPParameters {
 			return TheoremProver.TP_TYPE_WU;
 		if (value.equals("G"))
 			return TheoremProver.TP_TYPE_GROEBNER;
+		if (value.equals("A"))
+			return TheoremProver.TP_TYPE_AREA;
 		
 		OpenGeoProver.settings.getLogger().error("Bad value assigned to parameter");
 		

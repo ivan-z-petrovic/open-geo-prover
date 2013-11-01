@@ -1,0 +1,263 @@
+/* 
+ * DISCLAIMER PLACEHOLDER 
+ */
+ 
+/**
+ * JavaCC parser definition, to transform strings into expressions.
+ */options{  JDK_VERSION = "1.5";
+  static = false;}PARSER_BEGIN(ExpressionParser)package com.ogprover.pp.tp.expressions.parse;
+
+import java.lang.String;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import com.ogprover.pp.tp.expressions.*;
+import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.geoconstruction.FreePoint;
+
+public class ExpressionParser {  public static AMExpression convert(String arg) throws ParseException, TokenMgrError {
+    InputStream input = new ByteArrayInputStream(arg.getBytes());    ExpressionParser parser = new ExpressionParser(input);
+    return parser.start();  }}PARSER_END(ExpressionParser)SKIP :{  " "| "\r"| "\t"| "\n"}
+
+TOKEN : /* RESERVED WORDS */
+{  < SEGMENT : "Segment" >
+| < AREA : "Area" >
+| < SQUARE : "²" | "^2" | "^(2)" >
+}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >}TOKEN : /* NUMBERS */{  < NUMBER : (< DIGIT >)+ >| < #DIGIT: [                                    // unicode digits
+    "\u0030"-"\u0039", // Roman
+    "\u0660"-"\u0669", // Arabic-Indic
+    "\u06f0"-"\u06f9", // Extended Arabic-Indic
+    "\u0966"-"\u096f", // Devanagari (Hindi)
+    "\u09e6"-"\u09ef", // Bengali
+    "\u0a66"-"\u0a6f", // Gurmukhi (Punjabi)
+    "\u0ae6"-"\u0aef", // Gujurati
+    "\u0b66"-"\u0b6f", // Oryia
+    "\u0be6"-"\u0bef", // Tamil
+    "\u0c66"-"\u0c6f", // Telugu
+    "\u0ce6"-"\u0cef", // Kannada
+    "\u0d66"-"\u0d6f", // Malayalam
+    "\u0e50"-"\u0e59", // Thai
+    "\u0ed0"-"\u0ed9", // Lao
+    "\u1040"-"\u1049", // Myanmar (Burmese)
+    "\u0f20"-"\u0f29", // Tibetan
+    "\u1b50"-"\u1b59", // Balinese
+    "\u1bb0"-"\u1bb9", // Sudanese
+    "\u1c40"-"\u1c49", // Lepcha
+    "\u1c50"-"\u1c59", // Ol Chiki
+    "\u17e0"-"\u17e9", // Khmer
+    "\u1810"-"\u1819", // Mongolian
+    "\ua8d0"-"\ua8d9"  // Saurashtra
+   ] > }
+
+TOKEN : /* LABELS */
+{
+  < LABEL :  
+    <LETTER> ( <LETTER> | <DIGIT> | "'" )* (<INDEX>)? (<LETTER> | <DIGIT>)* >
+| < #INDEX : "_" (  <CHAR>  | ("{" (~["}"])+ "}" ) )  >
+| < #LETTER: [  // unicode letters
+        "$", // for absolute references in the spreadsheet
+        "\u0041"-"\u005a",      //upper case (A-Z)
+        "\u0061"-"\u007a",      //lower case (a-z)
+        "\u00b7",   			// middle dot (for Catalan)
+        "\u00c0"-"\u00d6",      //accentuated letters
+        "\u00d8"-"\u00f6",		//accentuated letters
+        "\u00f8"-"\u01bf",		//accentuated letters
+        "\u01c4"-"\u02a8",		//accentuated letters
+        "\u0391"-"\u03f3", 		// Greek 
+       	"\u0401"-"\u0481",		// Cyrillic
+        "\u0490"-"\u04f9",		// Cyrillic
+        "\u0531"-"\u1ffc", 	    // a lot of signs (Arabic, accentuated, ...)
+        "\u3041"-"\u3357", 	 	// Asian letters	 
+        "\u4e00"-"\ud7a3",		// Asian letters
+        "\uf71d"-"\ufa2d",		// Asian letters
+        "\ufb13"-"\ufdfb",		// Armenian, Hebrew, Arabic
+        "\ufe80"-"\ufefc",		// Arabic
+        "\uff66"-"\uff9d",		// Katakana
+        "\uffa1"-"\uffdc"		// Hangul
+   ] >
+| < #CHAR: ["\u0000"-"\u0021", "\u0023"-"\uffff"]  >    
+}
+
+TOKEN : /* PARENTHESIS AND SEPARATORS */
+{
+  < LEFTPAR : "(" >
+| < RIGHTPAR : ")" >
+| < LEFTBRACKET : "[" >
+| < RIGHTBRACKET : "]" >
+| < COMMA : "," >
+}
+
+AMExpression start() :
+{
+  AMExpression expr;
+}
+{
+  (	LOOKAHEAD(4217)
+	expr = expression()
+  | 
+	LOOKAHEAD(4217)
+    expr = simpleSegment()
+  )
+  { return expr; }}
+
+AMExpression expression() :
+{
+  AMExpression expr;
+  AMExpression t;
+}
+{
+  expr = term()
+  (    < PLUS >
+    t = term()
+    { expr = new Sum(expr, t); }  
+  |
+ 	< MINUS >
+    t = term()
+    { expr = new Difference(expr, t); }  )*
+  { return expr; }
+}
+
+AMExpression term() :
+{  AMExpression expr;
+  AMExpression p;
+}
+{  expr = primary()
+  (    < MULTIPLY >
+    p = primary()
+    { expr = new Product(expr, p); }
+  |
+    p = notNumberPrimary()
+    { expr = new Product(expr, p); }
+  |
+  	< DIVIDE >
+    p = primary()
+  	{ expr = new Fraction(expr, p); }
+  )*
+  { return expr; }
+}
+
+AMExpression primary() :
+{
+  Token t;  AMExpression expr;
+}
+{  t = < NUMBER >
+  { return new BasicNumber(Integer.parseInt(t.image)); }
+|
+  < MINUS > expr = primary()
+  { return new AdditiveInverse(expr); }
+| 
+  < LEFTPAR > expr = expression() < RIGHTPAR >
+  { return expr; }
+|
+  LOOKAHEAD(42)
+  expr = ratioOfSegments()
+  { return expr; }
+|
+  expr = areaOfTriangle()
+  { return expr; }
+|
+  LOOKAHEAD(42)
+  expr = squareOfSegment()
+  { return expr; }
+}
+
+AMExpression notNumberPrimary() :
+{
+  Token t;  AMExpression expr;
+}
+{  < LEFTPAR > expr = expression() < RIGHTPAR >
+  { return expr; }
+|
+  LOOKAHEAD(42)
+  expr = ratioOfSegments()
+  { return expr; }
+|
+  expr = areaOfTriangle()
+  { return expr; }
+|
+  LOOKAHEAD(42)
+  expr = squareOfSegment()
+  { return expr; }
+}
+
+AMExpression ratioOfSegments() :
+{  Token s1, s2, s3, s4;
+  Point pt1, pt2, pt3, pt4;
+}
+{
+  < SEGMENT >
+  ( < LEFTBRACKET > | < LEFTPAR > )  s1 = < LABEL >
+  < COMMA >
+  s2 = < LABEL >
+  ( < COMMA > < LABEL >)?
+  ( < RIGHTBRACKET > | < RIGHTPAR > )
+  < DIVIDE >
+  < SEGMENT >
+  ( < LEFTBRACKET > | < LEFTPAR > )
+  s3 = < LABEL >
+  < COMMA >
+  s4 = < LABEL >
+  ( < COMMA > < LABEL >)?
+  ( < RIGHTBRACKET > | < RIGHTPAR > )
+  {
+    pt1 = new FreePoint(s1.image);
+    pt2 = new FreePoint(s2.image);
+    pt3 = new FreePoint(s3.image);
+    pt4 = new FreePoint(s4.image);
+    return new RatioOfCollinearSegments(pt1, pt2, pt3, pt4);
+  }}
+
+AMExpression areaOfTriangle() :
+{  Token s1, s2, s3;
+  Point pt1, pt2, pt3;
+}
+{
+  < AREA >
+  ( < LEFTBRACKET > | < LEFTPAR > )  s1 = < LABEL >
+  < COMMA >
+  s2 = < LABEL >
+  < COMMA >
+  s3 = < LABEL >
+  ( < RIGHTBRACKET > | < RIGHTPAR > )
+  {
+    pt1 = new FreePoint(s1.image);
+    pt2 = new FreePoint(s2.image);
+    pt3 = new FreePoint(s3.image);
+    return new AreaOfTriangle(pt1, pt2, pt3);
+  }}
+
+AMExpression squareOfSegment() :
+{  Token s1, s2;
+  Point pt1, pt2;
+}
+{
+  < SEGMENT >
+  ( < LEFTBRACKET > | < LEFTPAR > )  s1 = < LABEL >
+  < COMMA >
+  s2 = < LABEL >
+  ( < COMMA > < LABEL >)?
+  ( < RIGHTBRACKET > | < RIGHTPAR > )
+  < SQUARE >
+  {
+    pt1 = new FreePoint(s1.image);
+    pt2 = new FreePoint(s2.image);
+    return new Fraction(new PythagorasDifference(pt1, pt2, pt1), new BasicNumber (2));
+  }}
+
+// This returns THE SQUARE of the segment.
+// It is only used to compare two segments.
+AMExpression simpleSegment() :
+{  Token s1, s2;
+  Point pt1, pt2;
+}
+{  < SEGMENT >
+  ( < LEFTBRACKET > | < LEFTPAR > )  s1 = < LABEL >
+  < COMMA >
+  s2 = < LABEL >
+  ( < COMMA > < LABEL >)?
+  ( < RIGHTBRACKET > | < RIGHTPAR > )
+  {
+    pt1 = new FreePoint(s1.image);
+    pt2 = new FreePoint(s2.image);
+    return new Fraction(new PythagorasDifference(pt1, pt2, pt1), new BasicNumber (2));
+  }}

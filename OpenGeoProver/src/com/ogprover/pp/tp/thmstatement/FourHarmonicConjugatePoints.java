@@ -17,6 +17,10 @@ import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.RatioOfCollinearSegments;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
 
@@ -340,5 +344,34 @@ public class FourHarmonicConjugatePoints extends PositionThmStatement {
 		sb.append(" and ");
 		sb.append(this.getGeoObjects().get(3).getGeoObjectLabel());
 		return sb.toString();
+	}
+
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		/*
+		 * First, we verify that the points are collinear, and then we verify that the
+		 * ratio condition is verified.
+		 */
+		Point a = (Point)this.geoObjects.get(0);
+		Point b = (Point)this.geoObjects.get(1);
+		Point c = (Point)this.geoObjects.get(2);
+		Point d = (Point)this.geoObjects.get(3);
+		
+		AMExpression areaOfABC = new AreaOfTriangle(a, b, c);
+		AMExpression areaOfABD = new AreaOfTriangle(a, b, d);
+		
+		AMExpression firstRatio = new RatioOfCollinearSegments(a,c,c,b);
+		AMExpression secondRatio = new RatioOfCollinearSegments(d,a,d,b);
+		Difference difference = new Difference(firstRatio, secondRatio);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		statements.add(areaOfABC);
+		statements.add(areaOfABD);
+		statements.add(difference);
+		
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

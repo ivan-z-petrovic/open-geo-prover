@@ -15,7 +15,7 @@ import com.ogprover.pp.tp.geoconstruction.LineThroughTwoPoints;
 import com.ogprover.pp.tp.geoconstruction.PerpendicularBisector;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoobject.Segment;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 import com.ogprover.pp.tp.thmstatement.AlgebraicSumOfThreeSegments;
 import com.ogprover.pp.tp.thmstatement.CollinearPoints;
 import com.ogprover.pp.tp.thmstatement.PointOnSetOfPoints;
@@ -70,7 +70,7 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 	 * 
 	 * @param ndgCond	NDG condition associated to this points position checker
 	 */
-	public ThreePointsPositionChecker(NDGCondition ndgCond){
+	public ThreePointsPositionChecker(AlgebraicNDGCondition ndgCond){
 		this.initializePointsPositionChecker(ndgCond);
 	}
 	
@@ -110,7 +110,7 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_COLLINEAR, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_3PT_COLLINEAR, pointsV);
 			return true;
 		}
 		
@@ -148,7 +148,7 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_MIDPOINT, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_3PT_MIDPOINT, pointsV);
 			return true;
 		}
 		
@@ -178,7 +178,7 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_ON_PERP_BIS, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_3PT_ON_PERP_BIS, pointsV);
 			return true;
 		}
 		
@@ -210,7 +210,7 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_RIGHT_ANG, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_3PT_RIGHT_ANG, pointsV);
 			return true;
 		}
 		
@@ -240,7 +240,7 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_ON_CIRCLE, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_3PT_ON_CIRCLE, pointsV);
 			return true;
 		}
 		
@@ -268,7 +268,7 @@ public class ThreePointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(A);
 			pointsV.add(B);
 			pointsV.add(C);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_3PT_SEG_SUM, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_3PT_SEG_SUM, pointsV);
 			return true;
 		}
 		

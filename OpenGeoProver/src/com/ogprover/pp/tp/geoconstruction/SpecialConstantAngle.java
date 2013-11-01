@@ -4,7 +4,7 @@
 
 package com.ogprover.pp.tp.geoconstruction;
 
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 
 
 /**
@@ -52,7 +52,7 @@ public interface SpecialConstantAngle {
      * 
      * @param ndgCond	Polynomial for of NDG condition.
      */
-    public void processNDGCondition(NDGCondition ndgCond);
+    public void processNDGCondition(AlgebraicNDGCondition ndgCond);
     
     /**
 	 * Method that sets the parametric point used in algebraic expression for tangent of this angle.

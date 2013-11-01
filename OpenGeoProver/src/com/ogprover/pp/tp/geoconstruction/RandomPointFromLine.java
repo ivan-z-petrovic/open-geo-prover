@@ -5,6 +5,7 @@
 package com.ogprover.pp.tp.geoconstruction;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.UXVariable;
@@ -162,5 +163,10 @@ public class RandomPointFromLine extends RandomPointFromSetOfPoints {
 		return sb.toString();
 	}
 
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 

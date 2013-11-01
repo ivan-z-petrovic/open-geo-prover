@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.thmstatement;
 
 import java.util.Vector;
 
+import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.auxiliary.GeneralizedSegment;
 import com.ogprover.pp.tp.auxiliary.ProductOfTwoSegments;
@@ -200,5 +201,11 @@ public class LinearCombinationOfSquaresOfSegments extends DimensionThmStatement 
 		}
 		sb.append(" equals zero");
 		return sb.toString();
+	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		OpenGeoProver.settings.getLogger().error("The area method does not currently use floating-point calculus.");
+		return null;
 	}
 }

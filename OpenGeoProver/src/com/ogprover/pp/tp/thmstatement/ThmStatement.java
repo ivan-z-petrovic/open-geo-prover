@@ -59,6 +59,13 @@ public abstract class ThmStatement {
      */
     public abstract XPolynomial getAlgebraicForm();
     /**
+     * Transformation of theorem statement to an equality between geometric quantities, for
+     * the area method algorithm.
+     * 
+     * @return The statement converted into a rational expression in geometric quantities.
+     */
+    public abstract AreaMethodTheoremStatement getAreaMethodStatement();
+    /**
 	 * Method that retrieves text description of theorem statement.
 	 * 
 	 * @return	Textual description of theorem statement

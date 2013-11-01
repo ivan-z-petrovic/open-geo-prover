@@ -1688,6 +1688,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 		 */
 		
 		ILogger logger = OpenGeoProver.settings.getLogger();
+		logger.info("launching convertPolygonCmd");
 		
 		if (this.validateCmdArguments(ggCmd, 3, -1, 1, -1) == false) {
 			logger.error("Failed to validate command: " + PolygonCmd.cmdName);

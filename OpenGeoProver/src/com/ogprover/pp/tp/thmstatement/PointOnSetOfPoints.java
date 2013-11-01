@@ -9,7 +9,15 @@ import java.util.Vector;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
+import com.ogprover.pp.tp.geoconstruction.Circle;
+import com.ogprover.pp.tp.geoconstruction.CircleWithCenterAndPoint;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
+import com.ogprover.pp.tp.geoconstruction.Line;
+import com.ogprover.pp.tp.geoconstruction.LineThroughTwoPoints;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoconstruction.SetOfPoints;
 
@@ -105,5 +113,39 @@ public class PointOnSetOfPoints extends PositionThmStatement {
 		sb.append(" lies on set of points ");
 		sb.append(this.geoObjects.get(0).getGeoObjectLabel());
 		return sb.toString();
+	}
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		SetOfPoints set = (SetOfPoints)this.geoObjects.get(0);
+		Point p = (Point)this.geoObjects.get(1);
+		
+		if (set instanceof Line) {
+			Point a = ((LineThroughTwoPoints)set).getPoints().get(0);
+			Point b = ((LineThroughTwoPoints)set).getPoints().get(1);
+			
+			AMExpression areaOfABP = new AreaOfTriangle(a, b, p);
+			
+			Vector<AMExpression> statements = new Vector<AMExpression>();
+			statements.add(areaOfABP);
+			
+			return new AreaMethodTheoremStatement(getStatementDesc(), statements);
+		}
+		if (set instanceof Circle) {
+			Point center = ((CircleWithCenterAndPoint)set).getCenter();
+			Point pointOnCircle = ((CircleWithCenterAndPoint)set).getPoints().get(0);
+			
+			AMExpression squareOfRadius = new PythagorasDifference(center, pointOnCircle, center);
+			AMExpression squareOfDistanceToP = new PythagorasDifference(center, p, center);
+			AMExpression difference = new Difference(squareOfDistanceToP, squareOfRadius);
+			
+			Vector<AMExpression> statements = new Vector<AMExpression>();
+			statements.add(difference);
+			
+			return new AreaMethodTheoremStatement(getStatementDesc(), statements);
+		}
+		return null;
 	}
 }

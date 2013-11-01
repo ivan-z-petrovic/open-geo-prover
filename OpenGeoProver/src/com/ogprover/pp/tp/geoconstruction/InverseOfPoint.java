@@ -344,10 +344,10 @@ public class InverseOfPoint extends SelfConditionalPoint {
 	/**
 	 * Method that gives the condition for y coordinate 
 	 * 
-	 * @see com.ogp.pp.cp.geoconstruction.Point#getYCondition()
+	 * @see com.ogp.pp.tp.geoconstruction.Point#getYCondition()
 	 */
 	public SymbolicPolynomial getYCondition() {
-		/*t
+		/*
 		 * The condition for y-coordinate depends on current instances of
 		 * points O - center of circle, and A - original point. 
 		 * If points O and A have same instances
@@ -569,5 +569,10 @@ public class InverseOfPoint extends SelfConditionalPoint {
 		return pointsMap;
 	}
 
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		OpenGeoProver.settings.getLogger().error("This method should not be called on this class.");
+		return null;
+	}
 }
 
