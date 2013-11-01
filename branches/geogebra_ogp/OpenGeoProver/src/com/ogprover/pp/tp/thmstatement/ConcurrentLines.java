@@ -12,6 +12,10 @@ import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolySystem;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.Product;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.IntersectionPoint;
 import com.ogprover.pp.tp.geoconstruction.Line;
@@ -306,5 +310,45 @@ public class ConcurrentLines extends PositionThmStatement {
 		}
 		sb.append(" are concurrent");
 		return sb.toString();
+	}
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		Vector<GeoConstruction> lines = this.getGeoObjects();
+		
+		Line line1 = (Line) lines.get(0);
+		Line line2 = (Line) lines.get(1);
+		
+		Point a = line1.getPoints().get(0);
+		Point b = line1.getPoints().get(1);
+		Point c = line2.getPoints().get(0);
+		Point d = line2.getPoints().get(1);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		
+		for (int i = 2 ; i<lines.size(); i++) {
+			Point e = ((Line)lines.get(i)).getPoints().get(0);
+			Point f = ((Line)lines.get(i)).getPoints().get(1);
+			/*
+			 * Let I be the intersection point between the lines (ab) and (cd).
+			 * The three lines are concurrent iff I, e and f are collinear, so
+			 *   iff S_efI = 0.
+			 * Considering we cannot add new points to the construction at this step
+			 *   of the algorithm, we eliminate the point I by hand. It gives us the
+			 *   formula (S_ACD*S_EFB - S_BCD*S_EFA)/S_ABCD = 0, and we can simplify
+			 *   by S_ABCD.
+			 */
+			AMExpression sacd = new AreaOfTriangle(a, c, d);
+			AMExpression sefb = new AreaOfTriangle(e, f, b);
+			AMExpression term1 = new Product(sacd, sefb);
+			AMExpression sbcd = new AreaOfTriangle(b, c, d);
+			AMExpression sefa = new AreaOfTriangle(e, f, a);
+			AMExpression term2 = new Product(sbcd, sefa);
+			statements.add(new Difference(term1, term2));
+		}
+		
+	return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

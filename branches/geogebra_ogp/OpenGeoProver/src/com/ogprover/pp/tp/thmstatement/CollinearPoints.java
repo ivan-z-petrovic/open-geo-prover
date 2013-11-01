@@ -5,11 +5,14 @@
 package com.ogprover.pp.tp.thmstatement;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.AMExpression;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Line;
 import com.ogprover.pp.tp.geoconstruction.LineThroughTwoPoints;
@@ -249,5 +252,32 @@ public class CollinearPoints extends PositionThmStatement {
 		}
 		sb.append(" are collinear");
 		return sb.toString();
+	}
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		/*
+		 * Three points are collinear iff the area of the corresponding triangle is zero.
+		 * So, we take the first two points and for every other point, we add the corresponding statement.
+		 */
+		if (this.geoObjects.size() < 3) {
+			OpenGeoProver.settings.getLogger().error("There should be at least three points.");
+			return null;
+		}
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		
+		// If one of the cast fails then the validation will fail
+		Point pt1 = (Point)this.geoObjects.get(0);
+		Point pt2 = (Point)this.geoObjects.get(1);
+		List<GeoConstruction> otherPoints = this.geoObjects.subList(2,this.geoObjects.size());
+		for (GeoConstruction geoCons : otherPoints) {
+			Point pt = (Point)geoCons;
+			AMExpression expr = new AreaOfTriangle(pt1, pt2, pt);
+			statements.add(expr);
+		}
+		
+		return new AreaMethodTheoremStatement(this.getStatementDesc(), statements);
 	}
 }

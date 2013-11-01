@@ -454,7 +454,8 @@ public abstract class GeoGebraConstructionConverter {
 				for (GeoConstruction gc : this.constructionsToRemove)
 					this.thmProtocol.removeGeoConstruction(gc);
 			}
-			this.thmProtocol.addGeoConstruction(geoCons);
+			if (!(geoCons instanceof IgnoredConstruction))
+				this.thmProtocol.addGeoConstruction(geoCons);
 		}
 		
 		return true;

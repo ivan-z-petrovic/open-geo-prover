@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.geoconstruction.Point;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 import com.ogprover.pp.tp.thmstatement.IdenticalPoints;
 
 
@@ -59,7 +59,7 @@ public class TwoPointsPositionChecker extends PointsPositionChecker {
 	 * 
 	 * @param ndgCond	NDG condition associated to this points position checker
 	 */
-	public TwoPointsPositionChecker(NDGCondition ndgCond){
+	public TwoPointsPositionChecker(AlgebraicNDGCondition ndgCond){
 		this.initializePointsPositionChecker(ndgCond);
 	}
 	
@@ -105,7 +105,7 @@ public class TwoPointsPositionChecker extends PointsPositionChecker {
 		XPolynomial statementPoly = this.auxiliaryCP.getTheoremStatement().getAlgebraicForm();
 		
 		if (statementPoly != null && statementPoly.matchesNDGCPolynomial(this.ndgCond.getPolynomial())) {
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_2PT_IDENTICAL, pointList);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_2PT_IDENTICAL, pointList);
 			return true;
 		}
 		

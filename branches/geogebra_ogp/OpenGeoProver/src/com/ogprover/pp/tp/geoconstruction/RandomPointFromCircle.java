@@ -5,6 +5,7 @@
 package com.ogprover.pp.tp.geoconstruction;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.UXVariable;
@@ -162,5 +163,9 @@ public class RandomPointFromCircle extends RandomPointFromSetOfPoints {
 		return sb.toString();
 	}
 
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		OpenGeoProver.settings.getLogger().error("This method should not be called on this class.");
+		return null;
+	}
 }
-

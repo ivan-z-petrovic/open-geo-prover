@@ -223,4 +223,10 @@ public class LinearCombinationOfOrientedSegments extends DimensionThmStatement {
 		return sb.toString();
 	}
 
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		OpenGeoProver.settings.getLogger().error("The area method does not currently use floating-point calculus.");
+		return null;
+	}
+
 }

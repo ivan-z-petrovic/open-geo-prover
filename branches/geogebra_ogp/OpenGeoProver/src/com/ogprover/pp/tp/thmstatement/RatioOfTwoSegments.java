@@ -181,4 +181,10 @@ public class RatioOfTwoSegments extends DimensionThmStatement {
 		sb.append(this.ratioCoefficient);
 		return sb.toString();
 	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		OpenGeoProver.settings.getLogger().error("The area method does not currently use floating-point calculus.");
+		return null;
+	}
 }

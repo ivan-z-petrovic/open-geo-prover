@@ -6,6 +6,7 @@ package com.ogprover.pp.tp.thmstatement;
 
 import java.util.Vector;
 
+import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.auxiliary.GeneralizedSegment;
 import com.ogprover.pp.tp.auxiliary.ProductOfTwoSegments;
@@ -263,5 +264,11 @@ public class AlgebraicSumOfThreeSegments extends DimensionThmStatement {
 		sb.append(this.thirdSegment.getDescription());
 		sb.append(" is zero");
 		return sb.toString();
+	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		OpenGeoProver.settings.getLogger().error("Statement not currently supported by the area method.");
+		return null;
 	}
 }

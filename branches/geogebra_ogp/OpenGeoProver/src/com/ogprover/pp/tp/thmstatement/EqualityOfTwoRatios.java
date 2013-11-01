@@ -212,4 +212,10 @@ public class EqualityOfTwoRatios extends DimensionThmStatement {
 		sb.append(this.denominatorSegmentOfSecondRatio.getDescription());
 		return sb.toString();
 	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import com.ogprover.api.converter.GGThmConverterForAlgebraicProvers;
+import com.ogprover.api.converter.GGThmConverterForAreaMethod;
 import com.ogprover.api.converter.GeoGebraTheoremConverter;
 import com.ogprover.geogebra.GeoGebraTheorem;
 import com.ogprover.main.OGPConstants;
@@ -20,7 +21,7 @@ import com.ogprover.pp.GeoGebraOGPOutputProverProtocol;
 import com.ogprover.pp.OGPInputProverProtocol;
 import com.ogprover.pp.OGPOutputProverProtocol;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.thmprover.AlgebraicMethodProver;
+import com.ogprover.thmprover.AreaMethodProver;
 import com.ogprover.thmprover.TheoremProver;
 import com.ogprover.thmprover.WuMethodProver;
 import com.ogprover.utilities.OGPTimer;
@@ -197,6 +198,13 @@ public class GeoGebraOGPInterface implements OGPAPI {
 				return false;
 			}
 		}
+		if (proverType == TheoremProver.TP_TYPE_AREA) {
+			thmCnv = new GGThmConverterForAreaMethod(ggThm, theoremProtocol);
+			if (thmCnv.convert() == false) {
+				logger.error("Failed to convert geometry theorem");
+				return false;
+			}
+		}
 		// TODO - other types of prover
 		
 		return true;
@@ -225,6 +233,8 @@ public class GeoGebraOGPInterface implements OGPAPI {
 		// Set prover parameters
 		if (this.populateParameters(inputObject) == false)
 			return exitProver(outputObject, "Failed in reading input prover parameters");
+		
+		int proverType = parameters.getProver();
 		
 		// Read input theorem
 		logger.info("Reading input geometry problem...");
@@ -279,7 +289,7 @@ public class GeoGebraOGPInterface implements OGPAPI {
 			output.close();
 			return exitProver(outputObject, "Theorem protocol is invalid");
 		}
-		int proverType = parameters.getProver();
+		
 		// Transformation to algebraic form
 		Double conversionToAlgFormTime = 0.0;
 		if (proverType == TheoremProver.TP_TYPE_WU || proverType == TheoremProver.TP_TYPE_GROEBNER) {
@@ -321,10 +331,13 @@ public class GeoGebraOGPInterface implements OGPAPI {
 		
 		// Proving the geometry theorem
 		logger.info("Invoking prover method...");
-		AlgebraicMethodProver proverMethod = null;
+		TheoremProver proverMethod = null;
 		OGPTimer timer = OpenGeoProver.settings.getTimer();
 		if (proverType == TheoremProver.TP_TYPE_WU) { // Wu's method
 			proverMethod = new WuMethodProver(theorem);
+		}
+		if (proverType == TheoremProver.TP_TYPE_AREA) {
+			proverMethod = new AreaMethodProver(thmProtocol);
 		}
 		// TODO - add here new cases for other types of provers
 			
