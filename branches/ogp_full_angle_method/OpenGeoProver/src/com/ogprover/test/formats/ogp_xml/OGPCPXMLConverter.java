@@ -7,7 +7,7 @@ package com.ogprover.test.formats.ogp_xml;
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.PointList;
+import com.ogprover.pp.tp.geoobject.RCConsPointList;
 import com.ogprover.pp.tp.geoconstruction.*;
 import com.ogprover.pp.tp.thmstatement.*;
 import com.thoughtworks.xstream.converters.Converter;
@@ -202,7 +202,7 @@ public class OGPCPXMLConverter implements Converter {
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
 		OGPTP consProtocol = new OGPTP();
-		OpenGeoProver.settings.setParsedCP(consProtocol); // this CP will be visible while parsing inner tags
+		OpenGeoProver.settings.setParsedTP(consProtocol); // this CP will be visible while parsing inner tags
 		
 		consProtocol.setTheoremName(reader.getAttribute("name"));
 		
@@ -365,7 +365,7 @@ public class OGPCPXMLConverter implements Converter {
 					else
 						return null; // incorrect argument value
 				}
-				PointList ptList = (PointList)ctx.convertAnother(null, PointList.class);
+				RCConsPointList ptList = (RCConsPointList)ctx.convertAnother(null, RCConsPointList.class);
 				if (ptList == null)
 					return null;
 				consProtocol.setRcConsFreePoints(ptList);
@@ -373,7 +373,7 @@ public class OGPCPXMLConverter implements Converter {
 			reader.moveUp();
 			reader.moveDown();
 			if ("conspts".equals(reader.getNodeName())) {
-				PointList ptList = (PointList)ctx.convertAnother(null, PointList.class);
+				RCConsPointList ptList = (RCConsPointList)ctx.convertAnother(null, RCConsPointList.class);
 				if (ptList == null)
 					return null;
 				consProtocol.setRcConsPointsToConstruct(ptList);

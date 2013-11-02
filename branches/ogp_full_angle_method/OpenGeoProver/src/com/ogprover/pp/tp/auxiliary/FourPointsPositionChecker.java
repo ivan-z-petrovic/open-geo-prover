@@ -18,7 +18,8 @@ import com.ogprover.pp.tp.geoconstruction.CircleWithCenterAndRadius;
 import com.ogprover.pp.tp.geoconstruction.Line;
 import com.ogprover.pp.tp.geoconstruction.LineThroughTwoPoints;
 import com.ogprover.pp.tp.geoconstruction.Point;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.geoobject.Segment;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 import com.ogprover.pp.tp.thmstatement.CollinearPoints;
 import com.ogprover.pp.tp.thmstatement.ConcyclicPoints;
 import com.ogprover.pp.tp.thmstatement.FourHarmonicConjugatePoints;
@@ -77,7 +78,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 	 * 
 	 * @param ndgCond	NDG condition associated to this points position checker
 	 */
-	public FourPointsPositionChecker(NDGCondition ndgCond){
+	public FourPointsPositionChecker(AlgebraicNDGCondition ndgCond){
 		this.initializePointsPositionChecker(ndgCond);
 	}
 	
@@ -121,7 +122,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_COLLINEAR, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_COLLINEAR, pointsV);
 			return true;
 		}
 		
@@ -177,7 +178,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_CONCYCLIC, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_CONCYCLIC, pointsV);
 			return true;
 		}
 		
@@ -208,7 +209,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_EQ_SEG, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_EQ_SEG, pointsV);
 			return true;
 		}
 		
@@ -243,7 +244,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_PARALLEL, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_PARALLEL, pointsV);
 			return true;
 		}
 		
@@ -278,7 +279,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_PERPENDICULAR, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_PERPENDICULAR, pointsV);
 			return true;
 		}
 		
@@ -317,7 +318,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_HARMONIC, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_HARMONIC, pointsV);
 			return true;
 		}
 		
@@ -357,7 +358,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_CONG_COLL_SEG, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_CONG_COLL_SEG, pointsV);
 			return true;
 		}
 		
@@ -394,7 +395,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_ON_ANG_BIS, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_ON_ANG_BIS, pointsV);
 			return true;
 		}
 		
@@ -434,7 +435,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_2_ON_CIRCLE, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_2_ON_CIRCLE, pointsV);
 			return true;
 		}
 		
@@ -467,7 +468,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_ON_CIRCLE, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_ON_CIRCLE, pointsV);
 			return true;
 		}
 		
@@ -509,7 +510,7 @@ public class FourPointsPositionChecker extends PointsPositionChecker {
 			pointsV.add(B);
 			pointsV.add(C);
 			pointsV.add(D);
-			this.ndgCond.addNewTranslation(NDGCondition.NDG_TYPE_4PT_INVERSE, pointsV);
+			this.ndgCond.addNewTranslation(AlgebraicNDGCondition.NDG_TYPE_4PT_INVERSE, pointsV);
 			return true;
 		}
 		

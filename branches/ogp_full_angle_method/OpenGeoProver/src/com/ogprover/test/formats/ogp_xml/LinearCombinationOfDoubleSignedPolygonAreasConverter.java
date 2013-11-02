@@ -54,7 +54,7 @@ public class LinearCombinationOfDoubleSignedPolygonAreasConverter implements Con
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		Vector<Vector<Point>> polygons = new Vector<Vector<Point>>();
 		Vector<Point> polygon = null;
 		Vector<Double> coefficients = new Vector<Double>();

@@ -239,4 +239,13 @@ public class TouchingCircles extends PositionThmStatement {
 		sb.append(" are touching each other");
 		return sb.toString();
 	}
+
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		OpenGeoProver.settings.getLogger().error("Area method cannot deal with such statement for now.");
+		return null;
+	}
 }

@@ -5,7 +5,7 @@
 package com.ogprover.test.formats.ogp_xml;
 
 import com.ogprover.main.OpenGeoProver;
-import com.ogprover.pp.tp.auxiliary.PointList;
+import com.ogprover.pp.tp.geoobject.RCConsPointList;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -22,16 +22,16 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class PointListConverter implements Converter {
+public class RCConsPointListConverter implements Converter {
 
 	@SuppressWarnings("rawtypes")
 	public boolean canConvert(Class clazz) {
-		return clazz.equals(PointList.class);
+		return clazz.equals(RCConsPointList.class);
 	}
 
 	public void marshal(Object obj, HierarchicalStreamWriter writer,
 			MarshallingContext ctx) {
-		PointList ptList = (PointList)obj;
+		RCConsPointList ptList = (RCConsPointList)obj;
 		
 		for (Point pt : ptList.getPoints()) {
 			writer.startNode("point");
@@ -49,13 +49,13 @@ public class PointListConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		PointList ptList = new PointList();
+		RCConsPointList ptList = new RCConsPointList();
 		
 		while (reader.hasMoreChildren()) {
 			reader.moveDown();
 			if ("point".equals(reader.getNodeName())) {
 				String ptLabel = reader.getAttribute("label");
-				Point pt = (Point)OpenGeoProver.settings.getParsedCP().getConstructionMap().get(ptLabel);
+				Point pt = (Point)OpenGeoProver.settings.getParsedTP().getConstructionMap().get(ptLabel);
 				if (pt == null)
 					return null;
 				ptList.addPoint(pt);

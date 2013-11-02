@@ -12,9 +12,12 @@ import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.Segment;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.geoobject.Segment;
 
 
 /**
@@ -83,7 +86,8 @@ public class CongruentTriangles extends DimensionThmStatement {
 			 * sqrt(x1)=sqrt(x2)
 			 * sqrt(y1)=sqrt(y2)
 			 * sqrt(z1)=sqrt(z2)
-			 * 
+			 * 		Point a = (Point)pointList.get(0);
+		Point b = (Point)pointList.get(1);
 			 * This system of equalities is equal to following system:
 			 * 
 			 * sqrt(x1) - sqrt(x2) = 0
@@ -251,5 +255,35 @@ public class CongruentTriangles extends DimensionThmStatement {
 		result.subtractPolynomial(R.clone().multiplyByPolynomial(R));
 		
 		return result;
+	}
+
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		Point a = (Point)this.geoObjects.get(0);
+		Point b = (Point)this.geoObjects.get(1);
+		Point c = (Point)this.geoObjects.get(2);
+		Point d = (Point)this.geoObjects.get(3);
+		Point e = (Point)this.geoObjects.get(4);
+		Point f = (Point)this.geoObjects.get(5);
+		
+		AMExpression squareOfAB = new PythagorasDifference(a, b, a);
+		AMExpression squareOfBC = new PythagorasDifference(c, b, c);
+		AMExpression squareOfAC = new PythagorasDifference(a, c, a);
+		AMExpression squareOfDE = new PythagorasDifference(d, e, d);
+		AMExpression squareOfEF = new PythagorasDifference(f, e, f);
+		AMExpression squareOfDF = new PythagorasDifference(d, f, d);
+		AMExpression difference1 = new Difference(squareOfAB, squareOfDE);
+		AMExpression difference2 = new Difference(squareOfBC, squareOfEF);
+		AMExpression difference3 = new Difference(squareOfAC, squareOfDF);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		statements.add(difference1);
+		statements.add(difference2);
+		statements.add(difference3);
+		
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

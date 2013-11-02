@@ -2,10 +2,11 @@
  * DISCLAIMER PLACEHOLDER 
  */
 
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.geoobject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import com.ogprover.polynomials.Power;
 import com.ogprover.polynomials.SymbolicPolynomial;
@@ -15,18 +16,20 @@ import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.auxiliary.GeneralizedSegment;
 import com.ogprover.pp.tp.geoconstruction.Point;
 
 /**
 * <dl>
 * <dt><b>Class description:</b></dt>
-* <dd>Class for segment between two points</dd>
+* <dd>Class for segment between two points and for vector from the first 
+* 		towards the second point</dd>
 * </dl>
 * 
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class Segment implements GeneralizedSegment{
+public class Segment implements GeneralizedSegment, PointList {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -77,6 +80,10 @@ public class Segment implements GeneralizedSegment{
 	 * Second end point of this segment
 	 */
 	private Point secondEndPoint = null;
+	/**
+	 * Label of segment
+	 */
+	private String segLabel = null;
 	
 	// Static initializer of condition member 
 	static {
@@ -207,6 +214,13 @@ public class Segment implements GeneralizedSegment{
 		return secondEndPoint;
 	}
 	
+	/**
+	 * @see com.ogprover.pp.tp.geoobject.GeoObject#getGeoObjectLabel()
+	 */
+	public String getGeoObjectLabel() {
+		return this.segLabel;
+	}
+	
 	
 	
 	/*
@@ -223,6 +237,24 @@ public class Segment implements GeneralizedSegment{
 	public Segment(Point firstP, Point secondP) {
 		this.firstEndPoint = firstP;
 		this.secondEndPoint = secondP;
+		StringBuilder sb = new StringBuilder();
+		sb.append("|");
+		sb.append(firstP.getGeoObjectLabel());
+		sb.append(secondP.getGeoObjectLabel());
+		sb.append("|");
+		this.segLabel = sb.toString(); 
+	}
+	
+	/**
+	 * Constructor method
+	 * 
+	 * @param firstP	First end point
+	 * @param secondP	Second end point
+	 * @param label		Label of segment
+	 */
+	public Segment(Point firstP, Point secondP, String label) {
+		this(firstP, secondP);
+		this.segLabel = label;
 	}
 	
 	
@@ -370,6 +402,16 @@ public class Segment implements GeneralizedSegment{
 		sb.append(this.firstEndPoint.getGeoObjectLabel());
 		sb.append(this.secondEndPoint.getGeoObjectLabel());
 		return sb.toString();
+	}
+
+	/**
+	 * @see com.ogprover.pp.tp.geoobject.PointList#getPoints()
+	 */
+	public Vector<Point> getPoints() {
+		Vector<Point> points = new Vector<Point>();
+		points.add(this.firstEndPoint);
+		points.add(this.secondEndPoint);
+		return points;
 	}
 	
 }

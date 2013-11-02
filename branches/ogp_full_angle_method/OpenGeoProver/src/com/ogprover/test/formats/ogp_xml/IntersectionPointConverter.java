@@ -41,7 +41,7 @@ public class IntersectionPointConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		String label = reader.getAttribute("label");
 		String set1 = reader.getAttribute("set1");
 		String set2 = reader.getAttribute("set2");

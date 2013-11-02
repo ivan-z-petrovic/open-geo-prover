@@ -43,7 +43,7 @@ public class ConicSectionWithFivePointsConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		String label = reader.getAttribute("label");
 		String pointA = reader.getAttribute("pointA");
 		String pointB = reader.getAttribute("pointB");

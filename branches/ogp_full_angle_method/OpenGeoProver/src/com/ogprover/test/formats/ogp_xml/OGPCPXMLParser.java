@@ -110,7 +110,7 @@ public class OGPCPXMLParser {
 		// statements' converters - END
 		// other classes' converters - BEGIN
 		xstream.registerConverter(new AngleConverter());
-		xstream.registerConverter(new PointListConverter());
+		xstream.registerConverter(new RCConsPointListConverter());
 		xstream.registerConverter(new ProductOfTwoSegmentsConverter());
 		xstream.registerConverter(new RatioOfTwoCollinearSegmentsConverter());
 		xstream.registerConverter(new RatioProductConverter());

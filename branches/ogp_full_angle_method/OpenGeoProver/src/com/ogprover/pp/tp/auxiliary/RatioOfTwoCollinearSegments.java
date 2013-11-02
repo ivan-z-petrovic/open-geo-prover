@@ -17,6 +17,7 @@ import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.geoobject.Segment;
 
 /**
 * <dl>

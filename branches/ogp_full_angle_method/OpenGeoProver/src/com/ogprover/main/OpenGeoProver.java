@@ -80,7 +80,7 @@ public class OpenGeoProver {
 		sb.append(";\nwritten by Ivan Petrovic and Predrag Janicic, University of Belgrade.\n");
 		sb.append("Reimplementation of C++ version 2.00;\nwritten by Goran Predovic and Predrag Janicic, University of Belgrade.\n");
 		sb.append("Copyright (c) 2005-2011. Not for commercial use.\n\n");
-		sb.append("Type \"-h\" or \"--help\" if necessary, for explanaition about correct usage of command line.\n\n");
+		sb.append("Type \"-h\" or \"--help\" if necessary, for explanation about correct usage of command line.\n\n");
 		System.out.println(sb.toString());
 		
 		int retCode = OGPConstants.RET_CODE_SUCCESS;

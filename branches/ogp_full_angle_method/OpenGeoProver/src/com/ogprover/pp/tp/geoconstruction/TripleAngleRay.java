@@ -14,9 +14,9 @@ import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
-import com.ogprover.pp.tp.auxiliary.Angle;
 import com.ogprover.pp.tp.auxiliary.GeneralizedAngleTangent;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.geoobject.Angle;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.logger.ILogger;
 

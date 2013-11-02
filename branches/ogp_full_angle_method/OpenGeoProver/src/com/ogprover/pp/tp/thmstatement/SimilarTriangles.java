@@ -12,6 +12,11 @@ import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.pp.tp.auxiliary.GeneralizedAngleTangent;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.Product;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
 
@@ -220,4 +225,42 @@ public class SimilarTriangles extends DimensionThmStatement {
 		return sb.toString();
 	}
 
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		/*
+		 * We have to verify three times that the angles are the same. See EqualAngles.java.
+		 */
+		Point a = (Point)this.geoObjects.get(0);
+		Point b = (Point)this.geoObjects.get(1);
+		Point c = (Point)this.geoObjects.get(2);
+		Point d = (Point)this.geoObjects.get(3);
+		Point e = (Point)this.geoObjects.get(4);
+		Point f = (Point)this.geoObjects.get(5);
+		
+		AMExpression sabc = new AreaOfTriangle(a, b, c);
+		AMExpression sdef = new AreaOfTriangle(d, e, f);
+		AMExpression pabc = new PythagorasDifference(a, b, c);
+		AMExpression pbca = new PythagorasDifference(b, c, a);
+		AMExpression pcab = new PythagorasDifference(c, a, b);
+		AMExpression pdef = new PythagorasDifference(d, e, f);
+		AMExpression pefd = new PythagorasDifference(e, f, d);
+		AMExpression pfde = new PythagorasDifference(f, d, e);
+		
+		AMExpression product1 = new Product(sabc, pdef);
+		AMExpression product1bis = new Product(sdef, pabc);
+		AMExpression product2 = new Product(sabc, pefd);
+		AMExpression product2bis = new Product(sdef, pbca);
+		AMExpression product3 = new Product(sabc, pfde);
+		AMExpression product3bis = new Product(sdef, pcab);
+		AMExpression difference1 = new Difference(product1, product1bis);
+		AMExpression difference2 = new Difference(product2, product2bis);
+		AMExpression difference3 = new Difference(product3, product3bis);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		statements.add(difference1);
+		statements.add(difference2);
+		statements.add(difference3);
+		
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
+	}
 }

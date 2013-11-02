@@ -108,9 +108,9 @@ public class OGPConfigurationSettings {
 	 */
 	private ILogger logger = null;
 	/**
-	 * Theorem protocol obtained from OGP xml file
+	 * Theorem protocol obtained from parsing and conversion
 	 */
-	private OGPTP parsedCP = null;
+	private OGPTP parsedTP = null;
 	/*
 	 * Return codes of some operations 
 	 */
@@ -251,17 +251,17 @@ public class OGPConfigurationSettings {
 	}
 	
 	/**
-	 * @param parsedCP the parsedCP to set
+	 * @param parsedTP the parsedTP to set
 	 */
-	public void setParsedCP(OGPTP parsedCP) {
-		this.parsedCP = parsedCP;
+	public void setParsedTP(OGPTP parsedTP) {
+		this.parsedTP = parsedTP;
 	}
 
 	/**
-	 * @return the parsedCP
+	 * @return the parsedTP
 	 */
-	public OGPTP getParsedCP() {
-		return parsedCP;
+	public OGPTP getParsedTP() {
+		return parsedTP;
 	}
 
 	/**

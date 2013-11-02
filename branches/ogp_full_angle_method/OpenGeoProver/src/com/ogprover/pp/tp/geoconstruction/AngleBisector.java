@@ -20,9 +20,9 @@ import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.Angle;
 import com.ogprover.pp.tp.auxiliary.GeneralizedAngleTangent;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.geoobject.Angle;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.logger.ILogger;
 
