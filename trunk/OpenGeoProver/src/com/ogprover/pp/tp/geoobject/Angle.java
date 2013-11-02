@@ -2,7 +2,9 @@
  * DISCLAIMER PLACEHOLDER 
  */
 
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.geoobject;
+
+import java.util.Vector;
 
 import com.ogprover.pp.tp.geoconstruction.Point;
 
@@ -16,7 +18,7 @@ import com.ogprover.pp.tp.geoconstruction.Point;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class Angle {
+public class Angle implements PointList {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -43,6 +45,10 @@ public class Angle {
 	 * Point from second ray of angle
 	 */
 	private Point secondRayPoint;
+	/**
+	 * Angle label
+	 */
+	private String angLabel;
 	
 	
 	
@@ -94,6 +100,13 @@ public class Angle {
 		return secondRayPoint;
 	}
 	
+	/**
+	 * @see com.ogprover.pp.tp.geoobject.GeoObject#getGeoObjectLabel()
+	 */
+	public String getGeoObjectLabel() {
+		return this.angLabel;
+	}
+	
 	
 	
 	/*
@@ -106,6 +119,17 @@ public class Angle {
 		this.vertex = vertex;
 		this.firstRayPoint = firstRayPoint;
 		this.secondRayPoint = secondRayPoint;
+		StringBuilder sb = new StringBuilder();
+		sb.append("<");
+		sb.append(firstRayPoint.getGeoObjectLabel());
+		sb.append(vertex.getGeoObjectLabel());
+		sb.append(secondRayPoint.getGeoObjectLabel());
+		this.angLabel = sb.toString();
+	}
+	
+	public Angle(Point firstRayPoint, Point vertex, Point secondRayPoint, String label) {
+		this(firstRayPoint, vertex, secondRayPoint);
+		this.angLabel = label;
 	}
 	
 	
@@ -149,7 +173,17 @@ public class Angle {
 		sb.append(this.secondRayPoint.getGeoObjectLabel());
 		return sb.toString();
 	}
-
+	
+	/**
+	 * @see com.ogprover.pp.tp.geoobject.PointList#getPoints()
+	 */
+	public Vector<Point> getPoints() {
+		Vector<Point> points = new Vector<Point>();
+		points.add(this.firstRayPoint);
+		points.add(this.vertex);
+		points.add(this.secondRayPoint);
+		return points;
+	}
 }
 
 

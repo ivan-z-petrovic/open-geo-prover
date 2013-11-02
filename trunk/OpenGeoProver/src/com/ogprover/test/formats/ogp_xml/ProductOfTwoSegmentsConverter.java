@@ -5,7 +5,7 @@
 package com.ogprover.test.formats.ogp_xml;
 
 import com.ogprover.pp.tp.auxiliary.ProductOfTwoSegments;
-import com.ogprover.pp.tp.auxiliary.Segment;
+import com.ogprover.pp.tp.geoobject.Segment;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;

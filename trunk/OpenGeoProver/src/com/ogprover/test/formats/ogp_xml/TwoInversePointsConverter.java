@@ -41,7 +41,7 @@ public class TwoInversePointsConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		String point1 = reader.getAttribute("point1");
 		String point2 = reader.getAttribute("point2");
 		String circle = reader.getAttribute("circle");

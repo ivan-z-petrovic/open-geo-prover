@@ -54,7 +54,7 @@ public class PolygonAreasCombinationConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		Vector<Double> coeffs = new Vector<Double>();
 		Vector<Vector<Point>> polygons = new Vector<Vector<Point>>();
 		

@@ -26,7 +26,7 @@ import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.polynomials.XTerm;
 import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.logger.ILogger;
@@ -419,7 +419,7 @@ public class GeneralConicSection extends FreeParametricSet implements ConicSecti
     	
     }
     
-    public void processNDGCondition(NDGCondition ndgCond) {
+    public void processNDGCondition(AlgebraicNDGCondition ndgCond) {
     	// Create three polynomial conditions for non-degenerate conic section - parameters A, B and C from 
     	// equation of general conic section can't all be equal to zero.
     	

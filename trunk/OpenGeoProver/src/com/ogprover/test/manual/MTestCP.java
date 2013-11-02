@@ -17,11 +17,9 @@ import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.SymbolicPolynomial;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.Angle;
 import com.ogprover.pp.tp.auxiliary.ProductOfTwoSegments;
 import com.ogprover.pp.tp.auxiliary.RatioOfTwoCollinearSegments;
 import com.ogprover.pp.tp.auxiliary.RatioProduct;
-import com.ogprover.pp.tp.auxiliary.Segment;
 import com.ogprover.pp.tp.geoconstruction.AngleBisector;
 import com.ogprover.pp.tp.geoconstruction.CentralSymmetricPoint;
 import com.ogprover.pp.tp.geoconstruction.Circle;
@@ -55,7 +53,9 @@ import com.ogprover.pp.tp.geoconstruction.RotatedPoint;
 import com.ogprover.pp.tp.geoconstruction.ShortcutConstruction;
 import com.ogprover.pp.tp.geoconstruction.TangentLine;
 import com.ogprover.pp.tp.geoconstruction.TranslatedPoint;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.geoobject.Angle;
+import com.ogprover.pp.tp.geoobject.Segment;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 import com.ogprover.pp.tp.thmstatement.AlgebraicSumOfThreeAngles;
 import com.ogprover.pp.tp.thmstatement.AlgebraicSumOfThreeSegments;
 import com.ogprover.pp.tp.thmstatement.CollinearPoints;
@@ -313,11 +313,11 @@ public class MTestCP {
 		System.out.println("-- NDG Conditions as text --");
 		System.out.println();
 		for (XPolynomial xp : cp.getAlgebraicGeoTheorem().getNDGConditions().getPolynomials()) {
-			cp.addNDGCondition(new NDGCondition(xp));
+			cp.addAlgebraicNDGCondition(new AlgebraicNDGCondition(xp));
 		}
 		ii = 1;
 		cp.translateNDGConditionsToUserReadableForm();
-		for (NDGCondition ndgc : cp.getNdgConditions()) {
+		for (AlgebraicNDGCondition ndgc : cp.getAlgebraicNDGConditions()) {
 			System.out.println("Text NDG Condition #" + ii);
 			
 			// Printing all descriptions

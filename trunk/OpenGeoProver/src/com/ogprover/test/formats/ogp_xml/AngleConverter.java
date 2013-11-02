@@ -6,7 +6,7 @@ package com.ogprover.test.formats.ogp_xml;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.Angle;
+import com.ogprover.pp.tp.geoobject.Angle;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -40,7 +40,7 @@ public class AngleConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		String firstraypt = reader.getAttribute("firstraypt");
 		String vertex = reader.getAttribute("vertex");
 		String secondraypt = reader.getAttribute("secondraypt");

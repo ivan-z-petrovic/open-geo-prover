@@ -4,7 +4,7 @@
 
 package com.ogprover.test.formats.ogp_xml;
 
-import com.ogprover.pp.tp.auxiliary.Segment;
+import com.ogprover.pp.tp.geoobject.Segment;
 import com.ogprover.pp.tp.thmstatement.RatioOfTwoSegments;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;

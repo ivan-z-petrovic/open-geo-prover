@@ -39,7 +39,7 @@ public class TouchingCirclesConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		String circle1 = reader.getAttribute("circle1");
 		String circle2 = reader.getAttribute("circle2");
 		

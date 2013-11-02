@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.pp.tp.geoconstruction.Point;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 
 
 /**
@@ -39,7 +39,7 @@ public abstract class PointsPositionChecker {
 	/**
 	 * Attached NDG condition
 	 */
-	protected NDGCondition ndgCond = null;
+	protected AlgebraicNDGCondition ndgCond = null;
 	/**
 	 * Theorem protocol used for process of translation of 
 	 * NDG condition to readable form.
@@ -80,14 +80,14 @@ public abstract class PointsPositionChecker {
 	/**
 	 * @param ndgCond the ndgCond to set
 	 */
-	public void setNDGCond(NDGCondition ndgCond) {
+	public void setNDGCond(AlgebraicNDGCondition ndgCond) {
 		this.ndgCond = ndgCond;
 	}
 	
 	/**
 	 * @return the ndgCond
 	 */
-	public NDGCondition getNDGCond() {
+	public AlgebraicNDGCondition getNDGCond() {
 		return ndgCond;
 	}
 	
@@ -146,7 +146,7 @@ public abstract class PointsPositionChecker {
 	 * 
 	 * @param ndgCond	NDG condition associated to this points position checker
 	 */
-	protected void initializePointsPositionChecker(NDGCondition ndgCond) {
+	protected void initializePointsPositionChecker(AlgebraicNDGCondition ndgCond) {
 		this.ndgCond = ndgCond;
 		this.initializeAuxiliaryCP();
 	}

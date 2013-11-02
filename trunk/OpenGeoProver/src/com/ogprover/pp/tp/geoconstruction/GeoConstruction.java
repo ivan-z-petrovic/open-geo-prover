@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.OGPTP;
+import com.ogprover.pp.tp.geoobject.GeoObject;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.logger.ILogger;
 
@@ -21,7 +22,7 @@ import com.ogprover.utilities.logger.ILogger;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public abstract class GeoConstruction {
+public abstract class GeoConstruction implements GeoObject {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -39,6 +40,12 @@ public abstract class GeoConstruction {
 	/* 
 	 * Class constants for types of geometric constructions - BEGIN 
 	 */
+	/**
+	 * <i><b>
+	 * Ignored construction
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_IGNORED = -2;
 	/**
 	 * <i><b>
 	 * Undefined construction
@@ -101,7 +108,26 @@ public abstract class GeoConstruction {
 	 * </b></i>
 	 */
 	public static final int GEOCONS_TYPE_GEN_SEGMENT_RATIO = 8;
-	// put other special point constructions here => [9 .. 19]
+	/**
+	 * <i><b>
+	 * Construction of a foot from a point to a line, where the line is 
+	 * given by two points, for the area method
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_AM_FOOT_POINT = 9;
+	/**
+	 * <i><b>
+	 * TRATIO construction of a point -
+	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf
+	 */
+	public static final int GEOCONS_TYPE_TRATIO_POINT = 10;
+	/**
+	 * <i><b>
+	 * PRATIO construction of a point -
+	 * See http://hal.inria.fr/hal-00426563/PDF/areaMethodRecapV2.pdf
+	 */
+	public static final int GEOCONS_TYPE_PRATIO_POINT = 11;
+	// put other special point constructions here => [12 .. 19]
 	// --- Intersection points ---
 	/**
 	 * <i><b>
@@ -110,7 +136,14 @@ public abstract class GeoConstruction {
 	 * </b></i>
 	 */
 	public static final int GEOCONS_TYPE_INTERSECTION = 20;
-	// put other intersection point constructions here => [21 .. 29]
+	/**
+	 * <i><b>
+	 * Construction of intersection of two lines given by 
+	 * two points each, for the area method
+	 * </b></i>
+	 */
+	public static final int GEOCONS_TYPE_AM_INTERSECTION_POINT = 21;
+	// put other intersection point constructions here => [22 .. 29]
 	// --- Random points ---
 	/**
 	 * <i><b>
@@ -283,7 +316,7 @@ public abstract class GeoConstruction {
 	 */
 	protected OGPTP consProtocol = null;
 	/**
-	 * Index of this constructed geometric object in construction protocol
+	 * Index of this constructed geometric object in theorem protocol
 	 */
 	protected int index = -1;
 	
@@ -335,6 +368,8 @@ public abstract class GeoConstruction {
 	 * Method that retrieves the label of constructed geometric object
 	 * 
 	 * @return The label of geometric object
+	 * 
+	 * @see com.ogprover.pp.tp.geoobject.GeoObject#getGeoObjectLabel()
 	 */
 	public String getGeoObjectLabel() {
 		return geoObjectLabel;
@@ -350,9 +385,9 @@ public abstract class GeoConstruction {
 	}
 
 	/**
-	 * Method that retrieves construction protocol that contains this construction
+	 * Method that retrieves theorem protocol that contains this construction
 	 * 
-	 * @return The construction protocol
+	 * @return The theorem protocol
 	 */
 	public OGPTP getConsProtocol() {
 		return consProtocol;
@@ -368,7 +403,7 @@ public abstract class GeoConstruction {
 	}
 
 	/**
-	 * Method that retrieves the index of this object in construction protocol
+	 * Method that retrieves the index of this object in theorem protocol
 	 * 
 	 * @return the index
 	 */

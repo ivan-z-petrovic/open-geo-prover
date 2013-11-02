@@ -7,7 +7,7 @@ package com.ogprover.main;
 import java.io.IOException;
 
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 import com.ogprover.thmprover.TheoremProver;
 import com.ogprover.utilities.OGPUtilities;
 import com.ogprover.utilities.Stopwatch;
@@ -113,6 +113,8 @@ public class OGPReport {
 					author = "Wu's method used";
 				else if (parameters.getProver() == TheoremProver.TP_TYPE_GROEBNER)
 					author = "Groebner basis method used";
+				else if (parameters.getProver() == TheoremProver.TP_TYPE_AREA)
+					author = "Area method used";
 			}
 			else if (OpenGeoProver.settings.getOgpMode() == OGPConstants.OGP_MODE_RC_CONSTRUCTIBILITY) {
 				title = "OpenGeoProver Output for RC-Constructibility problem ``" + this.thmProtocol.getTheoremName() + "'' ";
@@ -351,7 +353,7 @@ public class OGPReport {
 			return retCode;
 		}
 		
-		if (this.thmProtocol.getNdgConditions() == null) {
+		if (this.thmProtocol.getAlgebraicNDGConditions() == null) { // might not be an error
 			boolean exceptionCaught = false;
 			try {
 				output.openItem();
@@ -372,8 +374,8 @@ public class OGPReport {
 			
 			return retCode;
 		}
-		
-		for (NDGCondition ndgc : this.thmProtocol.getNdgConditions()) {
+		// Write NDGs to output files
+		for (AlgebraicNDGCondition ndgc : this.thmProtocol.getAlgebraicNDGConditions()) {
 			String ndgcText = ndgc.getBestDescription();
 				
 			try {

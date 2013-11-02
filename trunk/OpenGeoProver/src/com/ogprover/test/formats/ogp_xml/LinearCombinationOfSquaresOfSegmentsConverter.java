@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import com.ogprover.pp.tp.auxiliary.GeneralizedSegment;
 import com.ogprover.pp.tp.auxiliary.ProductOfTwoSegments;
-import com.ogprover.pp.tp.auxiliary.Segment;
+import com.ogprover.pp.tp.geoobject.Segment;
 import com.ogprover.pp.tp.thmstatement.LinearCombinationOfSquaresOfSegments;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;

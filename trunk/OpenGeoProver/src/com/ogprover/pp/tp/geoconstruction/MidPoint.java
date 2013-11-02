@@ -16,7 +16,7 @@ import com.ogprover.polynomials.SymbolicVariable;
 import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.UXVariable;
 import com.ogprover.polynomials.Variable;
-import com.ogprover.pp.tp.auxiliary.Segment;
+import com.ogprover.pp.tp.geoobject.Segment;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.logger.ILogger;
 
@@ -179,7 +179,7 @@ public class MidPoint extends SelfConditionalPoint {
 	/**
 	 * Method that gives the condition for y coordinate 
 	 * 
-	 * @see com.ogp.pp.cp.geoconstruction.Point#getYCondition()
+	 * @see com.ogp.pp.tp.geoconstruction.Point#getYCondition()
 	 */
 	public SymbolicPolynomial getYCondition() {
 		return yConditionForMidPoint;
@@ -320,6 +320,12 @@ public class MidPoint extends SelfConditionalPoint {
 		pointsMap.put(ALabel, this.segment.getFirstEndPoint());
 		pointsMap.put(BLabel, this.segment.getSecondEndPoint());
 		return pointsMap;
+	}
+
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		OpenGeoProver.settings.getLogger().error("This method should not be called on this class.");
+		return null;
 	}
 }
 

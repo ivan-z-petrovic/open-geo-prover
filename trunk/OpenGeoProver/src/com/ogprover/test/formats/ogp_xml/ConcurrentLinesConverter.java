@@ -51,7 +51,7 @@ public class ConcurrentLinesConverter implements Converter {
 		while (reader.hasMoreChildren()) {
 			reader.moveDown();
 			if ("line".equals(reader.getNodeName()))
-				lines.add((Line) OpenGeoProver.settings.getParsedCP().getConstructionMap().get(reader.getAttribute("label")));
+				lines.add((Line) OpenGeoProver.settings.getParsedTP().getConstructionMap().get(reader.getAttribute("label")));
 			else
 				return null;
 			reader.moveUp();
