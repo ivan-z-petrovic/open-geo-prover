@@ -6,7 +6,7 @@ package com.ogprover.test.formats.ogp_xml;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.Angle;
+import com.ogprover.pp.tp.geoobject.Angle;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.SpecialConstantAngle;
 import com.ogprover.pp.tp.thmstatement.AngleEqualToSpecialConstantAngle;
@@ -46,7 +46,7 @@ public class AngleEqualToSpecialConstantAngleConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		String consAngLabel = reader.getAttribute("consAngle");
 		
 		if (!reader.hasMoreChildren())

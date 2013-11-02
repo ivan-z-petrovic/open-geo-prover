@@ -10,6 +10,11 @@ import java.util.Vector;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.Product;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
 import com.ogprover.pp.tp.geoconstruction.Circle;
 import com.ogprover.pp.tp.geoconstruction.CircumscribedCircle;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
@@ -257,5 +262,36 @@ public class ConcyclicPoints extends PositionThmStatement {
 		}
 		sb.append(" are concyclic");
 		return sb.toString();
+	}
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		/*
+		 * Let S_ABC be the area of the triangle ABC and P_ABC be defined as P_ABC = AB²+BC²-AC².
+		 * 
+		 * Then, A and B belong to the same circle arc CD iff S_CAD*P_CBD = S_CBD*P_CAD.
+		 */
+		Vector<GeoConstruction> pointList = this.geoObjects;
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		
+		Point a = (Point)pointList.get(0);
+		Point b = (Point)pointList.get(1);
+		for (int i=4 ; i<pointList.size() ; i++) {
+			Point c = (Point)pointList.get(i-1);
+			Point d = (Point)pointList.get(i);
+			
+			AMExpression scad = new AreaOfTriangle(c,a,d);
+			AMExpression scbd = new AreaOfTriangle(c,b,d);
+			AMExpression pcad = new PythagorasDifference(c,a,d);
+			AMExpression pcbd = new PythagorasDifference(c,b,d);
+			AMExpression product1 = new Product(scad, pcbd);
+			AMExpression product2 = new Product(scbd, pcad);
+			AMExpression difference = new Difference(product1, product2);
+			
+			statements.add(difference);
+		}
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

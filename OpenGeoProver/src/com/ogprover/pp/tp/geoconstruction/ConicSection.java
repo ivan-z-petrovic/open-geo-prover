@@ -4,6 +4,8 @@
 
 package com.ogprover.pp.tp.geoconstruction;
 
+import com.ogprover.pp.tp.geoobject.GeoObject;
+
 
 /**
 * <dl>
@@ -14,7 +16,7 @@ package com.ogprover.pp.tp.geoconstruction;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public interface ConicSection {
+public interface ConicSection extends GeoObject {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================

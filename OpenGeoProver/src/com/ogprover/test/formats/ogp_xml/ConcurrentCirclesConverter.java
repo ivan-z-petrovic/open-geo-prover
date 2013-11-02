@@ -51,7 +51,7 @@ public class ConcurrentCirclesConverter implements Converter {
 		while (reader.hasMoreChildren()) {
 			reader.moveDown();
 			if ("circle".equals(reader.getNodeName()))
-				circles.add((Circle) OpenGeoProver.settings.getParsedCP().getConstructionMap().get(reader.getAttribute("label")));
+				circles.add((Circle) OpenGeoProver.settings.getParsedTP().getConstructionMap().get(reader.getAttribute("label")));
 			else
 				return null;
 			reader.moveUp();

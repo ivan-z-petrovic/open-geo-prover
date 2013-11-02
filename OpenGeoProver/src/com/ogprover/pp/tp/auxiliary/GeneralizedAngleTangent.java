@@ -16,6 +16,7 @@ import com.ogprover.polynomials.SymbolicVariable;
 import com.ogprover.polynomials.Term;
 import com.ogprover.polynomials.Variable;
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.geoobject.Angle;
 
 /**
 * <dl>

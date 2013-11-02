@@ -5,6 +5,7 @@
 package com.ogprover.pp.tp.geoconstruction;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.ogprover.main.OGPConstants;
 import com.ogprover.main.OpenGeoProver;
@@ -170,5 +171,9 @@ public class FreePoint extends Point {
 		return null;
 	}
 
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		return this;
+	}
 }
 

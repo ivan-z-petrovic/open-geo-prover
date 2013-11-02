@@ -4,7 +4,7 @@
 
 package com.ogprover.test.formats.ogp_xml;
 
-import com.ogprover.pp.tp.auxiliary.Angle;
+import com.ogprover.pp.tp.geoobject.Angle;
 import com.ogprover.pp.tp.thmstatement.EqualAngles;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;

@@ -6,7 +6,7 @@ package com.ogprover.test.formats.ogp_xml;
 
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.Segment;
+import com.ogprover.pp.tp.geoobject.Segment;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -39,7 +39,7 @@ public class SegmentConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		String point1 = reader.getAttribute("point1");
 		String point2 = reader.getAttribute("point2");
 		

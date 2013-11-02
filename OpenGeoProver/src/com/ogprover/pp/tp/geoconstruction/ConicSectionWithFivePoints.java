@@ -22,7 +22,7 @@ import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
-import com.ogprover.pp.tp.ndgcondition.NDGCondition;
+import com.ogprover.pp.tp.ndgcondition.AlgebraicNDGCondition;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.io.SpecialFileFormatting;
 import com.ogprover.utilities.logger.ILogger;
@@ -444,7 +444,7 @@ public class ConicSectionWithFivePoints extends ParametricSet implements ConicSe
     	
     }
     
-    public void processNDGCondition(NDGCondition ndgCond) {
+    public void processNDGCondition(AlgebraicNDGCondition ndgCond) {
     	// This type of conic section is always instantiated as non-degenerate conic,
     	// so there aren't NDG conditions for it.
     }

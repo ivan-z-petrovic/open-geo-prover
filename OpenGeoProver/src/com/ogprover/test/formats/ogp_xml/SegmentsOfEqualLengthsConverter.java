@@ -41,7 +41,7 @@ public class SegmentsOfEqualLengthsConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		String point11 = reader.getAttribute("point11");
 		String point12 = reader.getAttribute("point12");
 		String point21 = reader.getAttribute("point21");

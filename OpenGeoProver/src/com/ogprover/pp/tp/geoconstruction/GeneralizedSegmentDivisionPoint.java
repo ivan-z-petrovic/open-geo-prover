@@ -15,7 +15,7 @@ import com.ogprover.polynomials.Variable;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.auxiliary.RatioOfTwoCollinearSegments;
 import com.ogprover.pp.tp.auxiliary.RatioProduct;
-import com.ogprover.pp.tp.auxiliary.Segment;
+import com.ogprover.pp.tp.geoobject.Segment;
 import com.ogprover.utilities.io.OGPOutput;
 import com.ogprover.utilities.logger.ILogger;
 
@@ -424,6 +424,12 @@ public class GeneralizedSegmentDivisionPoint extends SelfConditionalPoint {
 		pointsMap.put(ALabel, this.segment.getFirstEndPoint());
 		pointsMap.put(BLabel, this.segment.getSecondEndPoint());
 		return pointsMap;
+	}
+
+	@Override
+	public Point replace(HashMap<Point, Point> replacementMap) {
+		OpenGeoProver.settings.getLogger().error("This method should not be called on this class.");
+		return null;
 	}
 }
 

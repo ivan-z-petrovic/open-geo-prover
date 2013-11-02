@@ -310,4 +310,12 @@ public class ConcurrentCircles extends PositionThmStatement {
 		sb.append(" are concurrent");
 		return sb.toString();
 	}
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		OpenGeoProver.settings.getLogger().error("Statement not currently supported by the area method.");
+		return null;
+	}
 }

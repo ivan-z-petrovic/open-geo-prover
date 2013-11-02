@@ -51,7 +51,7 @@ public class ConcyclicPointsConverter implements Converter {
 		while (reader.hasMoreChildren()) {
 			reader.moveDown();
 			if ("point".equals(reader.getNodeName()))
-				points.add((Point) OpenGeoProver.settings.getParsedCP().getConstructionMap().get(reader.getAttribute("label")));
+				points.add((Point) OpenGeoProver.settings.getParsedTP().getConstructionMap().get(reader.getAttribute("label")));
 			else
 				return null;
 			reader.moveUp();

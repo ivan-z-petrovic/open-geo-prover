@@ -2,7 +2,7 @@
  * DISCLAIMER PLACEHOLDER 
  */
 
-package com.ogprover.pp.tp.auxiliary;
+package com.ogprover.pp.tp.geoobject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ import com.ogprover.pp.tp.geoconstruction.Point;
 * @version 1.00
 * @author Ivan Petrovic
 */
-public class PointList {
+public class RCConsPointList implements PointList {
 	/*
 	 * ======================================================================
 	 * ========================== VARIABLES =================================
@@ -111,7 +111,7 @@ public class PointList {
 	/**
 	 * Constructor method.
 	 */
-	public PointList() {
+	public RCConsPointList() {
 		this.points = new Vector<Point>();
 		this.xCoordinateInstances = new HashMap<String, Double>();
 		this.yCoordinateInstances = new HashMap<String, Double>();
@@ -122,7 +122,7 @@ public class PointList {
 	 * 
 	 * @param points	List of points
 	 */
-	public PointList(Vector<Point> points) {
+	public RCConsPointList(Vector<Point> points) {
 		this.points = points;
 		this.xCoordinateInstances = new HashMap<String, Double>();
 		this.yCoordinateInstances = new HashMap<String, Double>();
@@ -223,6 +223,21 @@ public class PointList {
 		
 		return varInstanceMap;
 	}
+
+	public String getGeoObjectLabel() {
+		StringBuilder sb = new StringBuilder("Point list for RC constructibility: ");
+		boolean bFirst = true;
+		for (Point pt : this.points) {
+			if (bFirst) {
+				bFirst = false;
+			}
+			else {
+				sb.append(", ");
+			}
+			if (pt != null) {
+				sb.append(pt.getGeoObjectLabel());
+			}
+		}
+		return sb.toString();
+	}
 }
-
-

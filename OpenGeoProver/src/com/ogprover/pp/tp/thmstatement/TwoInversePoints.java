@@ -416,4 +416,11 @@ public class TwoInversePoints extends PositionThmStatement {
 		sb.append(this.geoObjects.get(2).getGeoObjectLabel());
 		return sb.toString();
 	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		// The area method cannot deal with such statement.
+		OpenGeoProver.settings.getLogger().error("The area method cannot deal with circle inversion.");
+		return null;
+	}
 }
