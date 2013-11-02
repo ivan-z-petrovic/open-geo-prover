@@ -9,10 +9,15 @@ import java.util.Vector;
 
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.OGPTP;
-import com.ogprover.pp.tp.auxiliary.Angle;
 import com.ogprover.pp.tp.auxiliary.GeneralizedAngleTangent;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
+import com.ogprover.pp.tp.expressions.Product;
+import com.ogprover.pp.tp.expressions.PythagorasDifference;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Point;
+import com.ogprover.pp.tp.geoobject.Angle;
 
 
 /**
@@ -165,6 +170,41 @@ public class EqualAngles extends DimensionThmStatement {
 		sb.append(beta.getDescription());
 		sb.append(" are equal");
 		return sb.toString();
+	}
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		/*
+		 * Let S_ABC be the area of the triangle ABC and P_ABC be defined as AB²+BC²-AC².
+		 * Then two angles ABC and DEF are equal iff S_ABC*P_DEF = S_DEF*P_ABC.
+		 * 
+		 * This can be proved as followed :
+		 * 
+		 * If ABC is a right angle, then P_ABC = 0 by the Pythagoras theorem, so the result is trivial.
+		 * Else, we can remark that S_ABC/P_ABC = tan(ABC)/4. Indeed, by the cosine rule :
+		 * 		S_ABC = AB*BC*sin(ABC)/2
+		 * 		P_ABC = AB² + BC² - (AB² + BC² - 2*AB*BC*cos(ABC))
+		 * 			  = 2*AB*BC*cos(ABC)
+		 */
+		Point a = (Point)this.geoObjects.get(0);
+		Point b = (Point)this.geoObjects.get(1);
+		Point c = (Point)this.geoObjects.get(2);
+		Point d = (Point)this.geoObjects.get(3);
+		Point e = (Point)this.geoObjects.get(4);
+		Point f = (Point)this.geoObjects.get(5);
+		
+		AMExpression sabc = new AreaOfTriangle(a, b, c);
+		AMExpression sdef = new AreaOfTriangle(d, e, f);
+		AMExpression pabc = new PythagorasDifference(a, b, c);
+		AMExpression pdef = new PythagorasDifference(d, e, f);
+		AMExpression firstProduct = new Product(sabc,pdef);
+		AMExpression secondProduct = new Product(sdef,pabc);
+		AMExpression difference = new Difference(firstProduct, secondProduct);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		statements.add(difference);
+		
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 
 }

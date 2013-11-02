@@ -9,8 +9,12 @@ import java.util.Vector;
 import com.ogprover.main.OpenGeoProver;
 import com.ogprover.polynomials.XPolynomial;
 import com.ogprover.pp.tp.auxiliary.PointSetRelationshipManager;
+import com.ogprover.pp.tp.expressions.AreaOfTriangle;
+import com.ogprover.pp.tp.expressions.Difference;
+import com.ogprover.pp.tp.expressions.AMExpression;
 import com.ogprover.pp.tp.geoconstruction.GeoConstruction;
 import com.ogprover.pp.tp.geoconstruction.Line;
+import com.ogprover.pp.tp.geoconstruction.LineThroughTwoPoints;
 import com.ogprover.pp.tp.geoconstruction.ParallelLine;
 import com.ogprover.pp.tp.geoconstruction.Point;
 import com.ogprover.pp.tp.geoconstruction.RandomPointFromLine;
@@ -218,5 +222,25 @@ public class TwoParallelLines extends PositionThmStatement {
 		sb.append(" is parallel with line ");
 		sb.append(this.geoObjects.get(1).getGeoObjectLabel());
 		return sb.toString();
+	}
+
+
+
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		// The lines (AB) and (CD) are parallel iff the area of ABC is equal to the area of ABD.
+		LineThroughTwoPoints firstLine = (LineThroughTwoPoints)this.geoObjects.get(0);
+		LineThroughTwoPoints secondLine = (LineThroughTwoPoints)this.geoObjects.get(1);
+		Point a = firstLine.getPoints().get(0);
+		Point b = firstLine.getPoints().get(1);
+		Point c = secondLine.getPoints().get(0);
+		Point d = secondLine.getPoints().get(1);
+		
+		AMExpression areaOfABC = new AreaOfTriangle(a, b, c);
+		AMExpression areaOfABD = new AreaOfTriangle(a, b, d);
+		
+		Vector<AMExpression> statements = new Vector<AMExpression>();
+		statements.add(new Difference(areaOfABC, areaOfABD));
+		return new AreaMethodTheoremStatement(getStatementDesc(), statements);
 	}
 }

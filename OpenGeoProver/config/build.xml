@@ -32,6 +32,9 @@
 		<delete dir="${build.path}"/>
 		<delete dir="${dist.path}"/>
 		<delete dir="${javadoc.path}"/>
+		<delete>
+		    <fileset dir="${parser.path}" includes="*.java"/>
+		</delete>
 	</target>
 	
 	<target name="init" depends="clean">
@@ -45,8 +48,18 @@
 		<mkdir dir="${javadoc.path}"/>
 	</target>
 	
+
+	<!-- compiles grammar, javacc path is hardcoded now for simplicity -->
+	<target name="compile-grammar">
+		<javacc
+		   target="${parser.path}/ExpressionParser.jj"
+		   javacchome="${3rd_party_libs.path}"
+		   static="false"
+		/>
+	</target>
+	
 	<!-- Tasks for JUnit testing -->
-	<target name="jutest-clean">
+	<target name="jutest-clean" depends="compile-grammar">
 		<!-- Delete the ${jutest.path} directory tree -->
 		<delete dir="${jutest.path}"/>
 	</target>

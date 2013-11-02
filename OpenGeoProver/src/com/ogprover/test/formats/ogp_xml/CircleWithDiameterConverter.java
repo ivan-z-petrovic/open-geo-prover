@@ -40,7 +40,7 @@ public class CircleWithDiameterConverter implements Converter {
 
 	public Object unmarshal(HierarchicalStreamReader reader,
 			UnmarshallingContext ctx) {
-		OGPTP consProtocol = OpenGeoProver.settings.getParsedCP();
+		OGPTP consProtocol = OpenGeoProver.settings.getParsedTP();
 		String label = reader.getAttribute("label");
 		String diampt1 = reader.getAttribute("diampt1");
 		String diampt2 = reader.getAttribute("diampt2");

@@ -224,4 +224,10 @@ public class EqualityOfRatioProducts extends DimensionThmStatement {
 		return sb.toString();
 	}
 
+	@Override
+	public AreaMethodTheoremStatement getAreaMethodStatement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
