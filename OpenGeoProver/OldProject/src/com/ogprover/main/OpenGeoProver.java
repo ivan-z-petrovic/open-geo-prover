@@ -129,8 +129,8 @@ public class OpenGeoProver {
 					latexWriter = new LaTeXFileWriter(outputFile);
 				} catch (IOException e) {
 					logger.error("Failed to open LaTeX output file.");
-					if (latexWriter != null)
-						latexWriter.close();
+//					if (latexWriter != null)
+//						latexWriter.close();
 					latexWriter = null;
 				}
 			}
@@ -140,8 +140,8 @@ public class OpenGeoProver {
 					xmlWriter = new XMLFileWriter(outputFile);
 				} catch (IOException e) {
 					logger.error("Failed to open XML output file.");
-					if (xmlWriter != null)
-						xmlWriter.close();
+//					if (xmlWriter != null)
+//						xmlWriter.close();
 					xmlWriter = null;
 				}
 			}
