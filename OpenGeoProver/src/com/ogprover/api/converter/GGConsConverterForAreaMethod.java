@@ -981,9 +981,9 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 			Vector<String> edges = new Vector<String>();
 			
 			// Check if input is for regular polygon
-			if (oArgs.size() == 3) {
+			if (iArgs.size() == 3) {
 				try {
-					numVertices = Integer.parseInt(oArgs.get(2));
+					numVertices = Integer.parseInt(iArgs.get(2));
 					
 					if (numVertices < 3) {
 						logger.error("Incorrect number of vertices passed in for construction of regular polygon");
@@ -1023,6 +1023,7 @@ public class GGConsConverterForAreaMethod extends GGConsConverterForAlgebraicPro
 				// Take labels of new vertices and create these points by rotation for the measure of inner angle
 				logger.error("The area method does not currently deal with regular polygons. " +
 						"Please construct the regular polygon by hand");
+				return null;
 			}
 			
 			// Add lines of polygon edges

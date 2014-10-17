@@ -1707,9 +1707,9 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 			Vector<String> edges = new Vector<String>();
 			
 			// Check if input is for regular polygon
-			if (oArgs.size() == 3) {
+			if (iArgs.size() == 3) {
 				try {
-					numVertices = Integer.parseInt(oArgs.get(2));
+					numVertices = Integer.parseInt(iArgs.get(2));
 					
 					if (numVertices < 3) {
 						logger.error("Incorrect number of vertices passed in for construction of regular polygon");
@@ -1752,7 +1752,7 @@ public class GGConsConverterForAlgebraicProvers extends GeoGebraConstructionConv
 				vertices.add(originalPt);
 				vertices.add(center);
 				double angMeasureInDegrees = -(numVertices - 2) * 180.0 / numVertices; // take negative measure i.e. rotate clockwise to order vertices counterclockwise 
-				for (int ii = numVertices + 1; ii < numVertices; ii++) { // new vertices are in output array after all edges
+				for (int ii = numVertices + 1; ii < oArgs.size(); ii++) { // new vertices are in output array after all edges
 					Point vPt = new RotatedPoint(oArgs.get(ii), originalPt, center, angMeasureInDegrees);
 					vertices.add(vPt);
 					consList.add(vPt);
