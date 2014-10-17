@@ -264,9 +264,9 @@ public class AreaMethodProver implements TheoremProver {
 				steps.add(new SimplificationStep(current, next));
 				current = next;
 				
-				Vector<Boolean> isLemmaUsed = new Vector<Boolean>(17);
+				Vector<Boolean> isLemmaUsed = new Vector<Boolean>();
 				for (int i = 0 ; i < 17 ; i++)
-					isLemmaUsed.set(i, false);
+					isLemmaUsed.add(false);
 				try {
 					next = current.eliminate((Point)constructions.get(nextPointToEliminate), isLemmaUsed, this); //safe cast
 				} catch (UnknownStatementException e) {
