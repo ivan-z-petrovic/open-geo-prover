@@ -505,16 +505,21 @@ public class PerpendicularLine extends Line {
 		// (they are implicit input arguments) - there can be some new random points added.
 		// But do not add points that depend on this perpendicular line.
 		for (Point pt : this.baseLine.getPoints()) {
+			if (this.consProtocol.getConstructionMap().get(pt.getGeoObjectLabel()).getIndex() >= this.index) {
+				continue;
+			}
 			String[] ptInputLabels = pt.getInputLabels();
 			Vector<String> ptInputLabelsV = new Vector<String>();
-			if (ptInputLabels != null) {
+			if (ptInputLabels != null && ptInputLabels.length > 0) {
 				for (String label : ptInputLabels) {
-					if (ptInputLabelsV.indexOf(label) == -1)
+					if (ptInputLabelsV.indexOf(label) == -1 && this.consProtocol.getConstructionMap().get(label).getIndex() < this.index) {
 						ptInputLabelsV.add(label);
+					}
 				}
 			}
 			boolean bDependent = false;
-			while (ptInputLabelsV != null && ptInputLabelsV.size() > 0) {
+			int oldSize = -1;
+			while (ptInputLabelsV != null && ptInputLabelsV.size() > 0 && oldSize != ptInputLabelsV.size()) {
 				if (ptInputLabelsV.indexOf(this.getGeoObjectLabel()) != -1) {
 					bDependent = true;
 					break;
@@ -522,19 +527,26 @@ public class PerpendicularLine extends Line {
 				
 				Vector<String> tempV = new Vector<String>();
 				for (String label : ptInputLabelsV) {
-					String[] inLabels = this.consProtocol.getConstructionMap().get(label).getInputLabels();
-					if (inLabels != null) {
+					GeoConstruction gc = this.consProtocol.getConstructionMap().get(label);
+					if (gc.getIndex() >= this.index) {
+						continue;
+					}
+					String[] inLabels = gc.getInputLabels();
+					if (inLabels != null && inLabels.length > 0) {
 						for (String label2 : inLabels) {
-							if (tempV.indexOf(label2) == -1)
+							if (tempV.indexOf(label2) == -1 && this.consProtocol.getConstructionMap().get(label2).getIndex() < this.index) {
 								tempV.add(label2);
+							}
 						}
 					}
 				}
 				
+				oldSize = ptInputLabelsV.size();
 				ptInputLabelsV = tempV;
 			}
-			if (!bDependent && !pt.equals(firstPt))
+			if (!bDependent && !pt.equals(firstPt)) {
 				inputLabels.add(pt.getGeoObjectLabel());
+			}
 		}
 		return inputLabels.toArray(strArr);
 	}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Construction no. 84">
+     <constructions>
+          <pfree label="$A$" />
+          <pfree label="$H_{a}$" />
+          <pfree label="$I$" />
+          <ltwopts label ="$h_{a}$" point1="$A$" point2="$H_{a}$" />
+          <lperp label ="$a$" point="$H_{a}$" baseline="$h_{a}$" />
+          <pfoot label ="$P_{\_G14517}$" origpt="$I$" baseline="$a$" />
+          <ccenterpt label ="$k(I,P_{a})$" center="$I$" point="$P_{\_G14517}$" />
+          <ltangent label ="$c$" basept="$A$" pointset="$k(I,P_{a})$" />
+		  <!-- add 1 -->
+		  <pintersect label ="$C1$" set1="$c$" set2="$k(I,P_{a})$" />
+          <ltangent label ="$b$" basept="$A$" pointset="$k(I,P_{a})$" />
+		  <!-- add 2 -->
+		  <pintersect label ="$B1$" set1="$b$" set2="$k(I,P_{a})$" />
+          <pintersect label ="$B$" set1="$c$" set2="$a$" />
+          <pintersect label ="$C$" set1="$a$" set2="$b$" />
+          <ltwopts label="$\_a$" point1="$B$" point2="$C$" />
+          <lperp label="$\_h_{a}$" point="$A$" baseline="$\_a$" />
+          <pintersect label="$\_H_{a}$" set1="$\_a$" set2="$\_h_{a}$" />
+          <ltwopts label="$\_c$" point1="$A$" point2="$B$" />
+          <ltwopts label="$\_b$" point1="$A$" point2="$C$" />
+          <langbis label="$\_s_{a}$" firstraypt="$B$" vertex="$A$" secondraypt="$C$" />
+          <langbis label="$\_s_{b}$" firstraypt="$C$" vertex="$B$" secondraypt="$A$" />
+          <pintersect label="$\_I$" set1="$\_s_{a}$" set2="$\_s_{b}$" />
+     </constructions>
+     <statement>
+          <identicpts point1="$H_{a}$" point2="$\_H_{a}$" />
+		  <!--
+          <identicpts point1="$I$" point2="$\_I$" />
+		  -->
+     </statement>
+</geothm>
