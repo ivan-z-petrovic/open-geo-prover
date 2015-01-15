@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE geothm SYSTEM "geothm.dtd">
+<geothm name="Construction no. 85">
+     <constructions>
+          <pfree label="$A$" />
+          <pfree label="$H_{b}$" />
+          <pfree label="$H_{c}$" />
+          <ltwopts label ="$b$" point1="$A$" point2="$H_{b}$" />
+          <ltwopts label ="$c$" point1="$A$" point2="$H_{c}$" />
+          <lperp label ="$h_{b}$" point="$H_{b}$" baseline="$b$" />
+          <pintersect label ="$B$" set1="$h_{b}$" set2="$c$" />
+          <lperp label ="$h_{c}$" point="$H_{c}$" baseline="$c$" />
+          <pintersect label ="$C$" set1="$h_{c}$" set2="$b$" />
+          <ltwopts label="$\_b$" point1="$A$" point2="$C$" />
+          <lperp label="$\_h_{b}$" point="$B$" baseline="$\_b$" />
+          <pintersect label="$\_H_{b}$" set1="$\_b$" set2="$\_h_{b}$" />
+          <ltwopts label="$\_c$" point1="$A$" point2="$B$" />
+          <lperp label="$\_h_{c}$" point="$C$" baseline="$\_c$" />
+          <pintersect label="$\_H_{c}$" set1="$\_c$" set2="$\_h_{c}$" />
+     </constructions>
+     <statement>
+          <identicpts point1="$H_{b}$" point2="$\_H_{b}$" />
+     </statement>
+</geothm>
