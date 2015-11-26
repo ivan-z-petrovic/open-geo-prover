@@ -1,2 +1,0 @@
-Main-Class: com.ogprover.main.OpenGeoProver
-
